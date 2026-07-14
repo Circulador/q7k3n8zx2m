@@ -9,17 +9,17 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=71">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=72">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=71">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=71">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=72">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=72">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=71"></script>
-<link rel="stylesheet" href="css/styles.css?v=71">
+<script src="js/access-gate.js?v=72"></script>
+<link rel="stylesheet" href="css/styles.css?v=72">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -310,7 +310,6 @@
             </div>
           </div>
         </div>
-        <button type="button" class="toolbar-btn hud-tip" id="voiceBtn" data-i18n-attr="aria-label:hud.tip.voice;title:hud.tip.voice" aria-label="Narração por voz"><span aria-hidden="true">🔈</span></button>
       </div>
     </div>
   </header>
@@ -638,19 +637,20 @@
     </div>
   </section>
 
-  <!-- ============ DAILY ============ -->
-  <section id="screenDaily" class="screen" aria-label="Missões diárias">
+  <!-- ============ MISSÕES (diária + semanal) ============ -->
+  <section id="screenDaily" class="screen" aria-label="Missões">
     <div class="ctx-tip" id="ctxTip_daily" hidden><span data-i18n="tip.daily">5 situações rápidas — 2 revisam erros anteriores. Mantém sua ofensiva!</span><button type="button" class="ctx-tip-dismiss" data-tip="daily" data-i18n="tip.dismiss">Entendi</button></div>
     <div class="card"><div class="section-title" data-i18n="daily.title">📅 Missões Diárias</div><div class="section-sub" id="dailyDate"></div>
       <div class="daily-meta" id="dailyMeta"></div>
       <p class="daily-srs-note" id="dailySrsNote" hidden></p><div id="dailyList"></div></div>
     <div class="row-actions"><button class="btn btn-primary btn-lg" id="dailyStartBtn" data-i18n="daily.play">▶️ Jogar missão do dia</button></div>
-  </section>
-
-  <!-- ============ WEEKLY ============ -->
-  <section id="screenWeekly" class="screen" aria-label="Desafios semanais">
-    <div class="card"><div class="section-title" data-i18n="weekly.title">🏆 Desafios Semanais</div><div class="section-sub" id="weeklyWeek"></div><p class="muted" data-i18n="weekly.intro">Metas maiores que renovam toda semana. Progridem enquanto você joga campanhas, diárias e bosses.</p><div id="weeklyList"></div></div>
-    <div class="row-actions"><button class="btn btn-primary" id="weeklyMapBtn" data-i18n="weekly.play">🗺️ Jogar campanha</button></div>
+    <div class="card missions-weekly-card" id="missionsWeeklyCard">
+      <div class="section-title" data-i18n="weekly.title">🏆 Desafios Semanais</div>
+      <div class="section-sub" id="weeklyWeek"></div>
+      <p class="muted" data-i18n="weekly.intro">Metas maiores que renovam toda semana. Progridem enquanto você joga campanhas, diárias e bosses.</p>
+      <div id="weeklyList"></div>
+      <div class="row-actions week-card-actions"><button class="btn btn-primary" id="weeklyMapBtn" data-i18n="weekly.play">🗺️ Jogar campanha</button></div>
+    </div>
   </section>
 
   <!-- ============ SHOP ============ -->
@@ -791,15 +791,11 @@
   <div class="bottom-nav-row">
   <button type="button" id="navHomeBtn" onclick="gdvNavClick('navHomeBtn',event)" data-i18n-attr="title:nav.tip.home;aria-label:nav.tip.home"><span class="ni" aria-hidden="true">🏠</span><span data-i18n="nav.home">Início</span></button>
   <button type="button" id="navMapBtn" onclick="gdvNavClick('navMapBtn',event)" data-i18n-attr="title:nav.tip.map;aria-label:nav.tip.map"><span class="ni" aria-hidden="true">🗺️</span><span data-i18n="nav.map">Mapa</span></button>
-  <button type="button" id="navDailyBtn" onclick="gdvNavClick('navDailyBtn',event)" data-i18n-attr="title:nav.tip.daily;aria-label:nav.tip.daily"><span class="ni" aria-hidden="true">📅</span><span class="nav-badge" id="navDailyBadge" hidden>!</span><span data-i18n="nav.daily">Missões</span></button>
+  <button type="button" id="navDailyBtn" onclick="gdvNavClick('navDailyBtn',event)" data-i18n-attr="title:nav.tip.missions;aria-label:nav.tip.missions"><span class="ni" aria-hidden="true">📅</span><span class="nav-badge" id="navDailyBadge" hidden>!</span><span data-i18n="nav.missions">Missões</span></button>
   <button type="button" id="navBossBtn" onclick="gdvNavClick('navBossBtn',event)" data-i18n-attr="title:nav.tip.boss;aria-label:nav.tip.boss"><span class="ni" aria-hidden="true">🎯</span><span data-i18n="nav.boss">Desafios / Crises</span></button>
   <button type="button" id="navStatsBtn" onclick="gdvNavClick('navStatsBtn',event)" data-i18n-attr="title:nav.tip.stats;aria-label:nav.tip.stats"><span class="ni" aria-hidden="true">📊</span><span data-i18n="nav.stats">Eu</span></button>
-  <button type="button" id="navMoreBtn" onclick="gdvNavClick('navMoreBtn',event)" data-i18n-attr="title:nav.more;aria-label:nav.more" aria-haspopup="true" aria-expanded="false"><span class="ni" aria-hidden="true">⋯</span><span class="nav-badge" id="navWeeklyBadge" hidden>!</span><span data-i18n="nav.more">Mais</span></button>
+  <button type="button" id="navShopBtn" onclick="gdvNavClick('navShopBtn',event)" data-i18n-attr="title:nav.tip.shop;aria-label:nav.tip.shop"><span class="ni" aria-hidden="true">🛒</span><span data-i18n="nav.shop">Loja</span></button>
   <button type="button" id="navManagerBtn" hidden onclick="gdvNavClick('navManagerBtn',event)" data-i18n-attr="title:nav.tip.manager;aria-label:nav.tip.manager"><span class="ni" aria-hidden="true">🧭</span><span data-i18n="nav.manager">Gestor</span></button>
-  </div>
-  <div class="nav-more-sheet" id="navMoreSheet" hidden role="menu">
-    <button type="button" class="nav-more-item" id="navWeeklyBtn" onclick="gdvNavClick('navWeeklyBtn',event)" data-i18n="weekly.title">🏆 Desafios Semanais</button>
-    <button type="button" class="nav-more-item" id="navShopBtn" onclick="gdvNavClick('navShopBtn',event)" data-i18n="shop.title">🛒 Loja</button>
   </div>
 </nav>
 
@@ -829,16 +825,16 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="71";</script>
-<script src="js/sign-lang.js?v=71"></script>
-<script src="js/orbita-world-map.js?v=71"></script>
-<script src="js/questions-data.js?v=71"></script>
-<script src="js/country-questions-data.js?v=71"></script>
-<script src="js/bosses-data.js?v=71"></script>
-<script src="js/chain-data.js?v=71"></script>
-<script src="js/boss-maps.js?v=71"></script>
-<script src="js/game.js?v=71"></script>
-<script src="js/review-bank.js?v=71"></script>
+<script>window.APP_VERSION="72";</script>
+<script src="js/sign-lang.js?v=72"></script>
+<script src="js/orbita-world-map.js?v=72"></script>
+<script src="js/questions-data.js?v=72"></script>
+<script src="js/country-questions-data.js?v=72"></script>
+<script src="js/bosses-data.js?v=72"></script>
+<script src="js/chain-data.js?v=72"></script>
+<script src="js/boss-maps.js?v=72"></script>
+<script src="js/game.js?v=72"></script>
+<script src="js/review-bank.js?v=72"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {

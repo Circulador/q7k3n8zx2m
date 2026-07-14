@@ -47,7 +47,7 @@ body.reduce-motion .hero-train,body.reduce-motion .hero-belt,body.reduce-motion 
 .streak-hud-risk{color:#ffb4ae;border-color:rgba(229,83,75,.75);background:rgba(229,83,75,.14);animation:streakHudPulse 2s ease-in-out infinite}
 .streak-hud-btn[aria-expanded="true"]{border-color:var(--gold);background:rgba(237,177,17,.16)}
 @keyframes streakHudPulse{0%,100%{box-shadow:0 0 0 0 rgba(229,83,75,.15)}50%{box-shadow:0 0 0 4px rgba(229,83,75,.32)}}
-.streak-popover{position:absolute;top:calc(100% + 8px);left:0;z-index:132;width:min(280px,calc(100vw - 28px));max-height:none;overflow:visible;padding:0}
+.streak-popover{position:absolute;top:calc(100% + 8px);left:0;z-index:10150;width:min(280px,calc(100vw - 28px));max-height:none;overflow:visible;padding:0}
 .streak-popover[hidden]{display:none!important}
 .streak-pop-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px 8px;background:linear-gradient(180deg,#f0faf9 0%,#fff 100%);border-bottom:1px solid #dce8ec}
 .streak-pop-title{margin:0;font-size:.9rem;font-weight:800;color:var(--green-d)}
@@ -122,7 +122,7 @@ body.handtalk-on #aslAccess{display:none!important}
 .a11y-menu .am-lang{display:inline-flex;align-items:center;gap:5px}
 .a11y-menu .am-lang .flag-chip{width:18px;height:12px}
 .a11y-menu-wrap{position:relative;display:inline-flex;flex:none}
-.a11y-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:132;width:min(320px,calc(100vw - 28px));max-height:min(78vh,560px);overflow:auto;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto}
+.a11y-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:10150;width:min(320px,calc(100vw - 28px));max-height:min(78vh,560px);overflow:auto;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto}
 .am-footer{padding:10px 14px 12px;border-top:1px solid #e8eef1;background:#f8fbfc}
 .am-action{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:10px 12px;border:1px solid #e2eaee;border-radius:10px;background:#f8fbfc;color:#0a1a24;font:inherit;font-size:.86rem;font-weight:600;cursor:pointer;text-align:left}
 .am-action:hover{border-color:#9ec5c3;background:#f0faf9}
@@ -135,10 +135,10 @@ body.handtalk-on #aslAccess{display:none!important}
 .am-section-compact{padding:10px 14px 12px}
 .am-section-compact .am-action{margin:0}
 body.a11y-menu-open{overflow:hidden}
-.a11y-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:120}
+.a11y-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:10140}
 .a11y-backdrop[hidden]{display:none!important}
 @media(max-width:640px){
-  .a11y-menu{position:fixed;top:auto;bottom:0;left:0;right:0;width:100%;max-width:100%;max-height:min(88dvh,100%);border-radius:16px 16px 0 0;z-index:132;box-shadow:0 -8px 40px rgba(0,0,0,.5)}
+  .a11y-menu{position:fixed;top:auto;bottom:calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px));left:0;right:0;width:100%;max-width:100%;max-height:min(72dvh,100%);border-radius:16px 16px 0 0;z-index:10150;box-shadow:0 -8px 40px rgba(0,0,0,.5)}
   .a11y-menu-wrap{position:static}
   .am-header{position:sticky;top:0;z-index:1}
 }
@@ -856,10 +856,22 @@ body.focus-learn #hudCoinsChip,body.focus-learn #hudScoreChip{display:none!impor
 .onboard-a11y-list{margin-top:6px}
 .quiz-nav{flex-wrap:wrap;gap:8px}
 @media(max-width:640px){
-  .topbar-toolbar{gap:6px}
+  .topbar{padding:8px 4px 6px;gap:6px}
+  .topbar-brand .gd small{display:none}
+  .topbar-brand .orbita-logo{width:56px;height:auto}
+  .topbar-brand .logo-badge{width:32px;height:32px;font-size:1rem}
+  .topbar-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;gap:6px;align-items:center}
+  .lang-switch{grid-column:1;grid-row:1;justify-self:start}
+  .hud-actions{grid-column:2;grid-row:1;justify-self:end;margin-left:0;gap:4px}
+  .hud{grid-column:1/-1;grid-row:2;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:4px;padding-bottom:2px;scrollbar-width:none}
+  .hud::-webkit-scrollbar{display:none}
+  .hud .chip{padding:4px 8px;font-size:.72rem;min-height:32px;flex:none}
+  body:not(.simple-ui) #hudTitle{display:none}
+  .toolbar-btn{width:36px;height:36px;font-size:1rem}
   .lang-switch-btn{padding:6px 10px;font-size:.76rem}
-  .settings-menu,.dropdown-panel,.a11y-menu,.streak-popover{position:fixed;top:auto;bottom:0;left:0;right:0;width:100%;max-width:100%;max-height:min(88dvh,100%);border-radius:16px 16px 0 0;z-index:132}
+  .settings-menu,.dropdown-panel,.a11y-menu,.streak-popover{position:fixed;top:auto;bottom:calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px));left:0;right:0;width:100%;max-width:100%;max-height:min(72dvh,100%);border-radius:16px 16px 0 0;z-index:10150}
   .settings-menu-wrap,.a11y-menu-wrap,.streak-hud-wrap{position:static}
+  .missions-weekly-card{margin-top:12px}
   .bottom-nav-row{padding:3px 2px 3px}
   .bottom-nav-row button{padding:5px 1px;font-size:.56rem;gap:1px;min-height:48px}
   .bottom-nav-row button .ni{font-size:1.15rem}
@@ -987,7 +999,7 @@ body.contrast .quit-btn-leave{background:#1a1a1a;border-color:#ff7b72;color:#ffb
 
 /* Configurações, glossário e temas */
 .settings-menu-wrap{position:relative;display:inline-flex;flex:none}
-.settings-menu,.dropdown-panel{position:absolute;top:calc(100% + 8px);right:0;z-index:132;width:min(340px,calc(100vw - 28px));max-height:min(78vh,560px);overflow:auto;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto}
+.settings-menu,.dropdown-panel{position:absolute;top:calc(100% + 8px);right:0;z-index:10150;width:min(340px,calc(100vw - 28px));max-height:min(78vh,560px);overflow:auto;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto}
 .settings-menu[hidden]{display:none!important}
 .dp-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 14px 10px;background:linear-gradient(180deg,#f0faf9 0%,#fff 100%);border-bottom:1px solid #dce8ec;position:sticky;top:0;z-index:1}
 .dp-title{margin:0;font-size:.92rem;font-weight:800;color:var(--green-d)}
@@ -1069,7 +1081,9 @@ body.theme-dark .card{background:rgba(255,255,255,.04);border-color:rgba(255,255
   #screenMap .map-expedition{order:-1;margin-bottom:10px}
   .map-sticky-go{display:flex!important}
 }
-/* UX v71 */
+/* UX v72 */
+.missions-weekly-card{margin-top:14px}
+.week-card-actions{margin-top:4px}
 .setup-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;max-width:1080px;margin:0 auto 10px;padding:10px 14px;border-radius:10px;background:rgba(237,177,17,.12);border:1px solid rgba(237,177,17,.35);font-size:.86rem}
 .hero-compact .hero-scene{height:96px;margin-bottom:8px}
 .hero-compact h1{font-size:1.45rem}

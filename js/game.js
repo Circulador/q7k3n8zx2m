@@ -502,6 +502,7 @@ var UI = {
   "nav.more":{pt:"Mais",en:"More"},
   "nav.boss":{pt:"Desafios / Crises",en:"Challenges / Crises"},
   "nav.daily":{pt:"Missões",en:"Missions"},
+  "nav.missions":{pt:"Missões",en:"Missions"},
   "nav.weekly":{pt:"Semanal",en:"Weekly"},
   "nav.shop":{pt:"Loja",en:"Shop"},
   "nav.stats":{pt:"Eu",en:"Me"},
@@ -509,10 +510,11 @@ var UI = {
   "nav.tip.home":{pt:"Início — idioma, acessibilidade e começar",en:"Home — language, accessibility and start"},
   "nav.tip.map":{pt:"Mapa — campanhas por país",en:"Map — country campaigns"},
   "nav.tip.daily":{pt:"Missões diárias",en:"Daily missions"},
+  "nav.tip.missions":{pt:"Missões diárias e desafios semanais",en:"Daily missions and weekly challenges"},
   "nav.tip.more":{pt:"Mais opções — início e gestor",en:"More options — home and manager"},
   "nav.tip.boss":{pt:"Desafios / Crises — crises simuladas estilo mesa com storytelling",en:"Challenges / Crises — tabletop simulated crises with storytelling"},
   "nav.tip.weekly":{pt:"Desafios semanais",en:"Weekly challenges"},
-  "nav.tip.shop":{pt:"Loja de avatares e temas",en:"Avatar and theme shop"},
+  "nav.tip.shop":{pt:"Loja de recompensas",en:"Rewards shop"},
   "nav.tip.stats":{pt:"Seu progresso e medalhas",en:"Your progress and medals"},
   "nav.tip.manager":{pt:"Painel do gestor",en:"Manager dashboard"},
   "footer.txt":{pt:"conscientização em Cyber Security e Segurança da Informação — Orbita.",en:"Cyber Security and Information Security awareness — Orbita."}
@@ -564,7 +566,7 @@ function applyHudTips(){
     hudTitle:"hud.tip.title", hudLives:"hud.tip.lives",
     hudStreakBtn:"hud.tip.streak", hudLevelChip:"hud.tip.level", hudXpChip:"hud.tip.xp",
     hudCoinsChip:"hud.tip.coins", hudScoreChip:"hud.tip.score", hudMaturityChip:"hud.tip.maturity",
-    a11yBtn:"hud.tip.a11y", voiceBtn:"hud.tip.voice", settingsBtn:"hud.tip.settings",
+    a11yBtn:"hud.tip.a11y", settingsBtn:"hud.tip.settings",
     onboardOpenBtn:"onboard.reopenTip"
   };
   for(var id in map){ var el=$(id); if(el) el.setAttribute("title", t(map[id])); }
@@ -781,44 +783,36 @@ function speak(text){
 function stopSpeak(){ if("speechSynthesis" in window) try{ window.speechSynthesis.cancel(); }catch(e){} }
 
 /* -------------------- NAVEGAÇÃO -------------------- */
-var NAVMAP={screenMap:"navMapBtn",screenBossList:"navBossBtn",screenDaily:"navDailyBtn",screenProfile:"navStatsBtn",screenHome:"navHomeBtn",screenManager:"navManagerBtn"};
+var NAVMAP={screenMap:"navMapBtn",screenBossList:"navBossBtn",screenDaily:"navDailyBtn",screenWeekly:"navDailyBtn",screenProfile:"navStatsBtn",screenHome:"navHomeBtn",screenManager:"navManagerBtn",screenShop:"navShopBtn"};
 var NAV_IMMERSIVE=["screenQuiz","screenBoss"];
-var NAV_MORE_SCREENS=["screenHome","screenManager","screenWeekly","screenShop"];
 var NAV_HIDE=[];
-function toggleNavMore(open){
-  var sheet=$("navMoreSheet"), btn=$("navMoreBtn");
-  if(!sheet) return;
-  var showSheet=open===undefined?!sheet.hidden:!!open;
-  sheet.hidden=!showSheet;
-  if(btn) btn.setAttribute("aria-expanded",showSheet?"true":"false");
-}
 function updateManagerNav(){
   var showMgr=!!S.managerMode;
   var btn=$("navManagerBtn"); if(btn) btn.hidden=!showMgr;
 }
 function show(id){
   stopSpeak();
-  toggleNavMore(false);
+  var scrollWeekly=id==="screenWeekly";
+  if(scrollWeekly) id="screenDaily";
   if(id!=="screenMap" && typeof glStop==="function") glStop();
   document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
   var el=$(id); if(el) el.classList.add("active");
   if(id==="screenHome"){ renderNextStep(); renderWeekCard(); renderFirstDayHint(); updateSetupBanner(); }
   if(id==="screenMap"){ showContextTip("map"); renderMapExplorerHint(); updateSetupBanner(); }
-  if(id==="screenDaily") showContextTip("daily");
+  if(id==="screenDaily"){ showContextTip("daily"); renderDaily(); renderWeekly(); }
   if(id==="screenBossList") showContextTip("boss");
   if(id==="screenReview"&&typeof window.initReviewBank==="function") window.initReviewBank();
   updateNavBadges();
-  window.scrollTo({top:0,behavior:S.a11y.motion?"auto":"smooth"});
+  if(!scrollWeekly) window.scrollTo({top:0,behavior:S.a11y.motion?"auto":"smooth"});
   document.querySelectorAll(".bottom-nav-row button").forEach(function(b){ b.classList.remove("on"); });
   if(NAVMAP[id]){ var nb=$(NAVMAP[id]); if(nb) nb.classList.add("on"); }
-  document.querySelectorAll(".nav-more-item").forEach(function(b){ b.classList.remove("on"); });
-  if(NAV_MORE_SCREENS.indexOf(id)>=0){
-    var mi=id==="screenWeekly"||id==="screenShop"?$("navMoreBtn"):$(NAVMAP[id]);
-    if(mi) mi.classList.add("on");
-  }
   if(NAV_IMMERSIVE.indexOf(id)>=0) document.body.classList.add("nav-hidden");
   else document.body.classList.remove("nav-hidden");
   announce(el?(el.getAttribute("aria-label")||""):"");
+  if(scrollWeekly){
+    var card=$("missionsWeeklyCard");
+    if(card) setTimeout(function(){ card.scrollIntoView({behavior:S.a11y.motion?"auto":"smooth",block:"start"}); },80);
+  }
 }
 function announce(m){ var live=$("a11yLive"); if(!live) return; live.textContent=""; setTimeout(function(){ live.textContent=m; },40); }
 function toast(m){ var w=$("toastWrap"); if(!w) return; w.innerHTML=""; var d=document.createElement("div"); d.className="toast"; d.textContent=m; w.appendChild(d); setTimeout(function(){ if(d.parentNode) d.remove(); },2200); }
@@ -942,7 +936,6 @@ function applyA11y(){
   document.body.classList.remove("cb-protanopia","cb-deuteranopia","cb-tritanopia");
   if(S.a11y.colorblind&&S.a11y.colorblind!=="none") document.body.classList.add("cb-"+S.a11y.colorblind);
   applyFontScale();
-  var vb=$("voiceBtn"); if(vb){ var ic=vb.querySelector("span"); if(ic) ic.textContent=S.a11y.voice?"🔊":"🔈"; else vb.textContent=S.a11y.voice?"🔊":"🔈"; }
   if($("optVoice")) $("optVoice").checked=S.a11y.voice;
   if($("optContrast")) $("optContrast").checked=S.a11y.contrast;
   if($("optLarge")) $("optLarge").checked=S.a11y.large;
@@ -1235,7 +1228,7 @@ function renderPedagogyRec(hostId){
     play.addEventListener("click",function(){
       if(r.action==="review") startReviewErrors();
       else if(r.action==="boss"){ renderBossList(); show("screenBossList"); }
-      else if(r.action==="weekly"){ renderWeekly(); show("screenWeekly"); }
+      else if(r.action==="weekly") show("screenWeekly");
       else openMap(null,true);
     });
     row.appendChild(play); host.appendChild(row);
@@ -3346,19 +3339,23 @@ function applyEasyReadPreset(){ setEasyRead(!(S.a11y&&S.a11y.easyRead)); }
 function updateNavBadges(){
   ensureDaily();
   var badge=$("navDailyBadge"), btn=$("navDailyBtn");
+  var pending=!S.daily.done.mission;
+  var pendingW=weeklyPendingCount();
   if(badge){
-    var pending=!S.daily.done.mission;
-    badge.hidden=!pending;
-    if(pending) badge.textContent="!";
+    var showBadge=pending||pendingW>0;
+    badge.hidden=!showBadge;
+    if(showBadge){
+      if(pending&&pendingW>0) badge.textContent=pendingW>9?"9+":String(pendingW);
+      else if(pending) badge.textContent="!";
+      else badge.textContent=pendingW>9?"9+":String(pendingW);
+    }
   }
-  if(btn) btn.setAttribute("aria-label",t("nav.tip.daily")+(badge&&!badge.hidden?" — "+t("nav.badgeDaily"):""));
-  var wb=$("navWeeklyBadge"), pendingW=weeklyPendingCount();
-  if(wb){
-    wb.hidden=!pendingW;
-    if(pendingW) wb.textContent=pendingW>9?"9+":String(pendingW);
+  if(btn){
+    var tip=t("nav.tip.missions");
+    if(pending) tip+=" — "+t("nav.badgeDaily");
+    else if(pendingW) tip+=" — "+pendingW+" "+t("nav.badgeWeekly");
+    btn.setAttribute("aria-label",tip);
   }
-  var moreBtn=$("navMoreBtn");
-  if(moreBtn&&pendingW) moreBtn.setAttribute("aria-label",t("nav.more")+" — "+pendingW+" "+t("nav.badgeWeekly"));
 }
 function showContextTip(key){
   ensureUxState();
@@ -3380,7 +3377,7 @@ function renderWeekProgressBar(){
   if(lab) lab.textContent=correct+"/20 · "+campaign+"/3 · "+(S.daily.done.mission?(L()==="pt"?"missão ✅":"mission ✅"):(L()==="pt"?"missão pendente":"mission pending"));
   host.setAttribute("aria-valuenow",String(score));
 }
-function openWeeklyScreen(){ renderWeekly(); show("screenWeekly"); }
+function openWeeklyScreen(){ show("screenWeekly"); }
 function renderWeeklyGoalsChecklist(){
   ensureWeekly(); ensureStreak();
   var host=$("weeklyGoalsChecklist"); if(!host) return;
@@ -3633,7 +3630,10 @@ function bind(){
   if(a11yMenuEl) a11yMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
   if(settingsMenuEl) settingsMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
   if(streakPopEl) streakPopEl.addEventListener("click",function(e){ e.stopPropagation(); });
-  on("voiceBtn","click",function(){ S.a11y.voice=!S.a11y.voice; save(); applyA11y(); toast(S.a11y.voice?(L()==="pt"?"🔊 Narração ligada":"🔊 Narration on"):(L()==="pt"?"🔈 Narração desligada":"🔈 Narration off")); });
+  wireToolbarTouch("settingsBtn",function(e){ e.stopPropagation(); toggleSettingsMenu(); });
+  wireToolbarTouch("a11yBtn",function(e){ e.stopPropagation(); toggleA11yMenu(); });
+  wireToolbarTouch("onboardOpenBtn",function(e){ e.stopPropagation(); showOnboarding(true); });
+  wireToolbarTouch("hudStreakBtn",function(e){ e.stopPropagation(); toggleStreakPopover(); });
 
   on("onboardSkipBtn","click",function(){ closeOnboarding(true); });
   on("onboardNextBtn","click",onboardNext);
@@ -3738,9 +3738,6 @@ function bind(){
     el.addEventListener("change",function(){ S.a11y[pair[1]]=this.checked; save(); applyA11y(); });
   });
 
-  document.addEventListener("click",function(e){ var sheet=$("navMoreSheet"); if(!sheet||sheet.hidden) return; if(e.target.closest&&e.target.closest("#navMoreBtn")) return; if(!e.target.closest("#navMoreSheet")) toggleNavMore(false); });
-  document.addEventListener("keydown",function(e){ var sheet=$("navMoreSheet"); if(e.key==="Escape"&&sheet&&!sheet.hidden){ toggleNavMore(false); var mb=$("navMoreBtn"); if(mb) mb.focus(); } });
-
   document.addEventListener("keydown",function(e){
     if(e.key==="Escape"){
       var qd=$("quitDialog"); if(qd&&!qd.hidden){ hideQuitDialog(); return; }
@@ -3758,7 +3755,6 @@ function dismissBlockingUI(){
   try{
     var ov=$("onboardOverlay");
     if(ov&&!ov.hidden){ closeOnboarding(); }
-    toggleNavMore(false);
     toggleA11yMenu(false);
     toggleSettingsMenu(false);
     toggleStreakPopover(false);
@@ -3768,6 +3764,18 @@ function dismissBlockingUI(){
   }catch(e){}
 }
 var navWired=false, lastNavTap=0;
+function wireToolbarTouch(id,handler){
+  var el=$(id); if(!el) return;
+  var last=0;
+  el.addEventListener("touchend",function(ev){
+    var now=Date.now();
+    if(now-last<400) return;
+    last=now;
+    ev.preventDefault();
+    ev.stopPropagation();
+    handler(ev);
+  },{passive:false});
+}
 function wireQuizNavButtons(){
   var lastTap=0;
   ["quitBtn","prevBtn","nextBtn","bossQuitBtn","bossPrevBtn","bossNext"].forEach(function(id){
@@ -3792,23 +3800,16 @@ function wireBottomNav(){
     if(e&&e.preventDefault) e.preventDefault();
     if(e&&e.stopPropagation) e.stopPropagation();
     dismissBlockingUI();
-    if(id==="navMoreBtn"){
-      var willOpen=$("navMoreSheet")&&$("navMoreSheet").hidden;
-      toggleNavMore(willOpen);
-      if(willOpen){ var first=document.querySelector("#navMoreSheet .nav-more-item:not([hidden])"); if(first) first.focus(); }
-      return;
-    }
     if(id==="navMapBtn") returnToMap();
     else if(id==="navBossBtn"){ hydrateNorthernBoss(); renderBossList(); show("screenBossList"); }
-    else if(id==="navDailyBtn"){ renderDaily(); show("screenDaily"); }
-    else if(id==="navWeeklyBtn"){ renderWeekly(); show("screenWeekly"); }
+    else if(id==="navDailyBtn") show("screenDaily");
     else if(id==="navShopBtn"){ renderShop(); show("screenShop"); }
     else if(id==="navStatsBtn"){ renderProfile(); show("screenProfile"); }
-    else if(id==="navHomeBtn"){ toggleNavMore(false); show("screenHome"); }
+    else if(id==="navHomeBtn") show("screenHome");
     else if(id==="navManagerBtn"){ renderManager(); show("screenManager"); }
   }
   window.__gdvRunNav=runNav;
-  ["navMapBtn","navDailyBtn","navBossBtn","navStatsBtn","navMoreBtn","navHomeBtn","navManagerBtn","navWeeklyBtn","navShopBtn"].forEach(function(nid){
+  ["navMapBtn","navDailyBtn","navBossBtn","navStatsBtn","navShopBtn","navHomeBtn","navManagerBtn"].forEach(function(nid){
     var el=$(nid);
     if(!el) return;
     el.addEventListener("click",function(ev){ runNav(nid,ev); });
