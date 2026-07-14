@@ -399,33 +399,76 @@ var OrbitaWorldMap = (function () {
     return null;
   }
 
+  var CONTINENT_BOXES = {
+    sa: { lon: [-82, -34], lat: [-56, 13] },
+    na: { lon: [-140, -52], lat: [12, 72] },
+    eu: { lon: [-12, 42], lat: [34, 62] },
+    me: { lon: [24, 64], lat: [11, 42] },
+    as: { lon: [58, 150], lat: [-11, 56] },
+    oc: { lon: [110, 180], lat: [-48, -9] }
+  };
+  var GAME_CONTINENT = {
+    br: "sa", pe: "sa", cl: "sa", ar: "sa",
+    ca: "na", us: "na",
+    gb: "eu", ch: "eu", nl: "eu",
+    om: "me", ae: "me", sa: "me",
+    my: "as", jp: "as", id: "as", cn: "as", in: "as", sg: "as",
+    au: "oc"
+  };
+
+  function projectedBoxBounds(box) {
+    if (!projection) return null;
+    var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    var steps = 14;
+    for (var i = 0; i <= steps; i++) {
+      var lon = box.lon[0] + (box.lon[1] - box.lon[0]) * (i / steps);
+      for (var j = 0; j <= steps; j++) {
+        var lat = box.lat[0] + (box.lat[1] - box.lat[0]) * (j / steps);
+        var p = projection([lon, lat]);
+        if (!p) continue;
+        if (p[0] < minX) minX = p[0];
+        if (p[0] > maxX) maxX = p[0];
+        if (p[1] < minY) minY = p[1];
+        if (p[1] > maxY) maxY = p[1];
+      }
+    }
+    if (minX === Infinity) return null;
+    return [[minX, minY], [maxX, maxY]];
+  }
+
+  function getContinentBounds(gameId) {
+    var cont = GAME_CONTINENT[gameId];
+    if (!cont || !CONTINENT_BOXES[cont]) return null;
+    return projectedBoxBounds(CONTINENT_BOXES[cont]);
+  }
+
+  // Frames the whole continent that contains the country, filling the
+  // available viewport aspect (opts.aspect) so it uses 100% of the pane.
   function getCountryView(gameId, opts) {
     opts = opts || {};
-    var feature = findCountryFeature(gameId);
-    if (!feature || !pathFn) return null;
-    var b = pathFn.bounds(feature);
+    if (!pathFn) return null;
+    var b = getContinentBounds(gameId);
+    if (!b) {
+      var feature = findCountryFeature(gameId);
+      if (!feature) return null;
+      b = pathFn.bounds(feature);
+    }
     var bw = Math.max(b[1][0] - b[0][0], 3);
     var bh = Math.max(b[1][1] - b[0][1], 3);
-    var narrow = window.innerWidth <= 640;
-    var panel = !!opts.panelOpen && !narrow;
-    var pad = narrow ? 1.18 : panel ? 1.1 : 1.08;
+    var pad = 1.03;
     var boxW = bw * pad;
     var boxH = bh * pad;
-    var aspect = VW / VH;
+    var aspect = opts.aspect && opts.aspect > 0 ? opts.aspect : VW / VH;
     var nw, nh;
     if (boxW / boxH > aspect) {
       nw = boxW;
       nh = nw / aspect;
-      if (nh < boxH) { nh = boxH; nw = nh * aspect; }
     } else {
       nh = boxH;
       nw = nh * aspect;
-      if (nw < boxW) { nw = boxW; nh = nw / aspect; }
     }
-    var maxW = panel ? VW * 0.72 : narrow ? VW * 0.85 : VW * 0.8;
-    if (nw > maxW) { nw = maxW; nh = nw / aspect; }
-    var minW = narrow ? 85 : 60;
-    if (nw < minW) { nw = minW; nh = nw / aspect; }
+    if (nw > VW) { nw = VW; nh = nw / aspect; }
+    if (nh > VH) { nh = VH; nw = nh * aspect; }
     return {
       cx: (b[0][0] + b[1][0]) / 2,
       cy: (b[0][1] + b[1][1]) / 2,

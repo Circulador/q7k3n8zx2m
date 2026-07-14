@@ -1833,6 +1833,7 @@ function finishWorldMapUI(){
   applyMapSearch();
   restoreMapTabFocus();
   mapReady=true;
+  updateMapCountryNav();
 }
 function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open"); updateMapCountryNav(); }
 function getPlayableCountryIds(){
@@ -1850,8 +1851,8 @@ function getPlayableCountryIds(){
 function navigateMapCountry(dir){
   var ids=getPlayableCountryIds();
   if(!ids.length) return;
-  var cur=mapHitActive||ids[0];
-  var idx=ids.indexOf(cur);
+  if(!mapHitActive){ openMapDetailCountry(ids[0]); setMapHitHighlight(ids[0],true); return; }
+  var idx=ids.indexOf(mapHitActive);
   if(idx<0) idx=0;
   var next=idx+dir;
   if(next<0) next=ids.length-1;
@@ -1862,7 +1863,8 @@ function navigateMapCountry(dir){
 function updateMapCountryNav(){
   var nav=$("mapCountryNav");
   if(!nav) return;
-  var open=!!mapHitActive&&$("mapDetail")&&!$("mapDetail").hidden&&!mapChainMode();
+  var onMap=$("screenMap")&&$("screenMap").classList.contains("active");
+  var open=!!onMap&&mapReady&&!mapChainMode();
   nav.hidden=!open;
 }
 function buildMapDetailHTML(c,official){
@@ -1967,10 +1969,14 @@ function drawMap(){
 }
 function ensureMap(){ if(!mapReady) drawMap(); }
 function updateViewBox(){ var s=$("mapSvg"); if(s) s.setAttribute("viewBox",view.x+" "+view.y+" "+view.w+" "+view.h); }
+function mapPaneAspect(){
+  var inner=document.querySelector(".vwm-map-stage-inner");
+  if(inner){ var r=inner.getBoundingClientRect(); if(r.width>0&&r.height>0) return r.width/r.height; }
+  return VW/VH;
+}
 function zoomToCountry(gameId){
   if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.isReady()||!gameId) return;
-  var panelOpen=$("mapDetail")&&!$("mapDetail").hidden;
-  var v=OrbitaWorldMap.getCountryView(gameId,{panelOpen:panelOpen});
+  var v=OrbitaWorldMap.getCountryView(gameId,{aspect:mapPaneAspect()});
   if(!v) return;
   var nw=Math.max(50,Math.min(VW,v.targetW));
   var nh=Math.max(50,Math.min(VH,v.targetH||nw*(VH/VW)));
