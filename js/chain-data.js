@@ -84,5 +84,70 @@ var CHAINS = [
       opts:[{pt:"Envio, é informação de logística",en:"Send it, it's just logistics info"},{pt:"Não envio dados sensíveis; valido a necessidade e a autorização pelo canal oficial",en:"Don't send sensitive data; validate the need and authorization via the official channel"},{pt:"Envio só uma parte",en:"Send just part of it"}],correct:1,
       why:{pt:"Programação de embarque é informação estratégica. Compartilhe só com autorização e pelos canais corretos.",en:"Shipping schedules are strategic information. Share only with authorization and through the right channels."}}
     ]}
+  ]},
+ {id:"office", ico:"🏢",
+  name:{pt:"Cadeia Digital — Escritórios Orbita",en:"Digital Chain — Orbita Offices"},
+  cap:{pt:"Do Rio de Janeiro a Singapura e Roterdã: a mesma história percorre os escritórios da Orbita. Um e-mail falso, um compartilhamento errado ou uma videochamada fraudulenta podem comprometer contratos, dados de clientes e a reputação global — cada decisão conecta a próxima cena.",en:"From Rio de Janeiro to Singapore and Rotterdam: the same story runs through Orbita's offices. A fake email, a wrong share or a fraudulent video call can compromise contracts, client data and global reputation — each decision connects to the next scene."},
+  stages:[
+   {id:"email", ico:"📧", name:{pt:"1. E-mail suspeito",en:"1. Suspicious email"},
+    desc:{pt:"Segunda-feira, 08h14 — sua caixa de entrada mostra 'Benefício Orbita — confirme hoje' com link externo.",en:"Monday, 08:14 — your inbox shows 'Orbita Benefit — confirm today' with an external link."},
+    qs:[
+     {theme:"phishing",diff:2,q:{pt:"O e-mail parece do RH, mas o remetente é rh-beneficios@orbita-benefits.net e pede login. Você:",en:"The email looks like HR, but the sender is hr-benefits@orbita-benefits.net and asks you to log in. You:"},
+      opts:[{pt:"Clico no link para não perder o prazo do benefício",en:"Click the link so I don't miss the benefit deadline"},{pt:"Não clico; reporto como phishing e confirmo com o RH pelo canal oficial",en:"Don't click; report as phishing and confirm with HR via the official channel"},{pt:"Encaminho para colegas verificarem também",en:"Forward it so colleagues can check too"}],correct:1,
+      why:{pt:"Domínios parecidos + urgência = phishing clássico. Reporte e valide sempre por canal oficial — nunca encaminhe.",en:"Look-alike domains + urgency = classic phishing. Report and always validate via official channel — never forward."}},
+     {theme:"phishing",diff:1,q:{pt:"O link do e-mail leva a uma página idêntica ao portal da Orbita pedindo senha. Ação correta:",en:"The email link leads to a page identical to Orbita's portal asking for your password. Correct action:"},
+      opts:[{pt:"Digito a senha para ver o benefício",en:"Enter my password to see the benefit"},{pt:"Fecho a página, não insiro credenciais e reporto à Segurança",en:"Close the page, don't enter credentials and report to Security"},{pt:"Uso a senha de um colega para testar",en:"Use a colleague's password to test"}],correct:1,
+      why:{pt:"Páginas falsas capturam credenciais. Nunca insira senha fora do portal oficial; reporte imediatamente.",en:"Fake pages capture credentials. Never enter passwords outside the official portal; report immediately."}}
+    ]},
+   {id:"workstation", ico:"💻", name:{pt:"2. Estação de trabalho",en:"2. Workstation"},
+    desc:{pt:"Um colega pede emprestado seu notebook 'só para imprimir' e conecta um pendrive desconhecido.",en:"A colleague asks to borrow your laptop 'just to print' and plugs in an unknown USB stick."},
+    qs:[
+     {theme:"device",diff:2,q:{pt:"O pendrive foi encontrado no estacionamento com etiqueta 'Folha de Pagamento'. O colega quer abrir no seu notebook. Você:",en:"The USB stick was found in the parking lot labeled 'Payroll'. Your colleague wants to open it on your laptop. You:"},
+      opts:[{pt:"Deixo abrir, pode ser de alguém da empresa",en:"Let them open it, it might belong to someone at the company"},{pt:"Não conecto; entrego o pendrive à Segurança/TI sem inserir em nenhum equipamento",en:"Don't plug it in; hand the USB stick to Security/IT without inserting it in any device"},{pt:"Abro no meu celular pessoal para ver o conteúdo",en:"Open it on my personal phone to see the contents"}],correct:1,
+      why:{pt:"Pendrives 'perdidos' são iscas (baiting). Nunca conecte em equipamento corporativo ou pessoal; entregue à Segurança.",en:"'Lost' USB sticks are baiting attacks. Never plug into corporate or personal devices; hand to Security."}},
+     {theme:"device",diff:1,q:{pt:"Ao sair do desk para uma reunião, você deve:",en:"When leaving your desk for a meeting, you should:"},
+      opts:[{pt:"Deixar o notebook desbloqueado, volto em 5 minutos",en:"Leave the laptop unlocked, I'll be back in 5 minutes"},{pt:"Bloquear a sessão (Win+L) e nunca deixar credenciais visíveis",en:"Lock the session (Win+L) and never leave credentials visible"},{pt:"Pedir ao colega para 'cuidar' do notebook aberto",en:"Ask a colleague to 'watch' the open laptop"}],correct:1,
+      why:{pt:"Estações desbloqueadas permitem acesso a e-mail, arquivos e sistemas em segundos. Bloqueie sempre.",en:"Unlocked workstations allow access to email, files and systems in seconds. Always lock."}}
+    ]},
+   {id:"meeting", ico:"📹", name:{pt:"3. Sala de reunião",en:"3. Meeting room"},
+    desc:{pt:"Durante videoconferência, um 'diretor financeiro' entra na call pedindo aprovação urgente de pagamento a fornecedor novo.",en:"During a video call, a 'finance director' joins asking for urgent approval of payment to a new supplier."},
+    qs:[
+     {theme:"bec",diff:3,q:{pt:"Na call, o 'diretor' diz que está em viagem, pede sigilo e envia dados bancários por chat. Você:",en:"On the call, the 'director' says they're traveling, asks for secrecy and sends bank details via chat. You:"},
+      opts:[{pt:"Aprovo o pagamento para não atrasar a operação",en:"Approve the payment so operations aren't delayed"},{pt:"Não autorizo; valido a solicitação pelo contato oficial e processo de aprovação",en:"Don't authorize; validate the request via official contact and approval process"},{pt:"Peço só o comprovante depois do pagamento",en:"Ask for the receipt only after payment"}],correct:1,
+      why:{pt:"BEC em videochamada usa urgência e autoridade falsa. Valide sempre pelo processo e contato oficial cadastrado.",en:"BEC via video call uses urgency and false authority. Always validate through process and registered official contact."}},
+     {theme:"bec",diff:2,q:{pt:"Como confirmar se quem está na call é realmente o diretor?",en:"How to confirm the person on the call is really the director?"},
+      opts:[{pt:"Confio na imagem e na voz, parece real",en:"Trust the image and voice, it looks real"},{pt:"Desligo a call, retorno pelo ramal/celular corporativo cadastrado e sigo o processo formal",en:"End the call, call back via registered corporate extension/mobile and follow formal process"},{pt:"Peço para enviar selfie com crachá",en:"Ask them to send a selfie with their badge"}],correct:1,
+      why:{pt:"Deepfake e contas comprometidas existem. Retorne sempre por canal conhecido e independente da call.",en:"Deepfakes and compromised accounts exist. Always call back via a known channel independent of the call."}}
+    ]},
+   {id:"cloud", ico:"☁️", name:{pt:"4. Nuvem corporativa",en:"4. Corporate cloud"},
+    desc:{pt:"Você prepara o relatório trimestral e o autocomplete do Outlook troca um caractere no destinatário externo.",en:"You prepare the quarterly report and Outlook autocomplete swaps one character in the external recipient."},
+    qs:[
+     {theme:"data",diff:2,q:{pt:"Percebe que enviou planilha com preços e volumes para e-mail externo errado. Primeira ação:",en:"You realize you sent a spreadsheet with prices and volumes to the wrong external email. First action:"},
+      opts:[{pt:"Peço ao destinatário para apagar e não conto internamente",en:"Ask the recipient to delete and don't tell anyone internally"},{pt:"Reporto imediatamente à Segurança/Privacidade e ao gestor",en:"Report immediately to Security/Privacy and my manager"},{pt:"Envio outro e-mail pedindo desculpas a toda a equipe",en:"Send another apology email to the whole team"}],correct:1,
+      why:{pt:"Vazamento exige resposta rápida e formal. Reporte imediatamente — pedir para apagar não substitui o protocolo.",en:"A leak requires fast, formal response. Report immediately — asking to delete doesn't replace the protocol."}},
+     {theme:"data",diff:2,q:{pt:"Qual hábito evita compartilhamento errado de dados confidenciais?",en:"Which habit prevents wrong sharing of confidential data?"},
+      opts:[{pt:"Conferir destinatário letra por letra e usar canais aprovados com classificação",en:"Verify recipient letter by letter and use approved channels with classification"},{pt:"Enviar rápido e corrigir depois se alguém reclamar",en:"Send fast and fix later if someone complains"},{pt:"Usar e-mail pessoal para arquivos grandes",en:"Use personal email for large files"}],correct:0,
+      why:{pt:"Autocomplete erra um caractere e causa vazamentos. Confira destinatário e classifique antes de enviar.",en:"Autocomplete can swap one character and cause leaks. Check recipient and classify before sending."}}
+    ]},
+   {id:"remote", ico:"📱", name:{pt:"5. Trabalho remoto",en:"5. Remote work"},
+    desc:{pt:"Em viagem a Roterdã, você precisa revisar contrato confidencial no laptop — o hotel oferece Wi-Fi aberto.",en:"On a trip to Rotterdam, you need to review a confidential contract on your laptop — the hotel offers open Wi-Fi."},
+    qs:[
+     {theme:"remote",diff:2,q:{pt:"O Wi-Fi do hotel não pede senha e aparece 'Orbita-Guest-Free'. Para acessar sistemas corporativos:",en:"The hotel Wi-Fi needs no password and shows 'Orbita-Guest-Free'. To access corporate systems:"},
+      opts:[{pt:"Conecto direto, é Wi-Fi do hotel parceiro",en:"Connect directly, it's partner hotel Wi-Fi"},{pt:"Uso VPN corporativa homologada antes de acessar qualquer sistema",en:"Use approved corporate VPN before accessing any system"},{pt:"Uso hotspot pessoal sem VPN para ser mais rápido",en:"Use personal hotspot without VPN to be faster"}],correct:1,
+      why:{pt:"Wi-Fi aberto permite interceptação. Só acesse sistemas corporativos com VPN homologada.",en:"Open Wi-Fi allows interception. Only access corporate systems with approved VPN."}},
+     {theme:"device",diff:2,q:{pt:"Na sala de embarque, alguém oferece carregador USB 'turbo' para seu notebook. Você:",en:"At the boarding lounge, someone offers a 'turbo' USB charger for your laptop. You:"},
+      opts:[{pt:"Aceito, a bateria está acabando",en:"Accept it, the battery is dying"},{pt:"Recuso; carregadores desconhecidos podem conter juice jacking — uso carregador próprio",en:"Decline; unknown chargers may contain juice jacking — use my own charger"},{pt:"Aceito mas desligo o notebook",en:"Accept but turn off the laptop"}],correct:1,
+      why:{pt:"Juice jacking via USB público pode comprometer o dispositivo. Use apenas carregadores confiáveis.",en:"Juice jacking via public USB can compromise the device. Use only trusted chargers."}}
+    ]},
+   {id:"soc", ico:"🛡️", name:{pt:"6. SOC & resposta",en:"6. SOC & response"},
+    desc:{pt:"O SOC detecta login anômalo na sua conta a partir de IP estrangeiro — a história precisa de um desfecho coordenado.",en:"The SOC detects an anomalous login on your account from a foreign IP — the story needs a coordinated ending."},
+    qs:[
+     {theme:"password",diff:2,q:{pt:"O SOC pede para você trocar a senha e revisar dispositivos conectados. Você:",en:"The SOC asks you to change your password and review connected devices. You:"},
+      opts:[{pt:"Ignoro, deve ser falso positivo",en:"Ignore it, must be a false positive"},{pt:"Sigo imediatamente: troco senha, ativo MFA e reviso sessões ativas",en:"Follow immediately: change password, enable MFA and review active sessions"},{pt:"Só troco a senha e sigo trabalhando",en:"Only change password and keep working"}],correct:1,
+      why:{pt:"Alertas do SOC exigem ação rápida. Troque credenciais, revise sessões e confirme MFA.",en:"SOC alerts require fast action. Change credentials, review sessions and confirm MFA."}},
+     {theme:"phishing",diff:2,q:{pt:"Como fechar o ciclo e proteger os escritórios Orbita a longo prazo?",en:"How to close the cycle and protect Orbita offices long term?"},
+      opts:[{pt:"Programa integrado: reporte de phishing, MFA, DLP, treinamento e simulações trimestrais",en:"Integrated program: phishing reporting, MFA, DLP, training and quarterly simulations"},{pt:"Apenas bloquear sites de redes sociais",en:"Just block social media sites"},{pt:"Proibir trabalho remoto para todos",en:"Ban remote work for everyone"}],correct:0,
+      why:{pt:"Escritórios seguros combinam pessoas, processos e tecnologia — não uma medida isolada.",en:"Secure offices combine people, processes and technology — not a single measure."}}
+    ]}
   ]}
 ];

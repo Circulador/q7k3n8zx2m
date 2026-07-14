@@ -9,17 +9,17 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Digital da Operação — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=47">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=50">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=47">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=47">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=50">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=50">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=47"></script>
-<link rel="stylesheet" href="css/styles.css?v=47">
+<script src="js/access-gate.js?v=50"></script>
+<link rel="stylesheet" href="css/styles.css?v=50">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -299,6 +299,7 @@
       <div class="row-actions">
         <button class="btn btn-primary btn-lg" id="homeStartBtn" data-i18n="home.start">▶️ Começar</button>
         <button class="btn btn-blue" id="homeMapBtn" data-i18n="home.map">🗺️ Mapa da Operação</button>
+        <button type="button" class="btn btn-ghost" id="pwaInstallBtn" hidden data-i18n="home.install">⬇️ Instalar app</button>
       </div>
     </div>
 
@@ -399,6 +400,7 @@
         </div>
       </div>
       <div class="map-stage" id="mapStage" role="tabpanel" tabindex="0" aria-live="polite">
+        <div id="mapChainAnim" class="map-chain-anim" hidden aria-label="Cadeia digital dos escritórios"></div>
         <div class="vwm-map-stage-inner">
           <div class="vwm-loading" id="mapLoading">Carregando mapa...</div>
           <svg id="mapSvg" class="vwm-svg" viewBox="0 0 960 520" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa mundial interativo da Orbita"></svg>
@@ -419,6 +421,12 @@
           <div class="vwm-legend-items" id="mapProductLegend"></div>
         </div>
       </footer>
+      <div class="chain-list-panel card" id="mapChainPanel" hidden>
+        <div class="section-title" id="mapChainTitle" data-i18n="office.chainTitle">🏢 Cadeia Digital — Escritórios</div>
+        <div class="section-sub" id="mapChainSub" data-i18n="office.chainSub">Storytelling conectado: cada cena no escritório leva à próxima. Clique numa etapa para proteger.</div>
+        <div id="mapChainImpactNote" class="chain-impact-note"></div>
+        <div id="mapChainFlow" class="chain-flow"></div>
+      </div>
       </div>
       <div class="map-hint" id="mapHint" data-i18n="map.hint">Clique em um país ou na legenda para explorar — ou use a lista abaixo.</div>
       <p class="map-search-empty" id="mapSearchEmpty" hidden data-i18n="map.searchEmpty">Nenhum país encontrado.</p>
@@ -463,14 +471,7 @@
 
   <!-- ============ CHEFÕES ============ -->
   <section id="screenBossList" class="screen" aria-label="Chefões">
-    <div class="card boss-chain-card" id="bossChainCard">
-      <div class="section-title" data-i18n="chain.bossTitle">⛓️ Cadeia Norte — Carajás → China</div>
-      <div class="section-sub" data-i18n="chain.sub">Sistema Norte da Orbita: da mina S11D à China em 8 etapas. Mapa dinâmico mostra a situação atual — uma brecha impacta toda a cadeia.</div>
-      <div class="row-actions" style="margin-top:8px">
-        <button type="button" class="btn btn-primary" id="bossChainPlayBtn" data-i18n="chain.playBoss">▶️ Proteger a cadeia</button>
-      </div>
-    </div>
-    <div class="card"><div class="section-title" data-i18n="boss.title">🐉 Chefões — Crises Tabletop</div><div class="section-sub" data-i18n="boss.sub">Aventuras estilo mesa: a Cadeia Norte usa mapa dinâmico por etapa; os demais chefões têm cenas conectadas.</div><div class="boss-list" id="bossList"></div></div>
+    <div class="card"><div class="section-title" data-i18n="boss.title">🐉 Chefões — Crises Tabletop</div><div class="section-sub" data-i18n="boss.sub">Aventuras estilo mesa com storytelling conectado.</div><div class="boss-list" id="bossList"></div></div>
     <div class="row-actions"><button class="btn btn-ghost" id="bossListBackBtn" data-i18n="common.home">🏠 Início</button></div>
   </section>
 
@@ -627,16 +628,13 @@
 </div>
 
 <nav class="bottom-nav" role="navigation" aria-label="Navegação principal">
+  <button type="button" id="navHomeBtn" onclick="gdvNavClick('navHomeBtn',event)" data-i18n-attr="title:nav.tip.home;aria-label:nav.tip.home"><span class="ni" aria-hidden="true">🏠</span><span data-i18n="nav.home">Início</span></button>
   <button type="button" id="navMapBtn" onclick="gdvNavClick('navMapBtn',event)" data-i18n-attr="title:nav.tip.map;aria-label:nav.tip.map"><span class="ni" aria-hidden="true">🗺️</span><span data-i18n="nav.map">Mapa</span></button>
   <button type="button" id="navDailyBtn" onclick="gdvNavClick('navDailyBtn',event)" data-i18n-attr="title:nav.tip.daily;aria-label:nav.tip.daily"><span class="ni" aria-hidden="true">📅</span><span data-i18n="nav.daily">Diária</span></button>
   <button type="button" id="navBossBtn" onclick="gdvNavClick('navBossBtn',event)" data-i18n-attr="title:nav.tip.boss;aria-label:nav.tip.boss"><span class="ni" aria-hidden="true">🐉</span><span data-i18n="nav.boss">Chefões</span></button>
   <button type="button" id="navStatsBtn" onclick="gdvNavClick('navStatsBtn',event)" data-i18n-attr="title:nav.tip.stats;aria-label:nav.tip.stats"><span class="ni" aria-hidden="true">📊</span><span data-i18n="nav.stats">Progresso</span></button>
-  <button type="button" id="navMoreBtn" onclick="gdvNavClick('navMoreBtn',event)" data-i18n-attr="title:nav.tip.more;aria-label:nav.tip.more" aria-haspopup="true" aria-expanded="false"><span class="ni" aria-hidden="true">⋯</span><span data-i18n="nav.more">Mais</span></button>
+  <button type="button" id="navManagerBtn" hidden onclick="gdvNavClick('navManagerBtn',event)" data-i18n-attr="title:nav.tip.manager;aria-label:nav.tip.manager"><span class="ni" aria-hidden="true">🧭</span><span data-i18n="nav.manager">Gestor</span></button>
 </nav>
-<div id="navMoreSheet" class="nav-more-sheet" hidden role="menu" aria-label="Mais opções">
-  <button type="button" class="nav-more-item" id="navHomeBtn" role="menuitem" onclick="gdvNavClick('navHomeBtn',event)" data-i18n-attr="title:nav.tip.home"><span class="ni" aria-hidden="true">🏠</span><span data-i18n="nav.home">Início</span></button>
-  <button type="button" class="nav-more-item" id="navManagerBtn" role="menuitem" hidden onclick="gdvNavClick('navManagerBtn',event)" data-i18n-attr="title:nav.tip.manager"><span class="ni" aria-hidden="true">🧭</span><span data-i18n="nav.manager">Gestor</span></button>
-</div>
 
 <!-- VLibras (PT) — widget oficial -->
 <div id="vlibrasRoot" hidden>
@@ -664,14 +662,15 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="47";</script>
-<script src="js/sign-lang.js?v=47"></script>
-<script src="js/orbita-world-map.js?v=47"></script>
-<script src="js/questions-data.js?v=47"></script>
-<script src="js/country-questions-data.js?v=47"></script>
-<script src="js/bosses-data.js?v=47"></script>
-<script src="js/chain-data.js?v=47"></script>
-<script src="js/game.js?v=47"></script>
+<script>window.APP_VERSION="50";</script>
+<script src="js/sign-lang.js?v=50"></script>
+<script src="js/orbita-world-map.js?v=50"></script>
+<script src="js/questions-data.js?v=50"></script>
+<script src="js/country-questions-data.js?v=50"></script>
+<script src="js/bosses-data.js?v=50"></script>
+<script src="js/chain-data.js?v=50"></script>
+<script src="js/boss-maps.js?v=50"></script>
+<script src="js/game.js?v=50"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {
@@ -681,6 +680,48 @@ if ("serviceWorker" in navigator) {
     });
   });
 }
+
+/* Instalação do PWA (Android/Chrome/Edge via prompt; iOS via instruções) */
+(function () {
+  var deferred = null;
+  function byId(id) { return document.getElementById(id); }
+  function isIOS() {
+    return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  }
+  function isStandalone() {
+    return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) ||
+      window.navigator.standalone === true;
+  }
+  function showBtn() { var b = byId("pwaInstallBtn"); if (b) b.hidden = false; }
+  function hideBtn() { var b = byId("pwaInstallBtn"); if (b) b.hidden = true; }
+
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    deferred = e;
+    showBtn();
+  });
+  window.addEventListener("appinstalled", function () { deferred = null; hideBtn(); });
+
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("#pwaInstallBtn");
+    if (!b) return;
+    e.preventDefault();
+    if (deferred) {
+      deferred.prompt();
+      deferred.userChoice.then(function () { deferred = null; hideBtn(); });
+    } else if (isIOS()) {
+      alert("Para instalar no iPhone/iPad:\n1) Toque em Compartilhar (ícone de seta para cima)\n2) Escolha \"Adicionar à Tela de Início\"");
+    } else {
+      alert("Instale pelo menu do navegador (\u22ee) escolhendo \"Instalar app\" / \"Adicionar à tela inicial\".");
+    }
+  });
+
+  window.addEventListener("load", function () {
+    if (isStandalone()) { hideBtn(); return; }
+    if (isIOS()) showBtn();
+  });
+})();
 </script>
 </body>
 </html>

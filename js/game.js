@@ -40,6 +40,7 @@ var UI = {
   "a11y.catalogToggle":{pt:"Ver catálogo de recursos",en:"View feature catalog"},
   "home.start":{pt:"▶️ Começar",en:"▶️ Start"},
   "home.map":{pt:"🗺️ Mapa da Operação",en:"🗺️ Operations Map"},
+  "home.install":{pt:"⬇️ Instalar app",en:"⬇️ Install app"},
   "home.heroIronTip":{pt:"Clique para abrir a Cadeia Norte nos Chefões — mina, ferrovia, porto e navio.",en:"Click to open the Northern Chain in Bosses — mine, railway, port and ship."},
   "home.chain":{pt:"⛓️ Cadeia de Produção",en:"⛓️ Production Chain"},
   "home.weekTitle":{pt:"3) Minha semana",en:"3) My week"},
@@ -225,6 +226,14 @@ var UI = {
   "map.procWorldTip":{pt:"Visão global — 19 países do mapa oficial Orbita.",en:"Global view — 19 countries from Orbita's official map."},
   "map.procIron":{pt:"⛓️ Cadeia ferro",en:"⛓️ Iron chain"},
   "map.procIronTip":{pt:"Cadeia animada Carajás → China — mina, usina, ferrovia, terminal, porto e cliente.",en:"Animated Carajás → China chain — mine, plant, railway, terminal, port and customer."},
+  "map.procOffice":{pt:"🏢 Escritórios",en:"🏢 Offices"},
+  "map.procOfficeTip":{pt:"Storytelling conectado nos escritórios Orbita — e-mail, estação, reunião, nuvem, remoto e SOC.",en:"Connected storytelling in Orbita offices — email, workstation, meeting, cloud, remote and SOC."},
+  "map.hintOffice":{pt:"Clique numa cena no mapa animado ou na lista — cada decisão conecta a próxima etapa do escritório.",en:"Click a scene on the animated map or in the list — each decision connects to the next office stage."},
+  "office.chainTitle":{pt:"🏢 Cadeia Digital — Escritórios Orbita",en:"🏢 Digital Chain — Orbita Offices"},
+  "office.chainSub":{pt:"Do Rio a Singapura e Roterdã: storytelling conectado com situações reais de escritório. Uma brecha propaga o risco adiante.",en:"From Rio to Singapore and Rotterdam: connected storytelling with real office situations. One breach propagates risk downstream."},
+  "office.chainFlow":{pt:"E-mail → Estação → Reunião → Nuvem → Remoto → SOC",en:"Email → Workstation → Meeting → Cloud → Remote → SOC"},
+  "office.impactOk":{pt:"🟢 Escritórios íntegros: fluxo digital seguro entre Rio, Singapura e Roterdã.",en:"🟢 Offices intact: secure digital flow between Rio, Singapore and Rotterdam."},
+  "office.impactBreach":{pt:"🔴 Brecha em \"{stage}\": o impacto se propaga pelos escritórios conectados — contratos, dados e reputação em risco.",en:"🔴 Breach at \"{stage}\": impact propagates across connected offices — contracts, data and reputation at risk."},
   "map.missionTitle":{pt:"Missão da mineração Orbita",en:"Orbita mining mission"},
   "map.missionText":{pt:"Proteger a cadeia global de minério de ferro, pelotas, níquel, cobre, cobalto, PGM, ouro e prata — da mina ao cliente.",en:"Protect the global chain of iron ore, pellets, nickel, copper, cobalt, PGM, gold and silver — from mine to customer."},
   "map.chainFlow":{pt:"Mina → Usina → Ferrovia → Terminal → Porto → Cliente",en:"Mine → Plant → Railway → Terminal → Port → Customer"},
@@ -253,7 +262,8 @@ var UI = {
   "result.medals":{pt:"🏅 Medalhas",en:"🏅 Medals"},
   "result.rank":{pt:"📈 Ranking por equipe",en:"📈 Team ranking"},
   "boss.title":{pt:"🐉 Chefões — Desafios de Segurança",en:"🐉 Bosses — Security Challenges"},
-  "boss.sub":{pt:"Aventuras estilo mesa (tabletop): cada chefão tem 10 cenas conectadas — erros comprometem a operação; acertos aumentam resiliência.",en:"Tabletop adventures: each boss has 10 connected scenes — mistakes compromise operations; correct choices build resilience."},
+  "boss.sub":{pt:"Aventuras estilo mesa com storytelling conectado e mapa vetorial animado — cada decisão avança a próxima cena.",en:"Tabletop adventures with connected storytelling and animated vector map — each decision advances the next scene."},
+  "boss.storyMapLabel":{pt:"Storytelling · Mapa",en:"Storytelling · Map"},
   "boss.threat":{pt:"🛡️ Ameaça",en:"🛡️ Threat"},
   "boss.energy":{pt:"energia do ataque",en:"attack energy"},
   "boss.ops":{pt:"🏭 Maturidade operacional",en:"🏭 Operational maturity"},
@@ -1154,14 +1164,29 @@ function setChainStageHighlight(id, scroll){
   });
   if(scroll&&id) scrollMapListItem('#bossChainFlow .chain-stage[data-stage="'+id+'"]');
 }
-function hydrateNorthernBoss(){
+var CHAIN_BOSS_CFG={
+  ransom:{chainId:"carajas",emoji:"⛓️",tag:{pt:"Sistema Norte · Cadeia",en:"Northern System · Chain"},
+    name:{pt:"Cadeia Norte — Carajás → China",en:"Northern Chain — Carajás → China"},
+    desc:{pt:"Proteja cada elo do Sistema Norte — da mina S11D ao cliente na China. Uma brecha impacta toda a cadeia a jusante.",en:"Protect every link of the Northern System — from the S11D mine to the customer in China. One breach hits the whole chain downstream."},
+    intro:{pt:"Você é o Guardião Digital do Sistema Norte. O minério sai de Carajás, percorre 892 km na EFC até Ponta da Madeira e segue à China. O mapa dinâmico mostra onde você está e o que já foi comprometido.",en:"You are the Digital Guardian of the Northern System. Ore leaves Carajás, travels 892 km on the EFC to Ponta da Madeira, then on to China. The live map shows where you are and what is already compromised."},
+    impactBad:{pt:"Brecha em \"{stage}\": o impacto se propaga a jusante na cadeia.",en:"Breach at \"{stage}\": impact propagates downstream."},
+    impactOk:{pt:"Elo protegido — a cadeia segue íntegra.",en:"Link protected — the chain stays intact."}},
+  officechain:{chainId:"office",emoji:"🏢",tag:{pt:"Escritórios · Digital",en:"Offices · Digital"},
+    name:{pt:"Cadeia Digital — Escritórios",en:"Digital Chain — Offices"},
+    desc:{pt:"Do Rio a Singapura e Roterdã: proteja cada cena do escritório. Uma brecha propaga risco pelos escritórios conectados.",en:"From Rio to Singapore and Rotterdam: protect each office scene. One breach propagates risk across connected offices."},
+    intro:{pt:"Você é o Guardião Digital dos escritórios Orbita. Uma segunda-feira começa com um e-mail suspeito no Rio — e cada decisão conecta a próxima cena, do desk à nuvem, da reunião ao SOC.",en:"You are the Digital Guardian of Orbita offices. A Monday starts with a suspicious email in Rio — and each decision connects to the next scene, from desk to cloud, meeting to SOC."},
+    impactBad:{pt:"Brecha em \"{stage}\": o impacto se propaga pelos escritórios conectados.",en:"Breach at \"{stage}\": impact propagates across connected offices."},
+    impactOk:{pt:"Cena protegida — o fluxo digital segue seguro.",en:"Scene protected — the digital flow stays secure."}}
+};
+function hydrateChainBoss(bossId){
   try{
     if(typeof BOSSES==="undefined"||!BOSSES||!BOSSES.length) return;
+    var cfg=CHAIN_BOSS_CFG[bossId]; if(!cfg) return;
     var b=null,i;
-    for(i=0;i<BOSSES.length;i++){ if(BOSSES[i].id==="ransom"){ b=BOSSES[i]; break; } }
+    for(i=0;i<BOSSES.length;i++){ if(BOSSES[i].id===bossId){ b=BOSSES[i]; break; } }
     if(!b) return;
     if(b.chainVisual&&b.phases&&b.phases.length&&b.phases[0]&&b.phases[0].stageId) return;
-    var ch=(typeof CHAINS!=="undefined"&&CHAINS&&CHAINS.length)?CHAINS[0]:null;
+    var ch=chainById(cfg.chainId);
     if(!ch||!ch.stages||!ch.stages.length) return;
     var phases=[];
     for(i=0;i<ch.stages.length;i++){
@@ -1171,76 +1196,39 @@ function hydrateNorthernBoss(){
       var snShort=snPt.length>16?snPt.slice(0,15)+"…":snPt;
       phases.push({
         stageId:st.id,
-        theme:q&&q.theme?q.theme:"ot",
-        scene:{pt:"Etapa "+(i+1)+" — "+snPt,en:"Stage "+(i+1)+" — "+snEn},
+        theme:q&&q.theme?q.theme:"phishing",
+        scene:{pt:"Cena "+(i+1)+" — "+snPt,en:"Scene "+(i+1)+" — "+snEn},
         q:q&&q.q?q.q:{pt:st.desc&&st.desc.pt?st.desc.pt:"",en:st.desc&&st.desc.en?st.desc.en:""},
         opts:q&&q.opts?q.opts:[{pt:"Seguir procedimento oficial",en:"Follow official procedure"},{pt:"Improvisar sob pressão",en:"Improvise under pressure"}],
         correct:q&&typeof q.correct==="number"?q.correct:0,
-        impactOk:q&&q.why?q.why:{pt:"Elo protegido — a cadeia segue íntegra.",en:"Link protected — the chain stays intact."},
-        impactBad:{pt:"Brecha em \""+snShort+"\": o impacto se propaga a jusante na cadeia.",en:"Breach at \""+snShort+"\": impact propagates downstream."},
-        bridge:next?{pt:"Próximo elo: "+(next.name&&next.name.pt?next.name.pt:"")+". "+(next.desc&&next.desc.pt?next.desc.pt:""),en:"Next link: "+(next.name&&next.name.en?next.name.en:"")+". "+(next.desc&&next.desc.en?next.desc.en:"")}:null
+        impactOk:q&&q.why?q.why:{pt:cfg.impactOk.pt,en:cfg.impactOk.en},
+        impactBad:{pt:cfg.impactBad.pt.replace("{stage}",snShort),en:cfg.impactBad.en.replace("{stage}",snShort)},
+        bridge:next?{pt:"Próxima cena: "+(next.name&&next.name.pt?next.name.pt:"")+". "+(next.desc&&next.desc.pt?next.desc.pt:""),en:"Next scene: "+(next.name&&next.name.en?next.name.en:"")+". "+(next.desc&&next.desc.en?next.desc.en:"")}:null
       });
     }
     if(!phases.length) return;
-    b.chainVisual=true; b.chainId=ch.id||"carajas";
-    b.emoji="⛓️";
-    b.tag={pt:"Sistema Norte · Cadeia",en:"Northern System · Chain"};
-    b.name={pt:"Cadeia Norte — Carajás → China",en:"Northern Chain — Carajás → China"};
-    b.desc={pt:"Proteja cada elo do Sistema Norte — da mina S11D ao cliente na China. Uma brecha impacta toda a cadeia a jusante.",en:"Protect every link of the Northern System — from the S11D mine to the customer in China. One breach hits the whole chain downstream."};
-    b.intro={pt:"Você é o Guardião Digital do Sistema Norte. O minério sai de Carajás, percorre 892 km na EFC até Ponta da Madeira e segue à China. O mapa dinâmico mostra onde você está e o que já foi comprometido.",en:"You are the Digital Guardian of the Northern System. Ore leaves Carajás, travels 892 km on the EFC to Ponta da Madeira, then on to China. The live map shows where you are and what is already compromised."};
+    b.chainVisual=true; b.mapVisual=true; b.chainId=cfg.chainId; b.mapSceneId=cfg.chainId;
+    b.emoji=cfg.emoji; b.tag=cfg.tag; b.name=cfg.name; b.desc=cfg.desc; b.intro=cfg.intro;
     b.phases=phases;
-  }catch(err){ console.error("hydrateNorthernBoss",err); }
+  }catch(err){ console.error("hydrateChainBoss",bossId,err); }
 }
+function hydrateNorthernBoss(){ hydrateChainBoss("ransom"); hydrateChainBoss("officechain"); hydrateAllBossMaps(); }
+function hydrateAllBossMaps(){
+  if(typeof BOSSES==="undefined"||!BOSSES.length) return;
+  BOSSES.forEach(function(b){
+    b.mapVisual=true;
+    if(!b.mapSceneId) b.mapSceneId=b.chainId||b.id;
+  });
+}
+function bossHasMap(b){ return !!(b&&b.mapVisual); }
 function renderBossChainVisual(){
   var host=$("bossChainVisual"); if(!host) return;
   var b=bossCur.boss;
-  if(!b||!b.chainVisual){ host.hidden=true; host.innerHTML=""; return; }
-  var ch=chainById(b.chainId||"carajas");
-  var active=bossCur.phase||0;
-  var toChina=(L()==="pt"?"Minério → China 🇨🇳":"Ore → China 🇨🇳");
-  var svg='<svg viewBox="0 0 1000 300" preserveAspectRatio="xMidYMid meet" width="100%" role="img" aria-label="'+tt(b.name)+'">';
-  svg+='<defs>'
-    +'<linearGradient id="cmSkyB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fd3e8"/><stop offset="1" stop-color="#dff1f5"/></linearGradient>'
-    +'<linearGradient id="cmGroundB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f7a4a"/><stop offset="1" stop-color="#2c5836"/></linearGradient>'
-    +'<linearGradient id="cmSeaB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b8fb0"/><stop offset="1" stop-color="#16607a"/></linearGradient>'
-    +'</defs>';
-  svg+=cmapScene().replace(/id="cmSky"/g,'id="cmSkyB"').replace(/url\(#cmSky\)/g,"url(#cmSkyB)")
-    .replace(/id="cmGround"/g,'id="cmGroundB"').replace(/url\(#cmGround\)/g,"url(#cmGroundB)")
-    .replace(/id="cmSea"/g,'id="cmSeaB"').replace(/url\(#cmSea\)/g,"url(#cmSeaB)");
-  var n=ch.stages.length;
-  function pinAt(i){ return CMAP_ROUTE[i]?{x:CMAP_ROUTE[i][0],y:CMAP_ROUTE[i][1]}:cmapPoint(n>1?i/(n-1):0); }
-  var d="M"+CMAP_ROUTE.map(function(p){ return p[0]+","+p[1]; }).join(" L");
-  svg+='<path d="'+d+'" fill="none" stroke="#EDB111" stroke-width="3" stroke-dasharray="7 6" opacity=".9"/>';
-  svg+='<g transform="translate(600,150)"><rect x="0" y="0" width="150" height="22" rx="11" fill="rgba(6,24,32,.82)"/><text x="12" y="15" font-size="12" fill="#EDB111" font-weight="700">'+toChina+'</text></g>';
-  var firstBad=-1;
-  for(var bi=0;bi<n;bi++){
-    var pst=bossCur.phaseStates&&bossCur.phaseStates[bi];
-    if(pst&&pst.ok===false){ firstBad=bi; break; }
-  }
-  if(firstBad>=0){
-    var bpts=[]; for(var bx=firstBad;bx<n;bx++){ var bp=pinAt(bx); bpts.push(bp.x+","+bp.y); }
-    svg+='<polyline class="cmap-breach" points="'+bpts.join(" ")+'" fill="none" stroke="#ff4d4f" stroke-width="5" stroke-dasharray="11 8" opacity=".95"/>';
-  }
-  ch.stages.forEach(function(st,i){
-    var pt=pinAt(i);
-    var pst=bossCur.phaseStates&&bossCur.phaseStates[i];
-    var done=!!pst, bad=done&&!pst.ok, on=i===active;
-    var fill=bad?"#ff4d4f":done?"#2fbf71":(on?"#EDB111":"#8aa4ad");
-    svg+='<g class="cmap-pin'+(bad?" compromised":(done?" done":""))+(on?" active":"")+'" data-stage="'+st.id+'" transform="translate('+pt.x.toFixed(1)+','+pt.y.toFixed(1)+')">';
-    svg+='<title>'+tt(st.name)+'</title>';
-    if(on) svg+='<circle class="cmap-pin-halo boss-visual-pulse" r="22" fill="'+fill+'" opacity=".35"/>';
-    else svg+='<circle class="cmap-pin-halo" r="17" fill="'+fill+'" opacity=".22"/>';
-    svg+='<circle class="cmap-pin-dot" r="13" fill="'+fill+'" stroke="#04141b" stroke-width="1.5"/>';
-    svg+='<text y="5" font-size="13" text-anchor="middle" font-weight="800" fill="#04141b">'+(bad?"!":(done?"✔":(i+1)))+'</text>';
-    svg+='<g class="cmap-pin-label"><rect x="-46" y="-40" width="92" height="18" rx="9" fill="rgba(6,24,32,.9)"/><text y="-27" font-size="11" text-anchor="middle" fill="#eaf2f6">'+(i+1)+". "+shortName(tt(st.name))+'</text></g>';
-    svg+='</g>';
-  });
-  var curSt=ch.stages[active];
-  if(curSt){
-    svg+='<g transform="translate(20,268)"><rect width="420" height="24" rx="8" fill="rgba(6,24,32,.88)"/><text x="12" y="16" font-size="12" fill="#eaf2f6" font-weight="700">'+(L()==="pt"?"Situação atual: ":"Current situation: ")+tt(curSt.name)+'</text></g>';
-  }
-  svg+='</svg>';
-  host.innerHTML=svg;
+  if(!bossHasMap(b)){ host.hidden=true; host.innerHTML=""; return; }
+  if(typeof renderBossMapSvg!=="function"){ host.hidden=true; return; }
+  var out=renderBossMapSvg(b,bossCur.phase||0,bossCur.phaseStates,L());
+  host.className="boss-chain-visual boss-chain-visual--"+(out.theme||"finance");
+  host.innerHTML=out.svg;
   host.hidden=false;
 }
 function renderBossChainSection(){ /* cadeia integrada ao chefão Northern Chain */ }
@@ -1250,7 +1238,7 @@ function openBossChain(scroll){
   show("screenBossList");
   if(scroll!==false){
     setTimeout(function(){
-      var card=$("bossChainCard")||document.querySelector('.boss-card[data-boss="ransom"]');
+      var card=document.querySelector('.boss-card[data-boss="ransom"]');
       if(card) card.scrollIntoView({behavior:S.a11y.motion?"auto":"smooth",block:"center"});
     },80);
   }
@@ -1817,7 +1805,58 @@ function renderChain(){
   });
 }
 
-/* ---- Mapa ilustrado da cadeia (SVG) ---- */
+/* ---- Mapa ilustrado — escritórios (SVG) ---- */
+var OFFICE_ROUTE=[[70,235],[210,198],[360,215],[520,175],[680,205],[890,228]];
+function offmapPoint(f){
+  var pts=OFFICE_ROUTE,segs=[],total=0,i;
+  for(i=0;i<pts.length-1;i++){ var dx=pts[i+1][0]-pts[i][0],dy=pts[i+1][1]-pts[i][1],len=Math.sqrt(dx*dx+dy*dy); segs.push(len); total+=len; }
+  var target=f*total,acc=0;
+  for(i=0;i<segs.length;i++){ if(acc+segs[i]>=target){ var t=segs[i]?(target-acc)/segs[i]:0; return {x:pts[i][0]+(pts[i+1][0]-pts[i][0])*t, y:pts[i][1]+(pts[i+1][1]-pts[i][1])*t}; } acc+=segs[i]; }
+  var last=pts[pts.length-1]; return {x:last[0], y:last[1]};
+}
+function offmapScene(sfx){
+  sfx=sfx||"";
+  var s='',lbl=L()==="pt"?"ESCRITÓRIOS ORBITA — RIO → SINGAPURA → ROTERDÃ":"ORBITA OFFICES — RIO → SINGAPORE → ROTTERDAM";
+  s+='<rect x="0" y="0" width="1000" height="300" fill="url(#omSky'+sfx+')"/>';
+  s+='<rect x="20" y="10" width="960" height="74" rx="10" fill="rgba(6,24,32,.18)" stroke="rgba(0,126,122,.4)" stroke-width="1.5"/>';
+  s+='<text x="500" y="30" font-size="11" text-anchor="middle" fill="rgba(255,255,255,.9)" font-weight="700">'+lbl+'</text>';
+  s+='<path d="M80,52 Q260,38 500,48 Q740,42 920,54" fill="none" stroke="rgba(0,126,122,.45)" stroke-width="2"/>';
+  s+='<path class="om-data-flow" d="M108,50 L500,46 L892,50" fill="none" stroke="#EDB111" stroke-width="2.5" opacity=".75"/>';
+  s+='<circle cx="108" cy="50" r="9" fill="#007E7A"/><text x="108" y="68" font-size="9" text-anchor="middle" fill="#eaf2f6" font-weight="700">🇧🇷 RIO</text>';
+  s+='<circle cx="500" cy="46" r="9" fill="#007E7A"/><text x="500" y="68" font-size="9" text-anchor="middle" fill="#eaf2f6" font-weight="700">🇸🇬 SG</text>';
+  s+='<circle cx="892" cy="50" r="9" fill="#007E7A"/><text x="892" y="68" font-size="9" text-anchor="middle" fill="#eaf2f6" font-weight="700">🇳🇱 RTM</text>';
+  s+='<rect x="0" y="88" width="1000" height="212" fill="url(#omFloor'+sfx+')"/>';
+  s+='<line x1="0" y1="128" x2="1000" y2="128" stroke="rgba(255,255,255,.1)" stroke-width="1"/>';
+  /* 1 E-mail */
+  s+='<rect x="28" y="152" width="82" height="52" rx="4" fill="#4a5568"/><rect x="36" y="160" width="66" height="36" rx="2" fill="#cbe8f2"/>';
+  s+='<g class="om-email-ping" transform="translate(78,148)"><rect x="-14" y="-16" width="28" height="18" rx="4" fill="#EDB111"/><text x="0" y="-3" font-size="11" text-anchor="middle">📧</text></g>';
+  s+='<rect x="42" y="208" width="54" height="26" rx="3" fill="#3d4f58"/>';
+  /* 2 Estação */
+  s+='<rect x="168" y="172" width="74" height="44" rx="4" fill="#2d3740"/><rect x="176" y="158" width="58" height="34" rx="2" fill="#1a2330" stroke="#5a6a72" stroke-width="2"/>';
+  s+='<rect x="184" y="166" width="42" height="22" fill="#cbe8f2" opacity=".85"/><rect x="226" y="186" width="8" height="18" rx="2" fill="#EDB111" class="om-usb"/>';
+  /* 3 Reunião */
+  s+='<rect x="308" y="142" width="104" height="82" rx="4" fill="rgba(0,126,122,.12)" stroke="#007E7A" stroke-width="2"/>';
+  s+='<rect x="324" y="156" width="72" height="46" rx="3" fill="#1a2a35"/><circle cx="346" cy="176" r="9" fill="#5a8a9a"/><circle cx="374" cy="176" r="9" fill="#5a8a9a"/>';
+  s+='<rect x="356" y="188" width="12" height="7" fill="#EDB111" class="om-video-flicker" rx="2"/>';
+  /* 4 Nuvem */
+  s+='<rect x="468" y="152" width="92" height="72" rx="4" fill="#3d4f58"/>';
+  for(var ry=0;ry<3;ry++){ s+='<rect x="478" y="'+(162+ry*20)+'" width="72" height="14" rx="2" fill="#2a353d"/><circle class="om-cloud-pulse" cx="538" cy="'+(169+ry*20)+'" r="3" fill="#2fbf71"/>'; }
+  s+='<path class="om-data-flow" d="M514,148 Q528,128 542,148" fill="none" stroke="#EDB111" stroke-width="2"/>';
+  /* 5 Remoto */
+  s+='<rect x="618" y="138" width="112" height="92" rx="6" fill="rgba(237,177,17,.1)" stroke="rgba(237,177,17,.35)" stroke-width="1.5"/>';
+  s+='<text x="674" y="154" font-size="9" text-anchor="middle" fill="rgba(255,255,255,.75)">✈ '+(L()==="pt"?"REMOTO":"REMOTE")+'</text>';
+  s+='<ellipse cx="654" cy="200" rx="20" ry="11" fill="#4a5568"/><rect x="638" y="184" width="42" height="28" rx="2" fill="#2d3740"/>';
+  s+='<circle cx="712" cy="172" r="11" fill="none" stroke="#ff6b6b" stroke-width="2" opacity=".55"/>';
+  /* 6 SOC */
+  s+='<rect x="778" y="146" width="184" height="76" rx="4" fill="#0a2a32" stroke="#007E7A" stroke-width="2"/>';
+  s+='<rect x="788" y="156" width="36" height="26" rx="2" fill="#1a3a45"/><rect x="828" y="156" width="36" height="26" rx="2" fill="#1a3a45"/>';
+  s+='<rect x="868" y="156" width="36" height="26" rx="2" fill="#1a3a45"/><rect x="908" y="156" width="44" height="26" rx="2" fill="#1a3a45"/>';
+  s+='<g transform="translate(932,198)"><path d="M0 0 L12 2 L12 12 Q6 20 0 16 Q-6 20 -12 12 L-12 2 Z" fill="url(#omShield'+sfx+')" opacity=".9"/><rect x="-4" y="4" width="8" height="6" rx="1" fill="#fff" opacity=".85"/></g>';
+  s+='<path d="M'+OFFICE_ROUTE.map(function(p){return p[0]+","+p[1];}).join(" L")+'" fill="none" stroke="rgba(237,177,17,.2)" stroke-width="2" stroke-dasharray="5 5"/>';
+  return s;
+}
+
+/* ---- Mapa ilustrado da cadeia ferro (SVG) ---- */
 var CMAP_ROUTE=[[95,248],[222,205],[306,206],[404,186],[504,214],[600,250],[760,232],[978,246]];
 function cmapPoint(f){
   var pts=CMAP_ROUTE,segs=[],total=0,i;
@@ -2133,16 +2172,23 @@ function renderBossList(){
   var host=$("bossList"); if(!host) return;
   ensureBossStats();
   host.innerHTML="";
-  BOSSES.forEach(function(b){
+  var list=BOSSES.slice().sort(function(a,b){
+    if(a.chainId==="carajas"&&b.chainId!=="carajas") return -1;
+    if(a.chainId!=="carajas"&&b.chainId==="carajas") return 1;
+    if(a.chainId==="office"&&b.chainId!=="office"&&b.chainId!=="carajas") return -1;
+    if(a.chainId!=="office"&&b.chainId==="office") return 1;
+    return 0;
+  });
+  list.forEach(function(b){
     var st=S.bossStats[b.id], best=st&&st.best, tier=best?bossTierInfo(best.tier):null;
     var d=document.createElement("button");
     d.type="button";
     d.setAttribute("data-boss",b.id);
-    d.className="boss-card boss-card--tabletop"+(b.chainVisual?" boss-card--chain":"");
-    var meta=(b.chainVisual?(L()==="pt"?"8 etapas · mapa dinâmico":"8 stages · live map"):(b.phases.length+" "+t("boss.scenes")))+(b.tag?" · "+tt(b.tag):"");
+    d.className="boss-card boss-card--tabletop boss-card--map";
+    var meta=b.phases.length+" "+(L()==="pt"?"cenas · mapa dinâmico":"scenes · live map")+(b.tag?" · "+tt(b.tag):"");
     if(best) meta+=" · "+(tier?tier.ico:"")+" "+best.index+"%";
     var badge=best?'<span class="bdone" title="'+tt(tier.title)+'">'+tier.ico+'</span>':'<span class="boss-card-play" aria-hidden="true">▶</span>';
-    var tagLabel=b.chainVisual?(L()==="pt"?"Cadeia logística":"Logistics chain"):t("boss.storyLabel");
+    var tagLabel=t("boss.storyMapLabel");
     d.innerHTML='<span class="be">'+b.emoji+'</span><div class="boss-card-body"><span class="boss-card-tag">'+tagLabel+'</span><div class="bt">'+tt(b.name)+'</div><div class="bd">'+tt(b.desc)+'</div><div class="boss-card-meta">'+meta+'</div></div>'+badge;
     d.addEventListener("click",function(){ startBoss(b.id); });
     host.appendChild(d);
@@ -2194,7 +2240,7 @@ function renderBossPhase(){
   if(sceneEl) sceneEl.textContent=ph.scene?tt(ph.scene):(t("boss.scene")+" "+(bossCur.phase+1));
   $("bossHpFill").style.width=bossCur.hp+"%";
   renderBossBars();
-  $("bossPhaseNum").textContent=(b.chainVisual?(L()==="pt"?"Etapa ":"Stage "):(t("boss.scene")+" "))+(bossCur.phase+1)+"/"+b.phases.length;
+  $("bossPhaseNum").textContent=(L()==="pt"?"Cena ":"Scene ")+(bossCur.phase+1)+"/"+b.phases.length;
   $("bossPrompt").textContent=tt(ph.q);
   var bp=$("bossPersonalBridge");
   if(bp){ var th=bossPhaseTheme(b,ph), p=getPersonal({theme:th,personal:ph.personal}); if(p){ bp.hidden=false; bp.innerHTML='<span class="personal-k">'+t("quiz.personal")+':</span> '+tt(p); } else bp.hidden=true; }
@@ -2214,7 +2260,7 @@ function renderBossPhase(){
   if(st){ fb.className=st.feedbackClass||"feedback"; fb.innerHTML=st.feedbackHtml||""; }
   else { fb.className="feedback"; fb.innerHTML=""; }
   var nxt=$("bossNext");
-  if(nxt) nxt.textContent=bossCur.phase>=b.phases.length-1?t("boss.finish"):(b.chainVisual?(L()==="pt"?"Próxima etapa →":"Next stage →"):t("boss.next"));
+  if(nxt) nxt.textContent=bossCur.phase>=b.phases.length-1?t("boss.finish"):(L()==="pt"?"Próxima cena →":"Next scene →");
   updateBossNav();
   if(!st) speak(tt(b.name)+". "+(ph.scene?tt(ph.scene)+". ":"")+tt(ph.q));
 }
@@ -2246,7 +2292,7 @@ function bossAnswer(idx,btn,ph,order){
   if(!bossCur.phaseStates) bossCur.phaseStates={};
   bossCur.phaseStates[bossCur.phase]={selectedIdx:idx,ok:ok,feedbackClass:fb.className,feedbackHtml:fb.innerHTML,hp:bossCur.hp,ops:bossCur.ops,order:order||bossCur._optOrder};
   bossCur.log.push({good:ph.impactOk||ph.why,bad:ph.impactBad||ph.why,ok:ok});
-  if(b.chainVisual&&ph.stageId){
+  if(b.chainId&&ph.stageId){
     var key=chainKey(b.chainId||"carajas",ph.stageId);
     S.chainDone[key]=ok?100:40;
     save();
@@ -2922,7 +2968,6 @@ function bind(){
   on("homeStartBtn","click",function(){ renderTeams(); renderRoles(); if($("playerName")) $("playerName").value=S.name||""; show("screenSetup"); });
   on("homeMapBtn","click",function(){ openMap(null,true); });
   on("heroIronBtn","click",function(){ openBossChain(true); });
-  on("bossChainPlayBtn","click",function(){ startBoss("ransom"); });
   on("setupBackBtn","click",function(){ show("screenHome"); });
   on("setupGoBtn","click",function(){ if($("playerName")) S.name=$("playerName").value.trim(); save(); openMap(null,true); });
   on("playerName","input",function(){ S.name=this.value; });

@@ -389,5 +389,10 @@ var BOSSES = [
       opts:[{pt:"Programa integrado: segurança física+digital, MFA remoto, calibração auditada, política de acesso e exercícios semestrais",en:"Integrated program: physical+digital security, remote MFA, audited calibration, access policy and semiannual exercises"},{pt:"Instalar câmeras novas e não mudar processos de acesso",en:"Install new cameras and don't change access processes"},{pt:"Proibir qualquer acesso remoto ao porto permanentemente",en:"Ban all remote port access permanently"}],correct:0,
       impactOk:{pt:"Programa integrado ao Guardião Digital; Ponta da Madeira opera com resiliência comprovada e a cadeia Carajás→Porto→China permanece íntegra.",en:"Program integrated into Digital Guardian; Ponta da Madeira operates with proven resilience and Carajás→Port→China chain stays intact."},
       impactBad:{pt:"Sem programa integrado, ataque coordenado físico+digital repete em 8 meses; porto paralisa embarques por 5 dias e perde US$ 8 mi.",en:"Without integrated program, coordinated physical+digital attack repeats in 8 months; port halts loading for 5 days and loses US$ 8M."}}
-   ]}
+   ]},
+  {id:"officechain", emoji:"🏢", tag:{pt:"Escritórios · Storytelling",en:"Offices · Storytelling"},
+   name:{pt:"Cadeia Digital — Escritórios",en:"Digital Chain — Offices"},
+   desc:{pt:"Do Rio a Singapura e Roterdã: situações reais de escritório em storytelling conectado com mapa animado.",en:"From Rio to Singapore and Rotterdam: real office situations in connected storytelling with animated map."},
+   intro:{pt:"Você é o Guardião Digital dos escritórios Orbita. Uma segunda-feira começa com um e-mail suspeito no Rio — e cada decisão sua conecta a próxima cena, do desk à nuvem, da reunião ao SOC.",en:"You are the Digital Guardian of Orbita offices. A Monday starts with a suspicious email in Rio — and each decision connects to the next scene, from desk to cloud, meeting to SOC."},
+   phases:[{scene:{pt:"Início",en:"Start"},q:{pt:"…",en:"…"},opts:[{pt:"A",en:"A"},{pt:"B",en:"B"}],correct:0}]}
 ];
