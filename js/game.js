@@ -1793,13 +1793,7 @@ function setMapHitHighlight(id, scroll){
 }
 function drawOrbitaRoutes(){
   if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.isReady()) return;
-  var activeRoute=mapProcess&&mapProcess!=="iron"?mapProcess:null;
-  var routes=SUPPLY_ROUTES.map(function(r){
-    var cls=r.cls||"";
-    if(activeRoute) cls+=(r.id===activeRoute?" route-active":" route-dim");
-    return {pts:r.pts, cls:cls};
-  });
-  OrbitaWorldMap.drawRoutes(routes);
+  OrbitaWorldMap.drawRoutes([]);
 }
 var orbitaMapInitPromise=null;
 function ensureOrbitaWorldMap(cb){
@@ -1813,6 +1807,8 @@ function ensureOrbitaWorldMap(cb){
       lang:L,
       onCountryClick:function(gameId, fromMap){
         if(!gameId) return;
+        zoomToCountry(gameId);
+        scrollMapIntoView();
         setMapHitHighlight(gameId, !fromMap);
         if(!fromMap) openMapDetailCountry(gameId);
       },
@@ -1837,12 +1833,16 @@ function finishWorldMapUI(){
   restoreMapTabFocus();
   mapReady=true;
 }
-function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; }
+function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open"); }
 function openMapDetailCountry(id){
   var c=COUNTRIES.filter(function(x){return x.id===id;})[0]; if(!c) return;
   cur.country=c;
   mapHitActive=id;
   setMapHitHighlight(id);
+  zoomToCountry(id);
+  scrollMapIntoView();
+  var tip=$("mapTooltip"); if(tip) tip.hidden=true;
+  var stage=$("mapStage"); if(stage) stage.classList.add("map-detail-open");
   var body=$("mapDetailBody"), panel=$("mapDetail"); if(!body||!panel) return;
   var official=(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.getCountry)?OrbitaWorldMap.getCountry(id,L()):null;
   var themes=c.themes.map(function(th){ return '<span class="tag">'+tt(THEMES[th])+'</span>'; }).join(" ");
@@ -1932,6 +1932,20 @@ function drawMap(){
 }
 function ensureMap(){ if(!mapReady) drawMap(); }
 function updateViewBox(){ var s=$("mapSvg"); if(s) s.setAttribute("viewBox",view.x+" "+view.y+" "+view.w+" "+view.h); }
+function zoomToCountry(gameId){
+  if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.isReady()||!gameId) return;
+  var v=OrbitaWorldMap.getCountryView(gameId);
+  if(!v) return;
+  var f=Math.max(0.22,Math.min(1,v.targetW/view.w));
+  zoomTo(v.cx,v.cy,f);
+}
+function scrollMapIntoView(){
+  var stage=$("mapStage");
+  if(!stage) return;
+  requestAnimationFrame(function(){
+    stage.scrollIntoView({behavior:"smooth",block:"start"});
+  });
+}
 function zoomTo(cx,cy,f){ var nw=Math.max(200,Math.min(VW,view.w*f)),nh=nw*(VH/VW); view.x=Math.max(0,Math.min(VW-nw,cx-nw/2)); view.y=Math.max(0,Math.min(VH-nh,cy-nh/2)); view.w=nw; view.h=nh; updateViewBox(); }
 function resetView(){ setMapProcess(null); }
 function focusIronChain(){ openBossChain(true); }

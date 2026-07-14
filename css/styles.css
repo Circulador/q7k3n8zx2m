@@ -378,7 +378,8 @@ input#playerName{width:100%;padding:12px 14px;border-radius:12px;border:1px soli
 .map-stage{position:relative;border:1px solid #c5d5db;border-radius:8px;overflow:hidden;background:#fff;touch-action:none;cursor:grab}
 .map-stage.dragging{cursor:grabbing}
 #mapSvg{display:block;width:100%;height:auto}
-.route-line{fill:none;stroke-width:2.5;stroke-linecap:round;opacity:.9}
+.route-line{fill:none;stroke-width:2.5;stroke-linecap:round;opacity:.9;display:none}
+.vwm-routes{display:none!important}
 .route-line.iron{stroke:#c47d08;stroke-dasharray:6 5;animation:routeFlow 1.6s linear infinite}
 .route-line.nickel{stroke:#007E7A;stroke-width:2;stroke-dasharray:5 6}
 .route-line.pellet{stroke:#3d7ea6;stroke-width:2;stroke-dasharray:5 6}
@@ -397,12 +398,18 @@ input#playerName{width:100%;padding:12px 14px;border-radius:12px;border:1px soli
 .integrity-res{margin-top:8px}
 .res-hit{display:block;font-size:.82rem;margin-top:4px;color:var(--bad)}
 .map-stage.dragging .vwm-country{pointer-events:none}
-.map-detail{position:absolute;top:12px;right:12px;width:min(340px,calc(100% - 24px));max-height:calc(100% - 24px);overflow:auto;background:#fff;border:2px solid #007E7A;border-radius:10px;padding:16px 16px 14px;box-shadow:0 10px 32px rgba(0,0,0,.25);z-index:20;color:#0a1a24}
-@media(max-width:640px){
-  .map-detail{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%;max-height:min(72vh,520px);border-radius:16px 16px 0 0;border-width:2px 0 0;box-shadow:0 -8px 32px rgba(0,0,0,.35);animation:mapSheetIn .25s ease}
-  .map-detail::before{content:"";display:block;width:40px;height:4px;border-radius:4px;background:#c5d5db;margin:0 auto 10px}
+.map-detail{position:absolute;top:12px;right:12px;width:min(340px,calc(100% - 24px));max-height:none;overflow:visible;background:#fff;border:2px solid #007E7A;border-radius:10px;padding:16px 16px 14px;box-shadow:0 10px 32px rgba(0,0,0,.25);z-index:20;color:#0a1a24}
+.map-stage.map-detail-open{overflow:visible}
+@media(max-width:900px){
+  .map-stage.map-detail-open{display:flex;flex-direction:column;overflow:visible}
+  .map-stage.map-detail-open .vwm-map-stage-inner{order:1;flex-shrink:0}
+  .map-stage.map-detail-open .map-detail{order:2;position:relative;top:auto;right:auto;left:auto;bottom:auto;width:100%;max-height:none;overflow:visible;margin:8px 0 0;border-radius:12px;animation:none;box-shadow:0 6px 20px rgba(0,0,0,.15)}
+  .map-stage.map-detail-open .map-detail::before{display:none}
 }
-@keyframes mapSheetIn{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@media(max-width:640px){
+  .map-detail{position:relative;top:auto;right:auto;left:auto;bottom:auto;width:100%;max-height:none;overflow:visible;border-radius:12px;border-width:2px;box-shadow:0 6px 20px rgba(0,0,0,.15);animation:none}
+  .map-detail::before{display:none}
+}
 .country-btn.map-hidden,.chain-stage.map-hidden{display:none!important}
 .country-group.map-group-hidden{display:none!important}
 .map-detail-close{position:absolute;top:8px;right:10px;width:28px;height:28px;border:0;background:#eef3f5;border-radius:6px;font-size:1.2rem;line-height:1;cursor:pointer;color:#0a1a24}
@@ -457,7 +464,7 @@ input#playerName{width:100%;padding:12px 14px;border-radius:12px;border:1px soli
 .vwm-country.has-data:hover{opacity:.88}
 .vwm-country.is-muted{opacity:.16}
 .vwm-country.is-active,.vwm-country.is-filtered{opacity:1;stroke:rgba(255,255,255,.7);stroke-width:.5}
-.vwm-tooltip{background:#fff;border:0;border-top:3px solid #007e7a;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.18);color:#1a1a1a;font-size:.72rem;left:0;max-width:min(280px,calc(100vw - 40px));min-width:210px;padding:14px 18px 12px;pointer-events:auto;position:fixed;top:0;z-index:500}
+.vwm-tooltip{background:#fff;border:0;border-top:3px solid #007e7a;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.18);color:#1a1a1a;font-size:.72rem;left:0;max-width:min(300px,calc(100vw - 24px));min-width:210px;max-height:none;overflow:visible;padding:14px 18px 12px;pointer-events:auto;position:fixed;top:0;z-index:500}
 .vwm-tooltip-title{border-bottom:1px solid #e5e5e5;color:#005f5c;font-size:.9rem;font-weight:700;line-height:1.2;margin-bottom:8px;padding-bottom:7px}
 .vwm-tooltip-phrase{color:#3d4f55;font-size:.72rem;font-style:italic;line-height:1.5;margin:0 0 8px}
 .vwm-tooltip-section+.vwm-tooltip-section{margin-top:8px}

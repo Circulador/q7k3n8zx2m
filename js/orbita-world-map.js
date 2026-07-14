@@ -60,7 +60,7 @@ var OrbitaWorldMap = (function () {
 
   var state = { filterId: null, filterType: null, selectedIso: null };
   var projection, pathFn, countrySel, svgNode, tooltipNode, clearBtn, loadingNode;
-  var itemById, onCountryClick, onFilterChange, langFn, ready = false, routesLayer;
+  var itemById, onCountryClick, onFilterChange, langFn, ready = false, routesLayer, countryFeatures;
 
   function notifyFilterChange() {
     if (onFilterChange) onFilterChange();
@@ -258,8 +258,21 @@ var OrbitaWorldMap = (function () {
     if (!tooltipNode || !getData(feature)) return;
     tooltipNode.innerHTML = buildTooltip(feature);
     tooltipNode.hidden = false;
-    tooltipNode.style.left = Math.max(8, Math.min(event.clientX + 18, window.innerWidth - 300)) + "px";
-    tooltipNode.style.top = Math.max(8, Math.min(event.clientY - 8, window.innerHeight - 260)) + "px";
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    var narrow = vw <= 900;
+    if (narrow) {
+      tooltipNode.style.left = "12px";
+      tooltipNode.style.right = "12px";
+      tooltipNode.style.width = "auto";
+      tooltipNode.style.maxWidth = "none";
+      tooltipNode.style.top = Math.max(12, Math.min(event.clientY + 12, vh - 220)) + "px";
+    } else {
+      tooltipNode.style.right = "auto";
+      tooltipNode.style.width = "";
+      tooltipNode.style.left = Math.max(8, Math.min(event.clientX + 18, vw - 320)) + "px";
+      tooltipNode.style.top = Math.max(8, Math.min(event.clientY - 8, vh - 280)) + "px";
+    }
     var playBtn = tooltipNode.querySelector(".vwm-tooltip-play");
     if (playBtn && onCountryClick) {
       playBtn.addEventListener("click", function (e) {
@@ -283,6 +296,7 @@ var OrbitaWorldMap = (function () {
     svg.selectAll("*").remove();
     svg.attr("viewBox", "0 0 " + VW + " " + VH);
     var features = topojson.feature(world, world.objects.countries).features;
+    countryFeatures = features;
     countrySel = svg.append("g").attr("class", "vwm-countries").selectAll("path").data(features).join("path")
       .attr("class", function (f) { return getData(f) ? "vwm-country has-data" : "vwm-country"; })
       .attr("d", pathFn)
@@ -372,6 +386,29 @@ var OrbitaWorldMap = (function () {
     return { x: p[0], y: p[1] };
   }
 
+  function findCountryFeature(gameId) {
+    if (!countryFeatures || !gameId) return null;
+    var iso = gameToIso(gameId);
+    if (!iso) return null;
+    var key = String(iso).padStart(3, "0");
+    for (var i = 0; i < countryFeatures.length; i++) {
+      if (getIso(countryFeatures[i]) === key) return countryFeatures[i];
+    }
+    return null;
+  }
+
+  function getCountryView(gameId) {
+    var feature = findCountryFeature(gameId);
+    if (!feature || !pathFn) return null;
+    var c = pathFn.centroid(feature);
+    var b = pathFn.bounds(feature);
+    var bw = b[1][0] - b[0][0];
+    var bh = b[1][1] - b[0][1];
+    var pad = window.innerWidth <= 640 ? 2.2 : 1.85;
+    var targetW = Math.min(VW, Math.max(200, Math.max(bw, bh) * pad));
+    return { cx: c[0], cy: c[1], targetW: targetW };
+  }
+
   function drawRoutes(routes) {
     if (!routesLayer || !pathFn) return;
     routesLayer.selectAll("*").remove();
@@ -448,6 +485,7 @@ var OrbitaWorldMap = (function () {
     getFilter: getFilter,
     project: project,
     drawRoutes: drawRoutes,
+    getCountryView: getCountryView,
     isReady: isReady,
     gameToIso: gameToIso,
     ISO_TO_GAME: ISO_TO_GAME,
