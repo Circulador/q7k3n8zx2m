@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="Guardião Digital da Operação — conscientização em Cyber Security (Orbita). Bilíngue PT/EN, mapa global explorável e acessível.">
+<meta name="description" content="Guardião Cibernético — conscientização em Cyber Security (Orbita). Bilíngue PT/EN, mapa global explorável e acessível.">
 <meta name="theme-color" content="#007E7A">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
-<title>Guardião Digital da Operação — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=55">
+<title>Guardião Cibernético — Orbita</title>
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=56">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=55">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=55">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=56">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=56">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=55"></script>
-<link rel="stylesheet" href="css/styles.css?v=55">
+<script src="js/access-gate.js?v=56"></script>
+<link rel="stylesheet" href="css/styles.css?v=56">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -71,11 +71,12 @@
 </div>
 
 <div class="app">
+  <div class="a11y-backdrop" id="a11yBackdrop" hidden aria-hidden="true"></div>
   <header class="topbar" role="banner">
     <div class="brand">
       <img class="orbita-logo" src="assets/orbita-logo.svg" width="72" height="28" alt="Orbita">
       <span class="logo-badge" id="hudAvatar">🛡️</span>
-      <div class="gd">Guardião Digital<small data-i18n="brand.sub">da Operação</small></div>
+      <div class="gd"><span data-i18n="brand.main">Guardião Cibernético</span><small data-i18n="brand.sub">Cyber Security</small></div>
     </div>
     <div class="hud" role="status" aria-label="Indicadores">
       <button class="chip chip-btn hud-tip" id="langToggle" data-i18n-attr="aria-label:hud.tip.lang;title:hud.tip.lang" aria-label="Trocar idioma">🌐 PT</button>
@@ -107,30 +108,44 @@
               </div>
             </div>
             <div class="am-section">
-              <span class="am-section-label" data-i18n="a11y.prefsLabel">Preferências</span>
+              <span class="am-section-label" data-i18n="a11y.sec.read">Leitura e narração</span>
               <div class="am-toggles">
                 <button type="button" class="am-toggle" data-opt="voice" role="menuitemcheckbox" aria-checked="false">
                   <span class="am-toggle-label" data-i18n="a11y.voice">Narração por voz</span>
                   <span class="am-switch" aria-hidden="true"></span>
                 </button>
-                <button type="button" class="am-toggle" data-opt="contrast" role="menuitemcheckbox" aria-checked="false">
-                  <span class="am-toggle-label" data-i18n="a11y.contrast">Alto contraste</span>
+                <button type="button" class="am-toggle" data-opt="readingMode" role="menuitemcheckbox" aria-checked="false">
+                  <span class="am-toggle-label" data-i18n="a11y.readingMode">Modo de leitura</span>
                   <span class="am-switch" aria-hidden="true"></span>
                 </button>
-                <button type="button" class="am-toggle" data-opt="large" role="menuitemcheckbox" aria-checked="false">
-                  <span class="am-toggle-label" data-i18n="a11y.large">Texto grande</span>
+              </div>
+            </div>
+            <div class="am-section">
+              <span class="am-section-label" data-i18n="a11y.sec.visual">Visual e cores</span>
+              <div class="am-toggles">
+                <button type="button" class="am-toggle" data-opt="contrast" role="menuitemcheckbox" aria-checked="false">
+                  <span class="am-toggle-label" data-i18n="a11y.contrast">Alto contraste</span>
                   <span class="am-switch" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="am-toggle" data-opt="motion" role="menuitemcheckbox" aria-checked="false">
                   <span class="am-toggle-label" data-i18n="a11y.motion">Reduzir animações</span>
                   <span class="am-switch" aria-hidden="true"></span>
                 </button>
-                <button type="button" class="am-toggle" data-opt="signs" role="menuitemcheckbox" aria-checked="false">
-                  <span class="am-toggle-label" data-i18n="a11y.signs">Hand Talk (Libras)</span>
+                <button type="button" class="am-toggle" data-opt="colorblind" role="menuitemcheckbox" aria-checked="false">
+                  <span class="am-toggle-label" data-i18n="a11y.colorblind">Modo daltônico</span>
                   <span class="am-switch" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="am-toggle" data-opt="links" role="menuitemcheckbox" aria-checked="false">
                   <span class="am-toggle-label" data-i18n="a11y.links">Destaque de links</span>
+                  <span class="am-switch" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+            <div class="am-section">
+              <span class="am-section-label" data-i18n="a11y.sec.text">Texto e tipografia</span>
+              <div class="am-toggles">
+                <button type="button" class="am-toggle" data-opt="large" role="menuitemcheckbox" aria-checked="false">
+                  <span class="am-toggle-label" data-i18n="a11y.large">Texto grande</span>
                   <span class="am-switch" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="am-toggle" data-opt="spacing" role="menuitemcheckbox" aria-checked="false">
@@ -145,19 +160,22 @@
                   <span class="am-toggle-label" data-i18n="a11y.dyslexia">Letras destacadas</span>
                   <span class="am-switch" aria-hidden="true"></span>
                 </button>
-                <button type="button" class="am-toggle" data-opt="readingMode" role="menuitemcheckbox" aria-checked="false">
-                  <span class="am-toggle-label" data-i18n="a11y.readingMode">Modo de leitura</span>
+              </div>
+            </div>
+            <div class="am-section">
+              <span class="am-section-label" data-i18n="a11y.sec.signs">Libras / ASL</span>
+              <div class="am-toggles">
+                <button type="button" class="am-toggle" data-opt="signs" role="menuitemcheckbox" aria-checked="false">
+                  <span class="am-toggle-label" data-i18n="a11y.signs">Hand Talk (Libras)</span>
                   <span class="am-switch" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="am-toggle" data-opt="colorblind" role="menuitemcheckbox" aria-checked="false">
-                  <span class="am-toggle-label" data-i18n="a11y.colorblind">Modo daltônico</span>
-                  <span class="am-switch" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="am-action" id="structureBtn" role="menuitem">
-                  <span class="am-toggle-label" data-i18n="a11y.structure">Estrutura da página</span>
-                  <span aria-hidden="true">📋</span>
                 </button>
               </div>
+            </div>
+            <div class="am-section am-section-compact">
+              <button type="button" class="am-action" id="structureBtn" role="menuitem">
+                <span class="am-toggle-label" data-i18n="a11y.structure">Estrutura da página</span>
+                <span aria-hidden="true">📋</span>
+              </button>
             </div>
             <div class="am-footer">
               <button type="button" class="am-reset" id="resetA11yMenuBtn" data-i18n="a11y.reset">↩️ Restaurar padrão</button>
@@ -175,63 +193,89 @@
   <!-- ============ HOME: LANGUAGE + ACCESSIBILITY ============ -->
   <section id="screenHome" class="screen active" aria-label="Início">
     <div class="card hero">
-      <button type="button" class="hero-scene hero-scene-btn" id="heroIronBtn" data-i18n-attr="aria-label:home.heroIronTip;title:home.heroIronTip" aria-label="Abrir cadeia de ferro no mapa">
-        <svg class="hero-svg" viewBox="0 0 900 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <button type="button" class="hero-scene hero-scene-btn" id="heroIronBtn" data-i18n-attr="aria-label:home.heroIronTip;title:home.heroIronTip" aria-label="Explorar cadeia operacional nos Chefões">
+        <svg class="hero-svg" viewBox="0 0 900 168" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
             <linearGradient id="heroSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a4a52"/><stop offset="1" stop-color="#063540"/></linearGradient>
-            <linearGradient id="heroGround" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5c3d1e"/><stop offset=".45" stop-color="#3d6b35"/><stop offset="1" stop-color="#0e5f6e"/></linearGradient>
+            <linearGradient id="heroGround" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5c3d1e"/><stop offset=".4" stop-color="#3d6b35"/><stop offset=".75" stop-color="#1a6b78"/><stop offset="1" stop-color="#0e5f6e"/></linearGradient>
             <linearGradient id="heroSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a8fa8"/><stop offset="1" stop-color="#0a4a58"/></linearGradient>
             <linearGradient id="orbitaGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EDB111"/><stop offset="1" stop-color="#007E7A"/></linearGradient>
+            <radialGradient id="globeGlow" cx=".35" cy=".35" r=".7"><stop offset="0" stop-color="#2ec4d8"/><stop offset="1" stop-color="#0a4a58"/></radialGradient>
           </defs>
-          <rect width="900" height="160" fill="url(#heroSky)"/>
-          <rect y="108" width="620" height="52" fill="url(#heroGround)"/>
-          <rect x="620" y="118" width="280" height="42" fill="url(#heroSea)"/>
-          <!-- Mina -->
-          <path d="M30 108 L90 72 L150 108 Z" fill="#6b4423" opacity=".9"/>
-          <rect x="52" y="88" width="28" height="20" rx="2" fill="#4a3520"/>
-          <g class="hero-exc"><rect x="58" y="78" width="6" height="18" fill="#EDB111"/><path d="M64 78 L82 68 L82 72 L68 82 Z" fill="#888"/></g>
-          <rect x="118" y="96" width="22" height="12" rx="2" fill="#c45a11" class="hero-truck"/>
-          <!-- Britagem -->
-          <rect x="168" y="92" width="36" height="16" rx="2" fill="#7a7a7a"/>
-          <rect x="176" y="84" width="20" height="8" fill="#555"/>
-          <!-- Correia -->
-          <line x1="210" y1="100" x2="268" y2="100" stroke="#555" stroke-width="4"/>
-          <line x1="210" y1="100" x2="268" y2="100" stroke="#EDB111" stroke-width="2" stroke-dasharray="6 4" class="hero-belt"/>
-          <!-- Usina -->
-          <rect x="278" y="78" width="48" height="30" fill="#5a6a72"/>
-          <rect x="288" y="68" width="8" height="14" fill="#888"/><rect x="304" y="72" width="8" height="10" fill="#888"/>
-          <circle cx="292" cy="64" r="3" fill="#aaa" class="hero-smoke"/>
-          <!-- Pátio -->
-          <ellipse cx="358" cy="108" rx="22" ry="6" fill="#8b6914" opacity=".7"/>
-          <!-- Trem EFC (locomotiva à esquerda, sentido →) -->
+          <rect width="900" height="168" fill="url(#heroSky)"/>
+          <rect y="112" width="640" height="56" fill="url(#heroGround)"/>
+          <rect x="640" y="122" width="260" height="46" fill="url(#heroSea)"/>
+          <!-- Mina a céu aberto -->
+          <path d="M18 112 L18 78 L48 62 L78 72 L98 62 L128 78 L128 112 Z" fill="#5a3a22" opacity=".95"/>
+          <path d="M32 112 L32 92 L52 84 L72 92 L72 112 Z" fill="#6b4a2a"/>
+          <path d="M44 112 L44 100 L58 94 L72 100 L72 112 Z" fill="#7a5a32"/>
+          <g class="hero-exc"><rect x="54" y="82" width="5" height="16" fill="#EDB111"/><path d="M59 82 L74 74 L74 78 L62 86 Z" fill="#aaa"/></g>
+          <!-- Britagem / usina -->
+          <rect x="148" y="96" width="40" height="16" rx="2" fill="#6a6a6a"/>
+          <rect x="156" y="86" width="24" height="10" fill="#555"/>
+          <rect x="162" y="76" width="6" height="12" fill="#888"/>
+          <circle cx="165" cy="72" r="3" fill="#bbb" class="hero-smoke"/>
+          <line x1="192" y1="104" x2="248" y2="104" stroke="#555" stroke-width="4"/>
+          <line x1="192" y1="104" x2="248" y2="104" stroke="#EDB111" stroke-width="2" stroke-dasharray="6 4" class="hero-belt"/>
+          <!-- Pátio / armazenagem -->
+          <ellipse cx="278" cy="112" rx="20" ry="5" fill="#8b6914" opacity=".75"/>
+          <rect x="300" y="88" width="44" height="24" fill="#5a6a72"/>
+          <rect x="310" y="78" width="8" height="12" fill="#888"/><rect x="326" y="82" width="8" height="8" fill="#888"/>
+          <!-- Trem logístico -->
           <g class="hero-train">
-            <rect x="0" y="92" width="22" height="14" rx="2" fill="#007E7A"/>
-            <rect x="2" y="88" width="18" height="6" fill="#005f5c"/>
-            <rect x="24" y="94" width="16" height="12" rx="1" fill="#6b5030"/>
-            <rect x="42" y="94" width="16" height="12" rx="1" fill="#6b5030"/>
-            <rect x="60" y="94" width="16" height="12" rx="1" fill="#6b5030"/>
-            <circle cx="8" cy="108" r="3" fill="#222"/><circle cx="18" cy="108" r="3" fill="#222"/>
-            <circle cx="32" cy="108" r="2.5" fill="#222"/><circle cx="50" cy="108" r="2.5" fill="#222"/><circle cx="68" cy="108" r="2.5" fill="#222"/>
+            <rect x="0" y="96" width="24" height="14" rx="2" fill="#007E7A"/>
+            <rect x="2" y="92" width="20" height="6" fill="#005f5c"/>
+            <rect x="26" y="98" width="18" height="12" rx="1" fill="#6b5030"/>
+            <rect x="46" y="98" width="18" height="12" rx="1" fill="#6b5030"/>
+            <rect x="66" y="98" width="18" height="12" rx="1" fill="#6b5030"/>
+            <circle cx="10" cy="112" r="3" fill="#222"/><circle cx="20" cy="112" r="3" fill="#222"/>
+            <circle cx="35" cy="112" r="2.5" fill="#222"/><circle cx="55" cy="112" r="2.5" fill="#222"/><circle cx="75" cy="112" r="2.5" fill="#222"/>
           </g>
-          <!-- Trilhos -->
-          <line x1="380" y1="110" x2="580" y2="110" stroke="#444" stroke-width="2"/>
+          <line x1="368" y1="114" x2="598" y2="114" stroke="#444" stroke-width="2"/>
           <!-- Porto -->
-          <rect x="600" y="100" width="50" height="8" fill="#555"/>
-          <path d="M650 108 L720 118 L720 138 L650 128 Z" fill="#8b2942" class="hero-ship"/>
-          <rect x="668" y="112" width="36" height="8" fill="#a03050"/>
-          <!-- Escudos de segurança -->
-          <g class="hero-shield" transform="translate(70,58)"><path d="M0 0 L10 2 L10 10 Q5 16 0 12 Q-5 16 -10 10 L-10 2 Z" fill="url(#orbitaGrad)" opacity=".85"/><rect x="-3" y="4" width="6" height="5" rx="1" fill="#fff" opacity=".9"/><path d="M-2 4 V3 Q0 1 2 3 V4" fill="none" stroke="#fff" stroke-width="1"/></g>
-          <g class="hero-shield" transform="translate(300,52)"><path d="M0 0 L10 2 L10 10 Q5 16 0 12 Q-5 16 -10 10 L-10 2 Z" fill="url(#orbitaGrad)" opacity=".85"/></g>
-          <g class="hero-shield" transform="translate(430,56)"><path d="M0 0 L10 2 L10 10 Q5 16 0 12 Q-5 16 -10 10 L-10 2 Z" fill="url(#orbitaGrad)" opacity=".85"/></g>
-          <g class="hero-shield" transform="translate(640,48)"><path d="M0 0 L10 2 L10 10 Q5 16 0 12 Q-5 16 -10 10 L-10 2 Z" fill="url(#orbitaGrad)" opacity=".85"/></g>
-          <!-- Rede de proteção digital -->
-          <path d="M70 68 Q185 42 300 62 Q370 48 430 66 Q520 50 640 58" fill="none" stroke="#007E7A" stroke-width="1.5" stroke-dasharray="4 5" opacity=".55" class="hero-net"/>
+          <rect x="610" y="104" width="56" height="8" fill="#555"/>
+          <rect x="628" y="88" width="4" height="16" fill="#888" class="hero-crane"/>
+          <path d="M632 88 L652 82 L652 86 L636 90 Z" fill="#EDB111" class="hero-crane"/>
+          <path d="M666 112 L738 122 L738 142 L666 132 Z" fill="#8b2942" class="hero-ship"/>
+          <rect x="684" y="116" width="38" height="8" fill="#a03050"/>
+          <!-- Globo / mercados -->
+          <g class="hero-globe" transform="translate(800, 58)">
+            <circle r="40" fill="url(#globeGlow)" stroke="#EDB111" stroke-width="1.5" opacity=".92"/>
+            <ellipse rx="40" ry="12" fill="none" stroke="#4ec8d8" stroke-width=".8" opacity=".5"/>
+            <ellipse rx="12" ry="40" fill="none" stroke="#4ec8d8" stroke-width=".8" opacity=".5"/>
+            <path d="M-28 -8 Q-8 6 18 2 Q32 -4 28 -18 Q10 -28 -12 -20 Z" fill="#2a8a5a" opacity=".65"/>
+            <path d="M-18 12 Q2 22 22 14 Q30 6 18 -2 Q4 -8 -14 0 Z" fill="#2a8a5a" opacity=".55"/>
+            <circle class="hero-node" cx="-22" cy="-12" r="3" fill="#EDB111"/>
+            <circle class="hero-node" cx="16" cy="8" r="3" fill="#EDB111"/>
+            <circle class="hero-node" cx="28" cy="-16" r="3" fill="#EDB111"/>
+          </g>
+          <!-- Fluxo de dados -->
+          <circle class="hero-flow" cx="120" cy="88" r="3" fill="#00ffe1" opacity=".8"/>
+          <circle class="hero-flow" cx="280" cy="82" r="3" fill="#00ffe1" opacity=".8" style="animation-delay:.8s"/>
+          <circle class="hero-flow" cx="480" cy="90" r="3" fill="#00ffe1" opacity=".8" style="animation-delay:1.6s"/>
+          <circle class="hero-flow" cx="680" cy="86" r="3" fill="#00ffe1" opacity=".8" style="animation-delay:2.4s"/>
+          <!-- Escudos cibernéticos -->
+          <g class="hero-shield" transform="translate(88,54)"><path d="M0 0 L10 2 L10 10 Q5 16 0 12 Q-5 16 -10 10 L-10 2 Z" fill="url(#orbitaGrad)" opacity=".9"/><rect x="-3" y="5" width="6" height="4" rx="1" fill="#fff" opacity=".9"/></g>
+          <g class="hero-shield" transform="translate(320,48)"><path d="M0 0 L10 2 L10 10 Q5 16 0 12 Q-5 16 -10 10 L-10 2 Z" fill="url(#orbitaGrad)" opacity=".85"/></g>
+          <g class="hero-shield" transform="translate(500,52)"><path d="M0 0 L10 2 L10 10 Q5 16 0 12 Q-5 16 -10 10 L-10 2 Z" fill="url(#orbitaGrad)" opacity=".85"/></g>
+          <g class="hero-shield" transform="translate(660,44)"><path d="M0 0 L10 2 L10 10 Q5 16 0 12 Q-5 16 -10 10 L-10 2 Z" fill="url(#orbitaGrad)" opacity=".85"/></g>
+          <!-- Rede digital -->
+          <path d="M88 64 Q200 38 320 58 Q420 44 500 62 Q590 48 660 54 Q730 42 800 58" fill="none" stroke="#007E7A" stroke-width="1.5" stroke-dasharray="4 5" opacity=".6" class="hero-net"/>
+          <g class="hero-lock" transform="translate(450, 78)"><circle r="14" fill="none" stroke="#EDB111" stroke-width="1" opacity=".45"/><rect x="-5" y="-2" width="10" height="8" rx="1" fill="#007E7A"/><path d="M-4 -2 V-5 Q0 -9 4 -5 V-2" fill="none" stroke="#EDB111" stroke-width="1.5"/></g>
         </svg>
       </button>
-      <span class="badge" data-i18n="home.badge">Missão de Segurança • Orbita</span>
-      <h1 data-i18n="home.title">Você é o <span class="accent">Guardião Digital</span> da Operação</h1>
-      <p data-i18n="home.desc">Da mina ao porto, proteja as operações da Orbita ao redor do mundo contra ameaças cibernéticas. Antes de começar, escolha o idioma e a acessibilidade.</p>
-      <div class="mission" data-i18n="home.mission">🎯 <b>Sua missão:</b> defender minas, ferrovias, portos e escritórios da Orbita pelo mundo. Explore o mapa global, enfrente Boss Fights, cumpra desafios diários e semanais e evolua sua carreira.</div>
+      <span class="badge" data-i18n="home.badge">Operações globais • Cyber Security</span>
+      <h1 data-i18n="home.title">Você é o <span class="accent">Guardião Cibernético</span></h1>
+      <p data-i18n="home.desc">Treino bilíngue para proteger a cadeia global de recursos — da extração ao mercado — com decisões certas em segurança da informação.</p>
+      <div class="mission" data-i18n="home.mission">🎯 <b>Sua missão:</b> antecipar ameaças em minas, plantas, logística, portos e escritórios. Enfrente cenários reais nos chefões, explore o mapa mundial e evolua como profissional de cyber.</div>
+      <div class="row-actions hero-actions">
+        <button class="btn btn-primary btn-lg" id="homeStartBtn" data-i18n="home.start">▶️ Começar</button>
+        <button class="btn btn-blue" id="homeMapBtn" data-i18n="home.map">🗺️ Mapa da Operação</button>
+        <button type="button" class="btn btn-ghost" id="pwaInstallBtn" hidden data-i18n="home.install">⬇️ Instalar app</button>
+      </div>
+      <p class="home-a11y-hint muted"><button type="button" class="btn-linkish" id="openA11yMenuBtn" data-i18n="a11y.openMenu">♿ Acessibilidade</button> — <span data-i18n="home.a11yHint">voz, contraste, Libras e mais no menu superior.</span></p>
+      <p class="muted handtalk-status" id="handTalkStatus" hidden></p>
+      <p class="muted asl-hint" id="aslHint" hidden data-i18n="a11y.signsHint">Sem token Hand Talk: VLibras (PT) ou dicionário ASL (EN) como alternativa.</p>
     </div>
 
     <div class="card next-step-card" id="nextStepCard" hidden>
@@ -245,8 +289,8 @@
       <button type="button" class="btn btn-primary btn-lg" id="nextStepBtn"></button>
     </div>
 
-    <div class="card">
-      <div class="section-title" data-i18n="home.langTitle">1) Idioma / Language</div>
+    <div class="card card-lang-home">
+      <div class="section-title" data-i18n="home.langTitle">Idioma / Language</div>
       <div class="section-sub" data-i18n="home.langSub">O jogo, as perguntas, as respostas e a narração por voz seguem o idioma escolhido.</div>
       <div class="lang-grid" role="group" aria-label="Idioma / Language">
         <button class="lang-card" data-lang="pt" aria-pressed="true">
@@ -262,69 +306,24 @@
       </div>
     </div>
 
-    <div class="card card-a11y-home">
-      <div class="section-title" data-i18n="home.a11yTitle">2) Acessibilidade / Accessibility</div>
-      <div class="section-sub" data-i18n="home.a11ySub">Essenciais aqui. Todas as opções ficam no menu ♿ A11y do topo.</div>
-      <div class="a11y-list a11y-list-compact">
-        <div class="a11y-row">
-          <div><div class="lab" data-i18n="a11y.voice">🔊 Narração por voz</div><div class="desc" data-i18n="a11y.voiceD">Lê cenários e opções no idioma escolhido.</div></div>
-          <label class="switch"><input type="checkbox" id="optVoice"><span class="slider"></span></label>
-        </div>
-        <div class="a11y-row">
-          <div><div class="lab" data-i18n="a11y.contrast">🌗 Alto contraste</div><div class="desc" data-i18n="a11y.contrastD">Cores fortes para melhor leitura.</div></div>
-          <label class="switch"><input type="checkbox" id="optContrast"><span class="slider"></span></label>
-        </div>
-        <div class="a11y-row">
-          <div><div class="lab" data-i18n="a11y.signs">🤟 Hand Talk (Libras)</div><div class="desc" data-i18n="a11y.signsD">Tradutor de Libras / ASL e recursos assistivos.</div></div>
-          <label class="switch"><input type="checkbox" id="optSigns"><span class="slider"></span></label>
-        </div>
-        <div class="a11y-row">
-          <div><div class="lab" data-i18n="a11y.motion">🎞️ Reduzir animações</div><div class="desc" data-i18n="a11y.motionD">Menos movimento na tela.</div></div>
-          <label class="switch"><input type="checkbox" id="optMotion"><span class="slider"></span></label>
-        </div>
-      </div>
-      <p class="muted a11y-home-hint" data-i18n="home.a11yMore">Mais opções no menu ♿ A11y (canto superior).</p>
-      <div class="a11y-home-actions">
-        <button type="button" class="btn btn-blue btn-sm" id="openA11yMenuBtn" data-i18n="a11y.openMenu">Abrir menu completo ♿</button>
-        <button type="button" class="btn btn-ghost btn-sm" id="resetA11yBtn" data-i18n="a11y.reset">↩️ Restaurar padrão</button>
-      </div>
-      <p class="muted handtalk-status" id="handTalkStatus" hidden></p>
-      <p class="muted asl-hint" id="aslHint" hidden data-i18n="a11y.signsHint">Sem token Hand Talk: VLibras (PT) ou dicionário ASL (EN) como alternativa.</p>
-      <details class="a11y-catalog-details">
-        <summary data-i18n="a11y.catalogToggle">Ver catálogo de recursos</summary>
-        <p class="muted catalog-details-sub" data-i18n="a11y.catalogSub">Alinhado ao site orbita.com — Hand Talk + recursos nativos do jogo.</p>
-        <div id="a11yCatalog" class="a11y-catalog"></div>
-        <a class="btn btn-ghost btn-sm" href="https://www.orbita.com/pt/acessibilidade" target="_blank" rel="noopener noreferrer" data-i18n="a11y.orbitaLink">Acessibilidade Orbita ↗</a>
-      </details>
-      <div class="row-actions">
-        <button class="btn btn-primary btn-lg" id="homeStartBtn" data-i18n="home.start">▶️ Começar</button>
-        <button class="btn btn-blue" id="homeMapBtn" data-i18n="home.map">🗺️ Mapa da Operação</button>
-        <button type="button" class="btn btn-ghost" id="pwaInstallBtn" hidden data-i18n="home.install">⬇️ Instalar app</button>
-      </div>
-    </div>
-
     <div class="card week-card" id="weekCard">
-      <div class="section-title" data-i18n="home.weekTitle">3) Minha semana</div>
+      <div class="week-streak-row streak-card" id="streakCard">
+        <div class="streak-inline">
+          <span class="streak-inline-flame" aria-hidden="true">🔥</span>
+          <span class="streak-inline-num" id="streakCount">0</span>
+          <span class="streak-inline-lab" data-i18n="streak.days">dias seguidos</span>
+          <span class="streak-inline-sep">·</span>
+          <span class="streak-inline-best-lab" data-i18n="streak.best">Recorde</span>
+          <span class="streak-inline-num" id="streakBest">0</span>
+        </div>
+        <p class="streak-status streak-status-inline" id="streakStatus" data-i18n="streak.risk">⚠️ Jogue hoje para não perder sua ofensiva!</p>
+      </div>
+      <div class="section-title" data-i18n="home.weekTitle">Minha semana</div>
       <div class="section-sub" data-i18n="home.weekSub">Metas da semana e próximo passo recomendado.</div>
       <div id="weekCardBody" class="week-card-body"></div>
       <div class="row-actions week-card-actions">
         <button type="button" class="btn btn-primary btn-sm" id="weekPlayBtn" data-i18n="home.weekPlay">Jogar agora →</button>
       </div>
-    </div>
-
-    <div class="card streak-card" id="streakCard">
-      <div class="streak-head">
-        <div>
-          <div class="section-title" data-i18n="streak.title">🔥 Ofensiva</div>
-          <div class="section-sub" data-i18n="streak.sub">Jogue todo dia para manter sua sequência e ganhar bônus.</div>
-        </div>
-        <div class="streak-flame" aria-hidden="true">🔥</div>
-      </div>
-      <div class="streak-stats">
-        <div class="streak-stat"><span class="streak-num" id="streakCount">0</span><span class="streak-lab" data-i18n="streak.days">dias seguidos</span></div>
-        <div class="streak-stat"><span class="streak-num" id="streakBest">0</span><span class="streak-lab" data-i18n="streak.best">Recorde</span></div>
-      </div>
-      <p class="streak-status" id="streakStatus" data-i18n="streak.risk">⚠️ Jogue hoje para não perder sua ofensiva!</p>
     </div>
 
   </section>
@@ -622,9 +621,7 @@
 
   </main>
 
-  <div class="footer">🛡️ <b>Guardião Digital da Operação</b> — <span data-i18n="footer.txt">conscientização em Cyber Security e Segurança da Informação.</span></div>
-  <div class="disclaimer" data-i18n="footer.disc">Ferramenta educativa interna. Referências públicas (orbita.com/pt/onde-estamos). Siga sempre as políticas oficiais da Orbita.</div>
-  <div class="disclaimer content-reviewed" id="contentReviewed" data-i18n="footer.reviewed">Conteúdo revisado em Jul/2026 · alinhado às políticas oficiais de Segurança da Informação da Orbita.</div>
+  <div class="footer">🛡️ <b data-i18n="footer.brand">Guardião Cibernético</b> — <span data-i18n="footer.txt">conscientização em Cyber Security e Segurança da Informação — Orbita.</span></div>
 </div>
 
 <nav class="bottom-nav" role="navigation" aria-label="Navegação principal">
@@ -662,15 +659,15 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="55";</script>
-<script src="js/sign-lang.js?v=55"></script>
-<script src="js/orbita-world-map.js?v=55"></script>
-<script src="js/questions-data.js?v=55"></script>
-<script src="js/country-questions-data.js?v=55"></script>
-<script src="js/bosses-data.js?v=55"></script>
-<script src="js/chain-data.js?v=55"></script>
-<script src="js/boss-maps.js?v=55"></script>
-<script src="js/game.js?v=55"></script>
+<script>window.APP_VERSION="56";</script>
+<script src="js/sign-lang.js?v=56"></script>
+<script src="js/orbita-world-map.js?v=56"></script>
+<script src="js/questions-data.js?v=56"></script>
+<script src="js/country-questions-data.js?v=56"></script>
+<script src="js/bosses-data.js?v=56"></script>
+<script src="js/chain-data.js?v=56"></script>
+<script src="js/boss-maps.js?v=56"></script>
+<script src="js/game.js?v=56"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {

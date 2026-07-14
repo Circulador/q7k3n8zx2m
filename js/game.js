@@ -1,4 +1,4 @@
-/* Guardião Digital da Operação — Orbita
+/* Guardião Cibernético — Orbita
    Jogo bilíngue (PT/EN) · mapa D3 em orbita-world-map.js */
 (function(){
 "use strict";
@@ -31,24 +31,28 @@ function tt(o){ return o? (o[L()]!==undefined?o[L()]:o.pt) : ""; }
 
 /* -------------------- i18n (UI) -------------------- */
 var UI = {
-  "brand.sub":{pt:"da Operação",en:"of the Operation"},
-  "home.badge":{pt:"Missão de Segurança • Orbita",en:"Security Mission • Orbita"},
-  "home.title":{pt:'Você é o <span class="accent">Guardião Digital</span> da Operação',en:'You are the <span class="accent">Digital Guardian</span> of the Operation'},
-  "home.desc":{pt:"Da mina ao porto, proteja as operações da Orbita ao redor do mundo contra ameaças cibernéticas. Antes de começar, escolha o idioma e a acessibilidade.",en:"From mine to port, protect Orbita's operations around the world against cyber threats. Before you start, choose your language and accessibility."},
-  "home.mission":{pt:"🎯 <b>Sua missão:</b> defender minas, ferrovias, portos e escritórios da Orbita pelo mundo. Explore o mapa global, proteja a <b>Cadeia Norte</b> nos chefões, enfrente crises tabletop e evolua sua carreira.",en:"🎯 <b>Your mission:</b> defend Orbita's mines, railways, ports and offices worldwide. Explore the global map, protect the <b>Northern Chain</b> in bosses, face tabletop crises and grow your career."},
-  "home.langTitle":{pt:"1) Idioma / Language",en:"1) Language / Idioma"},
-  "home.langSub":{pt:"O jogo, as perguntas, as respostas e a narração por voz seguem o idioma escolhido.",en:"The game, questions, answers and voice narration follow the chosen language."},
-  "home.a11yTitle":{pt:"2) Acessibilidade / Accessibility",en:"2) Accessibility / Acessibilidade"},
-  "home.a11ySub":{pt:"Essenciais aqui. Todas as opções (fonte, Libras, leitura, cores) ficam no menu ♿ A11y do topo.",en:"Essentials here. All options (font, sign language, reading, colors) are in the top ♿ A11y menu."},
-  "home.a11yMore":{pt:"Mais opções no menu ♿ A11y (canto superior).",en:"More options in the ♿ A11y menu (top bar)."},
-  "a11y.openMenu":{pt:"Abrir menu completo ♿",en:"Open full ♿ menu"},
-  "a11y.catalogToggle":{pt:"Ver catálogo de recursos",en:"View feature catalog"},
+  "brand.main":{pt:"Guardião Cibernético",en:"Cyber Guardian"},
+  "brand.sub":{pt:"Cyber Security",en:"Cyber Security"},
+  "home.badge":{pt:"Operações globais • Cyber Security",en:"Global operations • Cyber Security"},
+  "home.title":{pt:'Você é o <span class="accent">Guardião Cibernético</span>',en:'You are the <span class="accent">Cyber Guardian</span>'},
+  "home.desc":{pt:"Treino bilíngue para proteger a cadeia global de recursos — da extração ao mercado — com decisões certas em segurança da informação.",en:"Bilingual training to protect the global resources chain — from extraction to market — with the right information security decisions."},
+  "home.mission":{pt:"🎯 <b>Sua missão:</b> antecipar ameaças em minas, plantas, logística, portos e escritórios. Enfrente cenários reais nos chefões, explore o mapa mundial e evolua como profissional de cyber.",en:"🎯 <b>Your mission:</b> anticipate threats across mines, plants, logistics, ports and offices. Face real scenarios in bosses, explore the world map and grow as a cyber professional."},
+  "home.langTitle":{pt:"Idioma / Language",en:"Language / Idioma"},
+  "home.langSub":{pt:"Perguntas, respostas e narração seguem o idioma escolhido.",en:"Questions, answers and narration follow the chosen language."},
+  "home.a11yTitle":{pt:"Acessibilidade / Accessibility",en:"Accessibility / Acessibilidade"},
+  "home.a11ySub":{pt:"Configure narração, contraste, Libras e mais — agora ou depois no menu ♿ do topo.",en:"Set up narration, contrast, sign language and more — now or later in the top ♿ menu."},
+  "home.a11yHint":{pt:"voz, contraste, Libras e mais no menu superior.",en:"voice, contrast, sign language and more in the top menu."},
+  "a11y.openMenu":{pt:"♿ Acessibilidade",en:"♿ Accessibility"},
+  "a11y.sec.read":{pt:"Leitura e narração",en:"Reading & narration"},
+  "a11y.sec.visual":{pt:"Visual e cores",en:"Visual & colors"},
+  "a11y.sec.text":{pt:"Texto e tipografia",en:"Text & typography"},
+  "a11y.sec.signs":{pt:"Libras / ASL",en:"Sign language"},
   "home.start":{pt:"▶️ Começar",en:"▶️ Start"},
   "home.map":{pt:"🗺️ Mapa da Operação",en:"🗺️ Operations Map"},
   "home.install":{pt:"⬇️ Instalar app",en:"⬇️ Install app"},
-  "home.heroIronTip":{pt:"Clique para abrir a Cadeia Norte nos Chefões — mina, ferrovia, porto e navio.",en:"Click to open the Northern Chain in Bosses — mine, railway, port and ship."},
+  "home.heroIronTip":{pt:"Toque para explorar a cadeia operacional nos Chefões.",en:"Tap to explore the operational chain in Bosses."},
   "home.chain":{pt:"⛓️ Cadeia de Produção",en:"⛓️ Production Chain"},
-  "home.weekTitle":{pt:"3) Minha semana",en:"3) My week"},
+  "home.weekTitle":{pt:"Minha semana",en:"My week"},
   "home.weekSub":{pt:"Metas da semana e próximo passo recomendado.",en:"Weekly goals and your recommended next step."},
   "home.weekPlay":{pt:"Jogar agora →",en:"Play now →"},
   "home.nextStart":{pt:"Comece por aqui",en:"Start here"},
@@ -197,7 +201,7 @@ var UI = {
   "setup.prefsSub":{pt:"Ajuste o jogo ao seu perfil. Você pode mudar depois no Progresso.",en:"Adjust the game to your profile. You can change it later in Progress."},
   "setup.focusLabel":{pt:"🎯 Foco em aprender",en:"🎯 Focus on learning"},
   "setup.focusDesc":{pt:"Reduz ênfase em moedas e recompensas cosméticas para focar no conteúdo.",en:"Reduces emphasis on coins and cosmetic rewards to focus on content."},
-  "footer.reviewed":{pt:"Conteúdo revisado em Jul/2026 · alinhado às políticas oficiais de Segurança da Informação da Orbita.",en:"Content reviewed Jul/2026 · aligned with Orbita's official Information Security policies."},
+  "footer.brand":{pt:"Guardião Cibernético",en:"Cyber Guardian"},
   "daily.srsDue":{pt:"{n} revisões espaçadas priorizadas na missão de hoje",en:"{n} spaced reviews prioritized in today's mission"},
   "map.vwmTitle":{pt:"A Orbita no mundo",en:"Orbita in the world"},
   "map.vwmHelper":{pt:"Clique em um país ou na legenda para explorar",en:"Click a country or legend item to explore"},
@@ -392,8 +396,7 @@ var UI = {
   "nav.tip.shop":{pt:"Loja de avatares e temas",en:"Avatar and theme shop"},
   "nav.tip.stats":{pt:"Seu progresso e medalhas",en:"Your progress and medals"},
   "nav.tip.manager":{pt:"Painel do gestor",en:"Manager dashboard"},
-  "footer.txt":{pt:"conscientização em Cyber Security e Segurança da Informação.",en:"Cyber Security and Information Security awareness."},
-  "footer.disc":{pt:"Ferramenta educativa interna. Referências públicas (orbita.com/pt/onde-estamos). Siga sempre as políticas oficiais da Orbita.",en:"Internal educational tool. Public references (orbita.com/pt/onde-estamos). Always follow Orbita's official policies."}
+  "footer.txt":{pt:"conscientização em Cyber Security e Segurança da Informação — Orbita.",en:"Cyber Security and Information Security awareness — Orbita."}
 };
 function t(key){ var e=UI[key]; return e? (e[L()]||e.pt) : key; }
 function langFlagSvg(lang){
@@ -833,16 +836,19 @@ function updateHeroCaption(){
   var old=svg.querySelectorAll(".hero-caption"); old.forEach(function(n){ n.remove(); });
   var t1=document.createElementNS("http://www.w3.org/2000/svg","text");
   t1.setAttribute("class","hero-caption"); t1.setAttribute("x","450"); t1.setAttribute("y","24"); t1.setAttribute("text-anchor","middle"); t1.setAttribute("fill","#EDB111"); t1.setAttribute("font-size","11"); t1.setAttribute("font-weight","700"); t1.setAttribute("font-family","Segoe UI,sans-serif");
-  t1.textContent=L()==="pt"?"Carajás → EFC → Ponta da Madeira → China":"Carajás → Railway → Ponta da Madeira → China";
+  t1.textContent=L()==="pt"?"Extração → Processamento → Logística → Mercados globais":"Extraction → Processing → Logistics → Global markets";
   var t2=document.createElementNS("http://www.w3.org/2000/svg","text");
   t2.setAttribute("class","hero-caption"); t2.setAttribute("x","450"); t2.setAttribute("y","40"); t2.setAttribute("text-anchor","middle"); t2.setAttribute("fill","#8ec8d0"); t2.setAttribute("font-size","9"); t2.setAttribute("font-family","Segoe UI,sans-serif");
-  t2.textContent=L()==="pt"?"Cadeia protegida por decisões de segurança da informação":"Chain protected by information security decisions";
+  t2.textContent=L()==="pt"?"Recursos essenciais protegidos por decisões cibernéticas":"Essential resources protected by cyber decisions";
   svg.appendChild(t1); svg.appendChild(t2);
 }
 function toggleA11yMenu(force){
-  var menu=$("a11yMenu"),btn=$("a11yBtn"); if(!menu) return;
+  var menu=$("a11yMenu"),btn=$("a11yBtn"),bd=$("a11yBackdrop"); if(!menu) return;
   var open = force!==undefined ? force : menu.hidden;
-  menu.hidden=!open; btn.setAttribute("aria-expanded", open?"true":"false");
+  menu.hidden=!open;
+  if(btn) btn.setAttribute("aria-expanded", open?"true":"false");
+  if(bd){ bd.hidden=!open; bd.setAttribute("aria-hidden", open?"false":"true"); }
+  document.body.classList.toggle("a11y-menu-open", open);
 }
 
 /* -------------------- HUD -------------------- */
@@ -2758,7 +2764,7 @@ function renderCertificatePreview(){
   var cv=$("certCanvas"); if(!cv||!cv.getContext) return;
   var W=800, pt=L()==="pt";
   var title=currentTitle(), tr=certTeamRole();
-  var name=(S.name&&S.name.trim())?S.name.trim():(pt?"Guardião Digital":"Digital Guardian");
+  var name=(S.name&&S.name.trim())?S.name.trim():(pt?"Guardião Cibernético":"Cyber Guardian");
   var dateStr=new Date().toLocaleDateString(pt?"pt-BR":"en-US",{year:"numeric",month:"long",day:"numeric"});
   var avgRes=bossAvgIndex(), resRank=bossGuardianRank(avgRes);
   var stats=[
@@ -2781,7 +2787,7 @@ function renderCertificatePreview(){
   ctx.fillStyle="#1a1a1a"; ctx.font="700 24px Segoe UI,sans-serif";
   ctx.fillText(pt?"Certificado de Participação":"Certificate of Participation", W/2, 82);
   ctx.font="500 13px Segoe UI,sans-serif"; ctx.fillStyle="#3d4f55";
-  ctx.fillText(pt?"Guardião Digital da Operação":"Digital Guardian of the Operation", W/2, 104);
+  ctx.fillText(pt?"Guardião Cibernético":"Cyber Guardian", W/2, 104);
   ctx.strokeStyle="#ECB11F"; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(120,114); ctx.lineTo(W-120,114); ctx.stroke();
   ctx.fillStyle="#1a1a1a"; ctx.font="700 28px Segoe UI,sans-serif";
   ctx.fillText(certEllipsis(ctx,name,W-120), W/2, 148);
@@ -2825,7 +2831,7 @@ function printCertificate(){
   var data=cv.toDataURL("image/png");
   var win=window.open("","_blank","noopener,noreferrer,width=860,height=640");
   if(!win){ downloadCertificate(); return; }
-  var docTitle=L()==="pt"?"Certificado — Guardião Digital":"Certificate — Digital Guardian";
+  var docTitle=L()==="pt"?"Certificado — Guardião Cibernético":"Certificate — Cyber Guardian";
   win.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>'+docTitle+'</title><style>body{margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#f0f0f0}img{max-width:100%;height:auto;box-shadow:0 4px 24px rgba(0,0,0,.15)}@media print{body{background:#fff}img{box-shadow:none}}</style></head><body><img src="'+data+'" alt="'+docTitle+'" onload="setTimeout(function(){window.print()},300)"></body></html>');
   win.document.close();
 }
@@ -2959,11 +2965,11 @@ function bind(){
   function on(id,ev,fn){ var el=$(id); if(el) el.addEventListener(ev,fn); return el; }
 
   document.querySelectorAll(".lang-card").forEach(function(b){ b.addEventListener("click",function(){ setLang(b.getAttribute("data-lang")); }); });
-  on("optVoice","change",function(){ S.a11y.voice=this.checked; save(); applyA11y(); if(this.checked) speak(L()==="pt"?"Narração por voz ativada.":"Voice narration enabled."); });
-  on("optContrast","change",function(){ S.a11y.contrast=this.checked; save(); applyA11y(); });
-  on("optLarge","change",function(){ S.a11y.large=this.checked; save(); applyA11y(); });
-  on("optMotion","change",function(){ S.a11y.motion=this.checked; save(); applyA11y(); });
-  on("optSigns","change",function(){ S.a11y.signs=this.checked; save(); applyA11y(); });
+  if($("optVoice")) on("optVoice","change",function(){ S.a11y.voice=this.checked; save(); applyA11y(); if(this.checked) speak(L()==="pt"?"Narração por voz ativada.":"Voice narration enabled."); });
+  if($("optContrast")) on("optContrast","change",function(){ S.a11y.contrast=this.checked; save(); applyA11y(); });
+  if($("optLarge")) on("optLarge","change",function(){ S.a11y.large=this.checked; save(); applyA11y(); });
+  if($("optMotion")) on("optMotion","change",function(){ S.a11y.motion=this.checked; save(); applyA11y(); });
+  if($("optSigns")) on("optSigns","change",function(){ S.a11y.signs=this.checked; save(); applyA11y(); });
   on("optLinks","change",function(){ S.a11y.links=this.checked; save(); applyA11y(); });
   on("optSpacing","change",function(){ S.a11y.spacing=this.checked; save(); applyA11y(); });
   on("optLetterSpace","change",function(){ S.a11y.letterSpace=this.checked; save(); applyA11y(); });
@@ -2971,7 +2977,7 @@ function bind(){
   on("optReadingMode","change",function(){ S.a11y.readingMode=this.checked; save(); applyA11y(); });
   on("structureBtn","click",function(e){ e.stopPropagation(); showPageStructure(); toggleA11yMenu(false); });
   on("colorblindBtn","click",function(){ cycleColorblind(); });
-  on("resetA11yBtn","click",function(){ resetA11yDefaults(); });
+  if($("resetA11yBtn")) on("resetA11yBtn","click",function(){ resetA11yDefaults(); });
   on("resetA11yMenuBtn","click",function(){ resetA11yDefaults(); toggleA11yMenu(false); });
   on("openA11yMenuBtn","click",function(){ toggleA11yMenu(true); if($("a11yBtn")) $("a11yBtn").focus(); });
   on("voiceBtn","click",function(){ S.a11y.voice=!S.a11y.voice; save(); applyA11y(); toast(S.a11y.voice?(L()==="pt"?"🔊 Narração ligada":"🔊 Narration on"):(L()==="pt"?"🔈 Narração desligada":"🔈 Narration off")); });
@@ -2998,7 +3004,8 @@ function bind(){
   on("langToggle","click",function(){ setLang(L()==="pt"?"en":"pt"); });
   on("a11yBtn","click",function(e){ e.stopPropagation(); toggleA11yMenu(); });
   on("a11yMenuClose","click",function(e){ e.stopPropagation(); toggleA11yMenu(false); });
-  document.addEventListener("click",function(e){ var m=$("a11yMenu"); if(!m||m.hidden) return; if(e.target.closest&&e.target.closest(".a11y-menu-wrap")) return; toggleA11yMenu(false); });
+  on("a11yBackdrop","click",function(){ toggleA11yMenu(false); });
+  document.addEventListener("click",function(e){ var m=$("a11yMenu"); if(!m||m.hidden) return; if(e.target.closest&&e.target.closest(".a11y-menu-wrap")) return; if(e.target.closest&&e.target.closest("#openA11yMenuBtn")) return; toggleA11yMenu(false); });
   document.querySelectorAll("#a11yMenu .am-lang").forEach(function(b){ b.addEventListener("click",function(e){ e.stopPropagation(); setLang(b.getAttribute("data-lang")); }); });
   document.querySelectorAll("#a11yMenu .am-toggle").forEach(function(b){ b.addEventListener("click",function(e){ e.stopPropagation(); var k=b.getAttribute("data-opt"); if(k==="colorblind"){ cycleColorblind(); return; } S.a11y[k]=!S.a11y[k]; save(); applyA11y(); if(k==="voice"&&S.a11y.voice) speak(L()==="pt"?"Narração por voz ativada.":"Voice narration enabled."); if(k==="signs"&&S.a11y.signs) speak(L()==="pt"?"Hand Talk e Libras ativados.":"Hand Talk and ASL enabled."); }); });
 
@@ -3038,9 +3045,9 @@ function bind(){
   if($("optManagerProfile")){ $("optManagerProfile").checked=!!S.managerMode; on("optManagerProfile","change",function(){ setManagerMode(this.checked); }); }
   if($("optFocusLearn")){ $("optFocusLearn").checked=!!S.focusLearn; on("optFocusLearn","change",function(){ setFocusLearn(this.checked); }); }
   if($("optFocusLearnProfile")){ $("optFocusLearnProfile").checked=!!S.focusLearn; on("optFocusLearnProfile","change",function(){ setFocusLearn(this.checked); }); }
-  [["onboardOptVoice","optVoice","voice"],["onboardOptContrast","optContrast","contrast"],["onboardOptSigns","optSigns","signs"],["onboardOptMotion","optMotion","motion"]].forEach(function(triple){
-    var el=$(triple[0]), home=$(triple[1]); if(!el) return;
-    el.addEventListener("change",function(){ S.a11y[triple[2]]=this.checked; save(); applyA11y(); if(home) home.checked=this.checked; });
+  [["onboardOptVoice","voice"],["onboardOptContrast","contrast"],["onboardOptSigns","signs"],["onboardOptMotion","motion"]].forEach(function(pair){
+    var el=$(pair[0]); if(!el) return;
+    el.addEventListener("change",function(){ S.a11y[pair[1]]=this.checked; save(); applyA11y(); });
   });
 
   document.addEventListener("click",function(e){ var sheet=$("navMoreSheet"); if(!sheet||sheet.hidden) return; if(e.target.closest&&e.target.closest("#navMoreBtn")) return; if(!e.target.closest("#navMoreSheet")) toggleNavMore(false); });

@@ -66,7 +66,7 @@
 
     card.innerHTML =
       '<div style="font-size:2.6rem;line-height:1;margin-bottom:8px">🛡️</div>' +
-      '<h1 style="font-size:1.15rem;margin:0 0 4px;color:#EDB111">Guardião Digital — Orbita</h1>' +
+      '<h1 style="font-size:1.15rem;margin:0 0 4px;color:#EDB111">Guardião Cibernético — Orbita</h1>' +
       '<p style="font-size:.9rem;color:#8eb4be;margin:0 0 18px">Acesso restrito. Informe a senha para continuar.</p>' +
       '<input id="gdvGateInput" type="password" autocomplete="off" inputmode="text" ' +
       'placeholder="Senha de acesso" aria-label="Senha de acesso" ' +
