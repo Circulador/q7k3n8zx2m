@@ -921,6 +921,24 @@ function setTheme(th){
   if(["default","light","dark"].indexOf(th)<0) return;
   S.theme=th; save(); applyTheme();
 }
+function glossaryMatchFromSearch(q){
+  q=(q||"").trim(); if(!q) return null;
+  var low=q.toLowerCase();
+  var hit=GLOSSARY.filter(function(g){
+    return g.term.toLowerCase()===low || g.id===low
+      || (q.indexOf("—")>=0 && q.toLowerCase().indexOf(g.term.toLowerCase())===0);
+  })[0];
+  if(hit) return hit.id;
+  var list=glossaryFilter(q);
+  return list.length===1?list[0].id:null;
+}
+function syncGlossaryFromSearch(){
+  var search=$("glossarySearch"), sel=$("glossaryPick");
+  if(!search||!sel) return;
+  var id=glossaryMatchFromSearch(search.value);
+  renderGlossarySelect();
+  if(id){ sel.value=id; showGlossaryTerm(id); }
+}
 function glossaryFilter(q){
   q=(q||"").toLowerCase().trim();
   if(!q) return GLOSSARY.slice();
@@ -3180,10 +3198,14 @@ function bind(){
   on("resetA11yMenuBtn","click",function(){ resetA11yDefaults(); toggleA11yMenu(false); });
   on("settingsBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(); });
   on("settingsMenuClose","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); });
-  on("settingsOpenA11yBtn","click",function(){ toggleSettingsMenu(false); toggleA11yMenu(true); if($("a11yBtn")) $("a11yBtn").focus(); });
-  on("themeSelect","change",function(){ setTheme(this.value); });
-  on("glossaryPick","change",function(){ showGlossaryTerm(this.value); });
-  on("glossarySearch","input",function(){ renderGlossarySelect(); });
+  on("settingsOpenA11yBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); toggleA11yMenu(true); if($("a11yBtn")) $("a11yBtn").focus(); });
+  on("themeSelect","change",function(e){ e.stopPropagation(); setTheme(this.value); });
+  on("glossaryPick","change",function(e){ e.stopPropagation(); showGlossaryTerm(this.value); });
+  on("glossarySearch","input",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
+  on("glossarySearch","change",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
+  var a11yMenuEl=$("a11yMenu"), settingsMenuEl=$("settingsMenu");
+  if(a11yMenuEl) a11yMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
+  if(settingsMenuEl) settingsMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
   on("voiceBtn","click",function(){ S.a11y.voice=!S.a11y.voice; save(); applyA11y(); toast(S.a11y.voice?(L()==="pt"?"🔊 Narração ligada":"🔊 Narration on"):(L()==="pt"?"🔈 Narração desligada":"🔈 Narration off")); });
 
   on("onboardSkipBtn","click",closeOnboarding);
@@ -3230,8 +3252,8 @@ function bind(){
   on("a11yBackdrop","click",function(){ toggleA11yMenu(false); toggleSettingsMenu(false); });
   document.addEventListener("click",function(e){
     var am=$("a11yMenu"), sm=$("settingsMenu");
-    if(am&&!am.hidden){ if(e.target.closest&&e.target.closest(".a11y-menu-wrap")) return; toggleA11yMenu(false); }
-    if(sm&&!sm.hidden){ if(e.target.closest&&e.target.closest(".settings-menu-wrap")) return; toggleSettingsMenu(false); }
+    if(am&&!am.hidden){ if(e.target.closest&&(e.target.closest(".a11y-menu-wrap")||e.target.closest("#a11yMenu"))) return; toggleA11yMenu(false); }
+    if(sm&&!sm.hidden){ if(e.target.closest&&(e.target.closest(".settings-menu-wrap")||e.target.closest("#settingsMenu"))) return; toggleSettingsMenu(false); }
   });
   document.querySelectorAll("#a11yMenu .am-toggle").forEach(function(b){ b.addEventListener("click",function(e){ e.stopPropagation(); var k=b.getAttribute("data-opt"); if(k==="colorblind"){ cycleColorblind(); return; } S.a11y[k]=!S.a11y[k]; save(); applyA11y(); if(k==="voice"&&S.a11y.voice) speak(L()==="pt"?"Narração por voz ativada.":"Voice narration enabled."); if(k==="signs"&&S.a11y.signs) speak(L()==="pt"?"Hand Talk e Libras ativados.":"Hand Talk and ASL enabled."); }); });
 
@@ -3291,7 +3313,6 @@ function dismissBlockingUI(){
     if(ov&&!ov.hidden){ closeOnboarding(); }
     toggleNavMore(false);
     toggleA11yMenu(false);
-    toggleSettingsMenu(false);
     toggleSettingsMenu(false);
     var tip=$("mapTooltip"); if(tip) tip.hidden=true;
     if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.clearSelection) OrbitaWorldMap.clearSelection();
