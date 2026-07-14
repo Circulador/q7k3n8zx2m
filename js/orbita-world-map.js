@@ -406,8 +406,17 @@ var OrbitaWorldMap = (function () {
     var b = pathFn.bounds(feature);
     var bw = b[1][0] - b[0][0];
     var bh = b[1][1] - b[0][1];
-    var pad = window.innerWidth <= 640 ? 2.4 : window.innerWidth <= 900 ? 2.1 : 1.9;
-    var targetW = Math.min(VW, Math.max(180, Math.max(bw, bh) * pad));
+    var span = Math.max(bw, bh * (VW / VH));
+    if (span < 1) span = 6;
+    var narrow = window.innerWidth <= 640;
+    var fill = narrow ? 0.36 : 0.42;
+    var pad = narrow ? 1.35 : 1.28;
+    var targetW = (span / fill) * pad;
+    if (span < 14) targetW = Math.max(targetW, VW * (narrow ? 0.52 : 0.46));
+    else if (span < 35) targetW = Math.max(targetW, VW * (narrow ? 0.44 : 0.38));
+    else if (span > 95) targetW = Math.min(targetW, VW * 0.58);
+    else if (span > 60) targetW = Math.min(targetW, VW * 0.68);
+    targetW = Math.max(narrow ? 200 : 165, Math.min(VW * 0.9, targetW));
     return { cx: c[0], cy: c[1], targetW: targetW };
   }
 

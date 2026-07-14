@@ -1971,8 +1971,12 @@ function zoomToCountry(gameId){
   if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.isReady()||!gameId) return;
   var v=OrbitaWorldMap.getCountryView(gameId);
   if(!v) return;
-  var f=Math.max(0.22,Math.min(1,v.targetW/view.w));
-  zoomTo(v.cx,v.cy,f);
+  var nw=Math.max(120,Math.min(VW,v.targetW));
+  var nh=nw*(VH/VW);
+  view.w=nw; view.h=nh;
+  view.x=Math.max(0,Math.min(VW-nw,v.cx-nw/2));
+  view.y=Math.max(0,Math.min(VH-nh,v.cy-nh/2));
+  updateViewBox();
 }
 function scrollMapIntoView(){
   var stage=$("mapStage");
@@ -1982,7 +1986,11 @@ function scrollMapIntoView(){
   });
 }
 function zoomTo(cx,cy,f){ var nw=Math.max(200,Math.min(VW,view.w*f)),nh=nw*(VH/VW); view.x=Math.max(0,Math.min(VW-nw,cx-nw/2)); view.y=Math.max(0,Math.min(VH-nh,cy-nh/2)); view.w=nw; view.h=nh; updateViewBox(); }
-function resetView(){ setMapProcess(null); }
+function resetView(){
+  view={x:0,y:0,w:VW,h:VH};
+  updateViewBox();
+  updateMapCountryNav();
+}
 function focusIronChain(){ openBossChain(true); }
 function bindMapPanZoom(){
   var wrap=$("mapStage"),svg=$("mapSvg"),drag=false,sx,sy,ox,oy;
