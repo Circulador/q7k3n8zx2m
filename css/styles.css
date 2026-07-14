@@ -891,3 +891,35 @@ body.contrast .asl-fab{background:#111;color:#fff;border-color:#00ffe1}
 .mgr-row-you .mname{font-weight:700}
 .mgr-you-tag{color:var(--ok);font-size:.75rem}
 .mgr-pending{font-size:.8rem;margin:0 0 8px}
+
+/* ---- UX v60: modo simples, quiz, mapa, quit ---- */
+body.simple-ui #hudTitle,
+body.simple-ui #hudLevelChip,
+body.simple-ui #hudXpChip,
+body.simple-ui #hudMaturityChip{display:none}
+@media (max-width:720px){
+  body.simple-ui .onboard-chip span[data-i18n="onboard.reopen"]{display:none}
+  body.simple-ui .onboard-chip{padding:0 10px}
+}
+.next-step-week-line{width:100%;margin:0;font-size:.8rem;color:var(--steel);line-height:1.45}
+.next-step-card .week-streak-row{width:100%;margin-bottom:2px}
+.map-toolbar-row.map-toolbar-collapsed{display:none}
+.map-zoom-toggle{margin:6px 0}
+.map-more-options{margin-top:12px}
+.map-more-options summary{cursor:pointer;font-weight:700;color:var(--gold);padding:8px 0}
+.map-more-body{display:grid;gap:10px;padding-top:8px}
+.quiz-progress{margin-bottom:10px}
+.quiz-progress-label{font-size:.88rem;font-weight:700;color:#eaf2f6;margin-bottom:6px}
+.quiz-progress-bar{height:8px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden}
+.quiz-progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--gold));transition:width .25s ease}
+.integrity-res.quiz-resilience-hidden{display:none!important}
+body.simple-ui #screenQuiz .opt{min-height:58px;padding:16px;font-size:1rem}
+.quit-dialog{position:fixed;inset:0;z-index:10200;display:flex;align-items:center;justify-content:center;padding:16px}
+.quit-dialog[hidden]{display:none!important}
+.quit-dialog-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+.quit-dialog-box{position:relative;z-index:1;max-width:420px;width:100%}
+.quit-dialog-msg{margin:0 0 14px;font-size:1rem;line-height:1.45}
+.quit-dialog-actions{justify-content:flex-end}
+.profile-more summary{cursor:pointer;font-weight:700;color:var(--gold)}
+.profile-more-body{display:grid;gap:12px;padding-top:10px}
+.profile-more-body .section-title{margin-top:8px}

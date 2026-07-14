@@ -18,11 +18,11 @@ var DEF = { lang:"pt", name:"", team:"mina", role:"admin",
   a11y:{voice:false, contrast:false, large:false, motion:false, signs:false, fontScale:0, links:false, spacing:false, letterSpace:false, dyslexia:false, colorblind:"none", readingMode:false},
   done:{}, themeStats:{}, medals:{}, owned:{}, equipped:{avatar:"🛡️",frame:"default",skin:"default"},
   bossDone:{}, bossStats:{}, onboardingDone:false, daily:{date:"",done:{}}, weekly:{week:"",prog:{}}, teamScores:{},
-  chainDone:{}, streak:{count:0,lastDate:"",best:0}, missed:{}, reports:0, managerMode:false, focusLearn:false };
+  chainDone:{}, streak:{count:0,lastDate:"",best:0}, missed:{}, reports:0, managerMode:false, focusLearn:false, simpleUi:true };
 var S = merge(load(), DEF);
 
 function merge(a,b){ a=a||{}; for(var k in b){ if(a[k]===undefined) a[k]=b[k]; else if(b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])) a[k]=merge(a[k],b[k]); } return a; }
-function ensureManagerMode(){ if(S.managerMode===undefined) S.managerMode=false; if(S.focusLearn===undefined) S.focusLearn=false; }
+function ensureManagerMode(){ if(S.managerMode===undefined) S.managerMode=false; if(S.focusLearn===undefined) S.focusLearn=false; if(S.simpleUi===undefined) S.simpleUi=true; }
 function load(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY)); }catch(e){ return null; } }
 function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){} }
 function $(id){ return document.getElementById(id); }
@@ -32,25 +32,28 @@ function tt(o){ return o? (o[L()]!==undefined?o[L()]:o.pt) : ""; }
 /* -------------------- i18n (UI) -------------------- */
 var UI = {
   "brand.main":{pt:"Guardião Cibernético",en:"Cyber Guardian"},
-  "brand.sub":{pt:"Cyber Security",en:"Cyber Security"},
+  "brand.sub":{pt:"Segurança digital",en:"Digital security"},
   "home.badge":{pt:"Operações globais • Cyber Security",en:"Global operations • Cyber Security"},
   "home.title":{pt:'Você é o <span class="accent">Guardião Cibernético</span>',en:'You are the <span class="accent">Cyber Guardian</span>'},
-  "home.desc":{pt:"Treino bilíngue para proteger a cadeia global de recursos — da extração ao mercado — com decisões certas em segurança da informação.",en:"Bilingual training to protect the global resources chain — from extraction to market — with the right information security decisions."},
-  "home.mission":{pt:"🎯 <b>Sua missão:</b> antecipar ameaças em minas, plantas, logística, portos e escritórios. Enfrente cenários reais nos chefões, explore o mapa mundial e evolua como profissional de cyber.",en:"🎯 <b>Your mission:</b> anticipate threats across mines, plants, logistics, ports and offices. Face real scenarios in bosses, explore the world map and grow as a cyber professional."},
+  "home.desc":{pt:"Treino simples para tomar decisões certas em segurança digital — proteja a operação da Orbita no mundo todo.",en:"Simple training to make the right digital security decisions — protect Orbita's operations worldwide."},
+  "home.mission":{pt:"🎯 <b>Sua missão:</b> identificar riscos em minas, plantas, portos e escritórios. Enfrente crises simuladas, explore o mapa mundial e evolua como guardião digital.",en:"🎯 <b>Your mission:</b> spot risks across mines, plants, ports and offices. Face simulated crises, explore the world map and grow as a digital guardian."},
   "home.langTitle":{pt:"Idioma / Language",en:"Language / Idioma"},
   "home.langSub":{pt:"Perguntas, respostas e narração seguem o idioma escolhido.",en:"Questions, answers and narration follow the chosen language."},
   "home.a11yTitle":{pt:"Acessibilidade / Accessibility",en:"Accessibility / Acessibilidade"},
   "home.a11ySub":{pt:"Configure narração, contraste, Libras e mais — agora ou depois no menu ♿ do topo.",en:"Set up narration, contrast, sign language and more — now or later in the top ♿ menu."},
   "home.a11yHint":{pt:"voz, contraste, Libras e mais no menu superior.",en:"voice, contrast, sign language and more in the top menu."},
   "a11y.openMenu":{pt:"♿ Acessibilidade",en:"♿ Accessibility"},
+  "a11y.shortLabel":{pt:"Acessibilidade",en:"Accessibility"},
   "a11y.sec.read":{pt:"Leitura e narração",en:"Reading & narration"},
   "a11y.sec.visual":{pt:"Visual e cores",en:"Visual & colors"},
   "a11y.sec.text":{pt:"Texto e tipografia",en:"Text & typography"},
   "a11y.sec.signs":{pt:"Libras / ASL",en:"Sign language"},
   "home.start":{pt:"▶️ Começar",en:"▶️ Start"},
+  "home.playNow":{pt:"▶️ Jogar agora",en:"▶️ Play now"},
+  "home.weekLine":{pt:"Semana: {theme} · Acertos {correct}/20 · Campanhas {campaign}/3 · Missão {daily}",en:"Week: {theme} · Correct {correct}/20 · Campaigns {campaign}/3 · Mission {daily}"},
   "home.map":{pt:"🗺️ Mapa da Operação",en:"🗺️ Operations Map"},
   "home.install":{pt:"⬇️ Instalar app",en:"⬇️ Install app"},
-  "home.heroIronTip":{pt:"Toque para explorar a cadeia operacional nos Chefões.",en:"Tap to explore the operational chain in Bosses."},
+  "home.heroIronTip":{pt:"Toque para explorar a cadeia operacional nos Desafios.",en:"Tap to explore the operational chain in Challenges."},
   "home.chain":{pt:"⛓️ Cadeia de Produção",en:"⛓️ Production Chain"},
   "home.weekTitle":{pt:"Minha semana",en:"My week"},
   "home.weekSub":{pt:"Metas da semana e próximo passo recomendado.",en:"Weekly goals and your recommended next step."},
@@ -60,13 +63,13 @@ var UI = {
   "home.nextDaily":{pt:"Sua missão diária está esperando",en:"Your daily mission is waiting"},
   "home.nextDailySub":{pt:"5 situações rápidas mantêm sua ofensiva e priorizam o que você errou.",en:"5 quick scenarios keep your streak and prioritize what you missed."},
   "home.nextCampaignSub":{pt:"Sua expedição continua — proteja o próximo país no mapa e avance na meta semanal.",en:"Your expedition continues — protect the next country on the map and advance your weekly goal."},
-  "home.nextBoss":{pt:"Enfrente um chefão",en:"Face a boss"},
-  "home.nextBossSub":{pt:"Crises tabletop e a Cadeia Norte elevam sua maturidade operacional.",en:"Tabletop crises and the Northern Chain raise your operational maturity."},
+  "home.nextBoss":{pt:"Enfrente um desafio",en:"Face a challenge"},
+  "home.nextBossSub":{pt:"Crises simuladas estilo mesa elevam sua maturidade operacional.",en:"Tabletop-style simulated crises raise your operational maturity."},
   "home.nextReview":{pt:"Revise seus erros",en:"Review your mistakes"},
   "home.nextReviewSub":{pt:"Você tem {n} itens em revisão espaçada prontos para hoje.",en:"You have {n} items in spaced review ready for today."},
   "home.nextGoDaily":{pt:"▶️ Jogar diária",en:"▶️ Play daily"},
   "home.nextGoMap":{pt:"🗺️ Abrir mapa",en:"🗺️ Open map"},
-  "home.nextGoBoss":{pt:"🐉 Ver chefões",en:"🐉 See bosses"},
+  "home.nextGoBoss":{pt:"🎯 Ver desafios",en:"🎯 See challenges"},
   "home.nextGoReview":{pt:"📚 Revisar agora",en:"📚 Review now"},
   "home.weekTheme":{pt:"Tema da semana",en:"Week theme"},
   "home.weekCorrect":{pt:"Acertos semanais",en:"Weekly correct"},
@@ -85,8 +88,8 @@ var UI = {
   "home.modesTitle":{pt:"Modos de jogo",en:"Game modes"},
   "mode.campaign.h":{pt:"🗺️ Campanhas por país",en:"🗺️ Campaigns by country"},
   "mode.campaign.t":{pt:"Presença oficial da Orbita em 19 países — atuação e portfólio do mapa orbita.com.",en:"Orbita's official presence in 19 countries — activities and portfolio from the orbita.com map."},
-  "mode.boss.h":{pt:"🐉 Chefões",en:"🐉 Bosses"},
-  "mode.boss.t":{pt:"Aventuras estilo mesa (tabletop): crises encadeadas com storytelling.",en:"Tabletop-style adventures: chained crises with storytelling."},
+  "mode.boss.h":{pt:"🎯 Desafios",en:"🎯 Challenges"},
+  "mode.boss.t":{pt:"Crises simuladas estilo mesa: storytelling encadeado com mapas vetoriais animados.",en:"Tabletop-style simulated crises: chained storytelling with animated vector maps."},
   "mode.dw.h":{pt:"📅 Diárias & 🏆 Semanais",en:"📅 Dailies & 🏆 Weeklies"},
   "mode.dw.t":{pt:"Desafios que renovam e rendem XP.",en:"Challenges that refresh and grant XP."},
   "streak.title":{pt:"🔥 Ofensiva",en:"🔥 Streak"},
@@ -210,7 +213,9 @@ var UI = {
   "footer.brand":{pt:"Guardião Cibernético",en:"Cyber Guardian"},
   "daily.srsDue":{pt:"{n} revisões espaçadas priorizadas na missão de hoje",en:"{n} spaced reviews prioritized in today's mission"},
   "map.vwmTitle":{pt:"A Orbita no mundo",en:"Orbita in the world"},
-  "map.vwmHelper":{pt:"Clique em um país ou na legenda para explorar",en:"Click a country or legend item to explore"},
+  "map.vwmHelper":{pt:"Toque num país para iniciar a expedição",en:"Tap a country to start the expedition"},
+  "map.zoomToggle":{pt:"🔍 Ajustar zoom",en:"🔍 Adjust zoom"},
+  "map.moreOptions":{pt:"Mais informações do mapa",en:"More map information"},
   "map.clearSelection":{pt:"Limpar seleção",en:"Clear selection"},
   "map.legendActivity":{pt:"Atuação:",en:"Activity:"},
   "map.legendProduct":{pt:"Portfólio de Produtos:",en:"Product portfolio:"},
@@ -274,18 +279,21 @@ var UI = {
   "chain.impactOk":{pt:"🟢 Cadeia íntegra: minério fluindo de Carajás (S11D) até a China sem interrupções.",en:"🟢 Chain intact: ore flowing from Carajás (S11D) to China without interruptions."},
   "chain.impactBreach":{pt:"🔴 Brecha em \"{stage}\": o impacto se propaga por toda a cadeia a jusante — produção parada, ~230 Mt/ano no porto em risco e o abastecimento da China ameaçado.",en:"🔴 Breach at \"{stage}\": the impact propagates down the whole chain — production halted, ~230 Mtpy at the port at risk and China's supply threatened."},
   "region.start":{pt:"▶️ Iniciar missão de treino",en:"▶️ Start training mission"},
-  "quiz.integrity":{pt:"🏭 Integridade da operação",en:"🏭 Operation integrity"},
-  "quiz.resilience":{pt:"🛡️ Maturidade operacional",en:"🛡️ Operational maturity"},
+  "quiz.integrity":{pt:"🏭 Saúde da operação",en:"🏭 Operation health"},
+  "quiz.resilience":{pt:"🛡️ Proteção da operação",en:"🛡️ Operation protection"},
+  "quiz.progress":{pt:"Pergunta {n} de {t}",en:"Question {n} of {t}"},
   "quiz.quit":{pt:"✖ Sair",en:"✖ Quit"},
   "quiz.prev":{pt:"← Voltar",en:"← Back"},
   "quiz.next":{pt:"Próxima →",en:"Next →"},
   "quiz.finish":{pt:"Concluir →",en:"Finish →"},
   "quiz.quitConfirm":{pt:"Sair da missão? O progresso desta partida não será salvo.",en:"Leave this mission? Progress in this run won't be saved."},
+  "quit.stay":{pt:"Continuar jogando",en:"Keep playing"},
+  "quit.leave":{pt:"Sair da missão",en:"Leave mission"},
   "result.map":{pt:"🗺️ Mapa",en:"🗺️ Map"},
   "result.medals":{pt:"🏅 Medalhas",en:"🏅 Medals"},
   "result.rank":{pt:"📈 Ranking por equipe",en:"📈 Team ranking"},
-  "boss.title":{pt:"🐉 Chefões — Desafios de Segurança",en:"🐉 Bosses — Security Challenges"},
-  "boss.sub":{pt:"Aventuras estilo mesa com storytelling conectado e mapa vetorial animado — cada decisão avança a próxima cena.",en:"Tabletop adventures with connected storytelling and animated vector map — each decision advances the next scene."},
+  "boss.title":{pt:"🎯 Desafios — Crises simuladas",en:"🎯 Challenges — Simulated crises"},
+  "boss.sub":{pt:"Experiências estilo mesa com storytelling conectado e mapa vetorial animado — cada decisão avança a próxima cena.",en:"Tabletop experiences with connected storytelling and animated vector map — each decision advances the next scene."},
   "boss.storyMapLabel":{pt:"Storytelling · Mapa",en:"Storytelling · Map"},
   "boss.threat":{pt:"🛡️ Ameaça",en:"🛡️ Threat"},
   "boss.energy":{pt:"energia do ataque",en:"attack energy"},
@@ -301,7 +309,7 @@ var UI = {
   "boss.storyLabel":{pt:"História",en:"Story"},
   "boss.next":{pt:"Próxima cena →",en:"Next scene →"},
   "boss.finish":{pt:"Ver desfecho →",en:"See ending →"},
-  "boss.backList":{pt:"← Voltar aos Chefões",en:"← Back to Bosses"},
+  "boss.backList":{pt:"← Voltar aos Desafios",en:"← Back to Challenges"},
   "boss.defeated":{pt:"🐉 Missão tabletop concluída!",en:"🐉 Tabletop mission complete!"},
   "boss.contained":{pt:"Avaliação de resiliência",en:"Resilience assessment"},
   "boss.replay":{pt:"🔁 Repetir missão",en:"🔁 Replay mission"},
@@ -311,9 +319,9 @@ var UI = {
   "boss.guardianRank":{pt:"Patente de resiliência",en:"Resilience rank"},
   "boss.bestRun":{pt:"Melhor resultado",en:"Best run"},
   "boss.notPlayed":{pt:"Não jogado",en:"Not played"},
-  "profile.moreTitle":{pt:"Mais detalhes do progresso",en:"More progress details"},
-  "profile.bossRes":{pt:"🏭 Maturidade nos Chefões",en:"🏭 Maturity in Bosses"},
-  "profile.bossResSub":{pt:"Sua maturidade operacional nas aventuras tabletop — repita para subir de patente.",en:"Your operational maturity in tabletop adventures — replay to rank up."},
+  "profile.moreTitle":{pt:"Ver estatísticas e detalhes",en:"View stats and details"},
+  "profile.bossRes":{pt:"🏭 Maturidade nos desafios",en:"🏭 Maturity in challenges"},
+  "profile.bossResSub":{pt:"Sua maturidade operacional nas crises simuladas — repita para subir de patente.",en:"Your operational maturity in simulated crises — replay to advance your rank."},
   "profile.completionTitle":{pt:"🎯 Sua jornada",en:"🎯 Your journey"},
   "profile.completionPct":{pt:"da jornada concluída",en:"of journey complete"},
   "profile.nextMilestone":{pt:"Próximo marco",en:"Next milestone"},
@@ -335,16 +343,12 @@ var UI = {
   "onboard.step":{pt:"Passo",en:"Step"},
   "onboard.reopen":{pt:"Guia",en:"Guide"},
   "onboard.reopenTip":{pt:"Reabrir guia de introdução ao jogo",en:"Reopen the game introduction guide"},
-  "onboard.langT":{pt:"1) Idioma / Language",en:"1) Language / Idioma"},
-  "onboard.langB":{pt:"O jogo, as perguntas, as respostas e a narração por voz seguem o idioma escolhido.",en:"The game, questions, answers and voice narration follow the chosen language."},
-  "onboard.s1t":{pt:"3) Bem-vindo, Guardião!",en:"3) Welcome, Guardian!"},
-  "onboard.s1b":{pt:"Você protege a operação da Orbita — da mina ao porto — contra ameaças cibernéticas. Suas decisões fortalecem a resiliência da cadeia global.",en:"You protect Orbita's operations — from mine to port — against cyber threats. Your decisions strengthen the global chain's resilience."},
-  "onboard.s2t":{pt:"4) Expedição no mapa",en:"4) Map expedition"},
-  "onboard.s2b":{pt:"Explore países como numa missão global — cada destino traz situações de cyber security no contexto da operação local.",en:"Explore countries like a global mission — each destination brings cyber security scenarios in the local operation context."},
-  "onboard.s3t":{pt:"5) Chefões e cadeia",en:"5) Bosses and chain"},
-  "onboard.s3b":{pt:"Chefões tabletop simulam crises reais. A Cadeia Norte (Carajás → China) fica nos Chefões — proteja mina, ferrovia e porto.",en:"Tabletop bosses simulate real crises. The Northern Chain (Carajás → China) lives in Bosses — protect mine, railway and port."},
-  "onboard.s4t":{pt:"6) Progresso e certificado",en:"6) Progress and certificate"},
-  "onboard.s4b":{pt:"Diárias, semanais e conquistas alimentam seu dashboard. Gere o certificado com selo de resiliência ao evoluir nos chefões.",en:"Dailies, weeklies and achievements feed your dashboard. Earn your certificate with the resilience seal as you progress through bosses."},
+  "onboard.setupT":{pt:"1) Idioma e acessibilidade",en:"1) Language & accessibility"},
+  "onboard.setupB":{pt:"Escolha o idioma e, se quiser, ative narração por voz, contraste ou Libras. Você pode mudar depois no menu ♿ do topo.",en:"Choose your language and optionally enable voice narration, contrast or sign language. You can change these later in the top ♿ menu."},
+  "onboard.playT":{pt:"2) Como funciona",en:"2) How it works"},
+  "onboard.playB":{pt:"Explore países no mapa, faça a missão diária e enfrente crises simuladas. Cada acerto fortalece a operação — erros mostram o que revisar.",en:"Explore countries on the map, play the daily mission and face simulated crises. Each correct answer strengthens operations — mistakes show what to review."},
+  "onboard.readyT":{pt:"3) Pronto para jogar",en:"3) Ready to play"},
+  "onboard.readyB":{pt:"Toque em Jogar agora na tela inicial. O jogo sugere sempre o melhor próximo passo para você.",en:"Tap Play now on the home screen. The game always suggests your best next step."},
   "quiz.personal":{pt:"💡 Na sua vida",en:"💡 In your life"},
   "progress.hub":{pt:"🔗 Como os modos se conectam",en:"🔗 How modes connect"},
   "progress.hubSub":{pt:"Tudo alimenta o mesmo progresso: XP, temas, conquistas, resiliência e certificado.",en:"Everything feeds the same progress: XP, themes, achievements, resilience and certificate."},
@@ -395,7 +399,7 @@ var UI = {
   "nav.home":{pt:"Início",en:"Home"},
   "nav.map":{pt:"Mapa",en:"Map"},
   "nav.more":{pt:"Mais",en:"More"},
-  "nav.boss":{pt:"Chefões",en:"Bosses"},
+  "nav.boss":{pt:"Desafios",en:"Challenges"},
   "nav.daily":{pt:"Missões",en:"Missions"},
   "nav.weekly":{pt:"Semanal",en:"Weekly"},
   "nav.shop":{pt:"Loja",en:"Shop"},
@@ -405,7 +409,7 @@ var UI = {
   "nav.tip.map":{pt:"Mapa — campanhas por país",en:"Map — country campaigns"},
   "nav.tip.daily":{pt:"Missões diárias",en:"Daily missions"},
   "nav.tip.more":{pt:"Mais opções — início e gestor",en:"More options — home and manager"},
-  "nav.tip.boss":{pt:"Chefões — desafios estilo mesa com storytelling",en:"Bosses — tabletop challenges with storytelling"},
+  "nav.tip.boss":{pt:"Desafios — crises simuladas estilo mesa com storytelling",en:"Challenges — tabletop-style simulated crises with storytelling"},
   "nav.tip.weekly":{pt:"Desafios semanais",en:"Weekly challenges"},
   "nav.tip.shop":{pt:"Loja de avatares e temas",en:"Avatar and theme shop"},
   "nav.tip.stats":{pt:"Seu progresso e medalhas",en:"Your progress and medals"},
@@ -983,7 +987,39 @@ function renderPedagogyRec(hostId){
     row.appendChild(play); host.appendChild(row);
   });
 }
-function initQuizSession(){ cur.sessionLog=[]; cur.qStates={}; cur.optOrder={}; cur.reportPending=false; cur.reportDone=false; var rs=$("reportStep"); if(rs) rs.hidden=true; }
+var quitCallback=null;
+function showQuitDialog(cb){
+  quitCallback=cb;
+  var dlg=$("quitDialog"), msg=$("quitDialogMsg");
+  if(!dlg) return;
+  if(msg) msg.textContent=t("quiz.quitConfirm");
+  dlg.hidden=false;
+  var stay=$("quitDialogCancel"); if(stay) stay.focus();
+}
+function hideQuitDialog(){ quitCallback=null; var dlg=$("quitDialog"); if(dlg) dlg.hidden=true; }
+function applySimpleUi(){
+  document.body.classList.toggle("simple-ui",S.simpleUi!==false);
+}
+function playNow(){
+  var ns=computeNextStep();
+  if(ns&&ns.act) ns.act();
+}
+function updateQuizResilienceVisibility(){
+  var el=document.querySelector("#screenQuiz .integrity-res");
+  if(!el) return;
+  var show=false;
+  if(cur.qStates){ for(var k in cur.qStates){ if(cur.qStates[k]&&!cur.qStates[k].ok){ show=true; break; } } }
+  el.classList.toggle("quiz-resilience-hidden",!show);
+}
+function updateQuizProgress(){
+  var lab=$("quizProgressLabel"), fill=$("quizProgressFill"), bar=fill&&fill.parentNode;
+  if(!lab||!cur.questions||!cur.questions.length) return;
+  var n=cur.i+1, tot=cur.questions.length, pct=Math.round(n/tot*100);
+  lab.textContent=t("quiz.progress").replace("{n}",String(n)).replace("{t}",String(tot));
+  if(fill) fill.style.width=pct+"%";
+  if(bar){ bar.setAttribute("aria-valuenow",String(pct)); bar.setAttribute("aria-label",lab.textContent); }
+}
+function initQuizSession(){ cur.sessionLog=[]; cur.qStates={}; cur.optOrder={}; cur.reportPending=false; cur.reportDone=false; var rs=$("reportStep"); if(rs) rs.hidden=true; updateQuizResilienceVisibility(); }
 function countQuizCorrect(){ var n=0,i; if(!cur.qStates) return 0; for(i=0;i<cur.questions.length;i++){ if(cur.qStates[i]&&cur.qStates[i].ok) n++; } return n; }
 function rebuildSessionLog(){ cur.sessionLog=[]; var i; for(i=0;i<cur.questions.length;i++){ if(cur.qStates[i]) cur.sessionLog.push({q:cur.questions[i],ok:cur.qStates[i].ok,i:i}); } }
 function updateQuizNav(){
@@ -1001,14 +1037,15 @@ function quizQuit(){
     cur.reportPending=false;
     var rs=$("reportStep"); if(rs) rs.hidden=true;
   }
-  if(!confirm(t("quiz.quitConfirm"))) return;
-  stopSpeak();
-  cur.reportPending=false;
-  if(cur.mode==="daily"){ renderDaily(); show("screenDaily"); }
-  else if(cur.mode==="review"){ renderProfile(); show("screenProfile"); }
-  else if(cur.mode==="chain"){ renderBossList(); show("screenBossList"); }
-  else if(cur.mode==="campaign") returnToMap();
-  else show("screenHome");
+  showQuitDialog(function(){
+    stopSpeak();
+    cur.reportPending=false;
+    if(cur.mode==="daily"){ renderDaily(); show("screenDaily"); }
+    else if(cur.mode==="review"){ renderProfile(); show("screenProfile"); }
+    else if(cur.mode==="chain"){ renderBossList(); show("screenBossList"); }
+    else if(cur.mode==="campaign") returnToMap();
+    else show("screenHome");
+  });
 }
 function prevQuestion(){
   if(cur.reportPending||cur.i<=0) return;
@@ -1751,7 +1788,7 @@ function renderQuestion(){
   var q=cur.questions[cur.i],c=cur.country;
   if(!cur.qStates) cur.qStates={};
   if(!cur.optOrder) cur.optOrder={};
-  setIntegrity(); renderQuizResilience();
+  setIntegrity(); renderQuizResilience(); updateQuizResilienceVisibility(); updateQuizProgress();
   $("themeTag").textContent=THEMES[q.theme].ico+" "+tt(THEMES[q.theme]);
   var diffTxt=L()==="pt"?["","Fácil","Médio","Difícil"]:["","Easy","Medium","Hard"];
   $("diffTag").textContent=diffTxt[q.diff]||"";
@@ -1799,7 +1836,7 @@ function answer(idx,btn,q){
   cur.qStates[cur.i]={selectedIdx:idx,ok:ok,feedbackClass:fb.className,feedbackHtml:fb.innerHTML,reportDone:false};
   cur.correct=countQuizCorrect();
   speak((ok?(L()==="pt"?"Correto. ":"Correct. "):(L()==="pt"?"Cuidado. ":"Careful. "))+tt(q.why));
-  setIntegrity(); renderQuizResilience();
+  setIntegrity(); renderQuizResilience(); updateQuizResilienceVisibility();
   if(!review){ bumpWeekly("correct",ok?1:0); if(ok&&q.theme===getWeekTheme()) bumpWeekly("theme",1); }
   if(!ok&&!review&&REPORT_THEMES[q.theme]) showReportPrompt(q);
   else { cur.reportPending=false; updateQuizNav(); $("nextBtn").focus(); }
@@ -2286,8 +2323,7 @@ function bossPrev(){
   renderBossPhase();
 }
 function bossQuit(){
-  if(!confirm(t("quiz.quitConfirm"))) return;
-  renderBossList(); show("screenBossList");
+  showQuitDialog(function(){ renderBossList(); show("screenBossList"); });
 }
 function renderBossPhase(){
   var b=bossCur.boss;
@@ -2622,18 +2658,32 @@ function computeNextStep(){
   if((S.weekly.prog.campaign||0)<3){
     return {ico:"🗺️",title:t("home.nextContinue"),sub:t("home.nextCampaignSub"),btn:t("home.nextGoMap"),act:function(){ openMap(null,true,true); }};
   }
-  return {ico:"🐉",title:t("home.nextBoss"),sub:t("home.nextBossSub"),btn:t("home.nextGoBoss"),act:function(){ renderBossList(); show("screenBossList"); }};
+  return {ico:"🎯",title:t("home.nextBoss"),sub:t("home.nextBossSub"),btn:t("home.nextGoBoss"),act:function(){ renderBossList(); show("screenBossList"); }};
 }
 function renderNextStep(){
   var card=$("nextStepCard"); if(!card) return;
-  if(!S.onboardingDone){ card.hidden=true; return; }
+  var hero=$("homeHeroActions");
+  if(!S.onboardingDone){ card.hidden=true; if(hero) hero.hidden=false; return; }
+  if(hero) hero.hidden=true;
   var ns=computeNextStep();
   var ico=$("nextStepIco"), ti=$("nextStepTitle"), sub=$("nextStepSub"), btn=$("nextStepBtn");
   if(ico) ico.textContent=ns.ico;
   if(ti) ti.textContent=ns.title;
   if(sub) sub.textContent=ns.sub;
-  if(btn){ btn.textContent=ns.btn; btn.onclick=ns.act; }
+  if(btn){ btn.textContent=t("home.playNow"); btn.onclick=playNow; }
+  renderWeekLine();
   card.hidden=false;
+}
+function renderWeekLine(){
+  var host=$("nextStepWeek"); if(!host) return;
+  ensureWeekly(); ensureDaily();
+  var wp=S.weekly.prog||{}, wt=getWeekTheme();
+  var daily=S.daily.done.mission?(L()==="pt"?"✅ Feita":"✅ Done"):(L()==="pt"?"Pendente":"Pending");
+  host.textContent=t("home.weekLine")
+    .replace("{theme}",THEMES[wt].ico+" "+tt(THEMES[wt]))
+    .replace("{correct}",String(wp.correct||0))
+    .replace("{campaign}",String(wp.campaign||0))
+    .replace("{daily}",daily);
 }
 function setFocusLearn(on){
   S.focusLearn=!!on; save(); applyFocusLearn(); refreshHud();
@@ -2645,24 +2695,13 @@ function setManagerMode(on){
   var a=$("optManager"), b=$("optManagerProfile");
   if(a) a.checked=S.managerMode; if(b) b.checked=S.managerMode;
 }
-function renderWeekCard(){
-  var host=$("weekCardBody"); if(!host) return;
-  ensureWeekly(); ensureDaily();
-  var wp=S.weekly.prog||{}, wt=getWeekTheme();
-  host.innerHTML=
-    '<div class="week-stat"><span class="week-stat-k">'+t("home.weekTheme")+'</span><span class="week-stat-v">'+THEMES[wt].ico+' '+tt(THEMES[wt])+'</span></div>'
-    +'<div class="week-stat"><span class="week-stat-k">'+t("home.weekCorrect")+'</span><span class="week-stat-v">'+(wp.correct||0)+'/20</span></div>'
-    +'<div class="week-stat"><span class="week-stat-k">'+t("home.weekCampaign")+'</span><span class="week-stat-v">'+(wp.campaign||0)+'/3</span></div>'
-    +'<div class="week-stat"><span class="week-stat-k">'+t("home.weekDaily")+'</span><span class="week-stat-v">'+(S.daily.done.mission?(L()==="pt"?"✅ Feita":"✅ Done"):(L()==="pt"?"Pendente":"Pending"))+'</span></div>'
-    +'<div class="week-stat"><span class="week-stat-k">'+t("home.weekBoss")+'</span><span class="week-stat-v">'+(wp.boss||0)+'/1</span></div>';
-  var btn=$("weekPlayBtn"); if(btn){ btn.onclick=weekPlayAction(); }
-}
+function renderWeekCard(){ renderWeekLine(); }
 function renderCompletionCard(){
   var host=$("completionBody"); if(!host) return;
   var pct=journeyCompletionPct();
   host.innerHTML='<div class="completion-ring">'+pct+'%</div><div class="completion-meta">'
     +Object.keys(S.done).length+'/'+COUNTRIES.length+' '+(L()==="pt"?"países":"countries")+' · '
-    +bossCompletedCount()+'/'+BOSSES.length+' '+(L()==="pt"?"chefões":"bosses")+' · '
+    +bossCompletedCount()+'/'+BOSSES.length+' '+(L()==="pt"?"desafios":"challenges")+' · '
     +chainStagesDone()+'/'+chainTotalStages()+' '+(L()==="pt"?"etapas cadeia":"chain stages")+' · '
     +medalsEarned()+'/'+MEDALS.length+' '+(L()==="pt"?"conquistas":"achievements")
     +'</div><div class="completion-milestone"><b>'+t("profile.nextMilestone")+':</b> '+nextMilestoneText()+'</div>';
@@ -2948,12 +2987,9 @@ function renderRoles(){ var g=$("rolesGrid"); g.innerHTML=""; ROLES.forEach(func
    ========================================================== */
 /* -------------------- ONBOARDING -------------------- */
 var ONBOARD_STEPS=[
-  {ico:"🌐",type:"lang",titleKey:"home.langTitle",bodyKey:"home.langSub"},
-  {ico:"♿",type:"a11y",titleKey:"home.a11yTitle",bodyKey:"home.a11ySub"},
-  {ico:"🛡️",titleKey:"onboard.s1t",bodyKey:"onboard.s1b"},
-  {ico:"🗺️",titleKey:"onboard.s2t",bodyKey:"onboard.s2b"},
-  {ico:"🐉",titleKey:"onboard.s3t",bodyKey:"onboard.s3b"},
-  {ico:"📜",titleKey:"onboard.s4t",bodyKey:"onboard.s4b"}
+  {ico:"🌐",type:"setup",titleKey:"onboard.setupT",bodyKey:"onboard.setupB"},
+  {ico:"🛡️",titleKey:"onboard.playT",bodyKey:"onboard.playB"},
+  {ico:"▶️",titleKey:"onboard.readyT",bodyKey:"onboard.readyB"}
 ];
 var onboardStep=0, onboardReplay=false;
 function closeOnboarding(){
@@ -2961,17 +2997,19 @@ function closeOnboarding(){
   onboardReplay=false;
   var ov=$("onboardOverlay"); if(ov) ov.hidden=true;
   document.body.classList.remove("onboard-open");
+  try{ renderNextStep(); }catch(e){}
 }
 function renderOnboarding(){
-  var step=ONBOARD_STEPS[onboardStep], isLang=step.type==="lang", isA11y=step.type==="a11y";
+  var step=ONBOARD_STEPS[onboardStep], isSetup=step.type==="setup", isLang=step.type==="lang", isA11y=step.type==="a11y";
   var langPanel=$("onboardLangPanel"), a11yPanel=$("onboardA11yPanel"), feat=$("onboardFeature"), body=$("onboardBody"), mission=$("onboardMission");
-  if(feat) feat.hidden=isLang||isA11y;
-  if(body){ body.hidden=!(isLang||isA11y); if(isLang||isA11y) body.textContent=t(step.bodyKey); }
-  if(mission) mission.textContent=(isLang||isA11y)?"":t(step.bodyKey);
-  if(langPanel) langPanel.hidden=!isLang;
+  if($("onboardTitle")) $("onboardTitle").textContent=t(step.titleKey||"onboard.step");
+  if(feat) feat.hidden=isSetup||isLang||isA11y;
+  if(body){ body.hidden=!(isSetup||isLang||isA11y); if(isSetup||isLang||isA11y) body.textContent=t(step.bodyKey); }
+  if(mission) mission.textContent=(isSetup||isLang||isA11y)?"":t(step.bodyKey);
+  if(langPanel) langPanel.hidden=!(isSetup||isLang);
   if(a11yPanel){
-    a11yPanel.hidden=!isA11y;
-    if(isA11y){
+    a11yPanel.hidden=!(isSetup||isA11y);
+    if(isSetup||isA11y){
       var ov=$("onboardOptVoice"), oc=$("onboardOptContrast"), os=$("onboardOptSigns"), om=$("onboardOptMotion");
       if(ov) ov.checked=!!S.a11y.voice;
       if(oc) oc.checked=!!S.a11y.contrast;
@@ -2979,7 +3017,7 @@ function renderOnboarding(){
       if(om) om.checked=!!S.a11y.motion;
     }
   }
-  if(isLang){
+  if(isSetup||isLang){
     document.querySelectorAll("#onboardLangPanel .lang-card").forEach(function(b){ b.setAttribute("aria-pressed",b.getAttribute("data-lang")===S.lang?"true":"false"); });
   } else if(!isA11y) {
     var ico=$("onboardIco"); if(ico) ico.textContent=step.ico;
@@ -3008,6 +3046,9 @@ function onboardNext(){
   var firstTime=!S.onboardingDone;
   closeOnboarding();
   if(firstTime&&!onboardReplay){
+    if(!S.a11y.voice){ S.a11y.voice=true; }
+    if(S.simpleUi===undefined) S.simpleUi=true;
+    save(); applyA11y(); applySimpleUi();
     renderTeams(); renderRoles();
     if($("playerName")) $("playerName").value=S.name||"";
     show("screenSetup");
@@ -3042,12 +3083,12 @@ function bind(){
   document.addEventListener("keydown",function(e){ var ov=$("onboardOverlay"); if(e.key==="Escape"&&ov&&!ov.hidden) closeOnboarding(); });
 
   on("homeStartBtn","click",function(){
-    if(setupComplete()){ openMap(null,true,true); return; }
+    if(setupComplete()){ playNow(); return; }
     renderTeams(); renderRoles();
     if($("playerName")) $("playerName").value=S.name||"";
     show("screenSetup");
   });
-  on("homeMapBtn","click",function(){ openMap(null,true,setupComplete()); });
+  on("nextStepBtn","click",playNow);
   on("heroIronBtn","click",function(){ openBossChain(true); });
   on("setupBackBtn","click",function(){ show("screenHome"); });
   on("setupGoBtn","click",function(){
@@ -3062,6 +3103,14 @@ function bind(){
   on("zoomIn","click",function(){ zoomTo(view.x+view.w/2,view.y+view.h/2,.8); });
   on("zoomOut","click",function(){ zoomTo(view.x+view.w/2,view.y+view.h/2,1.25); });
   on("zoomReset","click",function(){ resetView(); });
+  on("mapZoomToggleBtn","click",function(){
+    var row=$("mapToolbarRow"); if(!row) return;
+    row.classList.toggle("map-toolbar-collapsed");
+    this.setAttribute("aria-expanded",row.classList.contains("map-toolbar-collapsed")?"false":"true");
+  });
+  on("quitDialogCancel","click",hideQuitDialog);
+  on("quitDialogBackdrop","click",hideQuitDialog);
+  on("quitDialogConfirm","click",function(){ var fn=quitCallback; hideQuitDialog(); if(fn) fn(); });
 
   on("langToggle","click",function(){ setLang(L()==="pt"?"en":"pt"); });
   on("a11yBtn","click",function(e){ e.stopPropagation(); toggleA11yMenu(); });
@@ -3112,6 +3161,7 @@ function bind(){
 
   document.addEventListener("keydown",function(e){
     if(e.key==="Escape"){
+      var qd=$("quitDialog"); if(qd&&!qd.hidden){ hideQuitDialog(); return; }
       if($("screenQuiz")&&$("screenQuiz").classList.contains("active")){ quizQuit(); return; }
       if($("mapDetail")&&!$("mapDetail").hidden){ closeMapDetail(); return; }
       var tip=$("mapTooltip"); if(tip&&!tip.hidden){ tip.hidden=true; if(typeof OrbitaWorldMap!=="undefined") OrbitaWorldMap.clearSelection(); return; }
@@ -3182,7 +3232,7 @@ function init(){
   try{
   sanitizeA11y(); ensureManagerMode();
   dismissBlockingUI();
-  applyI18n(); applyA11y(); applyCosmetics(); applyFocusLearn(); ensureDaily(); ensureWeekly(); ensureTeamScores(); ensureStreak(); refreshHud();
+  applyI18n(); applyA11y(); applySimpleUi(); applyCosmetics(); applyFocusLearn(); ensureDaily(); ensureWeekly(); ensureTeamScores(); ensureStreak(); refreshHud();
   try{ renderStreakCard(); }catch(e){ console.error(e); }
   try{ renderWeekCard(); }catch(e){ console.error(e); }
   try{ renderDaily(); }catch(e){ console.error(e); }

@@ -9,22 +9,33 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=59">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=60">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=59">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=59">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=60">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=60">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=59"></script>
-<link rel="stylesheet" href="css/styles.css?v=59">
+<script src="js/access-gate.js?v=60"></script>
+<link rel="stylesheet" href="css/styles.css?v=60">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
 <div id="a11yLive" class="sr-only" aria-live="polite" role="status"></div>
 <div id="toastWrap" class="toast-wrap" aria-live="polite"></div>
+
+<div id="quitDialog" class="quit-dialog" hidden role="alertdialog" aria-modal="true" aria-labelledby="quitDialogMsg">
+  <div class="quit-dialog-backdrop" id="quitDialogBackdrop"></div>
+  <div class="quit-dialog-box card">
+    <p class="quit-dialog-msg" id="quitDialogMsg"></p>
+    <div class="row-actions quit-dialog-actions">
+      <button type="button" class="btn btn-ghost" id="quitDialogCancel" data-i18n="quit.stay">Continuar jogando</button>
+      <button type="button" class="btn btn-primary" id="quitDialogConfirm" data-i18n="quit.leave">Sair da missão</button>
+    </div>
+  </div>
+</div>
 
 <!-- Onboarding pop-up — mesmo visual dos cards da tela inicial -->
 <div id="onboardOverlay" class="onboard-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="onboardTitle">
@@ -93,7 +104,7 @@
         <div class="a11y-menu-wrap">
           <button class="a11y-trigger" id="a11yBtn" data-i18n-attr="aria-label:hud.tip.a11y;title:hud.tip.a11y" aria-label="Idioma e acessibilidade" aria-haspopup="true" aria-expanded="false">
             <span class="a11y-trigger-icon" aria-hidden="true">♿</span>
-            <span class="a11y-trigger-label">A11y</span>
+            <span class="a11y-trigger-label" data-i18n="a11y.shortLabel">Acessibilidade</span>
           </button>
           <div class="a11y-menu" id="a11yMenu" role="menu" aria-label="Idioma e acessibilidade" hidden>
             <div class="am-header">
@@ -268,9 +279,8 @@
       <h1 data-i18n="home.title">Você é o <span class="accent">Guardião Cibernético</span></h1>
       <p data-i18n="home.desc">Treino bilíngue para proteger a cadeia global de recursos — da extração ao mercado — com decisões certas em segurança da informação.</p>
       <div class="mission" data-i18n="home.mission">🎯 <b>Sua missão:</b> antecipar ameaças em minas, plantas, logística, portos e escritórios. Enfrente cenários reais nos chefões, explore o mapa mundial e evolua como profissional de cyber.</div>
-      <div class="row-actions hero-actions">
+      <div class="row-actions hero-actions" id="homeHeroActions">
         <button class="btn btn-primary btn-lg" id="homeStartBtn" data-i18n="home.start">▶️ Começar</button>
-        <button class="btn btn-blue" id="homeMapBtn" data-i18n="home.map">🗺️ Mapa da Operação</button>
         <button type="button" class="btn btn-ghost" id="pwaInstallBtn" hidden data-i18n="home.install">⬇️ Instalar app</button>
       </div>
       <p class="home-a11y-hint muted"><button type="button" class="btn-linkish" id="openA11yMenuBtn" data-i18n="a11y.openMenu">♿ Acessibilidade</button> — <span data-i18n="home.a11yHint">voz, contraste, Libras e mais no menu superior.</span></p>
@@ -279,34 +289,6 @@
     </div>
 
     <div class="card next-step-card" id="nextStepCard" hidden>
-      <div class="next-step-main">
-        <span class="next-step-ico" id="nextStepIco" aria-hidden="true">▶️</span>
-        <div class="next-step-txt">
-          <div class="next-step-title" id="nextStepTitle"></div>
-          <div class="next-step-sub" id="nextStepSub"></div>
-        </div>
-      </div>
-      <button type="button" class="btn btn-primary btn-lg" id="nextStepBtn"></button>
-    </div>
-
-    <div class="card card-lang-home">
-      <div class="section-title" data-i18n="home.langTitle">Idioma / Language</div>
-      <div class="section-sub" data-i18n="home.langSub">O jogo, as perguntas, as respostas e a narração por voz seguem o idioma escolhido.</div>
-      <div class="lang-grid" role="group" aria-label="Idioma / Language">
-        <button class="lang-card" data-lang="pt" aria-pressed="true">
-          <span class="lang-flag" aria-hidden="true"><svg viewBox="0 0 36 24" class="flag-svg"><rect width="36" height="24" fill="#009b3a"/><polygon points="18,2 34,12 18,22 2,12" fill="#fedf00"/><circle cx="18" cy="12" r="5.5" fill="#002776"/></svg></span>
-          <span class="lang-name">Português</span>
-          <span class="desc" data-i18n="home.langPtDesc">Português (Brasil)</span>
-        </button>
-        <button class="lang-card" data-lang="en" aria-pressed="false">
-          <span class="lang-flag" aria-hidden="true"><svg viewBox="0 0 36 24" class="flag-svg"><rect width="36" height="24" fill="#B22234"/><rect y="2.3" width="36" height="2.3" fill="#fff"/><rect y="6.9" width="36" height="2.3" fill="#fff"/><rect y="11.5" width="36" height="2.3" fill="#fff"/><rect y="16.1" width="36" height="2.3" fill="#fff"/><rect y="20.7" width="36" height="2.3" fill="#fff"/><rect width="14.4" height="13.8" fill="#3C3B6E"/><circle cx="3.2" cy="2.8" r=".9" fill="#fff"/><circle cx="7.2" cy="2.8" r=".9" fill="#fff"/><circle cx="11.2" cy="2.8" r=".9" fill="#fff"/><circle cx="5.2" cy="5.8" r=".9" fill="#fff"/><circle cx="9.2" cy="5.8" r=".9" fill="#fff"/><circle cx="3.2" cy="8.8" r=".9" fill="#fff"/><circle cx="7.2" cy="8.8" r=".9" fill="#fff"/><circle cx="11.2" cy="8.8" r=".9" fill="#fff"/></svg></span>
-          <span class="lang-name">English</span>
-          <span class="desc" data-i18n="home.langEnDesc">English (United States)</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="card week-card" id="weekCard">
       <div class="week-streak-row streak-card" id="streakCard">
         <div class="streak-inline">
           <span class="streak-inline-flame" aria-hidden="true">🔥</span>
@@ -318,12 +300,15 @@
         </div>
         <p class="streak-status streak-status-inline" id="streakStatus" data-i18n="streak.risk">⚠️ Jogue hoje para não perder sua ofensiva!</p>
       </div>
-      <div class="section-title" data-i18n="home.weekTitle">Minha semana</div>
-      <div class="section-sub" data-i18n="home.weekSub">Metas da semana e próximo passo recomendado.</div>
-      <div id="weekCardBody" class="week-card-body"></div>
-      <div class="row-actions week-card-actions">
-        <button type="button" class="btn btn-primary btn-sm" id="weekPlayBtn" data-i18n="home.weekPlay">Jogar agora →</button>
+      <div class="next-step-main">
+        <span class="next-step-ico" id="nextStepIco" aria-hidden="true">▶️</span>
+        <div class="next-step-txt">
+          <div class="next-step-title" id="nextStepTitle"></div>
+          <div class="next-step-sub" id="nextStepSub"></div>
+        </div>
       </div>
+      <p class="next-step-week-line" id="nextStepWeek" aria-live="polite"></p>
+      <button type="button" class="btn btn-primary btn-lg" id="nextStepBtn" data-i18n="home.playNow">▶️ Jogar agora</button>
     </div>
 
   </section>
@@ -365,30 +350,16 @@
           <h2 class="vwm-title" data-i18n="map.vwmTitle">A Orbita no mundo</h2>
           <button type="button" class="vwm-clear" id="mapClearBtn" hidden><span class="vwm-clear-icon" aria-hidden="true">×</span><span data-i18n="map.clearSelection">Limpar seleção</span></button>
         </div>
-        <p class="vwm-helper" data-i18n="map.vwmHelper">Clique em um país ou na legenda para explorar</p>
+        <p class="vwm-helper" data-i18n="map.vwmHelper">Toque num país para iniciar a expedição</p>
       </header>
       <div class="vwm-accent" aria-hidden="true"></div>
-      <div class="section-sub map-vwm-sub" data-i18n="map.sub">Com sede no Brasil, a Orbita atua em 19 países no mapa oficial. Clique no mapa, na legenda ou na lista para explorar cada presença.</div>
-      <details class="map-about" id="mapAboutWrap">
-        <summary data-i18n="map.aboutTitle">Presença global da Orbita</summary>
-        <div id="mapAbout" class="map-about-body"></div>
-      </details>
       <div class="map-expedition" id="mapExpeditionWrap">
         <div id="mapExpedition"></div>
       </div>
-      <div class="map-mission" id="mapMissionWrap">
-        <div class="map-mission-head"><span data-i18n="map.missionTitle">Missão da mineração Orbita</span></div>
-        <div id="mapMission"></div>
-      </div>
-      <div class="map-resilience" id="mapResilienceWrap" title="">
-        <div class="map-resilience-head"><span data-i18n="map.resilience">Maturidade operacional</span> <span id="mapResilienceVal">100%</span></div>
-        <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div class="fill" id="mapResilienceBar" style="width:100%;background:var(--green)"></div></div>
-        <p class="map-resilience-tip" data-i18n="map.resilienceTip">Ataques reduzem produção, aumentam custos e emissões. Proteja cada elo da cadeia.</p>
-      </div>
       <div class="map-controls-sticky">
         <div class="map-context" id="mapContext" aria-live="polite"></div>
-        <div class="map-process-bar" id="mapProcessBar" role="tablist" aria-orientation="horizontal" data-i18n-attr="aria-label:map.processTabsLabel"></div>
-        <div class="map-toolbar-row">
+        <button type="button" class="btn btn-sm btn-ghost map-zoom-toggle" id="mapZoomToggleBtn" data-i18n="map.zoomToggle">🔍 Ajustar zoom</button>
+        <div class="map-toolbar-row map-toolbar-collapsed" id="mapToolbarRow">
           <div class="map-toolbar">
             <button class="btn btn-sm btn-ghost" id="zoomIn" aria-label="Aproximar">+</button>
             <button class="btn btn-sm btn-ghost" id="zoomOut" aria-label="Afastar">−</button>
@@ -412,16 +383,39 @@
           <div id="mapDetailBody"></div>
         </div>
       </div>
-      <footer class="vwm-legend" id="mapLegend" aria-label="Legenda do mapa">
-        <div class="vwm-legend-group vwm-legend-group-activity">
-          <strong class="vwm-legend-title" data-i18n="map.legendActivity">Atuação:</strong>
-          <div class="vwm-legend-items" id="mapActivityLegend"></div>
+      <details class="map-more-options" id="mapMoreOptions">
+        <summary data-i18n="map.moreOptions">Mais informações do mapa</summary>
+        <div class="map-more-body">
+          <div class="section-sub map-vwm-sub" data-i18n="map.sub">Com sede no Brasil, a Orbita atua em 19 países no mapa oficial. Clique no mapa, na legenda ou na lista para explorar cada presença.</div>
+          <details class="map-about" id="mapAboutWrap">
+            <summary data-i18n="map.aboutTitle">Presença global da Orbita</summary>
+            <div id="mapAbout" class="map-about-body"></div>
+          </details>
+          <div class="map-mission" id="mapMissionWrap">
+            <div class="map-mission-head"><span data-i18n="map.missionTitle">Missão da mineração Orbita</span></div>
+            <div id="mapMission"></div>
+          </div>
+          <div class="map-resilience" id="mapResilienceWrap" title="">
+            <div class="map-resilience-head"><span data-i18n="map.resilience">Maturidade operacional</span> <span id="mapResilienceVal">100%</span></div>
+            <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div class="fill" id="mapResilienceBar" style="width:100%;background:var(--green)"></div></div>
+            <p class="map-resilience-tip" data-i18n="map.resilienceTip">Ataques reduzem produção, aumentam custos e emissões. Proteja cada elo da cadeia.</p>
+          </div>
+          <div class="map-process-bar" id="mapProcessBar" role="tablist" aria-orientation="horizontal" data-i18n-attr="aria-label:map.processTabsLabel"></div>
+          <footer class="vwm-legend" id="mapLegend" aria-label="Legenda do mapa">
+            <div class="vwm-legend-group vwm-legend-group-activity">
+              <strong class="vwm-legend-title" data-i18n="map.legendActivity">Atuação:</strong>
+              <div class="vwm-legend-items" id="mapActivityLegend"></div>
+            </div>
+            <div class="vwm-legend-group vwm-legend-group-product">
+              <strong class="vwm-legend-title" data-i18n="map.legendProduct">Portfólio de Produtos:</strong>
+              <div class="vwm-legend-items" id="mapProductLegend"></div>
+            </div>
+          </footer>
+          <div class="map-hint" id="mapHint" data-i18n="map.hint">Clique em um país ou na legenda para explorar — ou use a lista abaixo.</div>
+          <p class="map-search-empty" id="mapSearchEmpty" hidden data-i18n="map.searchEmpty">Nenhum país encontrado.</p>
+          <div class="country-groups" id="countryList" aria-label="Países no mapa oficial"></div>
         </div>
-        <div class="vwm-legend-group vwm-legend-group-product">
-          <strong class="vwm-legend-title" data-i18n="map.legendProduct">Portfólio de Produtos:</strong>
-          <div class="vwm-legend-items" id="mapProductLegend"></div>
-        </div>
-      </footer>
+      </details>
       <div class="chain-list-panel card" id="mapChainPanel" hidden>
         <div class="section-title" id="mapChainTitle" data-i18n="office.chainTitle">🏢 Cadeia Digital — Escritórios</div>
         <div class="section-sub" id="mapChainSub" data-i18n="office.chainSub">Storytelling conectado: cada cena no escritório leva à próxima. Clique numa etapa para proteger.</div>
@@ -429,18 +423,19 @@
         <div id="mapChainFlow" class="chain-flow"></div>
       </div>
       </div>
-      <div class="map-hint" id="mapHint" data-i18n="map.hint">Clique em um país ou na legenda para explorar — ou use a lista abaixo.</div>
-      <p class="map-search-empty" id="mapSearchEmpty" hidden data-i18n="map.searchEmpty">Nenhum país encontrado.</p>
       <div class="sr-only" id="mapFilterLive" aria-live="polite" aria-atomic="true"></div>
-      <div class="country-groups" id="countryList" aria-label="Países no mapa oficial"></div>
     </div>
   </section>
 
   <!-- ============ QUIZ ============ -->
   <section id="screenQuiz" class="screen" aria-label="Situação de segurança">
     <div class="card">
-      <div class="integrity"><div class="il"><span data-i18n="quiz.integrity">🏭 Integridade da operação</span><span id="integrityVal">100%</span></div><div class="bar" role="progressbar"><div class="fill" id="integrityFill" style="width:100%;background:var(--green)"></div></div></div>
-      <div class="integrity integrity-res"><div class="il"><span data-i18n="quiz.resilience">🛡️ Resiliência operacional</span><span id="quizResilienceVal">100%</span></div><div class="bar" role="progressbar"><div class="fill" id="quizResilienceFill" style="width:100%;background:var(--green)"></div></div></div>
+      <div class="quiz-progress" id="quizProgress" aria-live="polite">
+        <div class="quiz-progress-label" id="quizProgressLabel"></div>
+        <div class="quiz-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
+      </div>
+      <div class="integrity"><div class="il"><span data-i18n="quiz.integrity">🏭 Saúde da operação</span><span id="integrityVal">100%</span></div><div class="bar" role="progressbar"><div class="fill" id="integrityFill" style="width:100%;background:var(--green)"></div></div></div>
+      <div class="integrity integrity-res quiz-resilience-hidden"><div class="il"><span data-i18n="quiz.resilience">🛡️ Proteção da operação</span><span id="quizResilienceVal">100%</span></div><div class="bar" role="progressbar"><div class="fill" id="quizResilienceFill" style="width:100%;background:var(--green)"></div></div></div>
       <div class="quiz-head"><span class="theme-tag" id="themeTag">🔐</span><span class="diff-tag" id="diffTag"></span></div>
       <div class="progress-line" id="progressLine"></div>
       <h2 class="scene-title"><button class="speak-btn" id="speakBtn" title="Ouvir" aria-label="Ouvir cenário">🔊</button> <span id="sceneTitleTxt"></span></h2>
@@ -470,8 +465,8 @@
   </section>
 
   <!-- ============ CHEFÕES ============ -->
-  <section id="screenBossList" class="screen" aria-label="Chefões">
-    <div class="card"><div class="section-title" data-i18n="boss.title">🐉 Chefões — Crises Tabletop</div><div class="section-sub" data-i18n="boss.sub">Aventuras estilo mesa com storytelling conectado.</div><div class="boss-list" id="bossList"></div></div>
+  <section id="screenBossList" class="screen" aria-label="Desafios">
+    <div class="card"><div class="section-title" data-i18n="boss.title">🎯 Desafios — Crises simuladas</div><div class="section-sub" data-i18n="boss.sub">Experiências estilo mesa com storytelling conectado e mapa vetorial animado — cada decisão avança a próxima cena.</div><div class="boss-list" id="bossList"></div></div>
   </section>
 
   <!-- ============ DESAFIO DO CHEFÃO ============ -->
@@ -538,19 +533,6 @@
       <div class="section-title" data-i18n="profile.completionTitle">🎯 Sua jornada</div>
       <div id="completionBody"></div>
     </div>
-    <div class="card"><div class="section-title" data-i18n="profile.title">📊 Dashboard do Guardião</div><div class="section-sub" data-i18n="profile.sub">Sua evolução acumulada (salva neste navegador).</div><div class="stats-grid" id="profileStats"></div></div>
-    <div class="card" id="reviewCard">
-      <div class="section-title" data-i18n="profile.reviewTitle">📚 Revisão</div>
-      <div class="section-sub" data-i18n="profile.reviewSub">Treine seus erros ou consulte o banco de perguntas para autores.</div>
-      <div class="review-actions" id="reviewActions"></div>
-    </div>
-    <div class="card"><div id="pedagogyRec"></div></div>
-    <div class="card" id="bossProgressCard">
-      <div class="section-title" data-i18n="profile.bossRes">🏭 Maturidade nos Chefões</div>
-      <div class="section-sub" data-i18n="profile.bossResSub">Sua maturidade operacional nas aventuras tabletop — repita para subir de patente.</div>
-      <div class="boss-prog-head" id="bossProgressHead"></div>
-      <div id="bossProgressList" class="boss-prog-list"></div>
-    </div>
     <div class="card" id="profileCertCard">
       <div class="section-title" data-i18n="profile.certTitle">📜 Certificado</div>
       <div class="section-sub" data-i18n="profile.certSub">Gere seu certificado a qualquer momento com seu progresso atual.</div>
@@ -565,8 +547,19 @@
       </div>
     </div>
     <details class="card profile-more">
-      <summary data-i18n="profile.moreTitle">Mais detalhes do progresso</summary>
+      <summary data-i18n="profile.moreTitle">Ver estatísticas e detalhes</summary>
       <div class="profile-more-body">
+        <div class="section-title" data-i18n="profile.title">📊 Seu desempenho</div>
+        <div class="section-sub" data-i18n="profile.sub">Sua evolução acumulada (salva neste navegador).</div>
+        <div class="stats-grid" id="profileStats"></div>
+        <div class="section-title" id="reviewCardTitle" data-i18n="profile.reviewTitle">📚 Revisão</div>
+        <div class="section-sub" data-i18n="profile.reviewSub">Treine seus erros ou consulte o banco de perguntas para autores.</div>
+        <div class="review-actions" id="reviewActions"></div>
+        <div id="pedagogyRec"></div>
+        <div class="section-title" data-i18n="profile.bossRes">🏭 Maturidade nos desafios</div>
+        <div class="section-sub" data-i18n="profile.bossResSub">Sua maturidade operacional nas crises simuladas — repita para subir de patente.</div>
+        <div class="boss-prog-head" id="bossProgressHead"></div>
+        <div id="bossProgressList" class="boss-prog-list"></div>
         <div id="progressHubCard">
           <div class="section-title" data-i18n="progress.hub">🔗 Como os modos se conectam</div>
           <div class="section-sub" data-i18n="progress.hubSub">Tudo alimenta o mesmo progresso: XP, temas, conquistas, maturidade e certificado.</div>
@@ -626,7 +619,7 @@
   <button type="button" id="navHomeBtn" onclick="gdvNavClick('navHomeBtn',event)" data-i18n-attr="title:nav.tip.home;aria-label:nav.tip.home"><span class="ni" aria-hidden="true">🏠</span><span data-i18n="nav.home">Início</span></button>
   <button type="button" id="navMapBtn" onclick="gdvNavClick('navMapBtn',event)" data-i18n-attr="title:nav.tip.map;aria-label:nav.tip.map"><span class="ni" aria-hidden="true">🗺️</span><span data-i18n="nav.map">Mapa</span></button>
   <button type="button" id="navDailyBtn" onclick="gdvNavClick('navDailyBtn',event)" data-i18n-attr="title:nav.tip.daily;aria-label:nav.tip.daily"><span class="ni" aria-hidden="true">📅</span><span data-i18n="nav.daily">Missões</span></button>
-  <button type="button" id="navBossBtn" onclick="gdvNavClick('navBossBtn',event)" data-i18n-attr="title:nav.tip.boss;aria-label:nav.tip.boss"><span class="ni" aria-hidden="true">🐉</span><span data-i18n="nav.boss">Chefões</span></button>
+  <button type="button" id="navBossBtn" onclick="gdvNavClick('navBossBtn',event)" data-i18n-attr="title:nav.tip.boss;aria-label:nav.tip.boss"><span class="ni" aria-hidden="true">🎯</span><span data-i18n="nav.boss">Desafios</span></button>
   <button type="button" id="navStatsBtn" onclick="gdvNavClick('navStatsBtn',event)" data-i18n-attr="title:nav.tip.stats;aria-label:nav.tip.stats"><span class="ni" aria-hidden="true">📊</span><span data-i18n="nav.stats">Progresso</span></button>
   <button type="button" id="navManagerBtn" hidden onclick="gdvNavClick('navManagerBtn',event)" data-i18n-attr="title:nav.tip.manager;aria-label:nav.tip.manager"><span class="ni" aria-hidden="true">🧭</span><span data-i18n="nav.manager">Gestor</span></button>
 </nav>
@@ -658,14 +651,14 @@
 </div>
 
 <script>window.APP_VERSION="59";</script>
-<script src="js/sign-lang.js?v=59"></script>
-<script src="js/orbita-world-map.js?v=59"></script>
-<script src="js/questions-data.js?v=59"></script>
-<script src="js/country-questions-data.js?v=59"></script>
-<script src="js/bosses-data.js?v=59"></script>
-<script src="js/chain-data.js?v=59"></script>
-<script src="js/boss-maps.js?v=59"></script>
-<script src="js/game.js?v=59"></script>
+<script src="js/sign-lang.js?v=60"></script>
+<script src="js/orbita-world-map.js?v=60"></script>
+<script src="js/questions-data.js?v=60"></script>
+<script src="js/country-questions-data.js?v=60"></script>
+<script src="js/bosses-data.js?v=60"></script>
+<script src="js/chain-data.js?v=60"></script>
+<script src="js/boss-maps.js?v=60"></script>
+<script src="js/game.js?v=60"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {
