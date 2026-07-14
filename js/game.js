@@ -3,8 +3,19 @@
 (function(){
 "use strict";
 
-/* Ponte global para onclick nos botões da barra inferior */
+/* Ponte global para onclick — confiável no Android (mesmo padrão da barra inferior) */
 window.gdvNavClick=function(id,e){ if(window.__gdvRunNav) window.__gdvRunNav(id,e||null); };
+window.gdvStartBoss=function(id,e){
+  if(e&&e.preventDefault) e.preventDefault();
+  if(e&&e.stopPropagation) e.stopPropagation();
+  if(window.__gdvStartBoss) window.__gdvStartBoss(id);
+};
+window.gdvBossAnswer=function(idx,e){
+  if(e&&e.preventDefault) e.preventDefault();
+  if(e&&e.stopPropagation) e.stopPropagation();
+  var btn=e&&e.target&&e.target.closest?e.target.closest(".opt"):null;
+  if(window.__gdvBossAnswer) window.__gdvBossAnswer(idx,btn);
+};
 
 /* -------------------- ESTADO / STATE -------------------- */
 var STORE_KEY = "guardiao_orbita_v7";
@@ -2181,10 +2192,10 @@ function renderBossList(){
   });
   list.forEach(function(b){
     var st=S.bossStats[b.id], best=st&&st.best, tier=best?bossTierInfo(best.tier):null;
-    var d=document.createElement("div");
-    d.setAttribute("role","button");
-    d.setAttribute("tabindex","0");
+    var d=document.createElement("button");
+    d.type="button";
     d.setAttribute("data-boss",b.id);
+    d.setAttribute("onclick","gdvStartBoss('"+b.id+"',event)");
     d.className="boss-card boss-card--tabletop boss-card--map";
     var phaseN=b.phases&&b.phases.length?b.phases.length:0;
     var meta=phaseN+" "+(L()==="pt"?"cenas · mapa dinâmico":"scenes · live map")+(b.tag?" · "+tt(b.tag):"");
@@ -2194,61 +2205,6 @@ function renderBossList(){
     d.innerHTML='<span class="be">'+b.emoji+'</span><div class="boss-card-body"><span class="boss-card-tag">'+tagLabel+'</span><div class="bt">'+tt(b.name)+'</div><div class="bd">'+tt(b.desc)+'</div><div class="boss-card-meta">'+meta+'</div></div>'+badge;
     host.appendChild(d);
   });
-}
-var bossListWired=false, bossListLastTap=0;
-function wireBossList(){
-  if(bossListWired) return;
-  var host=$("bossList"); if(!host) return;
-  bossListWired=true;
-  function pickBossCard(t){ return t&&t.closest?t.closest(".boss-card[data-boss]"):null; }
-  function launchBoss(card){
-    if(!card) return;
-    var id=card.getAttribute("data-boss");
-    if(id) startBoss(id);
-  }
-  function onBossCardTap(e){
-    if(e.pointerType==="mouse"&&e.button!==0) return;
-    var card=pickBossCard(e.target);
-    if(!card||!host.contains(card)) return;
-    var now=Date.now();
-    if(now-bossListLastTap<400) return;
-    bossListLastTap=now;
-    e.preventDefault();
-    e.stopPropagation();
-    launchBoss(card);
-  }
-  host.addEventListener("pointerup",onBossCardTap);
-  host.addEventListener("click",onBossCardTap);
-  host.addEventListener("keydown",function(e){
-    if(e.key!=="Enter"&&e.key!==" ") return;
-    var card=pickBossCard(e.target);
-    if(!card||!host.contains(card)) return;
-    e.preventDefault();
-    launchBoss(card);
-  });
-}
-var bossOptsWired=false, bossOptsLastTap=0;
-function wireBossOptions(){
-  if(bossOptsWired) return;
-  var host=$("bossOptions"); if(!host) return;
-  bossOptsWired=true;
-  function onBossOptTap(e){
-    if(e.pointerType==="mouse"&&e.button!==0) return;
-    var btn=e.target.closest?e.target.closest(".opt[data-opt-idx]:not([disabled])"):null;
-    if(!btn||!host.contains(btn)||bossCur.answered) return;
-    var now=Date.now();
-    if(now-bossOptsLastTap<400) return;
-    bossOptsLastTap=now;
-    e.preventDefault();
-    e.stopPropagation();
-    var idx=parseInt(btn.getAttribute("data-opt-idx"),10);
-    if(isNaN(idx)) return;
-    var b=bossCur.boss, ph=b&&b.phases?b.phases[bossCur.phase]:null;
-    if(!ph) return;
-    bossAnswer(idx,btn,ph,bossCur._optOrder);
-  }
-  host.addEventListener("pointerup",onBossOptTap);
-  host.addEventListener("click",onBossOptTap);
 }
 function startBoss(id){
   hydrateNorthernBoss();
@@ -2311,6 +2267,7 @@ function renderBossPhase(){
     btn.className="opt";
     btn.setAttribute("data-opt-idx",String(item.idx));
     if(item.idx===ph.correct) btn.setAttribute("data-correct","1");
+    if(!st) btn.setAttribute("onclick","gdvBossAnswer("+item.idx+",event)");
     btn.innerHTML='<span class="kx">'+letters[pos]+'</span><span>'+tt(item.o)+'</span>';
     if(st){ btn.disabled=true; if(item.idx===st.selectedIdx) btn.classList.add(st.ok?"correct":"wrong"); if(item.idx===ph.correct) btn.classList.add("correct"); }
     opts.appendChild(btn);
@@ -3154,8 +3111,6 @@ function init(){
   try{ updateHeroCaption(); }catch(e){ console.error(e); }
   document.querySelectorAll(".lang-card").forEach(function(x){ x.setAttribute("aria-pressed",x.getAttribute("data-lang")===S.lang?"true":"false"); });
   bind();
-  wireBossList();
-  wireBossOptions();
   try{ bindMapPanZoom(); }catch(e){ console.error(e); }
   ensureBossStats(); hydrateNorthernBoss(); checkMedals(); showOnboarding();
   if("speechSynthesis" in window){ try{ window.speechSynthesis.getVoices(); }catch(e){} }
@@ -3164,6 +3119,15 @@ function init(){
     try{ bind(); }catch(e2){ console.error("bind recovery",e2); }
   }
 }
+window.__gdvStartBoss=function(id){ startBoss(id); };
+window.__gdvBossAnswer=function(idx,btn){
+  if(bossCur.answered) return;
+  var b=bossCur.boss, ph=b&&b.phases?b.phases[bossCur.phase]:null;
+  if(!ph) return;
+  if(!btn) btn=document.querySelector('#bossOptions .opt[data-opt-idx="'+idx+'"]:not([disabled])');
+  if(!btn||btn.disabled) return;
+  bossAnswer(idx,btn,ph,bossCur._optOrder);
+};
 wireBottomNav();
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init);
 else init();
