@@ -9,17 +9,17 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=75">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=76">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=75">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=75">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=76">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=76">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=75"></script>
-<link rel="stylesheet" href="css/styles.css?v=75">
+<script src="js/access-gate.js?v=76"></script>
+<link rel="stylesheet" href="css/styles.css?v=76">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -549,6 +549,10 @@
         <div class="vwm-map-stage-inner">
           <div class="vwm-loading" id="mapLoading">Carregando mapa...</div>
           <svg id="mapSvg" class="vwm-svg" viewBox="0 0 960 520" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa mundial interativo da Orbita"></svg>
+          <div class="map-zoom-float" id="mapZoomFloat" aria-label="Zoom do mapa">
+            <button type="button" class="map-zoom-float-btn" id="mapZoomInFloat" aria-label="Aproximar">+</button>
+            <button type="button" class="map-zoom-float-btn" id="mapZoomOutFloat" aria-label="Afastar">−</button>
+          </div>
           <div class="vwm-tooltip" id="mapTooltip" hidden></div>
         </div>
         <div class="map-detail" id="mapDetail" hidden>
@@ -869,18 +873,18 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="75";</script>
-<script src="js/sign-lang.js?v=75"></script>
-<script src="js/orbita-world-map.js?v=75"></script>
-<script src="js/questions-data.js?v=75"></script>
-<script src="js/country-questions-data.js?v=75"></script>
-<script src="js/bosses-data.js?v=75"></script>
-<script src="js/boss-personal-tips.js?v=75"></script>
-<script src="js/chain-data.js?v=75"></script>
-<script src="js/boss-maps.js?v=75"></script>
-<script src="js/game.js?v=75"></script>
-<script src="js/demo-menu.js?v=75"></script>
-<script src="js/review-bank.js?v=75"></script>
+<script>window.APP_VERSION="76";</script>
+<script src="js/sign-lang.js?v=76"></script>
+<script src="js/orbita-world-map.js?v=76"></script>
+<script src="js/questions-data.js?v=76"></script>
+<script src="js/country-questions-data.js?v=76"></script>
+<script src="js/bosses-data.js?v=76"></script>
+<script src="js/boss-personal-tips.js?v=76"></script>
+<script src="js/chain-data.js?v=76"></script>
+<script src="js/boss-maps.js?v=76"></script>
+<script src="js/game.js?v=76"></script>
+<script src="js/demo-menu.js?v=76"></script>
+<script src="js/review-bank.js?v=76"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {

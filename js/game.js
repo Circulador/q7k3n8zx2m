@@ -175,6 +175,7 @@ var UI = {
   "map.stickyGo":{pt:"▶️ Iniciar expedição",en:"▶️ Start expedition"},
   "map.detailChain":{pt:"Etapa da cadeia",en:"Chain stage"},
   "map.chainImpact":{pt:"Impacto na cadeia",en:"Chain impact"},
+  "map.riskTitle":{pt:"Risco",en:"Risk"},
   "a11y.menuTitle":{pt:"Acessibilidade",en:"Accessibility"},
   "a11y.langLabel":{pt:"Idioma",en:"Language"},
   "a11y.prefsLabel":{pt:"Preferências",en:"Preferences"},
@@ -1805,13 +1806,11 @@ function ensureOrbitaWorldMap(cb){
       svg:$("mapSvg"), tooltip:$("mapTooltip"), loading:$("mapLoading"), clearBtn:$("mapClearBtn"),
       activityLegend:$("mapActivityLegend"), productLegend:$("mapProductLegend"),
       lang:L,
-      onCountryClick:function(gameId, fromMap){
+      onCountryClick:function(gameId){
         if(!gameId) return;
-        zoomToCountry(gameId);
-        scrollMapIntoView();
-        setMapHitHighlight(gameId, !fromMap);
-        if(!fromMap) openMapDetailCountry(gameId);
+        openMapDetailCountry(gameId);
       },
+      onClearSelection:function(){ closeMapDetail(); },
       onFilterChange:function(){ renderCountryList(); }
     });
   }
@@ -1833,30 +1832,34 @@ function finishWorldMapUI(){
   restoreMapTabFocus();
   mapReady=true;
 }
-function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open"); }
+function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open"); if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.clearCountryMarker) OrbitaWorldMap.clearCountryMarker(); }
+function buildMapDetailHTML(c,official){
+  var themes=c.themes.map(function(th){ return '<span class="tag md-risk-tag">'+tt(THEMES[th])+'</span>'; }).join("");
+  var prog=S.done[c.id]? ((L()==="pt"?"Melhor: ":"Best: ")+S.done[c.id]+"%") : (L()==="pt"?"Missão de treino disponível":"Training mission available");
+  var name=official?official.name:tt(c.name);
+  return '<h3><span class="md-code">'+c.id.toUpperCase()+'</span> '+name+'</h3>'
+    +(official?'<p class="md-tag md-tag-official">'+official.phrase+'</p>':'')
+    +'<p class="md-tag md-tag-train">'+t("map.trainingLabel")+'</p>'
+    +officialPresenceHTML(c.id)
+    +'<p class="md-desc">'+tt(c.desc)+'</p>'
+    +'<div class="md-chain"><b>'+t("map.chainImpact")+':</b> '+tt(c.chain)+'</div>'
+    +'<div class="md-risks"><b>'+t("map.riskTitle")+':</b><div class="chip-row md-risk-row">'+themes+'</div></div>'
+    +'<div class="md-progress">'+prog+'</div>'
+    +'<button class="btn btn-primary btn-lg map-detail-play" id="mapDetailPlay">'+t("region.start")+'</button>';
+}
 function openMapDetailCountry(id){
   var c=COUNTRIES.filter(function(x){return x.id===id;})[0]; if(!c) return;
   cur.country=c;
   mapHitActive=id;
   setMapHitHighlight(id);
   zoomToCountry(id);
+  if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.showCountryMarker) OrbitaWorldMap.showCountryMarker(id);
   scrollMapIntoView();
   var tip=$("mapTooltip"); if(tip) tip.hidden=true;
   var stage=$("mapStage"); if(stage) stage.classList.add("map-detail-open");
   var body=$("mapDetailBody"), panel=$("mapDetail"); if(!body||!panel) return;
   var official=(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.getCountry)?OrbitaWorldMap.getCountry(id,L()):null;
-  var themes=c.themes.map(function(th){ return '<span class="tag">'+tt(THEMES[th])+'</span>'; }).join(" ");
-  var nextExp=nextExpeditionCountry();
-  var prog=S.done[c.id]? ((L()==="pt"?"Melhor: ":"Best: ")+S.done[c.id]+"%") : (L()==="pt"?"Missão de treino disponível":"Training mission available");
-  body.innerHTML='<h3>'+c.flag+' '+(official?official.name:tt(c.name))+'</h3>'
-    +(official?'<p class="md-tag md-tag-official">'+official.phrase+'</p>':'')
-    +'<p class="md-tag md-tag-train">'+t("map.trainingLabel")+'</p>'
-    +officialPresenceHTML(id)
-    +'<p class="md-desc">'+tt(c.desc)+'</p>'
-    +'<div class="md-chain"><b>'+t("map.chainImpact")+':</b> '+tt(c.chain)+'</div>'
-    +'<div class="chip-row">'+themes+'</div>'
-    +'<div class="md-progress">'+prog+'</div>'
-    +'<button class="btn btn-primary btn-lg" id="mapDetailPlay">'+t("region.start")+'</button>';
+  body.innerHTML=buildMapDetailHTML(c,official);
   panel.hidden=false;
   $("mapDetailPlay").addEventListener("click",startCampaign);
   speak((official?official.name:tt(c.name))+". "+(official?official.phrase:tt(c.desc)));
@@ -1952,7 +1955,7 @@ function focusIronChain(){ openBossChain(true); }
 function bindMapPanZoom(){
   var wrap=$("mapStage"),svg=$("mapSvg"),drag=false,sx,sy,ox,oy;
   if(!wrap||!svg) return;
-  wrap.addEventListener("pointerdown",function(e){ if(mapChainMode()) return; if(e.target.closest(".map-detail,.cmap-pin,.vwm-country,.vwm-tooltip,.vwm-legend-button")) return; drag=true; wrap.classList.add("dragging"); sx=e.clientX; sy=e.clientY; ox=view.x; oy=view.y; });
+  wrap.addEventListener("pointerdown",function(e){ if(mapChainMode()) return; if(e.target.closest(".map-detail,.map-zoom-float,.cmap-pin,.vwm-country,.vwm-tooltip,.vwm-legend-button")) return; drag=true; wrap.classList.add("dragging"); sx=e.clientX; sy=e.clientY; ox=view.x; oy=view.y; });
   window.addEventListener("pointerup",function(){ drag=false; if(wrap) wrap.classList.remove("dragging"); });
   window.addEventListener("pointermove",function(e){ if(!drag) return; var r=svg.getBoundingClientRect(); var kx=view.w/r.width,ky=view.h/r.height; view.x=Math.max(0,Math.min(VW-view.w,ox-(e.clientX-sx)*kx)); view.y=Math.max(0,Math.min(VH-view.h,oy-(e.clientY-sy)*ky)); updateViewBox(); });
   wrap.addEventListener("wheel",function(e){ if(mapChainMode()) return; e.preventDefault(); var r=svg.getBoundingClientRect(); var mx=view.x+(e.clientX-r.left)/r.width*view.w,my=view.y+(e.clientY-r.top)/r.height*view.h; zoomTo(mx,my,e.deltaY>0?1.2:.83); },{passive:false});
@@ -3683,6 +3686,8 @@ function bind(){
   on("mapDetailClose","click",closeMapDetail);
   on("zoomIn","click",function(){ zoomTo(view.x+view.w/2,view.y+view.h/2,.8); });
   on("zoomOut","click",function(){ zoomTo(view.x+view.w/2,view.y+view.h/2,1.25); });
+  on("mapZoomInFloat","click",function(e){ e.stopPropagation(); zoomTo(view.x+view.w/2,view.y+view.h/2,.8); });
+  on("mapZoomOutFloat","click",function(e){ e.stopPropagation(); zoomTo(view.x+view.w/2,view.y+view.h/2,1.25); });
   on("zoomReset","click",function(){ resetView(); });
   on("mapZoomToggleBtn","click",function(){
     var row=$("mapToolbarRow"); if(!row) return;
