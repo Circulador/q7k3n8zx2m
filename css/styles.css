@@ -19,7 +19,7 @@ body.contrast .card{background:#0b0b0b;border-color:#fff}
 body.large{--fs:19px}
 body.reduce-motion *{animation:none!important;transition:none!important}
 body.reduce-motion .hero-train,body.reduce-motion .hero-belt,body.reduce-motion .hero-ship,body.reduce-motion .hero-shield,body.reduce-motion .hero-net,body.reduce-motion .hero-exc,body.reduce-motion .hero-smoke,body.reduce-motion .hero-truck,body.reduce-motion .route-line.iron{animation:none!important}
-.app{max-width:1080px;margin:0 auto;padding:0 14px 24px}
+.app{max-width:1080px;margin:0 auto;padding:0 14px calc(72px + env(safe-area-inset-bottom,0px))}
 .footer,.disclaimer{text-align:center;font-size:.72rem;color:var(--steel);line-height:1.4;padding:10px 14px 76px}
 .disclaimer{font-size:.66rem;opacity:.85;padding-top:0}
 .muted{color:var(--steel);font-size:.85rem;margin-bottom:12px}
@@ -510,7 +510,8 @@ body.contrast .chain-map-wrap{background:#04141b}
 .scene-title{font-size:1.3rem;margin:.2em 0}
 .scene-text{line-height:1.55;font-size:1rem}
 .options{display:grid;gap:10px;margin-top:12px}
-.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;font:inherit;color:inherit;transition:.15s}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;font:inherit;color:inherit;transition:.15s;touch-action:manipulation;-webkit-tap-highlight-color:rgba(237,177,17,.2);min-height:48px;appearance:none;-webkit-appearance:none}
+.opt:active{border-color:var(--gold)}
 .opt:hover{border-color:var(--gold);transform:translateX(3px)}
 .opt .kx{font-weight:800;color:var(--gold)}
 .opt.correct{border-color:var(--ok);background:rgba(47,191,113,.16)}
@@ -547,8 +548,9 @@ body.contrast .chain-map-wrap{background:#04141b}
 .rank-val{font-size:.82rem;color:var(--steel);width:46px;text-align:right}
 
 /* Chefões — estilo tabletop */
-.boss-list{display:grid;gap:12px}
-.boss-card{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;font:inherit;color:inherit;text-align:left;width:100%}
+.boss-list{display:grid;gap:12px;position:relative;z-index:2}
+.boss-card{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;font:inherit;color:inherit;text-align:left;width:100%;touch-action:manipulation;-webkit-tap-highlight-color:rgba(237,177,17,.2);min-height:48px;position:relative;z-index:1;appearance:none;-webkit-appearance:none}
+.boss-card:active{border-color:var(--gold);background:rgba(237,177,17,.08)}
 .boss-card:hover,.boss-card:focus-visible{border-color:var(--gold);outline:none;box-shadow:0 0 0 2px rgba(236,177,31,.25)}
 .boss-card .be{font-size:2rem;flex:none;line-height:1}
 .boss-card-body{flex:1;min-width:0}

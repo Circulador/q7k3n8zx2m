@@ -2185,14 +2185,38 @@ function renderBossList(){
     d.type="button";
     d.setAttribute("data-boss",b.id);
     d.className="boss-card boss-card--tabletop boss-card--map";
-    var meta=b.phases.length+" "+(L()==="pt"?"cenas · mapa dinâmico":"scenes · live map")+(b.tag?" · "+tt(b.tag):"");
+    var phaseN=b.phases&&b.phases.length?b.phases.length:0;
+    var meta=phaseN+" "+(L()==="pt"?"cenas · mapa dinâmico":"scenes · live map")+(b.tag?" · "+tt(b.tag):"");
     if(best) meta+=" · "+(tier?tier.ico:"")+" "+best.index+"%";
     var badge=best?'<span class="bdone" title="'+tt(tier.title)+'">'+tier.ico+'</span>':'<span class="boss-card-play" aria-hidden="true">▶</span>';
     var tagLabel=t("boss.storyMapLabel");
     d.innerHTML='<span class="be">'+b.emoji+'</span><div class="boss-card-body"><span class="boss-card-tag">'+tagLabel+'</span><div class="bt">'+tt(b.name)+'</div><div class="bd">'+tt(b.desc)+'</div><div class="boss-card-meta">'+meta+'</div></div>'+badge;
-    d.addEventListener("click",function(){ startBoss(b.id); });
     host.appendChild(d);
   });
+}
+var bossListWired=false;
+function wireBossList(){
+  if(bossListWired) return;
+  var host=$("bossList"); if(!host) return;
+  bossListWired=true;
+  function pickBossCard(t){ return t&&t.closest?t.closest(".boss-card[data-boss]"):null; }
+  function launchBoss(card){
+    if(!card) return;
+    var id=card.getAttribute("data-boss");
+    if(id) startBoss(id);
+  }
+  host.addEventListener("click",function(e){
+    var card=pickBossCard(e.target);
+    if(!card||!host.contains(card)) return;
+    e.preventDefault();
+    launchBoss(card);
+  });
+  host.addEventListener("touchend",function(e){
+    var card=pickBossCard(e.target);
+    if(!card||!host.contains(card)) return;
+    e.preventDefault();
+    launchBoss(card);
+  },{passive:false});
 }
 function startBoss(id){
   hydrateNorthernBoss();
@@ -3079,13 +3103,8 @@ function wireBottomNav(){
     var el=$(nid);
     if(!el) return;
     el.addEventListener("click",function(ev){ runNav(nid,ev); });
+    el.addEventListener("touchend",function(ev){ runNav(nid,ev); },{passive:false});
   });
-  function onNavPointer(e){
-    var btn=e.target.closest&&e.target.closest(".bottom-nav button, .nav-more-item");
-    if(!btn||!btn.id) return;
-    runNav(btn.id,e);
-  }
-  document.addEventListener("click",onNavPointer,true);
 }
 function init(){
   try{
@@ -3100,6 +3119,7 @@ function init(){
   try{ updateHeroCaption(); }catch(e){ console.error(e); }
   document.querySelectorAll(".lang-card").forEach(function(x){ x.setAttribute("aria-pressed",x.getAttribute("data-lang")===S.lang?"true":"false"); });
   bind();
+  wireBossList();
   try{ bindMapPanZoom(); }catch(e){ console.error(e); }
   ensureBossStats(); hydrateNorthernBoss(); checkMedals(); showOnboarding();
   if("speechSynthesis" in window){ try{ window.speechSynthesis.getVoices(); }catch(e){} }
