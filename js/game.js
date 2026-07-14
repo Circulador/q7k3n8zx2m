@@ -1231,10 +1231,15 @@ function renderBossChainVisual(){
   var b=bossCur.boss;
   if(!bossHasMap(b)){ host.hidden=true; host.innerHTML=""; return; }
   if(typeof renderBossMapSvg!=="function"){ host.hidden=true; return; }
-  var out=renderBossMapSvg(b,bossCur.phase||0,bossCur.phaseStates,L());
-  host.className="boss-chain-visual boss-chain-visual--"+(out.theme||"finance");
-  host.innerHTML=out.svg;
-  host.hidden=false;
+  try{
+    var out=renderBossMapSvg(b,bossCur.phase||0,bossCur.phaseStates,L());
+    host.className="boss-chain-visual boss-chain-visual--"+(out.theme||"finance");
+    host.innerHTML=out.svg||"";
+    host.hidden=!out.svg;
+  }catch(err){
+    console.error("renderBossChainVisual",err);
+    host.hidden=true; host.innerHTML="";
+  }
 }
 function renderBossChainSection(){ /* cadeia integrada ao chefão Northern Chain */ }
 function openBossChain(scroll){
@@ -2189,7 +2194,7 @@ function renderBossList(){
     var d=document.createElement("button");
     d.type="button";
     d.setAttribute("data-boss",b.id);
-    d.setAttribute("onclick","gdvStartBoss('"+b.id+"',event)");
+    d.addEventListener("click",function(){ startBoss(b.id); });
     d.className="boss-card boss-card--tabletop boss-card--map";
     var phaseN=b.phases&&b.phases.length?b.phases.length:0;
     var meta=phaseN+" "+(L()==="pt"?"cenas · mapa dinâmico":"scenes · live map")+(b.tag?" · "+tt(b.tag):"");
@@ -2203,6 +2208,7 @@ function renderBossList(){
 function startBoss(id){
   hydrateNorthernBoss();
   bossCur.boss=BOSSES.filter(function(x){return x.id===id;})[0];
+  if(!bossCur.boss){ console.error("startBoss: boss not found",id); return; }
   bossCur.phase=0; bossCur.hp=100; bossCur.ops=100; bossCur.answered=false; bossCur.correct=0; bossCur.wrong=0; bossCur.log=[]; bossCur.phaseStates={};
   renderBossPhase(); show("screenBoss");
 }
@@ -2225,7 +2231,10 @@ function bossQuit(){
   renderBossList(); show("screenBossList");
 }
 function renderBossPhase(){
-  var b=bossCur.boss,ph=b.phases[bossCur.phase];
+  var b=bossCur.boss;
+  if(!b||!b.phases||!b.phases.length) return;
+  var ph=b.phases[bossCur.phase];
+  if(!ph) return;
   var st=bossCur.phaseStates&&bossCur.phaseStates[bossCur.phase];
   if(st){ bossCur.hp=st.hp; bossCur.ops=st.ops; }
   $("bossHeader").innerHTML='<span class="be">'+b.emoji+'</span><div><h2>'+tt(b.name)+'</h2><div class="bd">'+tt(b.desc)+'</div></div>';
@@ -3112,6 +3121,9 @@ function init(){
   }
 }
 window.__gdvStartBoss=function(id){ startBoss(id); };
+window.__gdvCmapScene=cmapScene;
+window.__gdvOffmapScene=offmapScene;
+window.__gdvChainById=chainById;
 wireBottomNav();
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init);
 else init();

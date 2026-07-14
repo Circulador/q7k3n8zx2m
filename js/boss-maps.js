@@ -70,12 +70,13 @@ function bossMapDefs(sfx,theme){
   d+='<linearGradient id="bmGold'+sfx+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EDB111"/><stop offset="1" stop-color="#007E7A"/></linearGradient>';
   return d;
 }
-function bossMapSceneContent(id,sfx){
-  if(id==="carajas"&&typeof cmapScene==="function") return cmapScene().replace(/id="cmSky"/g,'id="bmSky'+sfx+'"').replace(/url\(#cmSky\)/g,"url(#bmSky"+sfx+")")
+function bossMapSceneContent(id,sfx,lang){
+  var pt=lang==="pt";
+  if(id==="carajas"&&typeof window.__gdvCmapScene==="function") return window.__gdvCmapScene().replace(/id="cmSky"/g,'id="bmSky'+sfx+'"').replace(/url\(#cmSky\)/g,"url(#bmSky"+sfx+")")
     .replace(/id="cmGround"/g,'id="bmGround'+sfx+'"').replace(/url\(#cmGround\)/g,"url(#bmGround"+sfx+")")
     .replace(/id="cmSea"/g,'id="bmSea'+sfx+'"').replace(/url\(#cmSea\)/g,"url(#bmSea"+sfx+")");
-  if(id==="office"&&typeof offmapScene==="function") return offmapScene(sfx).replace(/id="omSky/g,'id="bmSky').replace(/url\(#omSky/g,"url(#bmSky").replace(/id="omFloor/g,'id="bmGround').replace(/url\(#omFloor/g,"url(#bmGround").replace(/id="omShield/g,'id="bmGold').replace(/url\(#omShield/g,"url(#bmGold");
-  var s='',pt=L()==="pt";
+  if(id==="office"&&typeof window.__gdvOffmapScene==="function") return window.__gdvOffmapScene(sfx).replace(/id="omSky/g,'id="bmSky').replace(/url\(#omSky/g,"url(#bmSky").replace(/id="omFloor/g,'id="bmGround').replace(/url\(#omFloor/g,"url(#bmGround").replace(/id="omShield/g,'id="bmGold').replace(/url\(#omShield/g,"url(#bmGold");
+  var s='';
   s+='<rect x="0" y="0" width="1000" height="300" fill="url(#bmSky'+sfx+')"/>';
   s+='<rect x="0" y="70" width="1000" height="230" fill="url(#bmGround'+sfx+')"/>';
   if(id==="ceo"){
@@ -116,7 +117,19 @@ function bossMapSceneContent(id,sfx){
   }
   return s;
 }
+function bossMapPinLabel(ch,st,ph,i,lang){
+  if(ch&&ch.stages&&ch.stages[i]&&ch.stages[i].name){
+    var nm=ch.stages[i].name[lang]||ch.stages[i].name.pt||"";
+    return nm.length>18?nm.slice(0,17)+"…":nm;
+  }
+  if(ph&&ph.scene){
+    var sc=(ph.scene[lang]||ph.scene.pt||"").replace(/^(Cena|Scene)\s+\d+\s*[—–-]\s*/i,"");
+    return sc.length>18?sc.slice(0,17)+"…":sc;
+  }
+  return (lang==="en"?"Scene ":"Cena ")+(i+1);
+}
 function renderBossMapSvg(boss,active,phaseStates,lang){
+  if(!boss||!boss.phases||!boss.phases.length) return {svg:"",theme:"finance"};
   var sceneId=bossMapSceneId(boss);
   var theme=bossMapTheme(sceneId);
   var sfx="M"+(boss.id||"x");
@@ -126,7 +139,7 @@ function renderBossMapSvg(boss,active,phaseStates,lang){
   var pinFn=function(i){ return route[i]?{x:route[i][0],y:route[i][1]}:bossRoutePoint(route,i/(n>1?n-1:1)); };
   var svg='<svg viewBox="0 0 1000 300" preserveAspectRatio="xMidYMid meet" width="100%" role="img" aria-label="'+(boss.name&&boss.name[lang]?boss.name[lang]:"")+'">';
   svg+='<defs>'+bossMapDefs(sfx,theme)+'</defs>';
-  svg+=bossMapSceneContent(sceneId,sfx);
+  svg+=bossMapSceneContent(sceneId,sfx,lang);
   var d="M"+route.map(function(p){return p[0]+","+p[1];}).join(" L");
   svg+='<path d="'+d+'" fill="none" stroke="#EDB111" stroke-width="3" stroke-dasharray="7 6" opacity=".9"/>';
   svg+='<g transform="translate(20,268)"><rect x="0" y="0" width="'+Math.min(520,Math.max(200,label.length*7))+'" height="22" rx="11" fill="rgba(6,24,32,.82)"/><text x="12" y="15" font-size="11" fill="#EDB111" font-weight="700">'+label+'</text></g>';
@@ -136,16 +149,13 @@ function renderBossMapSvg(boss,active,phaseStates,lang){
     var bpts=[]; for(i=firstBad;i<n;i++){ var bp=pinFn(i); bpts.push(bp.x+","+bp.y); }
     svg+='<polyline class="cmap-breach" points="'+bpts.join(" ")+'" fill="none" stroke="#ff4d4f" stroke-width="5" stroke-dasharray="11 8" opacity=".95"/>';
   }
-  var ch=typeof chainById==="function"&&boss.chainId?chainById(boss.chainId):null;
+  var ch=typeof window.__gdvChainById==="function"&&boss.chainId?window.__gdvChainById(boss.chainId):null;
   for(i=0;i<n;i++){
     var pt=pinFn(i), pst=phaseStates&&phaseStates[i], ph=boss.phases[i];
     var done=!!pst, bad=done&&!pst.ok, on=i===active;
     var fill=bad?"#ff4d4f":done?"#2fbf71":(on?"#EDB111":"#8aa4ad");
-    var pinTxt=(ch&&ch.stages[i]?ch.stages[i].ico:(bad?"!":(done?"✔":(i+1))));
-    var pinLbl="";
-    if(ch&&ch.stages[i]&&typeof shortName==="function"&&typeof tt==="function") pinLbl=shortName(tt(ch.stages[i].name));
-    else if(ph&&ph.scene&&typeof tt==="function") pinLbl=shortName(String(tt(ph.scene)).replace(/^(Cena|Scene)\s+\d+\s*[—–-]\s*/i,""));
-    else pinLbl=(lang==="en"?"Scene ":"Cena ")+(i+1);
+    var pinTxt=(ch&&ch.stages&&ch.stages[i]?ch.stages[i].ico:(bad?"!":(done?"✔":(i+1))));
+    var pinLbl=bossMapPinLabel(ch,ch&&ch.stages?ch.stages[i]:null,ph,i,lang);
     svg+='<g class="cmap-pin'+(bad?" compromised":(done?" done":""))+(on?" active":"")+'" transform="translate('+pt.x.toFixed(1)+','+pt.y.toFixed(1)+')">';
     if(on) svg+='<circle class="cmap-pin-halo boss-visual-pulse" r="22" fill="'+fill+'" opacity=".35"/>';
     else svg+='<circle class="cmap-pin-halo" r="17" fill="'+fill+'" opacity=".22"/>';
@@ -154,8 +164,8 @@ function renderBossMapSvg(boss,active,phaseStates,lang){
     svg+='<g class="cmap-pin-label"><rect x="-54" y="-40" width="108" height="18" rx="9" fill="rgba(6,24,32,.9)"/><text y="-27" font-size="10" text-anchor="middle" fill="#eaf2f6">'+pinLbl+'</text></g></g>';
   }
   var curLbl="";
-  if(ch&&ch.stages[active]&&typeof tt==="function") curLbl=tt(ch.stages[active].name);
-  else if(boss.phases[active]&&boss.phases[active].scene&&typeof tt==="function") curLbl=tt(boss.phases[active].scene);
+  if(ch&&ch.stages&&ch.stages[active]&&ch.stages[active].name) curLbl=ch.stages[active].name[lang]||ch.stages[active].name.pt||"";
+  else if(boss.phases[active]&&boss.phases[active].scene) curLbl=boss.phases[active].scene[lang]||boss.phases[active].scene.pt||"";
   if(curLbl) svg+='<g transform="translate(20,12)"><rect width="460" height="24" rx="8" fill="rgba(6,24,32,.88)"/><text x="12" y="16" font-size="12" fill="#eaf2f6" font-weight="700">'+(lang==="en"?"Current situation: ":"Situação atual: ")+curLbl+'</text></g>';
   svg+='</svg>';
   return {svg:svg,theme:theme};
