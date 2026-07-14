@@ -290,8 +290,9 @@ var UI = {
   "quiz.next":{pt:"Próxima →",en:"Next →"},
   "quiz.finish":{pt:"Concluir →",en:"Finish →"},
   "quiz.quitConfirm":{pt:"Sair da missão? O progresso desta partida não será salvo.",en:"Leave this mission? Progress in this run won't be saved."},
-  "quit.stay":{pt:"Continuar jogando",en:"Keep playing"},
-  "quit.leave":{pt:"Sair da missão",en:"Leave mission"},
+  "quit.title":{pt:"Sair da missão?",en:"Leave this mission?"},
+  "quit.stay":{pt:"▶️ Continuar jogando",en:"▶️ Keep playing"},
+  "quit.leave":{pt:"Sair mesmo assim",en:"Leave anyway"},
   "result.map":{pt:"🗺️ Mapa",en:"🗺️ Map"},
   "result.medals":{pt:"🏅 Medalhas",en:"🏅 Medals"},
   "result.rank":{pt:"📈 Ranking por equipe",en:"📈 Team ranking"},
@@ -995,9 +996,10 @@ function showQuitDialog(cb){
   if(!dlg) return;
   if(msg) msg.textContent=t("quiz.quitConfirm");
   dlg.hidden=false;
+  document.body.classList.add("quit-open");
   var stay=$("quitDialogCancel"); if(stay) stay.focus();
 }
-function hideQuitDialog(){ quitCallback=null; var dlg=$("quitDialog"); if(dlg) dlg.hidden=true; }
+function hideQuitDialog(){ quitCallback=null; var dlg=$("quitDialog"); if(dlg) dlg.hidden=true; document.body.classList.remove("quit-open"); }
 function applySimpleUi(){
   document.body.classList.toggle("simple-ui",S.simpleUi!==false);
 }

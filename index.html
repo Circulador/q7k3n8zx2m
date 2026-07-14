@@ -9,30 +9,32 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=62">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=63">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=62">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=62">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=63">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=63">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=62"></script>
-<link rel="stylesheet" href="css/styles.css?v=62">
+<script src="js/access-gate.js?v=63"></script>
+<link rel="stylesheet" href="css/styles.css?v=63">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
 <div id="a11yLive" class="sr-only" aria-live="polite" role="status"></div>
 <div id="toastWrap" class="toast-wrap" aria-live="polite"></div>
 
-<div id="quitDialog" class="quit-dialog" hidden role="alertdialog" aria-modal="true" aria-labelledby="quitDialogMsg">
+<div id="quitDialog" class="quit-dialog" hidden role="alertdialog" aria-modal="true" aria-labelledby="quitDialogTitle" aria-describedby="quitDialogMsg">
   <div class="quit-dialog-backdrop" id="quitDialogBackdrop"></div>
-  <div class="quit-dialog-box card">
+  <div class="quit-dialog-box">
+    <div class="quit-dialog-icon" aria-hidden="true">⚠️</div>
+    <h2 class="quit-dialog-title" id="quitDialogTitle" data-i18n="quit.title">Sair da missão?</h2>
     <p class="quit-dialog-msg" id="quitDialogMsg"></p>
-    <div class="row-actions quit-dialog-actions">
-      <button type="button" class="btn btn-ghost" id="quitDialogCancel" data-i18n="quit.stay">Continuar jogando</button>
-      <button type="button" class="btn btn-primary" id="quitDialogConfirm" data-i18n="quit.leave">Sair da missão</button>
+    <div class="quit-dialog-actions">
+      <button type="button" class="btn btn-primary btn-lg quit-btn-stay" id="quitDialogCancel" data-i18n="quit.stay">Continuar jogando</button>
+      <button type="button" class="btn btn-lg quit-btn-leave" id="quitDialogConfirm" data-i18n="quit.leave">Sair da missão</button>
     </div>
   </div>
 </div>
@@ -451,7 +453,7 @@
       <div class="feedback" id="feedback" aria-live="polite"></div>
       <div class="report-step" id="reportStep" hidden></div>
       <div class="row-actions quiz-nav">
-        <button class="btn btn-ghost" id="quitBtn" data-i18n="quiz.quit">✖ Sair</button>
+        <button class="btn btn-quit" id="quitBtn" data-i18n="quiz.quit">✖ Sair</button>
         <button class="btn btn-ghost" id="prevBtn" data-i18n="quiz.prev">← Voltar</button>
         <button class="btn btn-primary" id="nextBtn" style="display:none" data-i18n="quiz.next">Próxima →</button>
       </div>
@@ -492,7 +494,7 @@
       <p class="personal-bridge" id="bossPersonalBridge" hidden></p>
       <div class="options" id="bossOptions" role="group" aria-label="Decisões"></div>
       <div class="feedback" id="bossFb" aria-live="polite"></div>
-      <div class="row-actions boss-nav"><button class="btn btn-ghost" id="bossQuitBtn" data-i18n="quiz.quit">✖ Sair</button><button class="btn btn-ghost" id="bossPrevBtn" data-i18n="quiz.prev">← Voltar</button><button class="btn btn-primary" id="bossNext" style="display:none" data-i18n="boss.next">Próxima cena →</button></div>
+      <div class="row-actions boss-nav"><button class="btn btn-quit" id="bossQuitBtn" data-i18n="quiz.quit">✖ Sair</button><button class="btn btn-ghost" id="bossPrevBtn" data-i18n="quiz.prev">← Voltar</button><button class="btn btn-primary" id="bossNext" style="display:none" data-i18n="boss.next">Próxima cena →</button></div>
       </div>
     </div>
   </section>
@@ -656,14 +658,14 @@
 </div>
 
 <script>window.APP_VERSION="59";</script>
-<script src="js/sign-lang.js?v=62"></script>
-<script src="js/orbita-world-map.js?v=62"></script>
-<script src="js/questions-data.js?v=62"></script>
-<script src="js/country-questions-data.js?v=62"></script>
-<script src="js/bosses-data.js?v=62"></script>
-<script src="js/chain-data.js?v=62"></script>
-<script src="js/boss-maps.js?v=62"></script>
-<script src="js/game.js?v=62"></script>
+<script src="js/sign-lang.js?v=63"></script>
+<script src="js/orbita-world-map.js?v=63"></script>
+<script src="js/questions-data.js?v=63"></script>
+<script src="js/country-questions-data.js?v=63"></script>
+<script src="js/bosses-data.js?v=63"></script>
+<script src="js/chain-data.js?v=63"></script>
+<script src="js/boss-maps.js?v=63"></script>
+<script src="js/game.js?v=63"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {
