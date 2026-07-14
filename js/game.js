@@ -58,7 +58,8 @@ var UI = {
   "settings.simpleUi":{pt:"Modo simples",en:"Simple mode"},
   "settings.simpleUiSub":{pt:"Esconde nível, XP e maturidade no topo — ideal para começar.",en:"Hides level, XP and maturity in the header — ideal for beginners."},
   "settings.easyRead":{pt:"Leitura fácil",en:"Easy reading"},
-  "settings.easyReadSub":{pt:"Liga contraste, texto grande e espaçamento de uma vez.",en:"Enables contrast, large text and spacing at once."},
+  "settings.easyReadSub":{pt:"Liga ou desliga contraste, texto grande e espaçamento de uma vez.",en:"Turns contrast, large text and spacing on or off together."},
+  "settings.easyReadOff":{pt:"Leitura fácil desativada",en:"Easy reading disabled"},
   "settings.editProfile":{pt:"✏️ Minha operação (equipe e papel)",en:"✏️ My operation (team & role)"},
   "settings.glossaryFavs":{pt:"⭐ Favoritos do glossário",en:"⭐ Glossary favorites"},
   "settings.flashcard":{pt:"🃏 Revisar termos (flashcards)",en:"🃏 Review terms (flashcards)"},
@@ -518,6 +519,7 @@ function renderSettingsUi(){
   }
   renderGlossarySelect(); renderGlossaryFavs(); renderFlashcard();
   var su=$("optSimpleUiSettings"); if(su) su.checked=S.simpleUi!==false;
+  syncEasyReadUi();
 }
 function applyHudTips(){
   var map={
@@ -744,7 +746,7 @@ function stopSpeak(){ if("speechSynthesis" in window) try{ window.speechSynthesi
 /* -------------------- NAVEGAÇÃO -------------------- */
 var NAVMAP={screenMap:"navMapBtn",screenBossList:"navBossBtn",screenDaily:"navDailyBtn",screenProfile:"navStatsBtn",screenHome:"navHomeBtn",screenManager:"navManagerBtn"};
 var NAV_MORE_SCREENS=["screenHome","screenManager","screenWeekly","screenShop"];
-var NAV_HIDE=["screenQuiz","screenBoss","screenResult","screenSetup","screenBossResult"];
+var NAV_HIDE=[];
 function toggleNavMore(open){
   var sheet=$("navMoreSheet"), btn=$("navMoreBtn");
   if(!sheet) return;
@@ -775,14 +777,14 @@ function show(id){
     var mi=id==="screenWeekly"||id==="screenShop"?$("navMoreBtn"):$(NAVMAP[id]);
     if(mi) mi.classList.add("on");
   }
-  document.body.classList.toggle("nav-hidden",NAV_HIDE.indexOf(id)>=0);
+  document.body.classList.remove("nav-hidden");
   announce(el?(el.getAttribute("aria-label")||""):"");
 }
 function announce(m){ var live=$("a11yLive"); if(!live) return; live.textContent=""; setTimeout(function(){ live.textContent=m; },40); }
 function toast(m){ var w=$("toastWrap"); if(!w) return; w.innerHTML=""; var d=document.createElement("div"); d.className="toast"; d.textContent=m; w.appendChild(d); setTimeout(function(){ if(d.parentNode) d.remove(); },2200); }
 
 /* -------------------- ACESSIBILIDADE -------------------- */
-var A11Y_DEFAULT={voice:false,contrast:false,large:false,motion:false,signs:false,fontScale:0,links:false,spacing:false,letterSpace:false,dyslexia:false,colorblind:"none",readingMode:false};
+var A11Y_DEFAULT={voice:false,contrast:false,large:false,motion:false,signs:false,fontScale:0,links:false,spacing:false,letterSpace:false,dyslexia:false,colorblind:"none",readingMode:false,easyRead:false};
 var A11Y_CATALOG=[
   {cat:"a11y.cat.signs",src:"handtalk",items:[
     {pt:"Tradutor de Libras / ASL",en:"Sign language translator"},
@@ -820,7 +822,7 @@ function sanitizeA11y(){
   var d=A11Y_DEFAULT;
   if(!S.a11y||typeof S.a11y!=="object"){ S.a11y=merge({},d); save(); return; }
   var before=JSON.stringify(S.a11y);
-  ["voice","contrast","large","motion","signs","links","spacing","letterSpace","dyslexia","readingMode"].forEach(function(k){
+  ["voice","contrast","large","motion","signs","links","spacing","letterSpace","dyslexia","readingMode","easyRead"].forEach(function(k){
     S.a11y[k]=!!S.a11y[k];
   });
   var cbModes=["none","protanopia","deuteranopia","tritanopia"];
@@ -3216,10 +3218,23 @@ function setSimpleUi(on){
   var a=$("optSimpleUi"), b=$("optSimpleUiSettings");
   if(a) a.checked=S.simpleUi; if(b) b.checked=S.simpleUi;
 }
-function applyEasyReadPreset(){
-  S.a11y.contrast=true; S.a11y.large=true; S.a11y.spacing=true;
-  save(); applyA11y(); toast(L()==="pt"?"Leitura fácil ativada":"Easy reading enabled");
+function setEasyRead(on){
+  S.a11y.easyRead=!!on;
+  if(on){
+    S.a11y.contrast=true; S.a11y.large=true; S.a11y.spacing=true;
+    toast(L()==="pt"?"Leitura fácil ativada":"Easy reading enabled");
+  } else {
+    S.a11y.contrast=false; S.a11y.large=false; S.a11y.spacing=false;
+    toast(t("settings.easyReadOff"));
+  }
+  save(); applyA11y(); syncEasyReadUi();
 }
+function syncEasyReadUi(){
+  var on=!!(S.a11y&&S.a11y.easyRead);
+  var a=$("optEasyReadSettings");
+  if(a) a.checked=on;
+}
+function applyEasyReadPreset(){ setEasyRead(!(S.a11y&&S.a11y.easyRead)); }
 function updateNavBadges(){
   ensureDaily();
   var badge=$("navDailyBadge"), btn=$("navDailyBtn");
@@ -3539,7 +3554,7 @@ function bind(){
     if(sm&&!sm.hidden){ if(e.target.closest&&(e.target.closest(".settings-menu-wrap")||e.target.closest("#settingsMenu"))) return; toggleSettingsMenu(false); }
     if(sp&&!sp.hidden){ if(e.target.closest&&(e.target.closest(".streak-hud-wrap")||e.target.closest("#streakPopover"))) return; toggleStreakPopover(false); }
   });
-  document.querySelectorAll("#a11yMenu .am-toggle").forEach(function(b){ b.addEventListener("click",function(e){ e.stopPropagation(); var k=b.getAttribute("data-opt"); if(k==="colorblind"){ cycleColorblind(); return; } S.a11y[k]=!S.a11y[k]; save(); applyA11y(); if(k==="voice"&&S.a11y.voice) speak(L()==="pt"?"Narração por voz ativada.":"Voice narration enabled."); if(k==="signs"&&S.a11y.signs) speak(L()==="pt"?"Hand Talk e Libras ativados.":"Hand Talk and ASL enabled."); }); });
+  document.querySelectorAll("#a11yMenu .am-toggle").forEach(function(b){ b.addEventListener("click",function(e){ e.stopPropagation(); var k=b.getAttribute("data-opt"); if(k==="colorblind"){ cycleColorblind(); return; } S.a11y[k]=!S.a11y[k]; if(k==="contrast"||k==="large"||k==="spacing") S.a11y.easyRead=false; save(); applyA11y(); syncEasyReadUi(); if(k==="voice"&&S.a11y.voice) speak(L()==="pt"?"Narração por voz ativada.":"Voice narration enabled."); if(k==="signs"&&S.a11y.signs) speak(L()==="pt"?"Hand Talk e Libras ativados.":"Hand Talk and ASL enabled."); }); });
 
   on("speakBtn","click",function(){ var q=cur.questions[cur.i]; if(q) speak(tt(q.q)); });
   on("nextBtn","click",nextQuestion);
@@ -3563,8 +3578,8 @@ function bind(){
   on("offlineDismissBtn","click",dismissOfflineBanner);
   on("weekProgressBar","click",openWeeklyScreen);
   on("nextStepWeek","click",openWeeklyScreen);
-  on("settingsEasyReadBtn","click",function(e){ e.stopPropagation(); applyEasyReadPreset(); });
   on("settingsEditProfileBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); openEditSetup(); });
+  on("optEasyReadSettings","change",function(e){ e.stopPropagation(); setEasyRead(this.checked); });
   on("optSimpleUiSettings","change",function(e){ e.stopPropagation(); setSimpleUi(this.checked); });
   on("optSimpleUi","change",function(){ setSimpleUi(this.checked); });
   on("flashcardBtn","click",function(e){ e.stopPropagation(); var fc=$("flashcardCard"),fn=$("flashcardNextBtn"); if(fc){ fc.hidden=false; flashcardIdx=0; renderFlashcard(); } if(fn) fn.hidden=false; });
