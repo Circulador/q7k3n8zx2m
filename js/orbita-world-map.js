@@ -399,7 +399,8 @@ var OrbitaWorldMap = (function () {
     return null;
   }
 
-  function getCountryView(gameId) {
+  function getCountryView(gameId, opts) {
+    opts = opts || {};
     var feature = findCountryFeature(gameId);
     if (!feature || !pathFn) return null;
     var c = pathFn.centroid(feature);
@@ -407,17 +408,24 @@ var OrbitaWorldMap = (function () {
     var bw = b[1][0] - b[0][0];
     var bh = b[1][1] - b[0][1];
     var span = Math.max(bw, bh * (VW / VH));
-    if (span < 1) span = 6;
+    if (span < 0.5) span = 3;
     var narrow = window.innerWidth <= 640;
-    var fill = narrow ? 0.36 : 0.42;
-    var pad = narrow ? 1.35 : 1.28;
-    var targetW = (span / fill) * pad;
-    if (span < 14) targetW = Math.max(targetW, VW * (narrow ? 0.52 : 0.46));
-    else if (span < 35) targetW = Math.max(targetW, VW * (narrow ? 0.44 : 0.38));
-    else if (span > 95) targetW = Math.min(targetW, VW * 0.58);
-    else if (span > 60) targetW = Math.min(targetW, VW * 0.68);
-    targetW = Math.max(narrow ? 200 : 165, Math.min(VW * 0.9, targetW));
-    return { cx: c[0], cy: c[1], targetW: targetW };
+    var tablet = !narrow && window.innerWidth <= 900;
+    var frac;
+    if (span >= 100) frac = narrow ? 0.78 : 0.82;
+    else if (span >= 55) frac = narrow ? 0.72 : 0.76;
+    else if (span >= 28) frac = narrow ? 0.66 : 0.7;
+    else if (span >= 14) frac = narrow ? 0.6 : 0.64;
+    else frac = narrow ? 0.54 : 0.58;
+    var margin = narrow ? 1.12 : tablet ? 1.14 : 1.16;
+    var targetW = (span / frac) * margin;
+    if (opts.panelOpen && !narrow) targetW *= 0.62;
+    var minW = span < 12 ? 58 : span < 22 ? 78 : span < 40 ? 110 : 140;
+    var maxW = span >= 100 ? VW * 0.62 : span >= 60 ? VW * 0.52 : VW * 0.42;
+    targetW = Math.max(minW, Math.min(maxW, targetW));
+    var shiftX = 0;
+    if (opts.panelOpen && !narrow) shiftX = targetW * 0.06;
+    return { cx: c[0], cy: c[1], targetW: targetW, shiftX: shiftX };
   }
 
   function drawRoutes(routes) {

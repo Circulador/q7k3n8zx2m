@@ -1884,14 +1884,14 @@ function openMapDetailCountry(id){
   cur.country=c;
   mapHitActive=id;
   setMapHitHighlight(id);
-  zoomToCountry(id);
-  scrollMapIntoView();
   var tip=$("mapTooltip"); if(tip) tip.hidden=true;
   var stage=$("mapStage"); if(stage) stage.classList.add("map-detail-open");
   var body=$("mapDetailBody"), panel=$("mapDetail"); if(!body||!panel) return;
   var official=(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.getCountry)?OrbitaWorldMap.getCountry(id,L()):null;
   body.innerHTML=buildMapDetailHTML(c,official);
   panel.hidden=false;
+  zoomToCountry(id);
+  scrollMapIntoView();
   $("mapDetailPlay").addEventListener("click",startCampaign);
   updateMapCountryNav();
   speak((official?official.name:tt(c.name))+". "+(official?official.phrase:tt(c.desc)));
@@ -1969,12 +1969,14 @@ function ensureMap(){ if(!mapReady) drawMap(); }
 function updateViewBox(){ var s=$("mapSvg"); if(s) s.setAttribute("viewBox",view.x+" "+view.y+" "+view.w+" "+view.h); }
 function zoomToCountry(gameId){
   if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.isReady()||!gameId) return;
-  var v=OrbitaWorldMap.getCountryView(gameId);
+  var panelOpen=$("mapDetail")&&!$("mapDetail").hidden;
+  var v=OrbitaWorldMap.getCountryView(gameId,{panelOpen:panelOpen});
   if(!v) return;
-  var nw=Math.max(120,Math.min(VW,v.targetW));
+  var nw=Math.max(55,Math.min(VW,v.targetW));
   var nh=nw*(VH/VW);
+  var cx=v.cx-(v.shiftX||0);
   view.w=nw; view.h=nh;
-  view.x=Math.max(0,Math.min(VW-nw,v.cx-nw/2));
+  view.x=Math.max(0,Math.min(VW-nw,cx-nw/2));
   view.y=Math.max(0,Math.min(VH-nh,v.cy-nh/2));
   updateViewBox();
 }
