@@ -1,0 +1,463 @@
+/* Mapa "A Vale no mundo" — baseado no componente oficial vale.com/pt/onde-estamos */
+var ValeWorldMap = (function () {
+  var assetV = (typeof window !== "undefined" && window.APP_VERSION) ? String(window.APP_VERSION) : "";
+  function assetUrl(path) { return assetV ? path + "?v=" + assetV : path; }
+  var VW = 960, VH = 520;
+  var BASE = "#007E7A", HIGHLIGHT = "#ECB11F", ACTIVE = "#F5C842";
+
+  var ISO_TO_GAME = {
+    "076": "br", "124": "ca", "826": "gb", "512": "om", "458": "my", "392": "jp",
+    "360": "id", "840": "us", "604": "pe", "152": "cl", "032": "ar", "756": "ch",
+    "528": "nl", "784": "ae", "156": "cn", "356": "in", "702": "sg", "036": "au",
+    "682": "sa"
+  };
+
+  var activityItems = [
+    { icon: "building2", id: "sede", labelPt: "Sede", labelEn: "HQ" },
+    { icon: "handshake", id: "joint-venture", labelPt: "Joint Venture", labelEn: "Joint Venture" },
+    { icon: "factory", id: "operacao", labelPt: "Operação", labelEn: "Operation" },
+    { icon: "briefcase", id: "escritorios", labelPt: "Escritórios", labelEn: "Offices" },
+    { icon: "zap", id: "metais-transicao", labelPt: "Metais de transição energética", labelEn: "Energy transition metals" },
+    { icon: "globe2", id: "mega-hub", labelPt: "Mega Hub", labelEn: "Mega Hub" },
+    { icon: "anchor", id: "portos", labelPt: "Portos", labelEn: "Ports" },
+    { icon: "search", id: "exploracao", labelPt: "Exploração", labelEn: "Exploration" },
+    { icon: "train", id: "ferrovias", labelPt: "Ferrovias", labelEn: "Railways" },
+    { icon: "hardhat", id: "minas-subterraneas", labelPt: "Minas subterrâneas", labelEn: "Underground mines" },
+    { icon: "layers", id: "solucoes-minerio", labelPt: "Soluções em minério de ferro", labelEn: "Iron ore solutions" }
+  ];
+
+  var productItems = [
+    { icon: "circle", id: "pelotas", labelPt: "Pelotas", labelEn: "Pellets" },
+    { icon: "gem", id: "minerio-ferro", labelPt: "Minério de ferro", labelEn: "Iron ore" },
+    { icon: "atom", id: "cobalto", labelPt: "Cobalto", labelEn: "Cobalt" },
+    { icon: "box", id: "briquetes", labelPt: "Briquetes", labelEn: "Briquettes" },
+    { icon: "circle", id: "niquel", labelPt: "Níquel", labelEn: "Nickel" },
+    { icon: "star", id: "pgm-ouro-prata", labelPt: "PGM, ouro e prata", labelEn: "PGM, gold and silver" },
+    { icon: "cpu", id: "cobre", labelPt: "Cobre", labelEn: "Copper" }
+  ];
+
+  var countryData = {
+    "076": { activities: ["sede", "mega-hub", "exploracao", "metais-transicao", "solucoes-minerio", "operacao", "portos", "ferrovias", "joint-venture", "escritorios"], namePt: "Brasil", nameEn: "Brazil", phrasePt: "Sede global da Vale. Maior produtor mundial de minério de ferro e pelotas, com vasta rede de ferrovias e portos.", phraseEn: "Vale's global headquarters. World's largest iron ore and pellet producer, with an extensive railway and port network.", products: ["cobre", "niquel", "briquetes", "minerio-ferro", "pelotas", "pgm-ouro-prata"] },
+    "124": { activities: ["metais-transicao", "portos", "exploracao", "operacao", "escritorios", "minas-subterraneas"], namePt: "Canadá", nameEn: "Canada", phrasePt: "Operações de classe mundial em metais de transição energética, com destaque para níquel, cobre e cobalto.", phraseEn: "World-class energy transition metals operations, with a focus on nickel, copper and cobalt.", products: ["cobalto", "cobre", "niquel", "pgm-ouro-prata"] },
+    "840": { activities: ["mega-hub", "escritorios"], namePt: "Estados Unidos", nameEn: "United States", phrasePt: "Escritórios comerciais e Mega Hub na estratégia global da Vale.", phraseEn: "Commercial offices and Mega Hub in Vale's global strategy.", products: [] },
+    "604": { activities: ["escritorios", "exploracao"], namePt: "Peru", nameEn: "Peru", phrasePt: "Projetos de operação e exploração mineral com foco em cobre.", phraseEn: "Mining operation and exploration projects focused on copper.", products: [] },
+    "152": { activities: ["escritorios", "exploracao"], namePt: "Chile", nameEn: "Chile", phrasePt: "Escritórios comerciais e projetos de exploração mineral.", phraseEn: "Commercial offices and mineral exploration projects.", products: [] },
+    "032": { activities: ["escritorios"], namePt: "Argentina", nameEn: "Argentina", phrasePt: "Escritório comercial apoiando relações comerciais na região.", phraseEn: "Commercial office supporting business relations in the region.", products: [] },
+    "826": { activities: ["escritorios", "operacao", "metais-transicao"], namePt: "Reino Unido", nameEn: "United Kingdom", phrasePt: "Refino de níquel de alta pureza para a cadeia de metais da transição energética.", phraseEn: "High-purity nickel refining for the energy transition metals supply chain.", products: ["niquel"] },
+    "756": { activities: ["escritorios"], namePt: "Suíça", nameEn: "Switzerland", phrasePt: "Centro de trading e gestão financeira internacional.", phraseEn: "International trading and financial management center.", products: [] },
+    "528": { activities: ["escritorios"], namePt: "Países Baixos", nameEn: "Netherlands", phrasePt: "Escritório europeu de distribuição de minério de ferro.", phraseEn: "European iron ore distribution office.", products: [] },
+    "682": { activities: ["mega-hub", "joint-venture"], namePt: "Arábia Saudita", nameEn: "Saudi Arabia", phrasePt: "Joint venture de pelotização para distribuição no Oriente Médio e Ásia.", phraseEn: "Pelletizing joint venture for distribution in the Middle East and Asia.", products: ["pelotas"] },
+    "784": { activities: ["mega-hub", "escritorios"], namePt: "Emirados Árabes Unidos", nameEn: "UAE", phrasePt: "Mega Hub estratégico de distribuição de pelotas e briquetes para o mercado asiático.", phraseEn: "Strategic Mega Hub for pellet and briquette distribution to Asian markets.", products: ["pelotas", "briquetes"] },
+    "512": { activities: ["escritorios", "operacao", "mega-hub", "solucoes-minerio"], namePt: "Omã", nameEn: "Oman", phrasePt: "Mega Hub de beneficiamento e distribuição de produtos de minério de ferro.", phraseEn: "Mega Hub for iron ore product processing and distribution.", products: ["pelotas"] },
+    "356": { activities: ["escritorios"], namePt: "Índia", nameEn: "India", phrasePt: "Escritórios e parcerias estratégicas para distribuição de minério de ferro.", phraseEn: "Offices and strategic partnerships for iron ore distribution.", products: [] },
+    "458": { activities: ["escritorios", "portos", "operacao"], namePt: "Malásia", nameEn: "Malaysia", phrasePt: "Terminal marítimo de Teluk Rubiah — movimentação e distribuição de minério na Ásia.", phraseEn: "Teluk Rubiah maritime terminal — ore handling and distribution across Asia.", products: [] },
+    "360": { activities: ["exploracao", "joint-venture", "operacao", "escritorios"], namePt: "Indonésia", nameEn: "Indonesia", phrasePt: "Participação minoritária na PT Vale Indonesia — exploração e operação de níquel.", phraseEn: "Minority stake in PT Vale Indonesia — nickel exploration and operation.", products: ["niquel"] },
+    "156": { activities: ["escritorios"], namePt: "China", nameEn: "China", phrasePt: "Principal destino de vendas — escritórios comerciais e relacionamento com o mercado.", phraseEn: "Main sales destination — commercial offices and market relationships.", products: [] },
+    "392": { activities: ["metais-transicao", "operacao", "escritorios"], namePt: "Japão", nameEn: "Japan", phrasePt: "Refino de níquel e fornecimento para clientes ao redor do mundo.", phraseEn: "Nickel refining and supply to customers worldwide.", products: ["niquel"] },
+    "702": { activities: ["escritorios"], namePt: "Singapura", nameEn: "Singapore", phrasePt: "Hub comercial regional para toda a Ásia-Pacífico.", phraseEn: "Regional commercial hub for Asia-Pacific.", products: [] },
+    "036": { activities: ["escritorios"], namePt: "Austrália", nameEn: "Australia", phrasePt: "Escritório comercial na Oceania.", phraseEn: "Commercial office in Oceania.", products: [] }
+  };
+
+  var state = { filterId: null, filterType: null, selectedIso: null };
+  var projection, pathFn, countrySel, svgNode, tooltipNode, clearBtn, loadingNode;
+  var itemById, onCountryClick, onFilterChange, langFn, ready = false, routesLayer;
+
+  function notifyFilterChange() {
+    if (onFilterChange) onFilterChange();
+  }
+
+  function getFilter() {
+    return { filterType: state.filterType, filterId: state.filterId, selectedIso: state.selectedIso };
+  }
+
+  function label(item) { return langFn() === "en" ? item.labelEn : item.labelPt; }
+  function countryName(data) { return langFn() === "en" ? data.nameEn : data.namePt; }
+  function countryPhrase(data) { return langFn() === "en" ? data.phraseEn : data.phrasePt; }
+
+  function loadScript(src, globalName) {
+    if (window[globalName]) return Promise.resolve(window[globalName]);
+    window.__vwmScripts = window.__vwmScripts || {};
+    if (window.__vwmScripts[src]) {
+      return window.__vwmScripts[src].then(function () { return window[globalName]; });
+    }
+    window.__vwmScripts[src] = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = src;
+      s.onload = function () { window[globalName] ? resolve() : reject(new Error("Missing " + globalName)); };
+      s.onerror = function () { reject(new Error("Failed " + src)); };
+      document.head.appendChild(s);
+    }).then(function () { return window[globalName]; });
+    return window.__vwmScripts[src].then(function () { return window[globalName]; });
+  }
+
+  function getIso(feature) { return String(feature && feature.id ? feature.id : "").padStart(3, "0"); }
+  function getData(feature) { return countryData[getIso(feature)]; }
+
+  function escapeHtml(v) {
+    return String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function renderIcon(name) {
+    var icons = {
+      anchor: '<path d="M12 22V8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/><circle cx="12" cy="5" r="3"/>',
+      atom: '<circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z"/>',
+      box: '<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>',
+      briefcase: '<path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/>',
+      building2: '<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/>',
+      circle: '<circle cx="12" cy="12" r="10"/>',
+      cpu: '<rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/>',
+      factory: '<path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/>',
+      gem: '<path d="M6 3h12l4 6-10 13L2 9Z"/>',
+      globe2: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/>',
+      handshake: '<path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/>',
+      hardhat: '<path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"/><rect x="2" y="15" width="20" height="4" rx="1"/>',
+      layers: '<path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/>',
+      search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+      star: '<path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/>',
+      train: '<path d="M8 3.1V7a4 4 0 0 0 8 0V3.1"/><path d="M9 19c-2.8 0-5-2.2-5-5v-4a8 8 0 0 1 16 0v4c0 2.8-2.2 5-5 5Z"/>',
+      zap: '<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>'
+    };
+    var icon = icons[name] || icons.layers;
+    return '<span class="vwm-icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + icon + "</svg></span>";
+  }
+
+  function buildLegend(container, items, type) {
+    if (!container) return;
+    container.innerHTML = "";
+    items.forEach(function (item) {
+      var btn = document.createElement("button");
+      btn.className = "vwm-legend-button";
+      btn.type = "button";
+      btn.dataset.vwmLegendType = type;
+      btn.dataset.vwmLegendId = item.id;
+      btn.setAttribute("aria-pressed", "false");
+      btn.innerHTML = renderIcon(item.icon) + "<span>" + escapeHtml(label(item)) + "</span>";
+      btn.addEventListener("click", function () { toggleFilter(type, item.id); });
+      container.appendChild(btn);
+    });
+  }
+
+  function toggleFilter(type, id) {
+    if (state.filterType === type && state.filterId === id) {
+      state.filterType = null;
+      state.filterId = null;
+    } else {
+      state.filterType = type;
+      state.filterId = id;
+      state.selectedIso = null;
+    }
+    hideTooltip();
+    updateState();
+    notifyFilterChange();
+  }
+
+  function selectCountry(feature) {
+    var iso = getIso(feature);
+    if (!countryData[iso]) return;
+    if (state.selectedIso === iso) state.selectedIso = null;
+    else {
+      state.selectedIso = iso;
+      state.filterType = null;
+      state.filterId = null;
+    }
+    updateState();
+    notifyFilterChange();
+  }
+
+  function clearSelection() {
+    state.filterType = null;
+    state.filterId = null;
+    state.selectedIso = null;
+    hideTooltip();
+    updateState();
+    notifyFilterChange();
+  }
+
+  function clearCountryHighlight() {
+    if (!state.selectedIso) return;
+    state.selectedIso = null;
+    updateState();
+  }
+
+  function matchesFilter(feature) {
+    var data = getData(feature);
+    if (!data || !state.filterId) return false;
+    if (state.filterType === "activity") return data.activities.indexOf(state.filterId) >= 0;
+    if (state.filterType === "product") return data.products.indexOf(state.filterId) >= 0;
+    return false;
+  }
+
+  function matchesState(feature) {
+    if (state.selectedIso) return state.selectedIso === getIso(feature);
+    if (state.filterId) return matchesFilter(feature);
+    return true;
+  }
+
+  function updateState() {
+    var hasSel = Boolean(state.selectedIso || state.filterId);
+    if (clearBtn) {
+      clearBtn.hidden = !hasSel;
+      clearBtn.setAttribute("aria-pressed", hasSel ? "true" : "false");
+    }
+    document.querySelectorAll(".vwm-legend-button").forEach(function (btn) {
+      var type = btn.dataset.vwmLegendType;
+      var id = btn.dataset.vwmLegendId;
+      var legendOn = type === state.filterType && id === state.filterId;
+      var countryOn = false;
+      var cd = state.selectedIso ? countryData[state.selectedIso] : null;
+      if (cd && type === "activity") countryOn = cd.activities.indexOf(id) >= 0;
+      if (cd && type === "product") countryOn = cd.products.indexOf(id) >= 0;
+      var on = legendOn || countryOn;
+      btn.classList.toggle("is-active", on);
+      btn.classList.toggle("is-dimmed", hasSel && !on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    if (!countrySel) return;
+    countrySel
+      .attr("fill", function (f) {
+        if (!getData(f)) return BASE;
+        if (state.selectedIso === getIso(f)) return ACTIVE;
+        return HIGHLIGHT;
+      })
+      .classed("is-muted", function (f) { return hasSel && !matchesState(f); })
+      .classed("is-active", function (f) { return state.selectedIso === getIso(f); })
+      .classed("is-filtered", function (f) { return Boolean(state.filterId && matchesFilter(f)); });
+  }
+
+  function buildTooltip(feature) {
+    var data = getData(feature);
+    if (!data) return "";
+    var actTitle = langFn() === "en" ? "Activity" : "Atuação";
+    var prodTitle = langFn() === "en" ? "Product portfolio" : "Portfólio de Produtos";
+    var playLabel = langFn() === "en" ? "Start campaign" : "Iniciar campanha";
+    var html = '<div class="vwm-tooltip-title">' + escapeHtml(countryName(data)) + "</div>";
+    if (data.phrasePt) html += '<p class="vwm-tooltip-phrase">' + escapeHtml(countryPhrase(data)) + "</p>";
+    if (data.activities.length) {
+      html += '<div class="vwm-tooltip-section"><span class="vwm-tooltip-label">' + actTitle + '</span><div class="vwm-tooltip-icon-grid">';
+      data.activities.forEach(function (id) {
+        var it = itemById[id];
+        if (it) html += '<span class="vwm-tooltip-icon-card" title="' + escapeHtml(label(it)) + '">' + renderIcon(it.icon) + "</span>";
+      });
+      html += "</div></div>";
+    }
+    if (data.products.length) {
+      html += '<div class="vwm-tooltip-section"><span class="vwm-tooltip-label">' + prodTitle + '</span><div class="vwm-tooltip-icon-grid">';
+      data.products.forEach(function (id) {
+        var it = itemById[id];
+        if (it) html += '<span class="vwm-tooltip-icon-card" title="' + escapeHtml(label(it)) + '">' + renderIcon(it.icon) + "</span>";
+      });
+      html += "</div></div>";
+    }
+    var gameId = ISO_TO_GAME[getIso(feature)];
+    if (gameId) html += '<button type="button" class="vwm-tooltip-play btn btn-primary btn-sm" data-game-id="' + gameId + '">🚀 ' + playLabel + "</button>";
+    return html;
+  }
+
+  function showTooltip(event, feature) {
+    if (!tooltipNode || !getData(feature)) return;
+    tooltipNode.innerHTML = buildTooltip(feature);
+    tooltipNode.hidden = false;
+    tooltipNode.style.left = Math.max(8, Math.min(event.clientX + 18, window.innerWidth - 300)) + "px";
+    tooltipNode.style.top = Math.max(8, Math.min(event.clientY - 8, window.innerHeight - 260)) + "px";
+    var playBtn = tooltipNode.querySelector(".vwm-tooltip-play");
+    if (playBtn && onCountryClick) {
+      playBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        onCountryClick(playBtn.getAttribute("data-game-id"), false);
+      });
+    }
+  }
+
+  function hideTooltip() { if (tooltipNode) tooltipNode.hidden = true; }
+
+  function renderMap(d3, topojson, world) {
+    if (!svgNode || !world || !world.objects || !world.objects.countries) {
+      showError(langFn() === "en" ? "Invalid world atlas." : "Atlas mundial inválido.");
+      return;
+    }
+    if (loadingNode) loadingNode.hidden = true;
+    projection = d3.geoNaturalEarth1().fitExtent([[20, 18], [VW - 20, VH - 24]], { type: "Sphere" });
+    pathFn = d3.geoPath(projection);
+    var svg = d3.select(svgNode);
+    svg.selectAll("*").remove();
+    svg.attr("viewBox", "0 0 " + VW + " " + VH);
+    var features = topojson.feature(world, world.objects.countries).features;
+    countrySel = svg.append("g").attr("class", "vwm-countries").selectAll("path").data(features).join("path")
+      .attr("class", function (f) { return getData(f) ? "vwm-country has-data" : "vwm-country"; })
+      .attr("d", pathFn)
+      .attr("fill", function (f) { return getData(f) ? HIGHLIGHT : BASE; })
+      .attr("stroke", "#ffffff")
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-width", 0.45)
+      .attr("tabindex", 0)
+      .attr("role", "button")
+      .attr("aria-label", function (f) { var d = getData(f); return d ? countryName(d) : (f.properties && f.properties.name) || ""; })
+      .attr("aria-disabled", function (f) { return getData(f) ? "false" : "true"; })
+      .on("click", function (event, feature) {
+        if (!getData(feature)) return;
+        event.stopPropagation();
+        var iso = getIso(feature);
+        var wasSelected = state.selectedIso === iso;
+        selectCountry(feature);
+        if (wasSelected) hideTooltip();
+        else showTooltip(event, feature);
+        if (onCountryClick && ISO_TO_GAME[iso]) onCountryClick(ISO_TO_GAME[iso], true);
+      })
+      .on("keydown", function (event, feature) {
+        if (getData(feature) && (event.key === "Enter" || event.key === " ")) {
+          event.preventDefault();
+          selectCountry(feature);
+          showTooltip({ clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 }, feature);
+        }
+      });
+    routesLayer = svg.append("g").attr("class", "vwm-routes");
+    svg.on("click", function () { clearSelection(); });
+    ready = true;
+    updateState();
+  }
+
+  function showError(msg) {
+    if (!loadingNode) return;
+    loadingNode.hidden = false;
+    loadingNode.classList.add("is-error");
+    loadingNode.textContent = msg;
+  }
+
+  function init(opts) {
+    svgNode = opts.svg;
+    tooltipNode = opts.tooltip;
+    clearBtn = opts.clearBtn;
+    loadingNode = opts.loading;
+    onCountryClick = opts.onCountryClick;
+    onFilterChange = opts.onFilterChange;
+    langFn = opts.lang || function () { return "pt"; };
+    itemById = {};
+    activityItems.concat(productItems).forEach(function (it) { itemById[it.id] = it; });
+    buildLegend(opts.activityLegend, activityItems, "activity");
+    buildLegend(opts.productLegend, productItems, "product");
+    if (clearBtn) clearBtn.addEventListener("click", clearSelection);
+    if (loadingNode) { loadingNode.hidden = false; loadingNode.classList.remove("is-error"); loadingNode.textContent = langFn() === "en" ? "Loading map..." : "Carregando mapa..."; }
+    return Promise.all([
+      loadScript(assetUrl("assets/d3.min.js"), "d3"),
+      loadScript(assetUrl("assets/topojson-client.min.js"), "topojson"),
+      fetch(assetUrl("assets/countries-110m.json")).then(function (r) { if (!r.ok) throw new Error("atlas"); return r.json(); })
+    ]).then(function (res) { renderMap(res[0], res[1], res[2]); });
+  }
+
+  function refresh() {
+    buildLegend(document.getElementById("mapActivityLegend"), activityItems, "activity");
+    buildLegend(document.getElementById("mapProductLegend"), productItems, "product");
+    if (countrySel) updateState();
+  }
+
+  function highlightGameId(gameId, opts) {
+    opts = opts || {};
+    var iso = null;
+    if (gameId) {
+      Object.keys(ISO_TO_GAME).forEach(function (k) { if (ISO_TO_GAME[k] === gameId) iso = k; });
+    }
+    state.selectedIso = iso;
+    if (!opts.keepFilter) {
+      state.filterType = null;
+      state.filterId = null;
+      notifyFilterChange();
+    }
+    updateState();
+  }
+
+  function project(lat, lon) {
+    if (!projection) return { x: 0, y: 0 };
+    var p = projection([lon, lat]);
+    return { x: p[0], y: p[1] };
+  }
+
+  function drawRoutes(routes) {
+    if (!routesLayer || !pathFn) return;
+    routesLayer.selectAll("*").remove();
+    if (!routes || !routes.length) return;
+    routes.forEach(function (route) {
+      if (!route.pts || route.pts.length < 2) return;
+      var coords = route.pts.map(function (p) { return [p.lon, p.lat]; });
+      var line = { type: "LineString", coordinates: coords };
+      routesLayer.append("path")
+        .attr("class", "route-line " + (route.cls || "") + (route.active ? " route-active" : " route-dim"))
+        .attr("d", pathFn(line))
+        .attr("fill", "none");
+    });
+  }
+
+  function isReady() { return ready; }
+
+  function gameToIso(gameId) {
+    var iso = null;
+    Object.keys(ISO_TO_GAME).forEach(function (k) { if (ISO_TO_GAME[k] === gameId) iso = k; });
+    return iso;
+  }
+
+  function buildItemById() {
+    var m = {};
+    activityItems.concat(productItems).forEach(function (it) { m[it.id] = it; });
+    return m;
+  }
+
+  function getActivityLabel(id, lang) {
+    var it = buildItemById()[id];
+    if (!it) return id;
+    return lang === "en" ? it.labelEn : it.labelPt;
+  }
+
+  function getProductLabel(id, lang) {
+    return getActivityLabel(id, lang);
+  }
+
+  function getCountries(lang) {
+    return Object.keys(countryData).map(function (iso) {
+      var d = countryData[iso];
+      return {
+        iso: iso,
+        gameId: ISO_TO_GAME[iso] || null,
+        name: lang === "en" ? d.nameEn : d.namePt,
+        phrase: lang === "en" ? d.phraseEn : d.phrasePt,
+        activities: d.activities.slice(),
+        products: d.products.slice()
+      };
+    });
+  }
+
+  function getCountry(gameId, lang) {
+    var iso = gameToIso(gameId);
+    if (!iso || !countryData[iso]) return null;
+    var d = countryData[iso];
+    return {
+      iso: iso,
+      gameId: gameId,
+      name: lang === "en" ? d.nameEn : d.namePt,
+      phrase: lang === "en" ? d.phraseEn : d.phrasePt,
+      activities: d.activities.slice(),
+      products: d.products.slice()
+    };
+  }
+
+  return {
+    init: init,
+    refresh: refresh,
+    clearSelection: clearSelection,
+    clearCountryHighlight: clearCountryHighlight,
+    highlightGameId: highlightGameId,
+    getFilter: getFilter,
+    project: project,
+    drawRoutes: drawRoutes,
+    isReady: isReady,
+    gameToIso: gameToIso,
+    ISO_TO_GAME: ISO_TO_GAME,
+    VW: VW,
+    VH: VH,
+    getCountries: getCountries,
+    getCountry: getCountry,
+    getActivityLabel: getActivityLabel,
+    getProductLabel: getProductLabel,
+    getActivityItems: function () { return activityItems.slice(); },
+    getProductItems: function () { return productItems.slice(); }
+  };
+})();

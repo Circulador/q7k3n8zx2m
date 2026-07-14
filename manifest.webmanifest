@@ -1,0 +1,24 @@
+{
+  "name": "Guardião Digital da Operação — Vale",
+  "short_name": "Guardião Vale",
+  "description": "Jogo bilíngue (PT/EN) de conscientização em Cyber Security e Segurança da Informação, ambientado nas operações da Vale. Funciona offline.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "./index.html?src=pwa",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#062028",
+  "theme_color": "#007E7A",
+  "categories": ["education", "games", "productivity"],
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "192x192 512x512 any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

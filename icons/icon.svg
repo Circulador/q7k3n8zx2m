@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Guardião Digital da Operação  Vale">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a4a52"/>
+      <stop offset="1" stop-color="#062028"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#EDB111"/>
+      <stop offset="1" stop-color="#007E7A"/>
+    </linearGradient>
+  </defs>
+  <!-- full-bleed background (maskable safe) -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <!-- shield within central safe zone (~80%) -->
+  <g transform="translate(256,256)">
+    <path d="M0,-150 L120,-108 L120,10 C120,96 60,150 0,176 C-60,150 -120,96 -120,10 L-120,-108 Z"
+          fill="url(#shield)" stroke="#04141b" stroke-width="8" stroke-linejoin="round"/>
+    <!-- chain/rail motif -->
+    <g stroke="#04141b" stroke-width="10" stroke-linecap="round" fill="none" opacity="0.9">
+      <path d="M-60,-30 L60,-30"/>
+      <path d="M-60,10 L60,10"/>
+      <path d="M-40,-30 L-40,10"/>
+      <path d="M0,-30 L0,10"/>
+      <path d="M40,-30 L40,10"/>
+    </g>
+    <!-- check / protection mark -->
+    <path d="M-46,58 L-8,96 L58,20" fill="none" stroke="#04141b" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
