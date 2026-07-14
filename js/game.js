@@ -81,7 +81,7 @@ var UI = {
   "map.reset":{pt:"Ver mundo",en:"View world"},
   "map.detailChain":{pt:"Etapa da cadeia",en:"Chain stage"},
   "map.chainImpact":{pt:"Impacto na cadeia",en:"Chain impact"},
-  "a11y.menuTitle":{pt:"Idioma e acessibilidade",en:"Language & accessibility"},
+  "a11y.menuTitle":{pt:"Acessibilidade",en:"Accessibility"},
   "a11y.langLabel":{pt:"Idioma",en:"Language"},
   "a11y.prefsLabel":{pt:"Preferências",en:"Preferences"},
   "a11y.close":{pt:"Fechar menu",en:"Close menu"},
@@ -101,7 +101,10 @@ var UI = {
   "streak.new":{pt:"🔥 Ofensiva iniciada! Dia 1.",en:"🔥 Streak started! Day 1."},
   "streak.up":{pt:"🔥 Ofensiva: ",en:"🔥 Streak: "},
   "streak.lost":{pt:"Ofensiva reiniciada.",en:"Streak reset."},
-  "hud.tip.lang":{pt:"Idioma do jogo — alterna entre Português e Inglês (perguntas, textos e narração).",en:"Game language — switches between Portuguese and English (questions, text and narration)."},
+  "hud.tip.lang":{pt:"Idioma do jogo — toque na bandeira PT ou EN.",en:"Game language — tap the PT or EN flag."},
+  "hud.tip.langPt":{pt:"Jogar em Português",en:"Play in Portuguese"},
+  "hud.tip.langEn":{pt:"Jogar em Inglês",en:"Play in English"},
+  "lang.switchLabel":{pt:"Idioma do jogo",en:"Game language"},
   "hud.tip.title":{pt:"Seu título na carreira — evolui conforme você acumula XP nas missões.",en:"Your career title — grows as you earn XP from missions."},
   "hud.tip.lives":{pt:"Vidas restantes — você perde uma ao errar em situações críticas; recupere jogando bem.",en:"Lives remaining — you lose one on critical mistakes; recover by playing well."},
   "hud.tip.streak":{pt:"Ofensiva — dias seguidos jogando; mantenha a sequência para bônus de moedas.",en:"Streak — consecutive days played; keep it going for coin bonuses."},
@@ -421,8 +424,10 @@ function langFlagSvg(lang){
   if(lang==="pt") return '<svg viewBox="0 0 36 24" class="flag-chip" aria-hidden="true"><rect width="36" height="24" fill="#009b3a"/><polygon points="18,2 34,12 18,22 2,12" fill="#fedf00"/><circle cx="18" cy="12" r="5.5" fill="#002776"/></svg>';
   return '<svg viewBox="0 0 36 24" class="flag-chip" aria-hidden="true"><rect width="36" height="24" fill="#B22234"/><rect y="2.3" width="36" height="2.3" fill="#fff"/><rect y="6.9" width="36" height="2.3" fill="#fff"/><rect y="11.5" width="36" height="2.3" fill="#fff"/><rect y="16.1" width="36" height="2.3" fill="#fff"/><rect y="20.7" width="36" height="2.3" fill="#fff"/><rect width="14.4" height="13.8" fill="#3C3B6E"/><circle cx="3.2" cy="2.8" r=".9" fill="#fff"/><circle cx="7.2" cy="2.8" r=".9" fill="#fff"/><circle cx="11.2" cy="2.8" r=".9" fill="#fff"/><circle cx="5.2" cy="5.8" r=".9" fill="#fff"/><circle cx="9.2" cy="5.8" r=".9" fill="#fff"/><circle cx="3.2" cy="8.8" r=".9" fill="#fff"/><circle cx="7.2" cy="8.8" r=".9" fill="#fff"/><circle cx="11.2" cy="8.8" r=".9" fill="#fff"/></svg>';
 }
-function langToggleHtml(){
-  return langFlagSvg(L())+' <span>'+(L()==="pt"?"PT":"EN")+'</span>';
+function updateLangSwitch(){
+  document.querySelectorAll(".lang-switch-btn").forEach(function(b){
+    b.setAttribute("aria-pressed", b.getAttribute("data-lang")===L()?"true":"false");
+  });
 }
 function applyI18n(){
   document.querySelectorAll("[data-i18n]").forEach(function(el){ el.innerHTML = t(el.getAttribute("data-i18n")); });
@@ -433,13 +438,14 @@ function applyI18n(){
     });
   });
   document.documentElement.setAttribute("lang", L()==="pt"?"pt-BR":"en");
-  var lt=$("langToggle"); if(lt) lt.innerHTML=langToggleHtml();
+  updateLangSwitch();
   applyHudTips();
   renderA11yMenu(); renderA11yCatalog(); updateHeroCaption();
 }
 function applyHudTips(){
   var map={
-    langToggle:"hud.tip.lang", hudTitle:"hud.tip.title", hudLives:"hud.tip.lives",
+    langSwitch:"hud.tip.lang", langPtBtn:"hud.tip.langPt", langEnBtn:"hud.tip.langEn",
+    hudTitle:"hud.tip.title", hudLives:"hud.tip.lives",
     hudStreak:"hud.tip.streak", hudLevelChip:"hud.tip.level", hudXpChip:"hud.tip.xp",
     hudCoinsChip:"hud.tip.coins", hudScoreChip:"hud.tip.score", hudMaturityChip:"hud.tip.maturity",
     a11yBtn:"hud.tip.a11y", voiceBtn:"hud.tip.voice"
@@ -832,12 +838,7 @@ function applySignLanguage(){
 }
 /* Quick language + accessibility menu (topbar) */
 function renderA11yMenu(){
-  var lt=$("langToggle"); if(lt) lt.innerHTML=langToggleHtml();
   var cl=$("a11yMenuClose"); if(cl) cl.setAttribute("aria-label",t("a11y.close"));
-  document.querySelectorAll("#a11yMenu .am-lang").forEach(function(b){
-    b.setAttribute("aria-pressed", b.getAttribute("data-lang")===L()?"true":"false");
-    b.innerHTML=langFlagSvg(b.getAttribute("data-lang"))+" "+(b.getAttribute("data-lang")==="pt"?"PT":"EN");
-  });
   document.querySelectorAll("#a11yMenu .am-toggle").forEach(function(b){
     var k=b.getAttribute("data-opt");
     var on=k==="colorblind"?(S.a11y.colorblind&&S.a11y.colorblind!=="none"):!!S.a11y[k];
@@ -3112,12 +3113,13 @@ function bind(){
   on("quitDialogBackdrop","click",hideQuitDialog);
   on("quitDialogConfirm","click",function(){ var fn=quitCallback; hideQuitDialog(); if(fn) fn(); });
 
-  on("langToggle","click",function(){ setLang(L()==="pt"?"en":"pt"); });
+  document.querySelectorAll(".lang-switch-btn").forEach(function(b){
+    b.addEventListener("click",function(){ setLang(b.getAttribute("data-lang")); });
+  });
   on("a11yBtn","click",function(e){ e.stopPropagation(); toggleA11yMenu(); });
   on("a11yMenuClose","click",function(e){ e.stopPropagation(); toggleA11yMenu(false); });
   on("a11yBackdrop","click",function(){ toggleA11yMenu(false); });
   document.addEventListener("click",function(e){ var m=$("a11yMenu"); if(!m||m.hidden) return; if(e.target.closest&&e.target.closest(".a11y-menu-wrap")) return; if(e.target.closest&&e.target.closest("#openA11yMenuBtn")) return; toggleA11yMenu(false); });
-  document.querySelectorAll("#a11yMenu .am-lang").forEach(function(b){ b.addEventListener("click",function(e){ e.stopPropagation(); setLang(b.getAttribute("data-lang")); }); });
   document.querySelectorAll("#a11yMenu .am-toggle").forEach(function(b){ b.addEventListener("click",function(e){ e.stopPropagation(); var k=b.getAttribute("data-opt"); if(k==="colorblind"){ cycleColorblind(); return; } S.a11y[k]=!S.a11y[k]; save(); applyA11y(); if(k==="voice"&&S.a11y.voice) speak(L()==="pt"?"Narração por voz ativada.":"Voice narration enabled."); if(k==="signs"&&S.a11y.signs) speak(L()==="pt"?"Hand Talk e Libras ativados.":"Hand Talk and ASL enabled."); }); });
 
   on("speakBtn","click",function(){ var q=cur.questions[cur.i]; if(q) speak(tt(q.q)); });
@@ -3143,7 +3145,6 @@ function bind(){
   on("certGenerateBtn","click",renderCertificatePreview);
   on("certDownloadBtn","click",downloadCertificate);
   on("certPrintBtn","click",printCertificate);
-  on("mgrBackBtn","click",function(){ show("screenHome"); });
   on("mgrExportTeams","click",exportTeams);
   on("mgrExportThemes","click",exportThemes);
 
