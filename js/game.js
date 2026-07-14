@@ -18,7 +18,7 @@ var DEF = { lang:"pt", name:"", team:"mina", role:"admin",
   a11y:{voice:false, contrast:false, large:false, motion:false, signs:false, fontScale:0, links:false, spacing:false, letterSpace:false, dyslexia:false, colorblind:"none", readingMode:false},
   done:{}, themeStats:{}, medals:{}, owned:{}, equipped:{avatar:"🛡️",frame:"default",skin:"default"},
   bossDone:{}, bossStats:{}, onboardingDone:false, daily:{date:"",done:{}}, weekly:{week:"",prog:{}}, teamScores:{},
-  chainDone:{}, streak:{count:0,lastDate:"",best:0}, missed:{}, reports:0, managerMode:false, focusLearn:false, simpleUi:true, theme:"default", tipsSeen:{map:false,daily:false,boss:false}, glossaryFavs:[], offlineHintSeen:false };
+  chainDone:{}, streak:{count:0,lastDate:"",best:0}, missed:{}, reports:0, managerMode:false, focusLearn:false, simpleUi:true, theme:"default", tipsSeen:{map:false,daily:false,boss:false}, glossaryFavs:[], offlineHintSeen:false, heroExpanded:false };
 var S = merge(load(), DEF);
 
 function merge(a,b){ a=a||{}; for(var k in b){ if(a[k]===undefined) a[k]=b[k]; else if(b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])) a[k]=merge(a[k],b[k]); } return a; }
@@ -101,6 +101,8 @@ var UI = {
   "cert.share":{pt:"📤 Compartilhar",en:"📤 Share"},
   "onboard.langT":{pt:"1) Escolha o idioma",en:"1) Choose language"},
   "onboard.langB":{pt:"Perguntas, respostas e narração seguem o idioma. Acessibilidade (♿) e configurações (⚙️) ficam no topo quando quiser.",en:"Questions, answers and narration follow the language. Accessibility (♿) and settings (⚙️) are in the top bar anytime."},
+  "onboard.a11yT":{pt:"2) Acessibilidade",en:"2) Accessibility"},
+  "onboard.a11yB":{pt:"Ative narração, contraste, Libras ou redução de animações agora — ou ajuste depois no menu ♿.",en:"Enable narration, contrast, sign language or reduced motion now — or adjust later in the ♿ menu."},
   "mgr.kpiAdoption":{pt:"Adoção",en:"Adoption"},
   "mgr.kpiWeak":{pt:"Tema mais fraco",en:"Weakest theme"},
   "mgr.kpiStreak":{pt:"Ofensiva média",en:"Avg streak"},
@@ -110,7 +112,8 @@ var UI = {
   "a11y.sec.visual":{pt:"Visual e cores",en:"Visual & colors"},
   "a11y.sec.text":{pt:"Texto e tipografia",en:"Text & typography"},
   "a11y.sec.signs":{pt:"Libras / ASL",en:"Sign language"},
-  "home.start":{pt:"▶️ Começar",en:"▶️ Start"},
+  "home.expand":{pt:"📖 Saber mais sobre o jogo",en:"📖 Learn more about the game"},
+  "home.collapse":{pt:"Recolher texto",en:"Collapse text"},
   "home.playNow":{pt:"▶️ Jogar agora",en:"▶️ Play now"},
   "home.weekLine":{pt:"Semana: {theme} · Acertos {correct}/20 · Campanhas {campaign}/3 · Missão {daily}",en:"Week: {theme} · Correct {correct}/20 · Campaigns {campaign}/3 · Mission {daily}"},
   "home.map":{pt:"🗺️ Mapa da Operação",en:"🗺️ Operations Map"},
@@ -140,7 +143,36 @@ var UI = {
   "home.weekBoss":{pt:"Crise",en:"Crisis"},
   "mode.mapchain.h":{pt:"Cadeia em Desafios / Crises",en:"Chain in Challenges / Crises"},
   "mode.mapchain.t":{pt:"Aventura Carajás → China em etapas — proteja cada elo da logística de ferro.",en:"Carajás → China adventure in stages — protect each iron logistics link."},
-  "map.reset":{pt:"Ver mundo",en:"View world"},
+  "daily.whyToday":{pt:"Por que jogar hoje?",en:"Why play today?"},
+  "daily.streakRisk":{pt:"Sua ofensiva está em risco — jogue para manter a sequência.",en:"Your streak is at risk — play to keep it going."},
+  "daily.streakOk":{pt:"Ofensiva mantida hoje — continue evoluindo.",en:"Streak kept today — keep improving."},
+  "daily.themeLine":{pt:"Temas do dia incluem revisão dos seus erros anteriores.",en:"Today's scenarios include review of your past mistakes."},
+  "daily.rewardLine":{pt:"+50 XP · mantém ofensiva 🔥",en:"+50 XP · keeps streak 🔥"},
+  "nav.badgeWeekly":{pt:"metas semanais pendentes",en:"pending weekly goals"},
+  "result.next":{pt:"Próximo passo",en:"Next step"},
+  "result.home":{pt:"🏠 Início",en:"🏠 Home"},
+  "result.weekly":{pt:"🏆 Metas da semana",en:"🏆 Weekly goals"},
+  "review.title":{pt:"📋 Banco de Perguntas",en:"📋 Question Bank"},
+  "review.sub":{pt:"Todas as perguntas do jogo — campanhas, diárias, cadeia e Desafios / Crises.",en:"All game questions — campaigns, dailies, chain and Challenges / Crises."},
+  "review.allSrc":{pt:"Todas as fontes",en:"All sources"},
+  "review.srcBank":{pt:"Campanhas / Diárias",en:"Campaigns / Dailies"},
+  "review.srcChain":{pt:"Cadeia Carajás",en:"Carajás Chain"},
+  "review.srcBoss":{pt:"Desafios / Crises",en:"Challenges / Crises"},
+  "review.allThemes":{pt:"Todos os temas",en:"All themes"},
+  "review.allDiff":{pt:"Todas as dificuldades",en:"All difficulties"},
+  "review.searchPh":{pt:"Buscar texto…",en:"Search text…"},
+  "pwa.installTitle":{pt:"⬇️ Instalar Guardião Digital",en:"⬇️ Install Digital Guardian"},
+  "pwa.installAndroid":{pt:"No menu do navegador (⋯), escolha Instalar app ou Adicionar à tela inicial.",en:"In the browser menu (⋯), choose Install app or Add to home screen."},
+  "pwa.ios1":{pt:"Toque em Compartilhar (ícone de seta para cima)",en:"Tap Share (arrow up icon)"},
+  "pwa.ios2":{pt:"Escolha Adicionar à Tela de Início",en:"Choose Add to Home Screen"},
+  "pwa.installClose":{pt:"Entendi",en:"Got it"},
+  "settings.managerPanel":{pt:"🧭 Painel do gestor",en:"🧭 Manager panel"},
+  "settings.managerPanelSub":{pt:"Exibe métricas da equipe e recomendações pedagógicas no menu Gestor.",en:"Shows team metrics and pedagogical recommendations in the Manager tab."},
+  "settings.focusLearn":{pt:"Modo foco no aprendizado",en:"Learning focus mode"},
+  "settings.focusLearnSub":{pt:"Esconde moedas e pontuação arcade durante o treino.",en:"Hides coins and arcade score during training."},
+  "settings.a11yCatalog":{pt:"Recursos de acessibilidade",en:"Accessibility features"},
+  "hud.tip.statsSummary":{pt:"Resumo do progresso — toque para abrir Eu",en:"Progress summary — tap to open Me"},
+  "map.stickyGo":{pt:"▶️ Iniciar expedição",en:"▶️ Start expedition"},
   "map.detailChain":{pt:"Etapa da cadeia",en:"Chain stage"},
   "map.chainImpact":{pt:"Impacto na cadeia",en:"Chain impact"},
   "a11y.menuTitle":{pt:"Acessibilidade",en:"Accessibility"},
@@ -267,6 +299,8 @@ var UI = {
   "setup.roleTitle":{pt:"Papel no dia a dia",en:"Your day-to-day role"},
   "setup.roleSub":{pt:"As situações do mapa se adaptam à sua rotina (escritório, campo, OT ou liderança).",en:"Map scenarios adapt to your routine (office, field, OT or leadership)."},
   "setup.go":{pt:"▶️ Iniciar expedição no mapa",en:"▶️ Start expedition on map"},
+  "setup.banner":{pt:"⚙️ Complete equipe e papel para personalizar suas missões.",en:"⚙️ Complete team and role to personalize your missions."},
+  "setup.bannerGo":{pt:"Configurar agora",en:"Set up now"},
   "setup.teamRequired":{pt:"Escolha uma equipe para continuar.",en:"Choose a team to continue."},
   "setup.roleRequired":{pt:"Escolha um papel para continuar.",en:"Choose a role to continue."},
   "setup.managerTitle":{pt:"🧭 Modo gestor",en:"🧭 Manager mode"},
@@ -412,9 +446,9 @@ var UI = {
   "onboard.reopenTip":{pt:"Reabrir guia de introdução ao jogo",en:"Reopen the game introduction guide"},
   "onboard.setupT":{pt:"1) Idioma e acessibilidade",en:"1) Language & accessibility"},
   "onboard.setupB":{pt:"Escolha o idioma e, se quiser, ative narração por voz, contraste ou Libras. Você pode mudar depois no menu ♿ do topo.",en:"Choose your language and optionally enable voice narration, contrast or sign language. You can change these later in the top ♿ menu."},
-  "onboard.playT":{pt:"2) Como funciona",en:"2) How it works"},
+  "onboard.playT":{pt:"3) Como funciona",en:"3) How it works"},
   "onboard.playB":{pt:"Explore países no mapa, faça a missão diária e enfrente crises simuladas. Cada acerto fortalece a operação — erros mostram o que revisar.",en:"Explore countries on the map, play the daily mission and face simulated crises. Each correct answer strengthens operations — mistakes show what to review."},
-  "onboard.readyT":{pt:"3) Pronto para jogar",en:"3) Ready to play"},
+  "onboard.readyT":{pt:"4) Pronto para jogar",en:"4) Ready to play"},
   "onboard.readyB":{pt:"Toque em Jogar agora na tela inicial. O jogo sugere sempre o melhor próximo passo para você.",en:"Tap Play now on the home screen. The game always suggests your best next step."},
   "quiz.personal":{pt:"💡 Na sua vida",en:"💡 In your life"},
   "progress.hub":{pt:"🔗 Como os modos se conectam",en:"🔗 How modes connect"},
@@ -748,6 +782,7 @@ function stopSpeak(){ if("speechSynthesis" in window) try{ window.speechSynthesi
 
 /* -------------------- NAVEGAÇÃO -------------------- */
 var NAVMAP={screenMap:"navMapBtn",screenBossList:"navBossBtn",screenDaily:"navDailyBtn",screenProfile:"navStatsBtn",screenHome:"navHomeBtn",screenManager:"navManagerBtn"};
+var NAV_IMMERSIVE=["screenQuiz","screenBoss"];
 var NAV_MORE_SCREENS=["screenHome","screenManager","screenWeekly","screenShop"];
 var NAV_HIDE=[];
 function toggleNavMore(open){
@@ -767,10 +802,11 @@ function show(id){
   if(id!=="screenMap" && typeof glStop==="function") glStop();
   document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
   var el=$(id); if(el) el.classList.add("active");
-  if(id==="screenHome"){ renderNextStep(); renderWeekCard(); renderFirstDayHint(); }
-  if(id==="screenMap"){ showContextTip("map"); renderMapExplorerHint(); }
+  if(id==="screenHome"){ renderNextStep(); renderWeekCard(); renderFirstDayHint(); updateSetupBanner(); }
+  if(id==="screenMap"){ showContextTip("map"); renderMapExplorerHint(); updateSetupBanner(); }
   if(id==="screenDaily") showContextTip("daily");
   if(id==="screenBossList") showContextTip("boss");
+  if(id==="screenReview"&&typeof window.initReviewBank==="function") window.initReviewBank();
   updateNavBadges();
   window.scrollTo({top:0,behavior:S.a11y.motion?"auto":"smooth"});
   document.querySelectorAll(".bottom-nav-row button").forEach(function(b){ b.classList.remove("on"); });
@@ -780,7 +816,8 @@ function show(id){
     var mi=id==="screenWeekly"||id==="screenShop"?$("navMoreBtn"):$(NAVMAP[id]);
     if(mi) mi.classList.add("on");
   }
-  document.body.classList.remove("nav-hidden");
+  if(NAV_IMMERSIVE.indexOf(id)>=0) document.body.classList.add("nav-hidden");
+  else document.body.classList.remove("nav-hidden");
   announce(el?(el.getAttribute("aria-label")||""):"");
 }
 function announce(m){ var live=$("a11yLive"); if(!live) return; live.textContent=""; setTimeout(function(){ live.textContent=m; },40); }
@@ -1041,7 +1078,7 @@ function toggleSettingsMenu(force){
   if(btn) btn.setAttribute("aria-expanded",open?"true":"false");
   if(bd){ bd.hidden=!open; bd.setAttribute("aria-hidden",open?"false":"true"); }
   document.body.classList.toggle("settings-menu-open",open);
-  if(open){ renderGlossarySelect(); var ts=$("themeSelect"); if(ts) ts.value=S.theme||"default"; }
+  if(open){ renderGlossarySelect(); renderA11yCatalog(); var ts=$("themeSelect"); if(ts) ts.value=S.theme||"default"; }
 }
 function toggleA11yMenu(force){
   var menu=$("a11yMenu"),btn=$("a11yBtn"),bd=$("a11yBackdrop"); if(!menu) return;
@@ -1051,6 +1088,7 @@ function toggleA11yMenu(force){
   if(btn) btn.setAttribute("aria-expanded", open?"true":"false");
   if(bd){ bd.hidden=!open; bd.setAttribute("aria-hidden", open?"false":"true"); }
   document.body.classList.toggle("a11y-menu-open", open);
+  if(open) renderA11yCatalog();
 }
 
 /* -------------------- HUD -------------------- */
@@ -1110,6 +1148,8 @@ function refreshHud(){
   ensureBossStats();
   var avg=bossAvgIndex(), chip=$("hudMaturityChip");
   if(chip) chip.textContent="🛡️ "+avg+"%";
+  var sum=$("hudStatsSummary");
+  if(sum) sum.textContent="📊 Nv "+levelOf()+" · ⭐ "+S.xp+(S.simpleUi===false?" · 🛡️ "+avg+"%":"");
   applyCosmetics();
   renderLives();
 }
@@ -1936,6 +1976,12 @@ function renderMapExpedition(){
     +'<button type="button" class="btn btn-primary btn-sm" id="mapExpeditionGo">'+t("map.expeditionGo")+'</button>';
   var btn=$("mapExpeditionGo");
   if(btn) btn.addEventListener("click",function(){ focusExpeditionCountry(next.id); });
+  var sticky=$("mapStickyGo"), stickyBtn=$("mapStickyGoBtn");
+  if(sticky&&stickyBtn){
+    sticky.hidden=false;
+    stickyBtn.textContent=t("map.stickyGo")+" — "+next.flag+" "+tt(next.name);
+    stickyBtn.onclick=function(){ focusExpeditionCountry(next.id); };
+  }
 }
 function openMap(process, reset, focusExpedition){
   if(process==="iron"){ openBossChain(true); return; }
@@ -2081,6 +2127,7 @@ function finishCampaign(){
   $("statsGrid").innerHTML='<div class="stat"><div class="v">'+cur.correct+"/"+total+'</div><div class="l">'+lab.a+'</div></div><div class="stat"><div class="v">'+acc+'%</div><div class="l">'+lab.b+'</div></div><div class="stat"><div class="v">'+cur.integrity+'%</div><div class="l">'+lab.c+'</div></div><div class="stat"><div class="v">'+S.xp+'</div><div class="l">'+lab.d+'</div></div>';
   renderCampaignDebrief(); renderThemeErrors($("themeErrors")); renderMedals($("medalsBox")); renderRank($("rankList"));
   renderSessionFeedback(win,acc);
+  renderPostSessionActions("resultPostActions");
   var rmb=$("resultMapBtn");
   if(rmb){
     if(cur.mode==="chain"){ rmb.textContent=L()==="pt"?"⛓️ Voltar a Desafios / Crises":"⛓️ Back to Challenges / Crises"; rmb.onclick=function(){ renderBossList(); show("screenBossList"); }; }
@@ -2669,6 +2716,7 @@ function finishBoss(){
       '<div class="boss-debrief-col"><div class="boss-debrief-k warn">'+t("boss.debriefImprove")+'</div><ul>'+impLi+'</ul></div></div>'+
     '</div>';
   bossCur.lastBossId=b.id;
+  renderPostSessionActions("bossPostActions",true);
   show("screenBossResult");
   speak(tt(tier.title)+". "+tt(tier.msg));
   toast(tier.ico+" "+tt(tier.title)+(improved?" ↑":""));
@@ -2737,6 +2785,16 @@ function renderDaily(){
     if(due>0){ srs.hidden=false; srs.textContent=t("daily.srsDue").replace("{n}",String(due)); }
     else srs.hidden=true;
   }
+  var meta=$("dailyMeta");
+  if(meta){
+    ensureStreak();
+    var streakMsg=streakPlayedToday()?t("daily.streakOk"):t("daily.streakRisk");
+    meta.innerHTML='<div class="daily-meta-grid">'
+      +'<div class="daily-meta-item"><span class="daily-meta-k">🔥</span><span class="daily-meta-v">'+(S.streak.count||0)+' '+t("streak.days")+'</span></div>'
+      +'<div class="daily-meta-item"><span class="daily-meta-k">📚</span><span class="daily-meta-v">'+(due>0?due+" SRS":"—")+'</span></div>'
+      +'<div class="daily-meta-item"><span class="daily-meta-k">🎯</span><span class="daily-meta-v">5</span></div>'
+      +'</div><p class="daily-why">'+t("daily.whyToday")+' — '+streakMsg+'</p><p class="muted daily-theme-line">'+t("daily.themeLine")+'</p>';
+  }
   var navDaily=$("navDailyBtn");
   if(navDaily){
     var lbl=navDaily.querySelector("span:last-child");
@@ -2745,7 +2803,7 @@ function renderDaily(){
   var host=$("dailyList"); host.innerHTML="";
   var done=!!S.daily.done.mission;
   var item=document.createElement("div"); item.className="mission-item"+(done?" done":"");
-  item.innerHTML='<span class="mem">'+(done?"✅":"📅")+'</span><div class="mtxt"><div class="mname">'+(L()==="pt"?"Missão do dia — 5 situações":"Daily mission — 5 scenarios")+'</div><div class="mrew">+50 XP • 🔥 '+(L()==="pt"?"mantém ofensiva":"keeps streak")+'</div></div>';
+  item.innerHTML='<span class="mem">'+(done?"✅":"📅")+'</span><div class="mtxt"><div class="mname">'+(L()==="pt"?"Missão do dia — 5 situações":"Daily mission — 5 scenarios")+'</div><div class="mrew">'+t("daily.rewardLine")+'</div></div>';
   host.appendChild(item);
   $("dailyStartBtn").disabled=done; $("dailyStartBtn").textContent=done?(L()==="pt"?"✅ Concluída hoje":"✅ Done today"):t("daily.play");
 }
@@ -2756,7 +2814,7 @@ var WEEKLY=[
   {id:"theme", goal:8, ico:"📚", themed:true, name:{pt:"Acerte 8 do tema da semana",en:"Get 8 on the week theme"}}
 ];
 function ensureWeekly(){ if(S.weekly.week!==weekKey()){ S.weekly={week:weekKey(),prog:{}}; save(); } }
-function bumpWeekly(id,n){ if(!n) return; ensureWeekly(); S.weekly.prog[id]=(S.weekly.prog[id]||0)+n; var w=WEEKLY.filter(function(x){return x.id===id;})[0]; if(w && S.weekly.prog[id]===w.goal){ addReward(40); toast((L()==="pt"?"🏆 Semanal concluída: ":"🏆 Weekly done: ")+tt(w.name)+" (+40 XP)"); } save(); renderWeekCard(); }
+function bumpWeekly(id,n){ if(!n) return; ensureWeekly(); S.weekly.prog[id]=(S.weekly.prog[id]||0)+n; var w=WEEKLY.filter(function(x){return x.id===id;})[0]; if(w && S.weekly.prog[id]===w.goal){ addReward(40); toast((L()==="pt"?"🏆 Semanal concluída: ":"🏆 Weekly done: ")+tt(w.name)+" (+40 XP)"); } save(); renderWeekCard(); updateNavBadges(); }
 function renderWeekly(){
   ensureWeekly();
   var wt=getWeekTheme();
@@ -2888,6 +2946,7 @@ function computeNextStep(){
 function renderNextStep(){
   var card=$("nextStepCard"); if(!card) return;
   var hero=$("homeHeroActions");
+  applyHeroCompact();
   if(!S.onboardingDone){ card.hidden=true; if(hero) hero.hidden=false; return; }
   if(hero) hero.hidden=true;
   var ns=computeNextStep();
@@ -2895,10 +2954,55 @@ function renderNextStep(){
   if(ico) ico.textContent=ns.ico;
   if(ti) ti.textContent=ns.title;
   if(sub) sub.textContent=ns.sub;
-  if(btn){ btn.textContent=t("home.playNow"); btn.onclick=playNow; }
+  if(btn){ btn.textContent=ns.btn||t("home.playNow"); btn.onclick=playNow; }
   renderWeekLine();
   renderFirstDayHint();
   card.hidden=false;
+}
+function applyHeroCompact(){
+  var card=$("heroCard"), exp=$("heroExpandable"), btn=$("heroExpandBtn");
+  if(!card) return;
+  var compact=!!S.onboardingDone&&!S.heroExpanded;
+  card.classList.toggle("hero-compact",compact);
+  if(exp) exp.hidden=compact;
+  if(btn){
+    btn.hidden=!S.onboardingDone;
+    if(S.onboardingDone) btn.textContent=S.heroExpanded?t("home.collapse"):t("home.expand");
+  }
+}
+function updateSetupBanner(){
+  var ban=$("setupBanner"); if(!ban) return;
+  var showBanner=S.onboardingDone&&!setupComplete();
+  ban.hidden=!showBanner;
+}
+function weeklyPendingCount(){
+  ensureWeekly();
+  var n=0, wp=S.weekly.prog||{};
+  WEEKLY.forEach(function(w){ if((wp[w.id]||0)<w.goal) n++; });
+  return n;
+}
+function renderPostSessionActions(hostId,withWeekly){
+  var host=$(hostId); if(!host) return;
+  host.innerHTML="";
+  var ns=computeNextStep();
+  var lab=document.createElement("div"); lab.className="post-session-k"; lab.textContent=t("result.next"); host.appendChild(lab);
+  var primary=document.createElement("button");
+  primary.className="btn btn-primary";
+  primary.textContent=ns.btn||t("home.playNow");
+  primary.onclick=function(){ ns.act(); };
+  host.appendChild(primary);
+  if(withWeekly){
+    var wk=document.createElement("button");
+    wk.className="btn btn-ghost";
+    wk.textContent=t("result.weekly");
+    wk.onclick=function(){ openWeeklyScreen(); };
+    host.appendChild(wk);
+  }
+  var home=document.createElement("button");
+  home.className="btn btn-ghost";
+  home.textContent=t("result.home");
+  home.onclick=function(){ show("screenHome"); };
+  host.appendChild(home);
 }
 function renderWeekLine(){
   var host=$("nextStepWeek"); if(!host) return;
@@ -2938,7 +3042,8 @@ function renderReviewSection(){
   host.innerHTML='';
   var tr=document.createElement("button"); tr.className="btn btn-primary btn-sm"; tr.textContent=t("profile.reviewTrain");
   tr.onclick=startReviewErrors; host.appendChild(tr);
-  var lk=document.createElement("a"); lk.className="btn btn-ghost btn-sm"; lk.href="review.html"; lk.target="_blank"; lk.rel="noopener"; lk.textContent=t("profile.reviewBank");
+  var lk=document.createElement("button"); lk.className="btn btn-ghost btn-sm"; lk.textContent=t("profile.reviewBank");
+  lk.onclick=function(){ if(typeof window.initReviewBank==="function") window.initReviewBank(); show("screenReview"); };
   host.appendChild(lk);
 }
 function renderCertChecklist(){
@@ -3247,6 +3352,13 @@ function updateNavBadges(){
     if(pending) badge.textContent="!";
   }
   if(btn) btn.setAttribute("aria-label",t("nav.tip.daily")+(badge&&!badge.hidden?" — "+t("nav.badgeDaily"):""));
+  var wb=$("navWeeklyBadge"), pendingW=weeklyPendingCount();
+  if(wb){
+    wb.hidden=!pendingW;
+    if(pendingW) wb.textContent=pendingW>9?"9+":String(pendingW);
+  }
+  var moreBtn=$("navMoreBtn");
+  if(moreBtn&&pendingW) moreBtn.setAttribute("aria-label",t("nav.more")+" — "+pendingW+" "+t("nav.badgeWeekly"));
 }
 function showContextTip(key){
   ensureUxState();
@@ -3413,8 +3525,9 @@ function getRecommendedBossId(){
 /* -------------------- ONBOARDING -------------------- */
 var ONBOARD_STEPS=[
   {ico:"🌐",type:"lang",titleKey:"onboard.langT",bodyKey:"onboard.langB"},
-  {ico:"🛡️",titleKey:"onboard.playT",bodyKey:"onboard.playB"},
-  {ico:"▶️",titleKey:"onboard.readyT",bodyKey:"onboard.readyB"}
+  {ico:"♿",type:"a11y",titleKey:"onboard.a11yT",bodyKey:"onboard.a11yB"},
+  {ico:"🛡️",type:"play",titleKey:"onboard.playT",bodyKey:"onboard.playB"},
+  {ico:"▶️",type:"ready",titleKey:"onboard.readyT",bodyKey:"onboard.readyB"}
 ];
 var onboardStep=0, onboardReplay=false;
 function closeOnboarding(skipped){
@@ -3431,17 +3544,22 @@ function closeOnboarding(skipped){
   try{ renderNextStep(); }catch(e){}
 }
 function renderOnboarding(){
-  var step=ONBOARD_STEPS[onboardStep], isSetup=step.type==="setup", isLang=step.type==="lang", isA11y=step.type==="a11y";
+  var step=ONBOARD_STEPS[onboardStep], isSetup=step.type==="setup", isLang=step.type==="lang", isA11y=step.type==="a11y", isPlay=step.type==="play"||step.type==="ready";
   var langPanel=$("onboardLangPanel"), a11yPanel=$("onboardA11yPanel"), feat=$("onboardFeature"), body=$("onboardBody"), mission=$("onboardMission");
   if($("onboardTitle")) $("onboardTitle").textContent=t(step.titleKey||"onboard.step");
-  if(feat) feat.hidden=isLang;
+  if(feat) feat.hidden=isLang||isA11y;
   if(body){ body.hidden=!isLang; if(isLang) body.textContent=t(step.bodyKey); }
-  if(mission) mission.textContent=isLang?"":t(step.bodyKey);
+  if(mission) mission.textContent=(isLang||isA11y)?"":t(step.bodyKey);
   if(langPanel) langPanel.hidden=!isLang;
-  if(a11yPanel) a11yPanel.hidden=true;
+  if(a11yPanel) a11yPanel.hidden=!isA11y;
   if(isLang){
     document.querySelectorAll("#onboardLangPanel .lang-card").forEach(function(b){ b.setAttribute("aria-pressed",b.getAttribute("data-lang")===S.lang?"true":"false"); });
-  } else if(!isA11y) {
+  } else if(isA11y){
+    if($("onboardOptVoice")) $("onboardOptVoice").checked=!!S.a11y.voice;
+    if($("onboardOptContrast")) $("onboardOptContrast").checked=!!S.a11y.contrast;
+    if($("onboardOptSigns")) $("onboardOptSigns").checked=!!S.a11y.signs;
+    if($("onboardOptMotion")) $("onboardOptMotion").checked=!!S.a11y.motion;
+  } else if(isPlay) {
     var ico=$("onboardIco"); if(ico) ico.textContent=step.ico;
   }
   if($("onboardStepLabel")) $("onboardStepLabel").textContent=t("onboard.step")+" "+(onboardStep+1)+"/"+ONBOARD_STEPS.length;
@@ -3464,6 +3582,14 @@ function showOnboarding(force){
   if($("onboardNextBtn")) $("onboardNextBtn").focus();
 }
 function onboardNext(){
+  var step=ONBOARD_STEPS[onboardStep];
+  if(step&&step.type==="a11y"){
+    if($("onboardOptVoice")) S.a11y.voice=$("onboardOptVoice").checked;
+    if($("onboardOptContrast")) S.a11y.contrast=$("onboardOptContrast").checked;
+    if($("onboardOptSigns")) S.a11y.signs=$("onboardOptSigns").checked;
+    if($("onboardOptMotion")) S.a11y.motion=$("onboardOptMotion").checked;
+    save(); applyA11y();
+  }
   if(onboardStep<ONBOARD_STEPS.length-1){ onboardStep++; renderOnboarding(); return; }
   var firstTime=!S.onboardingDone;
   closeOnboarding();
@@ -3522,6 +3648,15 @@ function bind(){
     show("screenSetup");
   });
   on("nextStepBtn","click",playNow);
+  on("nextStepWeeklyBtn","click",openWeeklyScreen);
+  on("setupBannerBtn","click",function(){ renderTeams(); renderRoles(); if($("playerName")) $("playerName").value=S.name||""; show("screenSetup"); });
+  on("heroExpandBtn","click",function(){ S.heroExpanded=!S.heroExpanded; save(); applyHeroCompact(); });
+  on("fontDownBtn","click",function(){ S.a11y.fontScale=(S.a11y.fontScale||0)-1; save(); applyFontScale(); });
+  on("fontUpBtn","click",function(){ S.a11y.fontScale=(S.a11y.fontScale||0)+1; save(); applyFontScale(); });
+  on("hudStatsSummary","click",function(){ renderProfile(); show("screenProfile"); });
+  on("hudStatsSummary","keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); renderProfile(); show("screenProfile"); } });
+  if($("optManager")){ $("optManager").checked=!!S.managerMode; on("optManager","change",function(){ setManagerMode(this.checked); }); }
+  if($("optFocusLearn")){ $("optFocusLearn").checked=!!S.focusLearn; on("optFocusLearn","change",function(){ setFocusLearn(this.checked); }); }
   on("heroIronBtn","click",function(){ openBossChain(true); });
   on("setupGoBtn","click",function(){
     if($("playerName")) S.name=$("playerName").value.trim();
@@ -3685,6 +3820,7 @@ function init(){
   sanitizeA11y(); ensureManagerMode(); ensureUxState();
   dismissBlockingUI();
   applyI18n(); applyA11y(); applyTheme(); applySimpleUi(); applyCosmetics(); applyFocusLearn(); ensureDaily(); ensureWeekly(); ensureTeamScores(); ensureStreak(); refreshHud();
+  applyHeroCompact(); updateSetupBanner(); renderA11yCatalog();
   updateNavBadges(); showOfflineBanner();
   try{ renderStreakCard(); }catch(e){ console.error(e); }
   try{ renderWeekCard(); }catch(e){ console.error(e); }

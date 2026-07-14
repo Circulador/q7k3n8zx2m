@@ -1,5 +1,10 @@
 /* Banco de perguntas — revisão pedagógica (PT / EN / PT+EN) */
-(function () {
+window.initReviewBank = function () {
+  if (window._reviewBankInited) return;
+  var listEl = document.getElementById("reviewList");
+  if (!listEl) return;
+  window._reviewBankInited = true;
+
   var THEMES = {
     phishing: "Phishing", password: "Senhas", ot: "OT", data: "Dados",
     device: "Dispositivos", remote: "Remoto", bec: "BEC", port: "Porto"
@@ -82,7 +87,7 @@
     return html;
   }
 
-  function renderBilingualBlock(labelPt, labelEn, textPt, textEn, cls) {
+  function renderBilingualBlock(textPt, textEn, cls) {
     return '<div class="' + (cls || "review-block") + '">' +
       '<div class="review-bilingual">' +
       '<div class="review-col pt"><span class="review-lang-tag">PT</span> ' + esc(textPt) + '</div>' +
@@ -90,7 +95,7 @@
       '</div></div>';
   }
 
-  function renderSingleBlock(label, text, cls) {
+  function renderSingleBlock(text, cls) {
     return '<div class="' + (cls || "review-block") + '">' + esc(text) + '</div>';
   }
 
@@ -102,53 +107,36 @@
       (it.diff ? 'Dif. ' + it.diff : '');
 
     var qHtml = both
-      ? renderBilingualBlock("Pergunta", "Question", txt(it.q, "pt"), txt(it.q, "en"), "review-q-wrap")
-      : renderSingleBlock("", txt(it.q, lang), "review-q");
+      ? '<div class="review-q-wrap">' + renderBilingualBlock(txt(it.q, "pt"), txt(it.q, "en"), "review-q") + '</div>'
+      : renderSingleBlock(txt(it.q, lang), "review-q");
 
     var personalHtml = "";
     if (it.personal) {
-      if (both) {
-        personalHtml = '<div class="review-personal">💡' +
-          renderBilingualBlock("", "", txt(it.personal, "pt"), txt(it.personal, "en"), "") + '</div>';
-      } else {
-        personalHtml = '<div class="review-personal">💡 ' + esc(txt(it.personal, lang)) + '</div>';
-      }
+      personalHtml = both
+        ? '<div class="review-personal">💡' + renderBilingualBlock(txt(it.personal, "pt"), txt(it.personal, "en"), "") + '</div>'
+        : '<div class="review-personal">💡 ' + esc(txt(it.personal, lang)) + '</div>';
     }
 
     var whyHtml = "";
     if (it.why) {
-      if (both) {
-        whyHtml = '<div class="review-why"><strong>Por quê / Why</strong>' +
-          renderBilingualBlock("", "", txt(it.why, "pt"), txt(it.why, "en"), "") + '</div>';
-      } else {
-        whyHtml = '<div class="review-why"><strong>' + (lang === "en" ? "Why: " : "Por quê: ") + '</strong>' +
-          esc(txt(it.why, lang)) + '</div>';
-      }
+      whyHtml = both
+        ? '<div class="review-why"><strong>Por quê / Why</strong>' + renderBilingualBlock(txt(it.why, "pt"), txt(it.why, "en"), "") + '</div>'
+        : '<div class="review-why"><strong>' + (lang === "en" ? "Why: " : "Por quê: ") + '</strong>' + esc(txt(it.why, lang)) + '</div>';
     }
 
     var extraHtml = "";
     if (it.impactBad) {
-      if (both) {
-        extraHtml += '<div class="review-impact-bad"><strong>Impacto errado / Wrong impact</strong>' +
-          renderBilingualBlock("", "", txt(it.impactBad, "pt"), txt(it.impactBad, "en"), "") + '</div>';
-      } else {
-        extraHtml += '<div class="review-impact-bad"><strong>' +
-          (lang === "en" ? "Wrong impact: " : "Impacto errado: ") + '</strong>' +
-          esc(txt(it.impactBad, lang)) + '</div>';
-      }
+      extraHtml += both
+        ? '<div class="review-impact-bad"><strong>Impacto errado / Wrong impact</strong>' + renderBilingualBlock(txt(it.impactBad, "pt"), txt(it.impactBad, "en"), "") + '</div>'
+        : '<div class="review-impact-bad"><strong>' + (lang === "en" ? "Wrong impact: " : "Impacto errado: ") + '</strong>' + esc(txt(it.impactBad, lang)) + '</div>';
     }
     if (it.bridge) {
-      if (both) {
-        extraHtml += '<div class="review-bridge"><strong>Ponte narrativa / Story bridge</strong>' +
-          renderBilingualBlock("", "", txt(it.bridge, "pt"), txt(it.bridge, "en"), "") + '</div>';
-      } else {
-        extraHtml += '<div class="review-bridge"><strong>' +
-          (lang === "en" ? "Story bridge: " : "Ponte narrativa: ") + '</strong>' +
-          esc(txt(it.bridge, lang)) + '</div>';
-      }
+      extraHtml += both
+        ? '<div class="review-bridge"><strong>Ponte narrativa / Story bridge</strong>' + renderBilingualBlock(txt(it.bridge, "pt"), txt(it.bridge, "en"), "") + '</div>'
+        : '<div class="review-bridge"><strong>' + (lang === "en" ? "Story bridge: " : "Ponte narrativa: ") + '</strong>' + esc(txt(it.bridge, lang)) + '</div>';
     }
 
-    return '<article class="review-card">' +
+    return '<article class="review-card-inapp">' +
       '<h3>' + label + '</h3>' +
       '<div class="review-meta">' + meta + '</div>' +
       qHtml + personalHtml +
@@ -167,18 +155,24 @@
 
   var themeSel = document.getElementById("reviewTheme");
   var diffSel = document.getElementById("reviewDiff");
-  Object.keys(THEMES).forEach(function (k) {
-    var o = document.createElement("option");
-    o.value = k;
-    o.textContent = THEMES[k];
-    themeSel.appendChild(o);
-  });
-  [1, 2, 3].forEach(function (d) {
-    var o = document.createElement("option");
-    o.value = String(d);
-    o.textContent = "Dif. " + d;
-    diffSel.appendChild(o);
-  });
+  if (themeSel && !themeSel.dataset.ready) {
+    themeSel.dataset.ready = "1";
+    Object.keys(THEMES).forEach(function (k) {
+      var o = document.createElement("option");
+      o.value = k;
+      o.textContent = THEMES[k];
+      themeSel.appendChild(o);
+    });
+  }
+  if (diffSel && !diffSel.dataset.ready) {
+    diffSel.dataset.ready = "1";
+    [1, 2, 3].forEach(function (d) {
+      var o = document.createElement("option");
+      o.value = String(d);
+      o.textContent = "Dif. " + d;
+      diffSel.appendChild(o);
+    });
+  }
 
   function getLang() {
     var r = document.querySelector('input[name="reviewLang"]:checked');
@@ -186,15 +180,19 @@
   }
 
   function render() {
-    var q = document.getElementById("reviewSearch").value.toLowerCase();
-    var src = document.getElementById("reviewSource").value;
-    var th = document.getElementById("reviewTheme").value;
-    var df = document.getElementById("reviewDiff").value;
+    var qEl = document.getElementById("reviewSearch");
+    var srcEl = document.getElementById("reviewSource");
+    var thEl = document.getElementById("reviewTheme");
+    var dfEl = document.getElementById("reviewDiff");
+    if (!qEl || !srcEl || !listEl) return;
+    var q = qEl.value.toLowerCase();
+    var src = srcEl.value;
+    var th = thEl ? thEl.value : "";
+    var df = dfEl ? dfEl.value : "";
     var lang = getLang();
     var both = lang === "both";
-    var list = document.getElementById("reviewList");
-    list.innerHTML = "";
-    list.className = both ? "review-list review-list-both" : "review-list";
+    listEl.innerHTML = "";
+    listEl.className = both ? "review-list-inapp review-list-both" : "review-list-inapp";
     var n = 0;
     items.forEach(function (it) {
       if (src !== "all" && it.src !== src) return;
@@ -203,19 +201,42 @@
       var blob = JSON.stringify(it).toLowerCase();
       if (q && blob.indexOf(q) < 0) return;
       n++;
-      list.insertAdjacentHTML("beforeend", renderCard(it, lang, both));
+      listEl.insertAdjacentHTML("beforeend", renderCard(it, lang, both));
     });
     var countEl = document.getElementById("reviewCount");
-    countEl.textContent = n + " de " + totals.all + " pergunta(s) — " +
-      "BANK " + totals.bank + " · Cadeia " + totals.chain + " · Desafios / Crises " + totals.boss;
+    if (countEl) {
+      countEl.textContent = n + " de " + totals.all + " pergunta(s) — " +
+        "BANK " + totals.bank + " · Cadeia " + totals.chain + " · Desafios / Crises " + totals.boss;
+    }
   }
 
-  document.getElementById("reviewSearch").addEventListener("input", render);
-  document.getElementById("reviewSource").addEventListener("change", render);
-  document.getElementById("reviewTheme").addEventListener("change", render);
-  document.getElementById("reviewDiff").addEventListener("change", render);
+  var searchEl = document.getElementById("reviewSearch");
+  if (searchEl && !searchEl.dataset.bound) {
+    searchEl.dataset.bound = "1";
+    searchEl.addEventListener("input", render);
+  }
+  var sourceEl = document.getElementById("reviewSource");
+  if (sourceEl && !sourceEl.dataset.bound) {
+    sourceEl.dataset.bound = "1";
+    sourceEl.addEventListener("change", render);
+  }
+  if (themeSel && !themeSel.dataset.bound) {
+    themeSel.dataset.bound = "1";
+    themeSel.addEventListener("change", render);
+  }
+  if (diffSel && !diffSel.dataset.bound) {
+    diffSel.dataset.bound = "1";
+    diffSel.addEventListener("change", render);
+  }
   document.querySelectorAll('input[name="reviewLang"]').forEach(function (el) {
-    el.addEventListener("change", render);
+    if (!el.dataset.bound) {
+      el.dataset.bound = "1";
+      el.addEventListener("change", render);
+    }
   });
   render();
-})();
+};
+
+if (document.getElementById("reviewList")) {
+  window.initReviewBank();
+}

@@ -67,7 +67,8 @@
     card.innerHTML =
       '<div style="font-size:2.6rem;line-height:1;margin-bottom:8px">🛡️</div>' +
       '<h1 style="font-size:1.15rem;margin:0 0 4px;color:#EDB111">Guardião Cibernético — Orbita</h1>' +
-      '<p style="font-size:.9rem;color:#8eb4be;margin:0 0 18px">Acesso restrito. Informe a senha para continuar.</p>' +
+      '<p style="font-size:.88rem;color:#8eb4be;margin:0 0 6px;line-height:1.45">Treino de conscientização em Cyber Security — operações globais.</p>' +
+      '<p style="font-size:.82rem;color:#6a9aa6;margin:0 0 16px">Acesso restrito nesta fase piloto. A sessão permanece aberta até fechar o navegador.</p>' +
       '<input id="gdvGateInput" type="password" autocomplete="off" inputmode="text" ' +
       'placeholder="Senha de acesso" aria-label="Senha de acesso" ' +
       'style="width:100%;box-sizing:border-box;padding:13px 14px;border-radius:10px;border:1px solid #1b5a63;' +
@@ -75,7 +76,8 @@
       '<p id="gdvGateErr" role="alert" style="min-height:1.1em;margin:8px 0 0;font-size:.82rem;color:#ff6b6b"></p>' +
       '<button id="gdvGateBtn" type="button" ' +
       'style="width:100%;margin-top:12px;padding:13px 14px;border:0;border-radius:10px;cursor:pointer;' +
-      'font-size:1rem;font-weight:700;color:#04141b;background:linear-gradient(135deg,#EDB111,#c99400)">Entrar</button>';
+      'font-size:1rem;font-weight:700;color:#04141b;background:linear-gradient(135deg,#EDB111,#c99400)">Entrar</button>' +
+      '<p style="margin:14px 0 0;font-size:.72rem;color:#6a9aa6"><a href="https://www.orbita.com/pt/acessibilidade" target="_blank" rel="noopener" style="color:#2fbf71">Acessibilidade Orbita</a></p>';
 
     ov.appendChild(card);
     (document.body || document.documentElement).appendChild(ov);

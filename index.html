@@ -9,17 +9,17 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=70">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=71">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=70">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=70">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=71">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=71">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=70"></script>
-<link rel="stylesheet" href="css/styles.css?v=70">
+<script src="js/access-gate.js?v=71"></script>
+<link rel="stylesheet" href="css/styles.css?v=71">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -28,6 +28,24 @@
 <div id="offlineBanner" class="offline-banner" hidden role="status">
   <span data-i18n="offline.hint">📶 Funciona offline após a primeira visita — seu progresso fica neste dispositivo.</span>
   <button type="button" class="btn btn-sm btn-ghost" id="offlineDismissBtn" data-i18n="offline.dismiss">Ok</button>
+</div>
+
+<div id="setupBanner" class="setup-banner" hidden role="status">
+  <span data-i18n="setup.banner">⚙️ Complete equipe e papel para personalizar suas missões.</span>
+  <button type="button" class="btn btn-sm btn-primary" id="setupBannerBtn" data-i18n="setup.bannerGo">Configurar agora</button>
+</div>
+
+<div id="pwaInstallSheet" class="pwa-install-sheet" hidden role="dialog" aria-modal="true" aria-labelledby="pwaInstallTitle">
+  <div class="pwa-install-backdrop" id="pwaInstallBackdrop"></div>
+  <div class="pwa-install-box">
+    <h2 class="pwa-install-title" id="pwaInstallTitle" data-i18n="pwa.installTitle">⬇️ Instalar Guardião Digital</h2>
+    <p class="pwa-install-body" id="pwaInstallBody" data-i18n="pwa.installAndroid">No menu do navegador (⋯), escolha <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</p>
+    <ol class="pwa-install-steps" id="pwaInstallSteps" hidden>
+      <li data-i18n="pwa.ios1">Toque em <b>Compartilhar</b> (ícone de seta para cima)</li>
+      <li data-i18n="pwa.ios2">Escolha <b>Adicionar à Tela de Início</b></li>
+    </ol>
+    <button type="button" class="btn btn-primary btn-lg" id="pwaInstallClose" data-i18n="pwa.installClose">Entendi</button>
+  </div>
 </div>
 
 <div id="quitDialog" class="quit-dialog" hidden role="alertdialog" aria-modal="true" aria-labelledby="quitDialogTitle" aria-describedby="quitDialogMsg">
@@ -53,7 +71,7 @@
     <div class="card onboard-card">
       <div class="section-title" id="onboardTitle"></div>
       <div class="section-sub" id="onboardBody"></div>
-      <div id="onboardA11yPanel" hidden>
+      <div id="onboardA11yPanel">
         <div class="a11y-list a11y-list-compact onboard-a11y-list">
           <div class="a11y-row"><div><div class="lab" data-i18n="a11y.voice">🔊 Narração por voz</div></div><label class="switch"><input type="checkbox" id="onboardOptVoice"><span class="slider"></span></label></div>
           <div class="a11y-row"><div><div class="lab" data-i18n="a11y.contrast">🌗 Alto contraste</div></div><label class="switch"><input type="checkbox" id="onboardOptContrast"><span class="slider"></span></label></div>
@@ -132,6 +150,7 @@
             </div>
           </div>
         </div>
+        <span class="chip hud-tip hud-stats-summary" id="hudStatsSummary" data-i18n-attr="title:hud.tip.statsSummary;aria-label:hud.tip.statsSummary" tabindex="0" role="button">📊 Nv 1</span>
         <span class="chip hud-tip" id="hudLevelChip">Nv <span id="hudLevel">1</span></span>
         <span class="chip hud-tip" id="hudXpChip">⭐ <span id="hudXp">0</span></span>
         <span class="chip hud-tip" id="hudMaturityChip" data-i18n-attr="title:hud.tip.maturity" title="Maturidade em Desafios / Crises">🛡️ 0%</span>
@@ -202,6 +221,11 @@
                   <span class="am-switch" aria-hidden="true"></span>
                 </button>
               </div>
+              <div class="am-font-scale">
+                <button type="button" class="am-font-btn" id="fontDownBtn" data-i18n-attr="title:a11y.fontDown;aria-label:a11y.fontDown">A−</button>
+                <span class="am-font-val" id="fontScaleLabel" aria-live="polite">0</span>
+                <button type="button" class="am-font-btn" id="fontUpBtn" data-i18n-attr="title:a11y.fontUp;aria-label:a11y.fontUp">A+</button>
+              </div>
             </div>
             <div class="am-section">
               <span class="am-section-label" data-i18n="a11y.sec.signs">Libras / ASL</span>
@@ -249,8 +273,22 @@
               <p class="dp-sub" data-i18n="settings.easyReadSub">Liga ou desliga contraste, texto grande e espaçamento de uma vez.</p>
               <label class="switch dp-switch"><input type="checkbox" id="optEasyReadSettings"><span class="slider"></span></label>
             </div>
+            <div class="dp-section">
+              <div class="dp-label" data-i18n="settings.managerPanel">🧭 Painel do gestor</div>
+              <p class="dp-sub" data-i18n="settings.managerPanelSub">Exibe métricas da equipe e recomendações pedagógicas no menu Gestor.</p>
+              <label class="switch dp-switch"><input type="checkbox" id="optManager"><span class="slider"></span></label>
+            </div>
+            <div class="dp-section">
+              <div class="dp-label" data-i18n="settings.focusLearn">Modo foco no aprendizado</div>
+              <p class="dp-sub" data-i18n="settings.focusLearnSub">Esconde moedas e pontuação arcade durante o treino.</p>
+              <label class="switch dp-switch"><input type="checkbox" id="optFocusLearn"><span class="slider"></span></label>
+            </div>
             <div class="dp-section dp-section-compact">
               <button type="button" class="dp-link-btn" id="settingsEditProfileBtn" data-i18n="settings.editProfile">✏️ Minha operação (equipe e papel)</button>
+            </div>
+            <div class="dp-section">
+              <div class="dp-label" data-i18n="settings.a11yCatalog">Recursos de acessibilidade</div>
+              <div class="a11y-catalog" id="a11yCatalog"></div>
             </div>
             <div class="dp-section">
               <div class="dp-label" data-i18n="settings.glossary">📖 Glossário</div>
@@ -281,7 +319,7 @@
 
   <!-- ============ HOME: LANGUAGE + ACCESSIBILITY ============ -->
   <section id="screenHome" class="screen active" aria-label="Início">
-    <div class="card hero">
+    <div class="card hero" id="heroCard">
       <button type="button" class="hero-scene hero-scene-btn" id="heroIronBtn" data-i18n-attr="aria-label:home.heroIronTip;title:home.heroIronTip" aria-label="Explorar cadeia operacional em Desafios / Crises">
         <svg class="hero-svg" viewBox="0 0 900 168" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
@@ -356,10 +394,13 @@
       <span class="badge" data-i18n="home.badge">Operações globais • Cyber Security</span>
       <h1 data-i18n="home.title">Você é o <span class="accent">Guardião Digital</span></h1>
       <p class="hero-lead" data-i18n="home.desc">Sua missão é proteger as operações da organização em todo o mundo por meio de decisões seguras no ambiente digital.</p>
+      <div class="hero-expandable" id="heroExpandable">
       <p class="hero-body" data-i18n="home.explore">Explore minas, usinas, portos, ferrovias e escritórios, identifique ameaças cibernéticas, responda a incidentes simulados e fortaleça a resiliência das operações.</p>
       <p class="hero-body" data-i18n="home.impact">Cada decisão que você toma pode proteger pessoas, informações e processos essenciais para o negócio.</p>
       <div class="mission" data-i18n="home.objective">🎯 <b>Objetivo do jogo:</b> reconhecer riscos digitais, aplicar boas práticas de segurança da informação e desenvolver a mentalidade de um verdadeiro Guardião Digital.</div>
       <p class="hero-journey" data-i18n="home.journey">🌍 Navegue pelo <span class="nav-ref">Mapa</span> global, enfrente <span class="nav-ref">Desafios / Crises</span> inspirados em situações reais, cumpra <span class="nav-ref">Missões</span> diárias e evolua sua jornada em <span class="nav-ref">Eu</span> — contribuindo para um ambiente mais seguro para todos.</p>
+      </div>
+      <button type="button" class="btn btn-ghost btn-sm hero-expand-btn" id="heroExpandBtn" hidden data-i18n="home.expand">📖 Saber mais sobre o jogo</button>
       <div class="row-actions hero-actions" id="homeHeroActions">
         <button class="btn btn-primary btn-lg" id="homeStartBtn" data-i18n="home.start">▶️ Começar</button>
         <button type="button" class="btn btn-ghost" id="pwaInstallBtn" hidden data-i18n="home.install">⬇️ Instalar app</button>
@@ -396,6 +437,7 @@
       </div>
       <p class="next-step-week-line" id="nextStepWeek" aria-live="polite"></p>
       <button type="button" class="btn btn-primary btn-lg" id="nextStepBtn" data-i18n="home.playNow">▶️ Jogar agora</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="nextStepWeeklyBtn" data-i18n="home.weekBarGo">Ver metas da semana →</button>
     </div>
 
   </section>
@@ -470,6 +512,9 @@
           <button class="map-detail-close" id="mapDetailClose" aria-label="Fechar">×</button>
           <div id="mapDetailBody"></div>
         </div>
+      </div>
+      <div class="map-sticky-go" id="mapStickyGo" hidden>
+        <button type="button" class="btn btn-primary btn-lg" id="mapStickyGoBtn" data-i18n="map.stickyGo">▶️ Iniciar expedição</button>
       </div>
       <details class="map-more-options" id="mapMoreOptions">
         <summary data-i18n="map.moreOptions">Mais informações do mapa</summary>
@@ -549,6 +594,7 @@
     <div class="card" id="campaignDebrief" hidden></div>
     <div class="card"><div class="section-title" data-i18n="result.medals">🏅 Medalhas</div><div class="medals" id="medalsBox"></div></div>
     <div class="card"><div class="section-title" data-i18n="result.rank">📈 Ranking por equipe</div><div class="rank-list" id="rankList"></div></div>
+    <div class="row-actions result-actions" id="resultPostActions"></div>
     <div class="row-actions">
       <button class="btn btn-blue" id="resultMapBtn" data-i18n="result.map">🗺️ Mapa</button>
     </div>
@@ -585,6 +631,7 @@
   <!-- ============ RESULTADO DO CHEFÃO ============ -->
   <section id="screenBossResult" class="screen" aria-label="Resultado da crise">
     <div class="card" id="bossResult"></div>
+    <div class="row-actions result-actions" id="bossPostActions"></div>
     <div class="row-actions">
       <button class="btn btn-ghost" id="bossResultBackBtn" data-i18n="boss.backList">← Voltar a Desafios / Crises</button>
       <button class="btn btn-gold" id="bossReplayBtn" data-i18n="boss.replay">🔁 Repetir missão</button>
@@ -594,7 +641,9 @@
   <!-- ============ DAILY ============ -->
   <section id="screenDaily" class="screen" aria-label="Missões diárias">
     <div class="ctx-tip" id="ctxTip_daily" hidden><span data-i18n="tip.daily">5 situações rápidas — 2 revisam erros anteriores. Mantém sua ofensiva!</span><button type="button" class="ctx-tip-dismiss" data-tip="daily" data-i18n="tip.dismiss">Entendi</button></div>
-    <div class="card"><div class="section-title" data-i18n="daily.title">📅 Missões Diárias</div><div class="section-sub" id="dailyDate"></div><p class="daily-srs-note" id="dailySrsNote" hidden></p><div id="dailyList"></div></div>
+    <div class="card"><div class="section-title" data-i18n="daily.title">📅 Missões Diárias</div><div class="section-sub" id="dailyDate"></div>
+      <div class="daily-meta" id="dailyMeta"></div>
+      <p class="daily-srs-note" id="dailySrsNote" hidden></p><div id="dailyList"></div></div>
     <div class="row-actions"><button class="btn btn-primary btn-lg" id="dailyStartBtn" data-i18n="daily.play">▶️ Jogar missão do dia</button></div>
   </section>
 
@@ -616,6 +665,32 @@
       <h3 class="shop-h" data-i18n="shop.themes">🎨 Temas visuais</h3>
       <div class="shop-grid" id="themeShop"></div>
     </div>
+  </section>
+
+  <!-- ============ REVIEW BANK (in-app) ============ -->
+  <section id="screenReview" class="screen" aria-label="Banco de perguntas">
+    <div class="card review-inapp-head">
+      <div class="section-title" data-i18n="review.title">📋 Banco de Perguntas</div>
+      <p class="section-sub" data-i18n="review.sub">Todas as perguntas do jogo — campanhas, diárias, cadeia e Desafios / Crises.</p>
+      <div class="review-filters">
+        <div class="review-lang-group" role="group" aria-label="Idioma">
+          <label><input type="radio" name="reviewLang" value="pt"> 🇧🇷 PT</label>
+          <label><input type="radio" name="reviewLang" value="en"> 🇺🇸 EN</label>
+          <label><input type="radio" name="reviewLang" value="both" checked> PT+EN</label>
+        </div>
+        <select id="reviewSource" aria-label="Fonte">
+          <option value="all" data-i18n="review.allSrc">Todas as fontes</option>
+          <option value="bank" data-i18n="review.srcBank">Campanhas / Diárias</option>
+          <option value="chain" data-i18n="review.srcChain">Cadeia Carajás</option>
+          <option value="boss" data-i18n="review.srcBoss">Desafios / Crises</option>
+        </select>
+        <select id="reviewTheme" aria-label="Tema"><option value="" data-i18n="review.allThemes">Todos os temas</option></select>
+        <select id="reviewDiff" aria-label="Dificuldade"><option value="" data-i18n="review.allDiff">Todas as dificuldades</option></select>
+        <input type="search" id="reviewSearch" data-i18n-attr="placeholder:review.searchPh" placeholder="Buscar texto…" aria-label="Buscar">
+      </div>
+      <p id="reviewCount" class="muted"></p>
+    </div>
+    <div id="reviewList" class="review-list-inapp"></div>
   </section>
 
   <!-- ============ PROFILE / DASHBOARD ============ -->
@@ -719,7 +794,7 @@
   <button type="button" id="navDailyBtn" onclick="gdvNavClick('navDailyBtn',event)" data-i18n-attr="title:nav.tip.daily;aria-label:nav.tip.daily"><span class="ni" aria-hidden="true">📅</span><span class="nav-badge" id="navDailyBadge" hidden>!</span><span data-i18n="nav.daily">Missões</span></button>
   <button type="button" id="navBossBtn" onclick="gdvNavClick('navBossBtn',event)" data-i18n-attr="title:nav.tip.boss;aria-label:nav.tip.boss"><span class="ni" aria-hidden="true">🎯</span><span data-i18n="nav.boss">Desafios / Crises</span></button>
   <button type="button" id="navStatsBtn" onclick="gdvNavClick('navStatsBtn',event)" data-i18n-attr="title:nav.tip.stats;aria-label:nav.tip.stats"><span class="ni" aria-hidden="true">📊</span><span data-i18n="nav.stats">Eu</span></button>
-  <button type="button" id="navMoreBtn" onclick="gdvNavClick('navMoreBtn',event)" data-i18n-attr="title:nav.more;aria-label:nav.more" aria-haspopup="true" aria-expanded="false"><span class="ni" aria-hidden="true">⋯</span><span data-i18n="nav.more">Mais</span></button>
+  <button type="button" id="navMoreBtn" onclick="gdvNavClick('navMoreBtn',event)" data-i18n-attr="title:nav.more;aria-label:nav.more" aria-haspopup="true" aria-expanded="false"><span class="ni" aria-hidden="true">⋯</span><span class="nav-badge" id="navWeeklyBadge" hidden>!</span><span data-i18n="nav.more">Mais</span></button>
   <button type="button" id="navManagerBtn" hidden onclick="gdvNavClick('navManagerBtn',event)" data-i18n-attr="title:nav.tip.manager;aria-label:nav.tip.manager"><span class="ni" aria-hidden="true">🧭</span><span data-i18n="nav.manager">Gestor</span></button>
   </div>
   <div class="nav-more-sheet" id="navMoreSheet" hidden role="menu">
@@ -754,15 +829,16 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="70";</script>
-<script src="js/sign-lang.js?v=70"></script>
-<script src="js/orbita-world-map.js?v=70"></script>
-<script src="js/questions-data.js?v=70"></script>
-<script src="js/country-questions-data.js?v=70"></script>
-<script src="js/bosses-data.js?v=70"></script>
-<script src="js/chain-data.js?v=70"></script>
-<script src="js/boss-maps.js?v=70"></script>
-<script src="js/game.js?v=70"></script>
+<script>window.APP_VERSION="71";</script>
+<script src="js/sign-lang.js?v=71"></script>
+<script src="js/orbita-world-map.js?v=71"></script>
+<script src="js/questions-data.js?v=71"></script>
+<script src="js/country-questions-data.js?v=71"></script>
+<script src="js/bosses-data.js?v=71"></script>
+<script src="js/chain-data.js?v=71"></script>
+<script src="js/boss-maps.js?v=71"></script>
+<script src="js/game.js?v=71"></script>
+<script src="js/review-bank.js?v=71"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {
@@ -803,11 +879,31 @@ if ("serviceWorker" in navigator) {
       deferred.prompt();
       deferred.userChoice.then(function () { deferred = null; hideBtn(); });
     } else if (isIOS()) {
-      alert("Para instalar no iPhone/iPad:\n1) Toque em Compartilhar (ícone de seta para cima)\n2) Escolha \"Adicionar à Tela de Início\"");
+      showPwaInstallSheet(true);
     } else {
-      alert("Instale pelo menu do navegador (\u22ee) escolhendo \"Instalar app\" / \"Adicionar à tela inicial\".");
+      showPwaInstallSheet(false);
     }
   });
+
+  function showPwaInstallSheet(ios) {
+    var sheet = byId("pwaInstallSheet"), body = byId("pwaInstallBody"), steps = byId("pwaInstallSteps");
+    if (!sheet) return;
+    if (body) body.hidden = !!ios;
+    if (steps) steps.hidden = !ios;
+    sheet.hidden = false;
+    document.body.classList.add("pwa-install-open");
+    var close = byId("pwaInstallClose");
+    if (close) close.focus();
+  }
+  function hidePwaInstallSheet() {
+    var sheet = byId("pwaInstallSheet");
+    if (sheet) sheet.hidden = true;
+    document.body.classList.remove("pwa-install-open");
+  }
+  var pwaBackdrop = byId("pwaInstallBackdrop");
+  if (pwaBackdrop) pwaBackdrop.addEventListener("click", hidePwaInstallSheet);
+  var pwaClose = byId("pwaInstallClose");
+  if (pwaClose) pwaClose.addEventListener("click", hidePwaInstallSheet);
 
   window.addEventListener("load", function () {
     if (isStandalone()) { hideBtn(); return; }
