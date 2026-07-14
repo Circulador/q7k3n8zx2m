@@ -10,12 +10,6 @@ window.gdvStartBoss=function(id,e){
   if(e&&e.stopPropagation) e.stopPropagation();
   if(window.__gdvStartBoss) window.__gdvStartBoss(id);
 };
-window.gdvBossAnswer=function(idx,e){
-  if(e&&e.preventDefault) e.preventDefault();
-  if(e&&e.stopPropagation) e.stopPropagation();
-  var btn=e&&e.target&&e.target.closest?e.target.closest(".opt"):null;
-  if(window.__gdvBossAnswer) window.__gdvBossAnswer(idx,btn);
-};
 
 /* -------------------- ESTADO / STATE -------------------- */
 var STORE_KEY = "guardiao_orbita_v7";
@@ -2263,13 +2257,11 @@ function renderBossPhase(){
   var letters=["A","B","C","D"];
   order.forEach(function(item,pos){
     var btn=document.createElement("button");
-    btn.type="button";
     btn.className="opt";
-    btn.setAttribute("data-opt-idx",String(item.idx));
     if(item.idx===ph.correct) btn.setAttribute("data-correct","1");
-    if(!st) btn.setAttribute("onclick","gdvBossAnswer("+item.idx+",event)");
     btn.innerHTML='<span class="kx">'+letters[pos]+'</span><span>'+tt(item.o)+'</span>';
     if(st){ btn.disabled=true; if(item.idx===st.selectedIdx) btn.classList.add(st.ok?"correct":"wrong"); if(item.idx===ph.correct) btn.classList.add("correct"); }
+    else btn.addEventListener("click",function(){ bossAnswer(item.idx,btn,ph,order); });
     opts.appendChild(btn);
   });
   var fb=$("bossFb");
@@ -3120,14 +3112,6 @@ function init(){
   }
 }
 window.__gdvStartBoss=function(id){ startBoss(id); };
-window.__gdvBossAnswer=function(idx,btn){
-  if(bossCur.answered) return;
-  var b=bossCur.boss, ph=b&&b.phases?b.phases[bossCur.phase]:null;
-  if(!ph) return;
-  if(!btn) btn=document.querySelector('#bossOptions .opt[data-opt-idx="'+idx+'"]:not([disabled])');
-  if(!btn||btn.disabled) return;
-  bossAnswer(idx,btn,ph,bossCur._optOrder);
-};
 wireBottomNav();
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init);
 else init();
