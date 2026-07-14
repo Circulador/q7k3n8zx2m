@@ -60,7 +60,7 @@ var OrbitaWorldMap = (function () {
 
   var state = { filterId: null, filterType: null, selectedIso: null };
   var projection, pathFn, countrySel, svgNode, tooltipNode, clearBtn, loadingNode;
-  var itemById, onCountryClick, onFilterChange, onClearSelection, langFn, ready = false, routesLayer, countryFeatures, markersLayer;
+  var itemById, onCountryClick, onFilterChange, onClearSelection, langFn, ready = false, routesLayer, countryFeatures;
 
   function notifyFilterChange() {
     if (onFilterChange) onFilterChange();
@@ -170,7 +170,6 @@ var OrbitaWorldMap = (function () {
     state.filterId = null;
     state.selectedIso = null;
     hideTooltip();
-    clearCountryMarker();
     updateState();
     notifyFilterChange();
     if (onClearSelection) onClearSelection();
@@ -328,7 +327,6 @@ var OrbitaWorldMap = (function () {
         }
       });
     routesLayer = svg.append("g").attr("class", "vwm-routes");
-    markersLayer = svg.append("g").attr("class", "vwm-markers");
     svg.on("click", function () { clearSelection(); });
     ready = true;
     updateState();
@@ -413,31 +411,6 @@ var OrbitaWorldMap = (function () {
     return { cx: c[0], cy: c[1], targetW: targetW };
   }
 
-  function showCountryMarker(gameId) {
-    if (!markersLayer || !pathFn) return;
-    markersLayer.selectAll("*").remove();
-    if (!gameId) return;
-    var feature = findCountryFeature(gameId);
-    if (!feature) return;
-    var c = pathFn.centroid(feature);
-    var g = markersLayer.append("g").attr("class", "vwm-marker").attr("transform", "translate(" + c[0] + "," + c[1] + ")");
-    g.append("path")
-      .attr("d", "M0,-32 L9,-10 L4,-10 L4,2 L-4,2 L-4,-10 L-9,-10 Z")
-      .attr("fill", "#d93025")
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 1.5);
-    g.append("circle")
-      .attr("r", 5.5)
-      .attr("cy", 5)
-      .attr("fill", "#ECB11F")
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 1.5);
-  }
-
-  function clearCountryMarker() {
-    if (markersLayer) markersLayer.selectAll("*").remove();
-  }
-
   function drawRoutes(routes) {
     if (!routesLayer || !pathFn) return;
     routesLayer.selectAll("*").remove();
@@ -515,8 +488,6 @@ var OrbitaWorldMap = (function () {
     project: project,
     drawRoutes: drawRoutes,
     getCountryView: getCountryView,
-    showCountryMarker: showCountryMarker,
-    clearCountryMarker: clearCountryMarker,
     isReady: isReady,
     gameToIso: gameToIso,
     ISO_TO_GAME: ISO_TO_GAME,

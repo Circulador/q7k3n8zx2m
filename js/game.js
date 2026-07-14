@@ -176,6 +176,8 @@ var UI = {
   "map.detailChain":{pt:"Etapa da cadeia",en:"Chain stage"},
   "map.chainImpact":{pt:"Impacto na cadeia",en:"Chain impact"},
   "map.riskTitle":{pt:"Risco",en:"Risk"},
+  "map.countryPrev":{pt:"País anterior",en:"Previous country"},
+  "map.countryNext":{pt:"Próximo país",en:"Next country"},
   "a11y.menuTitle":{pt:"Acessibilidade",en:"Accessibility"},
   "a11y.langLabel":{pt:"Idioma",en:"Language"},
   "a11y.prefsLabel":{pt:"Preferências",en:"Preferences"},
@@ -1832,7 +1834,37 @@ function finishWorldMapUI(){
   restoreMapTabFocus();
   mapReady=true;
 }
-function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open"); if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.clearCountryMarker) OrbitaWorldMap.clearCountryMarker(); }
+function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open"); updateMapCountryNav(); }
+function getPlayableCountryIds(){
+  if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getCountries) return COUNTRIES.map(function(c){ return c.id; });
+  var countries=OrbitaWorldMap.getCountries(L());
+  countries.sort(function(a,b){
+    if(a.gameId==="br") return -1;
+    if(b.gameId==="br") return 1;
+    return a.name.localeCompare(b.name);
+  });
+  return countries.filter(function(vc){
+    return !!vc.gameId&&COUNTRIES.some(function(c){ return c.id===vc.gameId; })&&countryMatchesMapFilter(vc);
+  }).map(function(vc){ return vc.gameId; });
+}
+function navigateMapCountry(dir){
+  var ids=getPlayableCountryIds();
+  if(!ids.length) return;
+  var cur=mapHitActive||ids[0];
+  var idx=ids.indexOf(cur);
+  if(idx<0) idx=0;
+  var next=idx+dir;
+  if(next<0) next=ids.length-1;
+  if(next>=ids.length) next=0;
+  openMapDetailCountry(ids[next]);
+  setMapHitHighlight(ids[next],true);
+}
+function updateMapCountryNav(){
+  var nav=$("mapCountryNav");
+  if(!nav) return;
+  var open=!!mapHitActive&&$("mapDetail")&&!$("mapDetail").hidden&&!mapChainMode();
+  nav.hidden=!open;
+}
 function buildMapDetailHTML(c,official){
   var themes=c.themes.map(function(th){ return '<span class="tag md-risk-tag">'+tt(THEMES[th])+'</span>'; }).join("");
   var prog=S.done[c.id]? ((L()==="pt"?"Melhor: ":"Best: ")+S.done[c.id]+"%") : (L()==="pt"?"Missão de treino disponível":"Training mission available");
@@ -1853,7 +1885,6 @@ function openMapDetailCountry(id){
   mapHitActive=id;
   setMapHitHighlight(id);
   zoomToCountry(id);
-  if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.showCountryMarker) OrbitaWorldMap.showCountryMarker(id);
   scrollMapIntoView();
   var tip=$("mapTooltip"); if(tip) tip.hidden=true;
   var stage=$("mapStage"); if(stage) stage.classList.add("map-detail-open");
@@ -1862,6 +1893,7 @@ function openMapDetailCountry(id){
   body.innerHTML=buildMapDetailHTML(c,official);
   panel.hidden=false;
   $("mapDetailPlay").addEventListener("click",startCampaign);
+  updateMapCountryNav();
   speak((official?official.name:tt(c.name))+". "+(official?official.phrase:tt(c.desc)));
 }
 function openMapDetailChain(stageId){
@@ -1955,7 +1987,7 @@ function focusIronChain(){ openBossChain(true); }
 function bindMapPanZoom(){
   var wrap=$("mapStage"),svg=$("mapSvg"),drag=false,sx,sy,ox,oy;
   if(!wrap||!svg) return;
-  wrap.addEventListener("pointerdown",function(e){ if(mapChainMode()) return; if(e.target.closest(".map-detail,.map-zoom-float,.cmap-pin,.vwm-country,.vwm-tooltip,.vwm-legend-button")) return; drag=true; wrap.classList.add("dragging"); sx=e.clientX; sy=e.clientY; ox=view.x; oy=view.y; });
+  wrap.addEventListener("pointerdown",function(e){ if(mapChainMode()) return; if(e.target.closest(".map-detail,.map-zoom-float,.map-country-nav,.cmap-pin,.vwm-country,.vwm-tooltip,.vwm-legend-button")) return; drag=true; wrap.classList.add("dragging"); sx=e.clientX; sy=e.clientY; ox=view.x; oy=view.y; });
   window.addEventListener("pointerup",function(){ drag=false; if(wrap) wrap.classList.remove("dragging"); });
   window.addEventListener("pointermove",function(e){ if(!drag) return; var r=svg.getBoundingClientRect(); var kx=view.w/r.width,ky=view.h/r.height; view.x=Math.max(0,Math.min(VW-view.w,ox-(e.clientX-sx)*kx)); view.y=Math.max(0,Math.min(VH-view.h,oy-(e.clientY-sy)*ky)); updateViewBox(); });
   wrap.addEventListener("wheel",function(e){ if(mapChainMode()) return; e.preventDefault(); var r=svg.getBoundingClientRect(); var mx=view.x+(e.clientX-r.left)/r.width*view.w,my=view.y+(e.clientY-r.top)/r.height*view.h; zoomTo(mx,my,e.deltaY>0?1.2:.83); },{passive:false});
@@ -3688,6 +3720,8 @@ function bind(){
   on("zoomOut","click",function(){ zoomTo(view.x+view.w/2,view.y+view.h/2,1.25); });
   on("mapZoomInFloat","click",function(e){ e.stopPropagation(); zoomTo(view.x+view.w/2,view.y+view.h/2,.8); });
   on("mapZoomOutFloat","click",function(e){ e.stopPropagation(); zoomTo(view.x+view.w/2,view.y+view.h/2,1.25); });
+  on("mapCountryPrev","click",function(e){ e.stopPropagation(); navigateMapCountry(-1); });
+  on("mapCountryNext","click",function(e){ e.stopPropagation(); navigateMapCountry(1); });
   on("zoomReset","click",function(){ resetView(); });
   on("mapZoomToggleBtn","click",function(){
     var row=$("mapToolbarRow"); if(!row) return;

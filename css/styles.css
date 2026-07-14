@@ -383,10 +383,13 @@ input#playerName{width:100%;padding:12px 14px;border-radius:12px;border:1px soli
 .map-zoom-float-btn{width:38px;height:38px;border:1px solid #a8bcc2;border-radius:8px;background:#fff;color:#1a3340;font-size:1.15rem;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.14);display:flex;align-items:center;justify-content:center;padding:0}
 .map-zoom-float-btn:hover{background:#f0faf9;border-color:#007E7A}
 .map-zoom-float-btn:active{transform:scale(.96)}
-.vwm-marker{pointer-events:none;animation:vwmMarkerDrop .35s ease}
-.vwm-marker path{filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
-@keyframes vwmMarkerDrop{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
-body.reduce-motion .vwm-marker{animation:none}
+.map-country-nav{position:absolute;inset:0;z-index:15;pointer-events:none}
+.map-country-nav[hidden]{display:none!important}
+.map-country-nav-btn{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:52px;border:1px solid #a8bcc2;border-radius:10px;background:rgba(255,255,255,.94);color:#005f5c;font-size:1.45rem;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.16);display:flex;align-items:center;justify-content:center;padding:0;pointer-events:auto;transition:background .15s,border-color .15s,transform .1s}
+.map-country-nav-btn:hover{background:#f0faf9;border-color:#007E7A}
+.map-country-nav-btn:active{transform:translateY(-50%) scale(.96)}
+.map-country-nav-prev{left:10px}
+.map-country-nav-next{right:10px}
 .map-stage.dragging{cursor:grabbing}
 #mapSvg{display:block;width:100%;height:auto}
 .route-line{fill:none;stroke-width:2.5;stroke-linecap:round;opacity:.9;display:none}
@@ -435,6 +438,9 @@ body.reduce-motion .vwm-marker{animation:none}
   .map-detail{position:relative;top:auto;right:auto;left:auto;bottom:auto;width:100%;max-height:none;overflow:visible;border-radius:0 0 8px 8px;border-width:0 2px 2px 2px;box-shadow:none;animation:none}
   .map-detail::before{display:none}
   .map-zoom-float-btn{width:44px;height:44px}
+  .map-country-nav-btn{width:44px;height:52px}
+  .map-country-nav-prev{left:6px}
+  .map-country-nav-next{right:6px}
 }
 .country-btn.map-hidden,.chain-stage.map-hidden{display:none!important}
 .country-group.map-group-hidden{display:none!important}
