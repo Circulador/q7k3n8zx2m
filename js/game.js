@@ -111,6 +111,7 @@ var UI = {
   "streak.best":{pt:"Recorde",en:"Best"},
   "streak.today":{pt:"✅ Ofensiva mantida hoje!",en:"✅ Streak kept today!"},
   "streak.risk":{pt:"⚠️ Jogue hoje para não perder sua ofensiva!",en:"⚠️ Play today to keep your streak!"},
+  "streak.neutral":{pt:"Jogue hoje para iniciar sua ofensiva!",en:"Play today to start your streak!"},
   "streak.new":{pt:"🔥 Ofensiva iniciada! Dia 1.",en:"🔥 Streak started! Day 1."},
   "streak.up":{pt:"🔥 Ofensiva: ",en:"🔥 Streak: "},
   "streak.lost":{pt:"Ofensiva reiniciada.",en:"Streak reset."},
@@ -476,7 +477,7 @@ function applyHudTips(){
   var map={
     langSwitch:"hud.tip.lang", langPtBtn:"hud.tip.langPt", langEnBtn:"hud.tip.langEn",
     hudTitle:"hud.tip.title", hudLives:"hud.tip.lives",
-    hudStreak:"hud.tip.streak", hudLevelChip:"hud.tip.level", hudXpChip:"hud.tip.xp",
+    hudStreakBtn:"hud.tip.streak", hudLevelChip:"hud.tip.level", hudXpChip:"hud.tip.xp",
     hudCoinsChip:"hud.tip.coins", hudScoreChip:"hud.tip.score", hudMaturityChip:"hud.tip.maturity",
     a11yBtn:"hud.tip.a11y", voiceBtn:"hud.tip.voice", settingsBtn:"hud.tip.settings",
     onboardOpenBtn:"onboard.reopenTip"
@@ -974,7 +975,7 @@ function toggleSettingsMenu(force){
   var menu=$("settingsMenu"),btn=$("settingsBtn"),bd=$("a11yBackdrop");
   if(!menu) return;
   var open=force!==undefined?!!force:menu.hidden;
-  if(open) toggleA11yMenu(false);
+  if(open){ toggleA11yMenu(false); toggleStreakPopover(false); }
   menu.hidden=!open;
   if(btn) btn.setAttribute("aria-expanded",open?"true":"false");
   if(bd){ bd.hidden=!open; bd.setAttribute("aria-hidden",open?"false":"true"); }
@@ -984,7 +985,7 @@ function toggleSettingsMenu(force){
 function toggleA11yMenu(force){
   var menu=$("a11yMenu"),btn=$("a11yBtn"),bd=$("a11yBackdrop"); if(!menu) return;
   var open=force!==undefined?!!force:menu.hidden;
-  if(open) toggleSettingsMenu(false);
+  if(open){ toggleSettingsMenu(false); toggleStreakPopover(false); }
   menu.hidden=!open;
   if(btn) btn.setAttribute("aria-expanded", open?"true":"false");
   if(bd){ bd.hidden=!open; bd.setAttribute("aria-hidden", open?"false":"true"); }
@@ -1007,14 +1008,44 @@ function applyCosmetics(){
   var sk=SKINS.find(function(s){ return s.id===S.equipped.skin; })||SKINS[0];
   if(sk) document.body.classList.add(sk.css);
 }
+function toggleStreakPopover(force){
+  var pop=$("streakPopover"), btn=$("hudStreakBtn");
+  if(!pop) return;
+  var open=force!==undefined?!!force:pop.hidden;
+  if(open){ toggleA11yMenu(false); toggleSettingsMenu(false); renderHudStreak(); }
+  pop.hidden=!open;
+  if(btn) btn.setAttribute("aria-expanded", open?"true":"false");
+  document.body.classList.toggle("streak-pop-open", open);
+}
+function renderHudStreak(){
+  ensureStreak();
+  var btn=$("hudStreakBtn");
+  var n=S.streak.count||0, best=S.streak.best||0, today=streakPlayedToday();
+  var numEl=$("hudStreakNum");
+  if(numEl) numEl.textContent=String(n);
+  if(btn){
+    btn.classList.remove("streak-hud-active","streak-hud-risk","streak-hud-neutral");
+    if(today && n>0) btn.classList.add("streak-hud-active");
+    else if(n>0 && !today) btn.classList.add("streak-hud-risk");
+    else btn.classList.add("streak-hud-neutral");
+    btn.setAttribute("title", t("hud.tip.streak"));
+    btn.setAttribute("aria-label", t("hud.tip.streak")+" — "+n+" "+t("streak.days"));
+  }
+  var countEl=$("streakPopCount"), bestEl=$("streakPopBest"), statusEl=$("streakPopStatus");
+  if(countEl) countEl.textContent=n;
+  if(bestEl) bestEl.textContent=best;
+  if(statusEl){
+    statusEl.textContent=today?t("streak.today"):(n>0?t("streak.risk"):t("streak.neutral"));
+    statusEl.className="streak-pop-status"+(today?" streak-pop-ok":(n>0?" streak-pop-risk":" streak-pop-neutral"));
+  }
+}
 function refreshHud(){
   var xp=$("hudXp"), score=$("hudScore"), lvl=$("hudLevel"), title=$("hudTitle");
   if(xp) xp.textContent=S.xp;
   if(score) score.textContent=S.score;
   if(lvl) lvl.textContent=levelOf();
   if(title){ var ti=currentTitle(); title.textContent=ti.ico+" "+tt(ti); }
-  ensureStreak();
-  var hs=$("hudStreak"); if(hs) hs.textContent="🔥 "+(S.streak.count||0);
+  renderHudStreak();
   ensureBossStats();
   var avg=bossAvgIndex(), chip=$("hudMaturityChip");
   if(chip) chip.textContent="🛡️ "+avg+"%";
@@ -2612,6 +2643,7 @@ function renderStreakCard(){
   $("streakStatus").textContent=today?t("streak.today"):t("streak.risk");
   card.classList.toggle("streak-active",today);
   card.classList.toggle("streak-risk",!today&&n>0);
+  renderHudStreak();
 }
 function resetProgress(){
   if(!confirm(t("profile.resetConfirm"))) return;
@@ -3203,9 +3235,12 @@ function bind(){
   on("glossaryPick","change",function(e){ e.stopPropagation(); showGlossaryTerm(this.value); });
   on("glossarySearch","input",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
   on("glossarySearch","change",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
-  var a11yMenuEl=$("a11yMenu"), settingsMenuEl=$("settingsMenu");
+  on("hudStreakBtn","click",function(e){ e.stopPropagation(); toggleStreakPopover(); });
+  on("streakPopClose","click",function(e){ e.stopPropagation(); toggleStreakPopover(false); });
+  var a11yMenuEl=$("a11yMenu"), settingsMenuEl=$("settingsMenu"), streakPopEl=$("streakPopover");
   if(a11yMenuEl) a11yMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
   if(settingsMenuEl) settingsMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
+  if(streakPopEl) streakPopEl.addEventListener("click",function(e){ e.stopPropagation(); });
   on("voiceBtn","click",function(){ S.a11y.voice=!S.a11y.voice; save(); applyA11y(); toast(S.a11y.voice?(L()==="pt"?"🔊 Narração ligada":"🔊 Narration on"):(L()==="pt"?"🔈 Narração desligada":"🔈 Narration off")); });
 
   on("onboardSkipBtn","click",closeOnboarding);
@@ -3251,9 +3286,10 @@ function bind(){
   on("a11yMenuClose","click",function(e){ e.stopPropagation(); toggleA11yMenu(false); });
   on("a11yBackdrop","click",function(){ toggleA11yMenu(false); toggleSettingsMenu(false); });
   document.addEventListener("click",function(e){
-    var am=$("a11yMenu"), sm=$("settingsMenu");
+    var am=$("a11yMenu"), sm=$("settingsMenu"), sp=$("streakPopover");
     if(am&&!am.hidden){ if(e.target.closest&&(e.target.closest(".a11y-menu-wrap")||e.target.closest("#a11yMenu"))) return; toggleA11yMenu(false); }
     if(sm&&!sm.hidden){ if(e.target.closest&&(e.target.closest(".settings-menu-wrap")||e.target.closest("#settingsMenu"))) return; toggleSettingsMenu(false); }
+    if(sp&&!sp.hidden){ if(e.target.closest&&(e.target.closest(".streak-hud-wrap")||e.target.closest("#streakPopover"))) return; toggleStreakPopover(false); }
   });
   document.querySelectorAll("#a11yMenu .am-toggle").forEach(function(b){ b.addEventListener("click",function(e){ e.stopPropagation(); var k=b.getAttribute("data-opt"); if(k==="colorblind"){ cycleColorblind(); return; } S.a11y[k]=!S.a11y[k]; save(); applyA11y(); if(k==="voice"&&S.a11y.voice) speak(L()==="pt"?"Narração por voz ativada.":"Voice narration enabled."); if(k==="signs"&&S.a11y.signs) speak(L()==="pt"?"Hand Talk e Libras ativados.":"Hand Talk and ASL enabled."); }); });
 
@@ -3299,6 +3335,7 @@ function bind(){
     if(e.key==="Escape"){
       var qd=$("quitDialog"); if(qd&&!qd.hidden){ hideQuitDialog(); return; }
       var sm=$("settingsMenu"); if(sm&&!sm.hidden){ toggleSettingsMenu(false); return; }
+      var sp=$("streakPopover"); if(sp&&!sp.hidden){ toggleStreakPopover(false); return; }
       var am=$("a11yMenu"); if(am&&!am.hidden){ toggleA11yMenu(false); return; }
       if($("screenQuiz")&&$("screenQuiz").classList.contains("active")){ quizQuit(); return; }
       if($("mapDetail")&&!$("mapDetail").hidden){ closeMapDetail(); return; }
@@ -3314,6 +3351,7 @@ function dismissBlockingUI(){
     toggleNavMore(false);
     toggleA11yMenu(false);
     toggleSettingsMenu(false);
+    toggleStreakPopover(false);
     var tip=$("mapTooltip"); if(tip) tip.hidden=true;
     if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.clearSelection) OrbitaWorldMap.clearSelection();
     document.body.classList.remove("nav-hidden");

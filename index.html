@@ -9,17 +9,17 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=65">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=66">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=65">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=65">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=66">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=66">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=65"></script>
-<link rel="stylesheet" href="css/styles.css?v=65">
+<script src="js/access-gate.js?v=66"></script>
+<link rel="stylesheet" href="css/styles.css?v=66">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -106,7 +106,28 @@
       </div>
       <div class="hud" role="status" aria-label="Indicadores">
         <span class="chip hud-tip" id="hudTitle">🌱</span>
-        <span class="chip hud-tip" id="hudStreak" aria-label="Ofensiva">🔥 0</span>
+        <div class="streak-hud-wrap">
+          <button type="button" class="chip chip-btn hud-tip streak-hud-btn streak-hud-neutral" id="hudStreakBtn" data-i18n-attr="aria-label:hud.tip.streak;title:hud.tip.streak" aria-label="Ofensiva" aria-haspopup="dialog" aria-expanded="false" aria-controls="streakPopover">
+            <span aria-hidden="true">🔥</span> <span id="hudStreakNum">0</span>
+          </button>
+          <div class="streak-popover dropdown-panel" id="streakPopover" role="dialog" aria-labelledby="streakPopTitle" hidden>
+            <div class="streak-pop-head">
+              <h2 class="streak-pop-title" id="streakPopTitle" data-i18n="streak.title">🔥 Ofensiva</h2>
+              <button type="button" class="streak-pop-close" id="streakPopClose" data-i18n-attr="aria-label:a11y.close" aria-label="Fechar">×</button>
+            </div>
+            <div class="streak-pop-body">
+              <div class="streak-pop-stats">
+                <span class="streak-pop-flame" aria-hidden="true">🔥</span>
+                <span class="streak-pop-num" id="streakPopCount">0</span>
+                <span class="streak-pop-lab" data-i18n="streak.days">dias seguidos</span>
+                <span class="streak-pop-sep">·</span>
+                <span class="streak-pop-best-lab" data-i18n="streak.best">Recorde</span>
+                <span class="streak-pop-num" id="streakPopBest">0</span>
+              </div>
+              <p class="streak-pop-status" id="streakPopStatus" data-i18n="streak.risk">⚠️ Jogue hoje para não perder sua ofensiva!</p>
+            </div>
+          </div>
+        </div>
         <span class="chip hud-tip" id="hudLevelChip">Nv <span id="hudLevel">1</span></span>
         <span class="chip hud-tip" id="hudXpChip">⭐ <span id="hudXp">0</span></span>
         <span class="chip hud-tip" id="hudMaturityChip" data-i18n-attr="title:hud.tip.maturity" title="Maturidade em Desafios / Crises">🛡️ 0%</span>
@@ -684,14 +705,14 @@
 </div>
 
 <script>window.APP_VERSION="59";</script>
-<script src="js/sign-lang.js?v=65"></script>
-<script src="js/orbita-world-map.js?v=65"></script>
-<script src="js/questions-data.js?v=65"></script>
-<script src="js/country-questions-data.js?v=65"></script>
-<script src="js/bosses-data.js?v=65"></script>
-<script src="js/chain-data.js?v=65"></script>
-<script src="js/boss-maps.js?v=65"></script>
-<script src="js/game.js?v=65"></script>
+<script src="js/sign-lang.js?v=66"></script>
+<script src="js/orbita-world-map.js?v=66"></script>
+<script src="js/questions-data.js?v=66"></script>
+<script src="js/country-questions-data.js?v=66"></script>
+<script src="js/bosses-data.js?v=66"></script>
+<script src="js/chain-data.js?v=66"></script>
+<script src="js/boss-maps.js?v=66"></script>
+<script src="js/game.js?v=66"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {
