@@ -1,5 +1,5 @@
-/* Guardião Digital da Operação — Vale
-   Jogo bilíngue (PT/EN) · mapa D3 em vale-world-map.js */
+/* Guardião Digital da Operação — Orbita
+   Jogo bilíngue (PT/EN) · mapa D3 em orbita-world-map.js */
 (function(){
 "use strict";
 
@@ -7,7 +7,7 @@
 window.gdvNavClick=function(id,e){ if(window.__gdvRunNav) window.__gdvRunNav(id,e||null); };
 
 /* -------------------- ESTADO / STATE -------------------- */
-var STORE_KEY = "guardiao_vale_v7";
+var STORE_KEY = "guardiao_orbita_v7";
 var DEF = { lang:"pt", name:"", team:"mina", role:"admin",
   xp:0, coins:0, score:0, lives:3, avatar:"🛡️", resilience:100,
   a11y:{voice:false, contrast:false, large:false, motion:false, signs:false, fontScale:0, links:false, spacing:false, letterSpace:false, dyslexia:false, colorblind:"none", readingMode:false},
@@ -27,10 +27,10 @@ function tt(o){ return o? (o[L()]!==undefined?o[L()]:o.pt) : ""; }
 /* -------------------- i18n (UI) -------------------- */
 var UI = {
   "brand.sub":{pt:"da Operação",en:"of the Operation"},
-  "home.badge":{pt:"Missão de Segurança • Vale",en:"Security Mission • Vale"},
+  "home.badge":{pt:"Missão de Segurança • Orbita",en:"Security Mission • Orbita"},
   "home.title":{pt:'Você é o <span class="accent">Guardião Digital</span> da Operação',en:'You are the <span class="accent">Digital Guardian</span> of the Operation'},
-  "home.desc":{pt:"Da mina ao porto, proteja as operações da Vale ao redor do mundo contra ameaças cibernéticas. Antes de começar, escolha o idioma e a acessibilidade.",en:"From mine to port, protect Vale's operations around the world against cyber threats. Before you start, choose your language and accessibility."},
-  "home.mission":{pt:"🎯 <b>Sua missão:</b> defender minas, ferrovias, portos e escritórios da Vale pelo mundo. Explore o mapa global, proteja a <b>Cadeia Norte</b> nos chefões, enfrente crises tabletop e evolua sua carreira.",en:"🎯 <b>Your mission:</b> defend Vale's mines, railways, ports and offices worldwide. Explore the global map, protect the <b>Northern Chain</b> in bosses, face tabletop crises and grow your career."},
+  "home.desc":{pt:"Da mina ao porto, proteja as operações da Orbita ao redor do mundo contra ameaças cibernéticas. Antes de começar, escolha o idioma e a acessibilidade.",en:"From mine to port, protect Orbita's operations around the world against cyber threats. Before you start, choose your language and accessibility."},
+  "home.mission":{pt:"🎯 <b>Sua missão:</b> defender minas, ferrovias, portos e escritórios da Orbita pelo mundo. Explore o mapa global, proteja a <b>Cadeia Norte</b> nos chefões, enfrente crises tabletop e evolua sua carreira.",en:"🎯 <b>Your mission:</b> defend Orbita's mines, railways, ports and offices worldwide. Explore the global map, protect the <b>Northern Chain</b> in bosses, face tabletop crises and grow your career."},
   "home.langTitle":{pt:"1) Idioma / Language",en:"1) Language / Idioma"},
   "home.langSub":{pt:"O jogo, as perguntas, as respostas e a narração por voz seguem o idioma escolhido.",en:"The game, questions, answers and voice narration follow the chosen language."},
   "home.a11yTitle":{pt:"2) Acessibilidade / Accessibility",en:"2) Accessibility / Acessibilidade"},
@@ -74,7 +74,7 @@ var UI = {
   "a11y.close":{pt:"Fechar menu",en:"Close menu"},
   "home.modesTitle":{pt:"Modos de jogo",en:"Game modes"},
   "mode.campaign.h":{pt:"🗺️ Campanhas por país",en:"🗺️ Campaigns by country"},
-  "mode.campaign.t":{pt:"Presença oficial da Vale em 19 países — atuação e portfólio do mapa vale.com.",en:"Vale's official presence in 19 countries — activities and portfolio from the vale.com map."},
+  "mode.campaign.t":{pt:"Presença oficial da Orbita em 19 países — atuação e portfólio do mapa orbita.com.",en:"Orbita's official presence in 19 countries — activities and portfolio from the orbita.com map."},
   "mode.boss.h":{pt:"🐉 Chefões",en:"🐉 Bosses"},
   "mode.boss.t":{pt:"Aventuras estilo mesa (tabletop): crises encadeadas com storytelling.",en:"Tabletop-style adventures: chained crises with storytelling."},
   "mode.dw.h":{pt:"📅 Diárias & 🏆 Semanais",en:"📅 Dailies & 🏆 Weeklies"},
@@ -115,7 +115,7 @@ var UI = {
   "pedagogy.reviewErrors":{pt:"📚 Revisar meus erros",en:"📚 Review my mistakes"},
   "pedagogy.reviewEmpty":{pt:"Nenhum erro registrado para revisão. Continue jogando!",en:"No errors recorded for review. Keep playing!"},
   "pedagogy.reviewMode":{pt:"Revisão guiada — sem penalidade",en:"Guided review — no penalty"},
-  "report.title":{pt:"📢 Como você reportaria na Vale?",en:"📢 How would you report at Vale?"},
+  "report.title":{pt:"📢 Como você reportaria na Orbita?",en:"📢 How would you report at Orbita?"},
   "report.sub":{pt:"Reconhecer e reportar faz parte do comportamento seguro.",en:"Recognizing and reporting is part of safe behavior."},
   "report.how":{pt:"💡 Na vida real: use o botão \"Reportar Phishing\" no Outlook ou acione a Segurança da Informação. Reportar cedo contém o incidente.",en:"💡 In real life: use the \"Report Phishing\" button in Outlook or contact Information Security. Reporting early contains the incident."},
   "report.helpdesk":{pt:"Help Desk / Service Desk",en:"Help Desk / Service Desk"},
@@ -126,7 +126,7 @@ var UI = {
   "debrief.title":{pt:"📋 Debriefing pedagógico",en:"📋 Pedagogical debrief"},
   "debrief.errors":{pt:"Pontos de atenção nesta missão",en:"Watch points in this mission"},
   "debrief.tip":{pt:"Hábito seguro",en:"Safe habit"},
-  "debrief.policy":{pt:"Consulte sempre as políticas oficiais da Vale.",en:"Always consult Vale's official policies."},
+  "debrief.policy":{pt:"Consulte sempre as políticas oficiais da Orbita.",en:"Always consult Orbita's official policies."},
   "weekly.theme":{pt:"Tema da semana",en:"Week theme"},
   "weekly.themeGoal":{pt:"Acerte 8 situações do tema da semana",en:"Get 8 scenarios right on the week theme"},
   "profile.reset":{pt:"🗑️ Resetar progresso",en:"🗑️ Reset progress"},
@@ -144,7 +144,7 @@ var UI = {
   "a11y.motion":{pt:"Reduzir animações",en:"Reduce motion"},
   "a11y.motionD":{pt:"Menos movimento na tela.",en:"Less on-screen movement."},
   "a11y.signs":{pt:"Hand Talk (Libras)",en:"Hand Talk (ASL)"},
-  "a11y.signsD":{pt:"Plugin Hand Talk da Vale — tradutor de Libras + 22 recursos assistivos (fonte, leitura, cores, navegação).",en:"Vale Hand Talk plugin — ASL translator + 22 assistive features (font, reading, colors, navigation)."},
+  "a11y.signsD":{pt:"Plugin Hand Talk da Orbita — tradutor de Libras + 22 recursos assistivos (fonte, leitura, cores, navegação).",en:"Orbita Hand Talk plugin — ASL translator + 22 assistive features (font, reading, colors, navigation)."},
   "a11y.signsHint":{pt:"Sem token Hand Talk: VLibras (PT) ou dicionário ASL (EN) como alternativa.",en:"Without Hand Talk token: VLibras (PT) or ASL dictionary (EN) as fallback."},
   "a11y.aslTitle":{pt:"Dicionário ASL",en:"ASL Dictionary"},
   "a11y.aslTranslate":{pt:"Traduzir seleção",en:"Translate selection"},
@@ -163,9 +163,9 @@ var UI = {
   "a11y.fontDown":{pt:"Diminuir fonte",en:"Decrease font size"},
   "a11y.fontUp":{pt:"Aumentar fonte",en:"Increase font size"},
   "a11y.structure":{pt:"Estrutura da página",en:"Page structure"},
-  "a11y.valeLink":{pt:"Acessibilidade Vale",en:"Vale Accessibility"},
+  "a11y.orbitaLink":{pt:"Acessibilidade Orbita",en:"Orbita Accessibility"},
   "a11y.catalogTitle":{pt:"Recursos de acessibilidade",en:"Accessibility features"},
-  "a11y.catalogSub":{pt:"Alinhado ao site vale.com — Hand Talk + recursos nativos do jogo.",en:"Aligned with vale.com — Hand Talk + native game features."},
+  "a11y.catalogSub":{pt:"Alinhado ao site orbita.com — Hand Talk + recursos nativos do jogo.",en:"Aligned with orbita.com — Hand Talk + native game features."},
   "a11y.cat.signs":{pt:"Libras, ASL e IA",en:"Sign language & AI"},
   "a11y.cat.font":{pt:"Fonte e legibilidade",en:"Font & readability"},
   "a11y.cat.nav":{pt:"Navegação assistida",en:"Assisted navigation"},
@@ -191,17 +191,17 @@ var UI = {
   "setup.prefsSub":{pt:"Ajuste o jogo ao seu perfil. Você pode mudar depois no Progresso.",en:"Adjust the game to your profile. You can change it later in Progress."},
   "setup.focusLabel":{pt:"🎯 Foco em aprender",en:"🎯 Focus on learning"},
   "setup.focusDesc":{pt:"Reduz ênfase em moedas e recompensas cosméticas para focar no conteúdo.",en:"Reduces emphasis on coins and cosmetic rewards to focus on content."},
-  "footer.reviewed":{pt:"Conteúdo revisado em Jul/2026 · alinhado às políticas oficiais de Segurança da Informação da Vale.",en:"Content reviewed Jul/2026 · aligned with Vale's official Information Security policies."},
+  "footer.reviewed":{pt:"Conteúdo revisado em Jul/2026 · alinhado às políticas oficiais de Segurança da Informação da Orbita.",en:"Content reviewed Jul/2026 · aligned with Orbita's official Information Security policies."},
   "daily.srsDue":{pt:"{n} revisões espaçadas priorizadas na missão de hoje",en:"{n} spaced reviews prioritized in today's mission"},
-  "map.vwmTitle":{pt:"A Vale no mundo",en:"Vale in the world"},
+  "map.vwmTitle":{pt:"A Orbita no mundo",en:"Orbita in the world"},
   "map.vwmHelper":{pt:"Clique em um país ou na legenda para explorar",en:"Click a country or legend item to explore"},
   "map.clearSelection":{pt:"Limpar seleção",en:"Clear selection"},
   "map.legendActivity":{pt:"Atuação:",en:"Activity:"},
   "map.legendProduct":{pt:"Portfólio de Produtos:",en:"Product portfolio:"},
-  "map.sub":{pt:"Com sede no Brasil, a Vale atua em 19 países no mapa oficial. Clique no mapa, na legenda ou na lista para explorar cada presença.",en:"Headquartered in Brazil, Vale is present in 19 countries on the official map. Click the map, legend or list to explore each presence."},
-  "map.aboutTitle":{pt:"Presença global da Vale",en:"Vale's global presence"},
-  "map.aboutIntro":{pt:"Com sede no Brasil, a Vale é uma empresa global de mineração, com presença em 19 países no mapa oficial. A legenda de Atuação e Portfólio segue o componente de vale.com/pt/onde-estamos.",en:"Headquartered in Brazil, Vale is a global mining company present in 19 countries on the official map. The Activity and Portfolio legend follows the component at vale.com/where-we-are."},
-  "map.aboutWhy":{pt:"A Vale atua em diferentes países para integrar de forma eficiente sua cadeia de valor global, conectando produção, processamento, logística e mercados consumidores — atendendo demandas regionais e apoiando o fornecimento de minerais para a indústria e a transição energética.",en:"Vale operates across countries to efficiently integrate its global value chain, connecting production, processing, logistics and consumer markets — meeting regional demand and supporting mineral supply for industry and the energy transition."},
+  "map.sub":{pt:"Com sede no Brasil, a Orbita atua em 19 países no mapa oficial. Clique no mapa, na legenda ou na lista para explorar cada presença.",en:"Headquartered in Brazil, Orbita is present in 19 countries on the official map. Click the map, legend or list to explore each presence."},
+  "map.aboutTitle":{pt:"Presença global da Orbita",en:"Orbita's global presence"},
+  "map.aboutIntro":{pt:"Com sede no Brasil, a Orbita é uma empresa global de mineração, com presença em 19 países no mapa oficial. A legenda de Atuação e Portfólio segue o componente de orbita.com/pt/onde-estamos.",en:"Headquartered in Brazil, Orbita is a global mining company present in 19 countries on the official map. The Activity and Portfolio legend follows the component at orbita.com/where-we-are."},
+  "map.aboutWhy":{pt:"A Orbita atua em diferentes países para integrar de forma eficiente sua cadeia de valor global, conectando produção, processamento, logística e mercados consumidores — atendendo demandas regionais e apoiando o fornecimento de minerais para a indústria e a transição energética.",en:"Orbita operates across countries to efficiently integrate its global value chain, connecting production, processing, logistics and consumer markets — meeting regional demand and supporting mineral supply for industry and the energy transition."},
   "map.aboutTransition":{pt:"A presença global está alinhada à produção de cobre, níquel e cobalto — fundamentais para eletrificação, baterias e energia limpa — e ao fornecimento de minério de ferro de alta qualidade para processos com menor emissão de carbono.",en:"The global footprint is aligned with copper, nickel and cobalt production — essential for electrification, batteries and clean energy — and high-quality iron ore supply for lower-carbon production processes."},
   "map.presenceTypesTitle":{pt:"Tipos de atuação (mapa oficial)",en:"Activity types (official map)"},
   "map.activityTitle":{pt:"Atuação",en:"Activity"},
@@ -222,10 +222,10 @@ var UI = {
   "map.hintIron":{pt:"Clique numa etapa no mapa animado ou na lista — proteja cada elo da cadeia Carajás → China.",en:"Click a stage on the animated map or in the list — protect each link in the Carajás → China chain."},
   "map.procWorld":{pt:"🌍 Mundo",en:"🌍 World"},
   "map.processTabsLabel":{pt:"Processos no mapa",en:"Map processes"},
-  "map.procWorldTip":{pt:"Visão global — 19 países do mapa oficial Vale.",en:"Global view — 19 countries from Vale's official map."},
+  "map.procWorldTip":{pt:"Visão global — 19 países do mapa oficial Orbita.",en:"Global view — 19 countries from Orbita's official map."},
   "map.procIron":{pt:"⛓️ Cadeia ferro",en:"⛓️ Iron chain"},
   "map.procIronTip":{pt:"Cadeia animada Carajás → China — mina, usina, ferrovia, terminal, porto e cliente.",en:"Animated Carajás → China chain — mine, plant, railway, terminal, port and customer."},
-  "map.missionTitle":{pt:"Missão da mineração Vale",en:"Vale mining mission"},
+  "map.missionTitle":{pt:"Missão da mineração Orbita",en:"Orbita mining mission"},
   "map.missionText":{pt:"Proteger a cadeia global de minério de ferro, pelotas, níquel, cobre, cobalto, PGM, ouro e prata — da mina ao cliente.",en:"Protect the global chain of iron ore, pellets, nickel, copper, cobalt, PGM, gold and silver — from mine to customer."},
   "map.chainFlow":{pt:"Mina → Usina → Ferrovia → Terminal → Porto → Cliente",en:"Mine → Plant → Railway → Terminal → Port → Customer"},
   "map.resilience":{pt:"Maturidade operacional",en:"Operational maturity"},
@@ -235,7 +235,7 @@ var UI = {
   "map.searchPh":{pt:"Buscar país…",en:"Search country…"},
   "map.searchEmpty":{pt:"Nenhum país encontrado.",en:"No country found."},
   "chain.title":{pt:"⛓️ Cadeia de Produção — Carajás → China",en:"⛓️ Production Chain — Carajás → China"},
-  "chain.sub":{pt:"Sistema Norte da Vale: da mina S11D (Carajás/PA), pela Estrada de Ferro Carajás (892 km) até o Terminal de Ponta da Madeira (São Luís/MA) e, por navio, até a China. Cada elo tem riscos cibernéticos — e uma brecha em qualquer ponto impacta toda a cadeia.",en:"Vale's Northern System: from the S11D mine (Carajás/PA), along the 892 km Carajás Railway to the Ponta da Madeira Terminal (São Luís/MA) and, by ship, to China. Every link has cyber risks — and one breach anywhere impacts the whole chain."},
+  "chain.sub":{pt:"Sistema Norte da Orbita: da mina S11D (Carajás/PA), pela Estrada de Ferro Carajás (892 km) até o Terminal de Ponta da Madeira (São Luís/MA) e, por navio, até a China. Cada elo tem riscos cibernéticos — e uma brecha em qualquer ponto impacta toda a cadeia.",en:"Orbita's Northern System: from the S11D mine (Carajás/PA), along the 892 km Carajás Railway to the Ponta da Madeira Terminal (São Luís/MA) and, by ship, to China. Every link has cyber risks — and one breach anywhere impacts the whole chain."},
   "chain.play":{pt:"▶️ Proteger etapa",en:"▶️ Protect stage"},
   "chain.done":{pt:"✅ Protegida",en:"✅ Protected"},
   "chain.scenarios":{pt:"situações",en:"scenarios"},
@@ -305,7 +305,7 @@ var UI = {
   "onboard.langT":{pt:"1) Idioma / Language",en:"1) Language / Idioma"},
   "onboard.langB":{pt:"O jogo, as perguntas, as respostas e a narração por voz seguem o idioma escolhido.",en:"The game, questions, answers and voice narration follow the chosen language."},
   "onboard.s1t":{pt:"3) Bem-vindo, Guardião!",en:"3) Welcome, Guardian!"},
-  "onboard.s1b":{pt:"Você protege a operação da Vale — da mina ao porto — contra ameaças cibernéticas. Suas decisões fortalecem a resiliência da cadeia global.",en:"You protect Vale's operations — from mine to port — against cyber threats. Your decisions strengthen the global chain's resilience."},
+  "onboard.s1b":{pt:"Você protege a operação da Orbita — da mina ao porto — contra ameaças cibernéticas. Suas decisões fortalecem a resiliência da cadeia global.",en:"You protect Orbita's operations — from mine to port — against cyber threats. Your decisions strengthen the global chain's resilience."},
   "onboard.s2t":{pt:"4) Mapa e campanhas",en:"4) Map and campaigns"},
   "onboard.s2b":{pt:"Explore o mapa mundial, escolha países e enfrente situações reais de segurança. Cada campanha aumenta seu XP e suas competências.",en:"Explore the world map, pick countries and face real security scenarios. Each campaign increases your XP and skills."},
   "onboard.s3t":{pt:"5) Chefões e cadeia",en:"5) Bosses and chain"},
@@ -378,7 +378,7 @@ var UI = {
   "nav.tip.stats":{pt:"Seu progresso e medalhas",en:"Your progress and medals"},
   "nav.tip.manager":{pt:"Painel do gestor",en:"Manager dashboard"},
   "footer.txt":{pt:"conscientização em Cyber Security e Segurança da Informação.",en:"Cyber Security and Information Security awareness."},
-  "footer.disc":{pt:"Ferramenta educativa interna. Referências públicas (vale.com/pt/onde-estamos). Siga sempre as políticas oficiais da Vale.",en:"Internal educational tool. Public references (vale.com/pt/onde-estamos). Always follow Vale's official policies."}
+  "footer.disc":{pt:"Ferramenta educativa interna. Referências públicas (orbita.com/pt/onde-estamos). Siga sempre as políticas oficiais da Orbita.",en:"Internal educational tool. Public references (orbita.com/pt/onde-estamos). Always follow Orbita's official policies."}
 };
 function t(key){ var e=UI[key]; return e? (e[L()]||e.pt) : key; }
 function langFlagSvg(lang){
@@ -464,35 +464,35 @@ var THEMES = {
 var COUNTRIES = [
   {id:"br", flag:"🇧🇷", name:{pt:"Brasil",en:"Brazil"},
     chain:{pt:"Sistema Norte: Carajás (S11D) → EFC (892 km) → Ponta da Madeira → China. Sistema Sudeste: Minas → EFVM → Tubarão.",en:"Northern System: Carajás (S11D) → Carajás Railway (892 km) → Ponta da Madeira → China. Southeastern System: Minas → EFVM → Tubarão."},
-    desc:{pt:"A Vale atua no Brasil de forma integrada, combinando mineração, logística e energia. Produz principalmente minério de ferro e metais como níquel e cobre, e opera ferrovias, portos e trens que conectam as operações aos mercados globais — com presença em iniciativas socioambientais e culturais nos territórios onde está presente.",en:"In Brazil, Vale operates in an integrated way, combining mining, logistics and energy. It mainly produces iron ore and metals such as nickel and copper, and runs railways, ports and trains connecting operations to global markets — with a relevant presence in social, environmental and cultural initiatives in the territories where it operates."},
+    desc:{pt:"A Orbita atua no Brasil de forma integrada, combinando mineração, logística e energia. Produz principalmente minério de ferro e metais como níquel e cobre, e opera ferrovias, portos e trens que conectam as operações aos mercados globais — com presença em iniciativas socioambientais e culturais nos territórios onde está presente.",en:"In Brazil, Orbita operates in an integrated way, combining mining, logistics and energy. It mainly produces iron ore and metals such as nickel and copper, and runs railways, ports and trains connecting operations to global markets — with a relevant presence in social, environmental and cultural initiatives in the territories where it operates."},
     themes:["phishing","password","ot","data","port"]},
   {id:"ca", flag:"🇨🇦", name:{pt:"Canadá",en:"Canada"},
     chain:{pt:"Operação independente de metais base — minas subterrâneas, portos e escritórios.",en:"Standalone base-metals operation — underground mines, ports and offices."},
-    desc:{pt:"No Canadá, a Vale atua principalmente na produção de metais básicos para a transição energética, minas subterrâneas e operações de produção e beneficiamento de níquel, cobre, cobalto e metais do grupo da platina. O país também abriga infraestrutura logística, portos e escritórios.",en:"In Canada, Vale mainly produces base metals for the energy transition, underground mines and operations focused on nickel, copper, cobalt and platinum group metals production and processing. The country also hosts logistics infrastructure, ports and offices."},
+    desc:{pt:"No Canadá, a Orbita atua principalmente na produção de metais básicos para a transição energética, minas subterrâneas e operações de produção e beneficiamento de níquel, cobre, cobalto e metais do grupo da platina. O país também abriga infraestrutura logística, portos e escritórios.",en:"In Canada, Orbita mainly produces base metals for the energy transition, underground mines and operations focused on nickel, copper, cobalt and platinum group metals production and processing. The country also hosts logistics infrastructure, ports and offices."},
     themes:["phishing","data","ot","device"]},
   {id:"gb", flag:"🇬🇧", name:{pt:"Reino Unido",en:"United Kingdom"},
     chain:{pt:"Refino de níquel de alta pureza — cadeia industrial independente do Brasil.",en:"High-purity nickel refining — industrial chain independent from Brazil."},
-    desc:{pt:"A Vale atua no Reino Unido por meio do refino de níquel de alta pureza, com foco no atendimento a aplicações industriais e à cadeia de metais da transição energética.",en:"In the United Kingdom, Vale operates through high-purity nickel refining, focused on industrial applications and the energy transition metals supply chain."},
+    desc:{pt:"A Orbita atua no Reino Unido por meio do refino de níquel de alta pureza, com foco no atendimento a aplicações industriais e à cadeia de metais da transição energética.",en:"In the United Kingdom, Orbita operates through high-purity nickel refining, focused on industrial applications and the energy transition metals supply chain."},
     themes:["data","remote","phishing","ot"]},
   {id:"om", flag:"🇴🇲", name:{pt:"Omã",en:"Oman"},
     chain:{pt:"Usina de pelotização em Sohar — distribuição para Ásia e Europa.",en:"Sohar pelletizing plant — distribution to Asia and Europe."},
-    desc:{pt:"Em Omã, a Vale atua com foco industrial e logístico por meio de um complexo em Sohar, que inclui usina de pelotização e infraestrutura portuária.",en:"In Oman, Vale operates with an industrial and logistics focus through a complex in Sohar, including a pelletizing plant and port infrastructure."},
+    desc:{pt:"Em Omã, a Orbita atua com foco industrial e logístico por meio de um complexo em Sohar, que inclui usina de pelotização e infraestrutura portuária.",en:"In Oman, Orbita operates with an industrial and logistics focus through a complex in Sohar, including a pelletizing plant and port infrastructure."},
     themes:["ot","port","phishing","device"]},
   {id:"my", flag:"🇲🇾", name:{pt:"Malásia",en:"Malaysia"},
     chain:{pt:"Terminal Teluk Rubiah — movimentação, armazenagem e distribuição de minério na Ásia.",en:"Teluk Rubiah terminal — ore handling, storage and distribution across Asia."},
-    desc:{pt:"Na Malásia, a presença da Vale está voltada à logística e à distribuição, com operações no terminal marítimo de Teluk Rubiah — movimentação, armazenagem e distribuição do minério de ferro, conectando as operações no Brasil aos clientes na Ásia.",en:"In Malaysia, Vale's presence is focused on logistics and distribution, with operations at the Teluk Rubiah maritime terminal — handling, storage and distribution of iron ore, connecting Brazilian operations to customers in Asia."},
+    desc:{pt:"Na Malásia, a presença da Orbita está voltada à logística e à distribuição, com operações no terminal marítimo de Teluk Rubiah — movimentação, armazenagem e distribuição do minério de ferro, conectando as operações no Brasil aos clientes na Ásia.",en:"In Malaysia, Orbita's presence is focused on logistics and distribution, with operations at the Teluk Rubiah maritime terminal — handling, storage and distribution of iron ore, connecting Brazilian operations to customers in Asia."},
     themes:["port","ot","device","phishing"]},
   {id:"jp", flag:"🇯🇵", name:{pt:"Japão",en:"Japan"},
     chain:{pt:"Refino e fornecimento de produtos de níquel para clientes globais.",en:"Nickel refining and supply of nickel products to global customers."},
-    desc:{pt:"A Vale atua no Japão por meio de atividades industriais e comerciais, incluindo o refino de níquel e seu fornecimento para clientes ao redor do mundo.",en:"In Japan, Vale operates through industrial and commercial activities, including nickel refining and supply to customers around the world."},
+    desc:{pt:"A Orbita atua no Japão por meio de atividades industriais e comerciais, incluindo o refino de níquel e seu fornecimento para clientes ao redor do mundo.",en:"In Japan, Orbita operates through industrial and commercial activities, including nickel refining and supply to customers around the world."},
     themes:["data","phishing","password","ot"]},
   {id:"id", flag:"🇮🇩", name:{pt:"Indonésia",en:"Indonesia"},
-    chain:{pt:"Participação minoritária na PT Vale Indonesia — exploração e operação de níquel.",en:"Minority stake in PT Vale Indonesia — nickel exploration and operation."},
-    desc:{pt:"A atuação da Vale na Indonésia ocorre por meio de uma participação minoritária na PT Vale Indonesia, que explora ativos de níquel no país.",en:"Vale's presence in Indonesia is through a minority stake in PT Vale Indonesia, which explores nickel assets in the country."},
+    chain:{pt:"Participação minoritária na PT Orbita Indonesia — exploração e operação de níquel.",en:"Minority stake in PT Orbita Indonesia — nickel exploration and operation."},
+    desc:{pt:"A atuação da Orbita na Indonésia ocorre por meio de uma participação minoritária na PT Orbita Indonesia, que explora ativos de níquel no país.",en:"Orbita's presence in Indonesia is through a minority stake in PT Orbita Indonesia, which explores nickel assets in the country."},
     themes:["ot","phishing","device","data"]},
   {id:"us", flag:"🇺🇸", name:{pt:"Estados Unidos",en:"United States"},
     chain:{pt:"Escritório comercial e Mega Hub — risco focado em BEC e contratos.",en:"Commercial office and Mega Hub — risk focused on BEC and contracts."},
-    desc:{pt:"Escritórios comerciais nos EUA, com atuação também como Mega Hub na estratégia global da Vale. Fraudes de pagamento (BEC) são a principal ameaça cibernética neste contexto.",en:"Commercial offices in the US, also serving as a Mega Hub in Vale's global strategy. Payment fraud (BEC) is the main cyber threat in this context."},
+    desc:{pt:"Escritórios comerciais nos EUA, com atuação também como Mega Hub na estratégia global da Orbita. Fraudes de pagamento (BEC) são a principal ameaça cibernética neste contexto.",en:"Commercial offices in the US, also serving as a Mega Hub in Orbita's global strategy. Payment fraud (BEC) is the main cyber threat in this context."},
     themes:["bec","phishing","password","data"]},
   {id:"pe", flag:"🇵🇪", name:{pt:"Peru",en:"Peru"},
     chain:{pt:"Presença de exploração greenfield — dados geológicos sensíveis.",en:"Greenfield exploration presence — sensitive geological data."},
@@ -516,11 +516,11 @@ var COUNTRIES = [
     themes:["data","remote","phishing","device"]},
   {id:"ae", flag:"🇦🇪", name:{pt:"Emirados Árabes",en:"UAE"},
     chain:{pt:"Escritório regional e Mega Hub — viagens e dispositivos móveis.",en:"Regional office and Mega Hub — travel and mobile devices."},
-    desc:{pt:"Escritório regional em Dubai, também integrado à rede de Mega Hubs da Vale na região do Oriente Médio.",en:"Regional office in Dubai, also part of Vale's Mega Hub network in the Middle East."},
+    desc:{pt:"Escritório regional em Dubai, também integrado à rede de Mega Hubs da Orbita na região do Oriente Médio.",en:"Regional office in Dubai, also part of Orbita's Mega Hub network in the Middle East."},
     themes:["device","remote","password","phishing"]},
   {id:"cn", flag:"🇨🇳", name:{pt:"China",en:"China"},
     chain:{pt:"Principal destino de minério de ferro — acordos com portos para blending.",en:"Main iron ore destination — port agreements for blending."},
-    desc:{pt:"Na China, a Vale mantém presença comercial e de relacionamento com o mercado por meio de seus escritórios, apoiando clientes e conexões com a cadeia global de minério de ferro e metais. O país é o principal destino de suas vendas.",en:"In China, Vale maintains a commercial and market relationship presence through its offices, supporting customers and connections with the global iron ore and metals supply chain. China is the main destination for its sales."},
+    desc:{pt:"Na China, a Orbita mantém presença comercial e de relacionamento com o mercado por meio de seus escritórios, apoiando clientes e conexões com a cadeia global de minério de ferro e metais. O país é o principal destino de suas vendas.",en:"In China, Orbita maintains a commercial and market relationship presence through its offices, supporting customers and connections with the global iron ore and metals supply chain. China is the main destination for its sales."},
     themes:["data","phishing","bec","device"]},
   {id:"in", flag:"🇮🇳", name:{pt:"Índia",en:"India"},
     chain:{pt:"Escritório comercial — relações com mercado indiano.",en:"Commercial office — relations with the Indian market."},
@@ -576,14 +576,14 @@ var AVATARS = [
 var FRAMES = [
   {id:"default", ico:"⬜", cost:0, css:"frame-default", name:{pt:"Sem moldura",en:"No frame"}, desc:{pt:"Visual limpo",en:"Clean look"}},
   {id:"gold", ico:"🥇", cost:40, css:"frame-gold", name:{pt:"Moldura Ouro",en:"Gold frame"}, desc:{pt:"Conquistas e excelência",en:"Achievements and excellence"}},
-  {id:"vale", ico:"💚", cost:0, css:"frame-vale", name:{pt:"Vale Oficial",en:"Official Vale"}, desc:{pt:"Cores da marca Vale",en:"Vale brand colors"}},
+  {id:"orbita", ico:"💚", cost:0, css:"frame-orbita", name:{pt:"Orbita Oficial",en:"Official Orbita"}, desc:{pt:"Cores da marca Orbita",en:"Orbita brand colors"}},
   {id:"lock", ico:"🔒", cost:45, css:"frame-lock", name:{pt:"Cadeado digital",en:"Digital lock"}, desc:{pt:"Segurança da informação",en:"Information security"}},
   {id:"chain", ico:"⛓️", cost:55, css:"frame-chain", unlock:"chain3", name:{pt:"Cadeia de suprimentos",en:"Supply chain"}, desc:{pt:"Desbloqueia com 3 etapas da cadeia",en:"Unlock with 3 chain stages"}},
   {id:"trophy", ico:"🏆", cost:70, css:"frame-trophy", name:{pt:"Conquistador",en:"Champion"}, desc:{pt:"Top do ranking de equipes",en:"Top of team rankings"}},
   {id:"shield", ico:"🔰", cost:80, css:"frame-shield", name:{pt:"Escudo reforçado",en:"Reinforced shield"}, desc:{pt:"Defesa máxima da operação",en:"Maximum operation defense"}}
 ];
 var SKINS = [
-  {id:"default", ico:"🌐", cost:0, css:"skin-default", name:{pt:"Vale Padrão",en:"Vale Default"}, desc:{pt:"Visual oficial do jogo",en:"Official game look"}},
+  {id:"default", ico:"🌐", cost:0, css:"skin-default", name:{pt:"Orbita Padrão",en:"Orbita Default"}, desc:{pt:"Visual oficial do jogo",en:"Official game look"}},
   {id:"forest", ico:"🌿", cost:50, css:"skin-forest", name:{pt:"Floresta Amazônica",en:"Amazon Forest"}, desc:{pt:"Operações no bioma verde",en:"Operations in the green biome"}},
   {id:"ocean", ico:"🌊", cost:60, css:"skin-ocean", name:{pt:"Porto & Mar",en:"Port & Sea"}, desc:{pt:"Terminais e logística marítima",en:"Terminals and maritime logistics"}},
   {id:"mine", ico:"⛰️", cost:70, css:"skin-mine", name:{pt:"Mineração",en:"Mining"}, desc:{pt:"Tons terrosos da operação",en:"Earthy mining operation tones"}},
@@ -686,7 +686,7 @@ var A11Y_CATALOG=[
     {pt:"Controle de contraste",en:"Contrast control"},
     {pt:"Ajuste de fonte (A+ / A-)",en:"Font adjustment (A+ / A-)"},
     {pt:"Mudança de idioma PT ↔ EN",en:"Language switch PT ↔ EN"},
-    {pt:"Página de acessibilidade Vale",en:"Vale accessibility page"}
+    {pt:"Página de acessibilidade Orbita",en:"Orbita accessibility page"}
   ]}
 ];
 function sanitizeA11y(){
@@ -885,7 +885,7 @@ var PERSONAL_BY_THEME={
   port:{pt:"Na vida pessoal: estranhos fotografando sua casa ou prédio podem mapear rotinas — avise a segurança.",en:"In personal life: strangers photographing your home or building may map routines — alert security."}
 };
 var BOSS_THEME_DEFAULT={ransom:"ot",ceo:"bec",otintr:"ot",omphish:"phishing",leakchain:"data",portintr:"port"};
-var VALE_POLICY_URL="https://www.vale.com/pt/sustentabilidade/governanca";
+var ORBITA_POLICY_URL="https://www.orbita.com/pt/sustentabilidade/governanca";
 
 function fullBank(){ return BANK.concat(typeof COUNTRY_BANK!=="undefined"?COUNTRY_BANK:[]); }
 function getPersonal(q){ return q&&(q.personal||(q.theme&&PERSONAL_BY_THEME[q.theme]))||null; }
@@ -1004,7 +1004,7 @@ function renderCampaignDebrief(){
     wrong.slice(0,3).forEach(function(x){ html+='<li><strong>'+tt(THEMES[x.q.theme])+'</strong>: '+tt(x.q.why)+'</li>'; }); html+='</ul>'; }
   var tip=wrong.length?wrong[0].q.theme:weakestThemeKey();
   if(tip&&PERSONAL_BY_THEME[tip]) html+='<div class="debrief-tip"><span class="debrief-k">'+t("debrief.tip")+':</span> '+tt(PERSONAL_BY_THEME[tip])+'</div>';
-  html+='<p class="muted debrief-policy"><a href="'+VALE_POLICY_URL+'" target="_blank" rel="noopener">'+t("debrief.policy")+'</a></p>';
+  html+='<p class="muted debrief-policy"><a href="'+ORBITA_POLICY_URL+'" target="_blank" rel="noopener">'+t("debrief.policy")+'</a></p>';
   host.innerHTML=html;
 }
 function startReviewErrors(){
@@ -1032,7 +1032,7 @@ function renderRank(host){
 }
 
 /* ==========================================================
-   MAPA GLOBAL (D3 / vale-world-map.js)
+   MAPA GLOBAL (D3 / orbita-world-map.js)
    ========================================================== */
 var VW=960,VH=520,mapProcess=null,chainStageActive=null,mapSearchQuery="",view={x:0,y:0,w:VW,h:VH};
 var MAP_PROCESSES=[{id:null, label:"map.procWorld", tip:"map.procWorldTip"}];
@@ -1330,24 +1330,24 @@ function renderAnimatedChainMap(){
 var mapHitActive=null;
 var THREAT_RESILIENCE={phishing:2,password:2,bec:3,malware:5,ransomware:15,ot:20,sap:25,data:3,device:4,remote:3,port:5};
 function officialPresenceHTML(gameId){
-  if(typeof ValeWorldMap==="undefined"||!ValeWorldMap.getCountry) return "";
-  var off=ValeWorldMap.getCountry(gameId,L()); if(!off) return "";
+  if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getCountry) return "";
+  var off=OrbitaWorldMap.getCountry(gameId,L()); if(!off) return "";
   var h="";
   if(off.activities.length){
     h+='<div class="md-presence"><b>'+t("map.activityTitle")+':</b><div class="presence-row">'
-      +off.activities.map(function(id){ return '<span class="presence-chip">'+ValeWorldMap.getActivityLabel(id,L())+'</span>'; }).join("")
+      +off.activities.map(function(id){ return '<span class="presence-chip">'+OrbitaWorldMap.getActivityLabel(id,L())+'</span>'; }).join("")
       +'</div></div>';
   }
   if(off.products.length){
     h+='<div class="md-presence"><b>'+t("map.productsTitle")+':</b><div class="presence-row">'
-      +off.products.map(function(id){ return '<span class="presence-chip mineral-chip">'+ValeWorldMap.getProductLabel(id,L())+'</span>'; }).join("")
+      +off.products.map(function(id){ return '<span class="presence-chip mineral-chip">'+OrbitaWorldMap.getProductLabel(id,L())+'</span>'; }).join("")
       +'</div></div>';
   }
   return h;
 }
 function renderMapAbout(){
-  var el=$("mapAbout"); if(!el||typeof ValeWorldMap==="undefined"||!ValeWorldMap.getActivityItems) return;
-  var chips=ValeWorldMap.getActivityItems().map(function(it){
+  var el=$("mapAbout"); if(!el||typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getActivityItems) return;
+  var chips=OrbitaWorldMap.getActivityItems().map(function(it){
     return '<span class="presence-chip">'+(L()==="en"?it.labelEn:it.labelPt)+'</span>';
   }).join("");
   el.innerHTML='<p class="map-about-p">'+t("map.aboutIntro")+'</p>'
@@ -1365,7 +1365,7 @@ function restoreVwmLegendHTML(){
 function renderMapLegend(){
   var leg=$("mapLegend"); if(!leg) return;
   restoreVwmLegendHTML();
-  if(typeof ValeWorldMap!=="undefined") ValeWorldMap.refresh();
+  if(typeof OrbitaWorldMap!=="undefined") OrbitaWorldMap.refresh();
 }
 function formatCountryListSummary(vc){
   var lines=formatCountryListLines(vc);
@@ -1373,14 +1373,14 @@ function formatCountryListSummary(vc){
   return lines.acts||lines.prods||"";
 }
 function formatCountryListLines(vc){
-  if(typeof ValeWorldMap==="undefined") return {acts:"",prods:""};
-  var f=ValeWorldMap.getFilter?ValeWorldMap.getFilter():null;
+  if(typeof OrbitaWorldMap==="undefined") return {acts:"",prods:""};
+  var f=OrbitaWorldMap.getFilter?OrbitaWorldMap.getFilter():null;
   if(f&&f.filterId){
-    if(f.filterType==="activity"&&vc.activities.indexOf(f.filterId)>=0) return {acts:ValeWorldMap.getActivityLabel(f.filterId,L()),prods:""};
-    if(f.filterType==="product"&&vc.products.indexOf(f.filterId)>=0) return {acts:"",prods:ValeWorldMap.getProductLabel(f.filterId,L())};
+    if(f.filterType==="activity"&&vc.activities.indexOf(f.filterId)>=0) return {acts:OrbitaWorldMap.getActivityLabel(f.filterId,L()),prods:""};
+    if(f.filterType==="product"&&vc.products.indexOf(f.filterId)>=0) return {acts:"",prods:OrbitaWorldMap.getProductLabel(f.filterId,L())};
   }
-  var actLabels=vc.activities.map(function(id){ return ValeWorldMap.getActivityLabel(id,L()); });
-  var prodLabels=vc.products.map(function(id){ return ValeWorldMap.getProductLabel(id,L()); });
+  var actLabels=vc.activities.map(function(id){ return OrbitaWorldMap.getActivityLabel(id,L()); });
+  var prodLabels=vc.products.map(function(id){ return OrbitaWorldMap.getProductLabel(id,L()); });
   function trimList(labels){
     if(!labels.length) return "";
     if(labels.length<=2) return labels.join(", ");
@@ -1389,33 +1389,33 @@ function formatCountryListLines(vc){
   return {acts:trimList(actLabels),prods:trimList(prodLabels)};
 }
 function clearMapFilter(){
-  if(typeof ValeWorldMap!=="undefined"&&ValeWorldMap.clearSelection) ValeWorldMap.clearSelection();
+  if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.clearSelection) OrbitaWorldMap.clearSelection();
   renderCountryList();
 }
 function countryMatchesMapFilter(vc){
-  if(typeof ValeWorldMap==="undefined"||!ValeWorldMap.getFilter) return true;
-  var f=ValeWorldMap.getFilter();
+  if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getFilter) return true;
+  var f=OrbitaWorldMap.getFilter();
   if(!f||!f.filterId) return true;
   if(f.filterType==="activity") return vc.activities.indexOf(f.filterId)>=0;
   if(f.filterType==="product") return vc.products.indexOf(f.filterId)>=0;
   return true;
 }
 function mapFilterLabel(){
-  if(typeof ValeWorldMap==="undefined"||!ValeWorldMap.getFilter) return "";
-  var f=ValeWorldMap.getFilter();
+  if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getFilter) return "";
+  var f=OrbitaWorldMap.getFilter();
   if(!f||!f.filterId) return "";
-  if(f.filterType==="activity") return ValeWorldMap.getActivityLabel(f.filterId,L());
-  if(f.filterType==="product") return ValeWorldMap.getProductLabel(f.filterId,L());
+  if(f.filterType==="activity") return OrbitaWorldMap.getActivityLabel(f.filterId,L());
+  if(f.filterType==="product") return OrbitaWorldMap.getProductLabel(f.filterId,L());
   return "";
 }
 function renderCountryList(){
   var list=$("countryList"); if(!list) return;
   list.innerHTML="";
   list.className="country-groups";
-  if(typeof ValeWorldMap==="undefined"||!ValeWorldMap.getCountries){
+  if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getCountries){
     return;
   }
-  var countries=ValeWorldMap.getCountries(L());
+  var countries=OrbitaWorldMap.getCountries(L());
   countries.sort(function(a,b){
     if(a.gameId==="br") return -1;
     if(b.gameId==="br") return 1;
@@ -1436,8 +1436,8 @@ function renderCountryList(){
     rows.innerHTML='<p class="country-list-empty">'+t("map.countryListEmpty")+'</p>';
   } else playable.forEach(function(vc){
     var c=COUNTRIES.filter(function(x){ return x.id===vc.gameId; })[0]; if(!c) return;
-    var actLabels=vc.activities.map(function(id){ return ValeWorldMap.getActivityLabel(id,L()); });
-    var prodLabels=vc.products.map(function(id){ return ValeWorldMap.getProductLabel(id,L()); });
+    var actLabels=vc.activities.map(function(id){ return OrbitaWorldMap.getActivityLabel(id,L()); });
+    var prodLabels=vc.products.map(function(id){ return OrbitaWorldMap.getProductLabel(id,L()); });
     var lines=formatCountryListLines(vc);
     var summary=formatCountryListSummary(vc);
     var detailHtml="";
@@ -1478,29 +1478,29 @@ function setMapHitHighlight(id, scroll){
   document.querySelectorAll("#countryList .country-btn").forEach(function(b){
     b.classList.toggle("list-active",!!id&&b.getAttribute("data-id")===id);
   });
-  if(typeof ValeWorldMap!=="undefined"&&ValeWorldMap.isReady()){
-    if(id) ValeWorldMap.highlightGameId(id,{keepFilter:true});
-    else ValeWorldMap.clearCountryHighlight();
+  if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.isReady()){
+    if(id) OrbitaWorldMap.highlightGameId(id,{keepFilter:true});
+    else OrbitaWorldMap.clearCountryHighlight();
   }
   if(scroll&&id) scrollMapListItem('.country-btn[data-id="'+id+'"]:not(.map-hidden)');
 }
-function drawValeRoutes(){
-  if(typeof ValeWorldMap==="undefined"||!ValeWorldMap.isReady()) return;
+function drawOrbitaRoutes(){
+  if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.isReady()) return;
   var activeRoute=mapProcess&&mapProcess!=="iron"?mapProcess:null;
   var routes=SUPPLY_ROUTES.map(function(r){
     var cls=r.cls||"";
     if(activeRoute) cls+=(r.id===activeRoute?" route-active":" route-dim");
     return {pts:r.pts, cls:cls};
   });
-  ValeWorldMap.drawRoutes(routes);
+  OrbitaWorldMap.drawRoutes(routes);
 }
-var valeMapInitPromise=null;
-function ensureValeWorldMap(cb){
-  if(typeof ValeWorldMap==="undefined"){ if(cb) cb(false); return; }
-  if(ValeWorldMap.isReady()){ if(cb) cb(true); return; }
+var orbitaMapInitPromise=null;
+function ensureOrbitaWorldMap(cb){
+  if(typeof OrbitaWorldMap==="undefined"){ if(cb) cb(false); return; }
+  if(OrbitaWorldMap.isReady()){ if(cb) cb(true); return; }
   restoreVwmLegendHTML();
-  if(!valeMapInitPromise){
-    valeMapInitPromise=ValeWorldMap.init({
+  if(!orbitaMapInitPromise){
+    orbitaMapInitPromise=OrbitaWorldMap.init({
       svg:$("mapSvg"), tooltip:$("mapTooltip"), loading:$("mapLoading"), clearBtn:$("mapClearBtn"),
       activityLegend:$("mapActivityLegend"), productLegend:$("mapProductLegend"),
       lang:L,
@@ -1512,7 +1512,7 @@ function ensureValeWorldMap(cb){
       onFilterChange:function(){ renderCountryList(); }
     });
   }
-  valeMapInitPromise.then(function(){ if(cb) cb(true); }).catch(function(){ if(cb) cb(false); });
+  orbitaMapInitPromise.then(function(){ if(cb) cb(true); }).catch(function(){ if(cb) cb(false); });
 }
 function finishWorldMapUI(){
   updateViewBox();
@@ -1536,7 +1536,7 @@ function openMapDetailCountry(id){
   mapHitActive=id;
   setMapHitHighlight(id);
   var body=$("mapDetailBody"), panel=$("mapDetail"); if(!body||!panel) return;
-  var official=(typeof ValeWorldMap!=="undefined"&&ValeWorldMap.getCountry)?ValeWorldMap.getCountry(id,L()):null;
+  var official=(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.getCountry)?OrbitaWorldMap.getCountry(id,L()):null;
   var themes=c.themes.map(function(th){ return '<span class="tag">'+tt(THEMES[th])+'</span>'; }).join(" ");
   var prog=S.done[c.id]? ((L()==="pt"?"Melhor: ":"Best: ")+S.done[c.id]+"%") : (L()==="pt"?"Ainda não jogada":"Not played yet");
   body.innerHTML='<h3>'+c.flag+' '+(official?official.name:tt(c.name))+'</h3>'
@@ -1609,11 +1609,11 @@ function drawMap(){
   var cl=$("countryList");
   if(cl) cl.hidden=false;
   var loadNode=$("mapLoading");
-  if(loadNode&&typeof ValeWorldMap!=="undefined"&&ValeWorldMap.isReady()) loadNode.hidden=true;
+  if(loadNode&&typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.isReady()) loadNode.hidden=true;
   else if(loadNode){ loadNode.hidden=false; loadNode.classList.remove("is-error"); }
-  ensureValeWorldMap(function(ok){
+  ensureOrbitaWorldMap(function(ok){
     if(ok){
-      drawValeRoutes();
+      drawOrbitaRoutes();
       setMapHitHighlight(mapHitActive);
     }
     finishWorldMapUI();
@@ -1920,7 +1920,7 @@ function cmapScene(){
   /* navio atracado */
   s+='<g transform="translate(800,236)"><path d="M0,0 L64,0 L58,16 L6,16 Z" fill="#b23b32" stroke="#7d271f" stroke-width="1.5"/><rect x="10" y="-10" width="44" height="10" fill="#7a4f28"/><rect x="46" y="-20" width="14" height="12" fill="#e8eef1"/></g>';
 
-  /* ===== 8. ROTA MARÍTIMA → CHINA (Valemax navegando) ===== */
+  /* ===== 8. ROTA MARÍTIMA → CHINA (Orbitamax navegando) ===== */
   s+='<g class="cm-ship"><path d="M0,0 L74,0 L66,20 L8,20 Z" fill="#c0453b" stroke="#7d271f" stroke-width="1.5"/><rect x="12" y="-12" width="52" height="12" fill="#7a4f28"/><rect x="54" y="-24" width="16" height="14" fill="#eef3f5"/><rect x="57" y="-21" width="10" height="6" fill="#9fb7c2"/></g>';
   /* China (destino) */
   s+='<polygon points="962,196 1000,190 1000,300 950,300 946,244 958,220" fill="#b0392e" opacity=".9"/>';
@@ -1991,7 +1991,7 @@ var BOSS_TIERS={
     {pt:"✅ Operações portuárias sem impacto",en:"✅ Port operations unaffected"},
     {pt:"✅ Clientes atendidos no prazo",en:"✅ Customers served on time"},
     {pt:"✅ Auditoria sem não conformidades",en:"✅ Audit with no non-conformities"}
-  ],msg:{pt:"Você antecipou ameaças, coordenou equipes e protegeu toda a cadeia da mina ao porto. Sua liderança fortaleceu a resiliência global da Vale.",en:"You anticipated threats, coordinated teams and protected the whole chain from mine to port. Your leadership strengthened Vale's global resilience."}},
+  ],msg:{pt:"Você antecipou ameaças, coordenou equipes e protegeu toda a cadeia da mina ao porto. Sua liderança fortaleceu a resiliência global da Orbita.",en:"You anticipated threats, coordinated teams and protected the whole chain from mine to port. Your leadership strengthened Orbita's global resilience."}},
   gold:{ico:"🥇",title:{pt:"Vitória Ouro",en:"Gold Victory"},outcomes:[
     {pt:"✅ Operação mantida",en:"✅ Operation maintained"},
     {pt:"✅ Impactos mínimos aos negócios",en:"✅ Minimal business impact"},
@@ -2571,7 +2571,7 @@ function renderCertChecklist(){
 function exportProgress(){
   var blob=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
   var a=document.createElement("a"); a.href=URL.createObjectURL(blob);
-  a.download="guardiao-vale-"+(S.name||"jogador").replace(/\s+/g,"-")+".json";
+  a.download="guardiao-orbita-"+(S.name||"jogador").replace(/\s+/g,"-")+".json";
   a.click(); URL.revokeObjectURL(a.href);
 }
 function importProgress(file){
@@ -2714,7 +2714,7 @@ function renderCertificatePreview(){
   ctx.strokeStyle="#007E7A"; ctx.lineWidth=6; ctx.strokeRect(18,18,W-36,H-36);
   ctx.strokeStyle="#ECB11F"; ctx.lineWidth=2; ctx.strokeRect(28,28,W-56,H-56);
   ctx.fillStyle="#007E7A"; ctx.font="600 14px Segoe UI,sans-serif"; ctx.textAlign="center";
-  ctx.fillText("VALE", W/2, 52);
+  ctx.fillText("ORBITA", W/2, 52);
   ctx.fillStyle="#1a1a1a"; ctx.font="700 24px Segoe UI,sans-serif";
   ctx.fillText(pt?"Certificado de Participação":"Certificate of Participation", W/2, 82);
   ctx.font="500 13px Segoe UI,sans-serif"; ctx.fillStyle="#3d4f55";
@@ -2739,7 +2739,7 @@ function renderCertificatePreview(){
   y=certDrawResilienceSeal(ctx,W,y,pt);
   y+=28;
   ctx.textAlign="center"; ctx.font="italic 10px Segoe UI,sans-serif"; ctx.fillStyle="#3d4f55";
-  ctx.fillText(pt?"Reconhece a participação na trilha educativa de Cyber Security da Vale.":"Recognizes participation in Vale's Cyber Security learning journey.", W/2, y);
+  ctx.fillText(pt?"Reconhece a participação na trilha educativa de Cyber Security da Orbita.":"Recognizes participation in Orbita's Cyber Security learning journey.", W/2, y);
   ctx.font="500 10px Segoe UI,sans-serif"; ctx.fillStyle="#5c706e";
   ctx.fillText(dateStr, W/2, y+18);
   ctx.fillText(pt?"Ferramenta educativa interna — não substitui certificações oficiais.":"Internal educational tool — not an official certification.", W/2, y+34);
@@ -2751,7 +2751,7 @@ function downloadCertificate(){
     if(!blob) return;
     var url=URL.createObjectURL(blob);
     var a=document.createElement("a");
-    a.href=url; a.download="guardiao-vale-certificado.png";
+    a.href=url; a.download="guardiao-orbita-certificado.png";
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function(){ URL.revokeObjectURL(url); },500);
   },"image/png");
@@ -2987,7 +2987,7 @@ function bind(){
   document.addEventListener("keydown",function(e){
     if(e.key==="Escape"){
       if($("mapDetail")&&!$("mapDetail").hidden){ closeMapDetail(); return; }
-      var tip=$("mapTooltip"); if(tip&&!tip.hidden){ tip.hidden=true; if(typeof ValeWorldMap!=="undefined") ValeWorldMap.clearSelection(); return; }
+      var tip=$("mapTooltip"); if(tip&&!tip.hidden){ tip.hidden=true; if(typeof OrbitaWorldMap!=="undefined") OrbitaWorldMap.clearSelection(); return; }
     }
   });
   on("mapSearch","input",function(){ mapSearchQuery=this.value; applyMapSearch(); });
@@ -2999,7 +2999,7 @@ function dismissBlockingUI(){
     toggleNavMore(false);
     toggleA11yMenu(false);
     var tip=$("mapTooltip"); if(tip) tip.hidden=true;
-    if(typeof ValeWorldMap!=="undefined"&&ValeWorldMap.clearSelection) ValeWorldMap.clearSelection();
+    if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.clearSelection) OrbitaWorldMap.clearSelection();
     document.body.classList.remove("nav-hidden");
   }catch(e){}
 }

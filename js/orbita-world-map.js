@@ -1,5 +1,5 @@
-/* Mapa "A Vale no mundo" — baseado no componente oficial vale.com/pt/onde-estamos */
-var ValeWorldMap = (function () {
+/* Mapa "A Orbita no mundo" — baseado no componente oficial orbita.com/pt/onde-estamos */
+var OrbitaWorldMap = (function () {
   var assetV = (typeof window !== "undefined" && window.APP_VERSION) ? String(window.APP_VERSION) : "";
   function assetUrl(path) { return assetV ? path + "?v=" + assetV : path; }
   var VW = 960, VH = 520;
@@ -37,9 +37,9 @@ var ValeWorldMap = (function () {
   ];
 
   var countryData = {
-    "076": { activities: ["sede", "mega-hub", "exploracao", "metais-transicao", "solucoes-minerio", "operacao", "portos", "ferrovias", "joint-venture", "escritorios"], namePt: "Brasil", nameEn: "Brazil", phrasePt: "Sede global da Vale. Maior produtor mundial de minério de ferro e pelotas, com vasta rede de ferrovias e portos.", phraseEn: "Vale's global headquarters. World's largest iron ore and pellet producer, with an extensive railway and port network.", products: ["cobre", "niquel", "briquetes", "minerio-ferro", "pelotas", "pgm-ouro-prata"] },
+    "076": { activities: ["sede", "mega-hub", "exploracao", "metais-transicao", "solucoes-minerio", "operacao", "portos", "ferrovias", "joint-venture", "escritorios"], namePt: "Brasil", nameEn: "Brazil", phrasePt: "Sede global da Orbita. Maior produtor mundial de minério de ferro e pelotas, com vasta rede de ferrovias e portos.", phraseEn: "Orbita's global headquarters. World's largest iron ore and pellet producer, with an extensive railway and port network.", products: ["cobre", "niquel", "briquetes", "minerio-ferro", "pelotas", "pgm-ouro-prata"] },
     "124": { activities: ["metais-transicao", "portos", "exploracao", "operacao", "escritorios", "minas-subterraneas"], namePt: "Canadá", nameEn: "Canada", phrasePt: "Operações de classe mundial em metais de transição energética, com destaque para níquel, cobre e cobalto.", phraseEn: "World-class energy transition metals operations, with a focus on nickel, copper and cobalt.", products: ["cobalto", "cobre", "niquel", "pgm-ouro-prata"] },
-    "840": { activities: ["mega-hub", "escritorios"], namePt: "Estados Unidos", nameEn: "United States", phrasePt: "Escritórios comerciais e Mega Hub na estratégia global da Vale.", phraseEn: "Commercial offices and Mega Hub in Vale's global strategy.", products: [] },
+    "840": { activities: ["mega-hub", "escritorios"], namePt: "Estados Unidos", nameEn: "United States", phrasePt: "Escritórios comerciais e Mega Hub na estratégia global da Orbita.", phraseEn: "Commercial offices and Mega Hub in Orbita's global strategy.", products: [] },
     "604": { activities: ["escritorios", "exploracao"], namePt: "Peru", nameEn: "Peru", phrasePt: "Projetos de operação e exploração mineral com foco em cobre.", phraseEn: "Mining operation and exploration projects focused on copper.", products: [] },
     "152": { activities: ["escritorios", "exploracao"], namePt: "Chile", nameEn: "Chile", phrasePt: "Escritórios comerciais e projetos de exploração mineral.", phraseEn: "Commercial offices and mineral exploration projects.", products: [] },
     "032": { activities: ["escritorios"], namePt: "Argentina", nameEn: "Argentina", phrasePt: "Escritório comercial apoiando relações comerciais na região.", phraseEn: "Commercial office supporting business relations in the region.", products: [] },
@@ -51,7 +51,7 @@ var ValeWorldMap = (function () {
     "512": { activities: ["escritorios", "operacao", "mega-hub", "solucoes-minerio"], namePt: "Omã", nameEn: "Oman", phrasePt: "Mega Hub de beneficiamento e distribuição de produtos de minério de ferro.", phraseEn: "Mega Hub for iron ore product processing and distribution.", products: ["pelotas"] },
     "356": { activities: ["escritorios"], namePt: "Índia", nameEn: "India", phrasePt: "Escritórios e parcerias estratégicas para distribuição de minério de ferro.", phraseEn: "Offices and strategic partnerships for iron ore distribution.", products: [] },
     "458": { activities: ["escritorios", "portos", "operacao"], namePt: "Malásia", nameEn: "Malaysia", phrasePt: "Terminal marítimo de Teluk Rubiah — movimentação e distribuição de minério na Ásia.", phraseEn: "Teluk Rubiah maritime terminal — ore handling and distribution across Asia.", products: [] },
-    "360": { activities: ["exploracao", "joint-venture", "operacao", "escritorios"], namePt: "Indonésia", nameEn: "Indonesia", phrasePt: "Participação minoritária na PT Vale Indonesia — exploração e operação de níquel.", phraseEn: "Minority stake in PT Vale Indonesia — nickel exploration and operation.", products: ["niquel"] },
+    "360": { activities: ["exploracao", "joint-venture", "operacao", "escritorios"], namePt: "Indonésia", nameEn: "Indonesia", phrasePt: "Participação minoritária na PT Orbita Indonesia — exploração e operação de níquel.", phraseEn: "Minority stake in PT Orbita Indonesia — nickel exploration and operation.", products: ["niquel"] },
     "156": { activities: ["escritorios"], namePt: "China", nameEn: "China", phrasePt: "Principal destino de vendas — escritórios comerciais e relacionamento com o mercado.", phraseEn: "Main sales destination — commercial offices and market relationships.", products: [] },
     "392": { activities: ["metais-transicao", "operacao", "escritorios"], namePt: "Japão", nameEn: "Japan", phrasePt: "Refino de níquel e fornecimento para clientes ao redor do mundo.", phraseEn: "Nickel refining and supply to customers worldwide.", products: ["niquel"] },
     "702": { activities: ["escritorios"], namePt: "Singapura", nameEn: "Singapore", phrasePt: "Hub comercial regional para toda a Ásia-Pacífico.", phraseEn: "Regional commercial hub for Asia-Pacific.", products: [] },

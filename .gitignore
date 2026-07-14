@@ -1,3 +1,6 @@
+# Backups locais (não publicar)
+_backup/
+
 # Dependências / build (não usados neste site estático, mas por segurança)
 node_modules/
 dist/

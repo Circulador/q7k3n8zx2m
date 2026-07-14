@@ -1,29 +1,46 @@
 /* ============================================================
-   TRAVA LEVE DE ACESSO (client-side)  —  Guardião Digital / Vale
+   TRAVA DE ACESSO (client-side)  —  Guardião Digital / Orbita
    ------------------------------------------------------------
-   ⚠️ IMPORTANTE (leia): isto NÃO é segurança de verdade.
-   Como o site é estático (GitHub Pages), a senha fica no navegador
-   e pode ser descoberta por quem inspecionar o código. Serve apenas
-   para evitar acesso casual de quem receber o link por engano.
-   Para senha "real", use Cloudflare Access (grátis) ou host com
-   proteção de senha no servidor.
+   A senha NÃO fica em texto puro: guardamos apenas o hash
+   SHA-256 dela (GATE_HASH). Ao digitar, o app calcula o hash
+   do que foi digitado e compara com o armazenado.
+
+   ⚠️ Observação honesta: por ser um site estático, isto continua
+   sendo uma trava "de navegador" — evita acesso casual, mas alguém
+   técnico ainda pode remover a trava do código. Para senha real,
+   use Cloudflare Access (grátis) ou um host com proteção no servidor.
 
    COMO CONFIGURAR:
    - GATE_ENABLED = false  -> desliga a trava (site abre direto).
-   - GATE_PASSPHRASE       -> troque pela senha que quiser.
+   - GATE_HASH             -> hash SHA-256 (hex) da nova senha.
+       Gere assim no navegador (console), com a senha desejada:
+       crypto.subtle.digest('SHA-256', new TextEncoder().encode('SUA_SENHA'))
+         .then(b=>console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))
    ============================================================ */
 (function () {
   "use strict";
 
   var GATE_ENABLED = true;
-  var GATE_PASSPHRASE = "vale-guardiao-2026";   // <-- troque aqui
-  var STORAGE_KEY = "gdv_gate_ok_v1";
+  var GATE_HASH = "4138944fff04175f5df102e795458a1289700e76887131c3a2065c742c63c023";
+  var STORAGE_KEY = "gdv_gate_ok_v2";
 
   if (!GATE_ENABLED) return;
 
   try {
     if (sessionStorage.getItem(STORAGE_KEY) === "1") return;
   } catch (e) { /* sessionStorage indisponível: segue com a trava */ }
+
+  function sha256Hex(str) {
+    var enc = new TextEncoder().encode(str);
+    if (!(window.crypto && window.crypto.subtle)) {
+      return Promise.reject(new Error("crypto indisponível"));
+    }
+    return window.crypto.subtle.digest("SHA-256", enc).then(function (buf) {
+      var bytes = new Uint8Array(buf), out = "";
+      for (var i = 0; i < bytes.length; i++) out += bytes[i].toString(16).padStart(2, "0");
+      return out;
+    });
+  }
 
   function build() {
     if (document.getElementById("gdvGate")) return;
@@ -49,7 +66,7 @@
 
     card.innerHTML =
       '<div style="font-size:2.6rem;line-height:1;margin-bottom:8px">🛡️</div>' +
-      '<h1 style="font-size:1.15rem;margin:0 0 4px;color:#EDB111">Guardião Digital — Vale</h1>' +
+      '<h1 style="font-size:1.15rem;margin:0 0 4px;color:#EDB111">Guardião Digital — Orbita</h1>' +
       '<p style="font-size:.9rem;color:#8eb4be;margin:0 0 18px">Acesso restrito. Informe a senha para continuar.</p>' +
       '<input id="gdvGateInput" type="password" autocomplete="off" inputmode="text" ' +
       'placeholder="Senha de acesso" aria-label="Senha de acesso" ' +
@@ -66,17 +83,31 @@
     var input = document.getElementById("gdvGateInput");
     var btn = document.getElementById("gdvGateBtn");
     var err = document.getElementById("gdvGateErr");
+    var busy = false;
+
+    function fail(msg) {
+      err.textContent = msg || "Senha incorreta. Tente novamente.";
+      input.value = "";
+      input.focus();
+    }
 
     function tryEnter() {
+      if (busy) return;
       var val = (input.value || "").trim();
-      if (val === GATE_PASSPHRASE) {
-        try { sessionStorage.setItem(STORAGE_KEY, "1"); } catch (e) {}
-        ov.parentNode && ov.parentNode.removeChild(ov);
-      } else {
-        err.textContent = "Senha incorreta. Tente novamente.";
-        input.value = "";
-        input.focus();
-      }
+      if (!val) { fail("Digite a senha."); return; }
+      busy = true;
+      sha256Hex(val).then(function (hex) {
+        busy = false;
+        if (hex === GATE_HASH) {
+          try { sessionStorage.setItem(STORAGE_KEY, "1"); } catch (e) {}
+          ov.parentNode && ov.parentNode.removeChild(ov);
+        } else {
+          fail();
+        }
+      }).catch(function () {
+        busy = false;
+        fail("Não foi possível validar (navegador sem suporte a HTTPS/crypto).");
+      });
     }
 
     btn.addEventListener("click", tryEnter);

@@ -102,7 +102,7 @@ async function run() {
     // 2) Simular estado corrompido (daltônico + libras + contraste)
     await page.evaluate(() => {
       localStorage.setItem(
-        "guardiao_vale_v7",
+        "guardiao_orbita_v7",
         JSON.stringify({
           lang: "pt",
           a11y: {

@@ -4,7 +4,7 @@
   --ink:#0a1a24; --ink2:#0e2431;
   --card:rgba(255,255,255,.05); --line:rgba(255,255,255,.12);
   --gold:#EDB111; --gold-d:#c9920d; --ok:#2fbf71; --bad:#e5534b; --white:#fff;
-  --vale-land:#1a5c42; --vale-highlight:#e8a020;
+  --orbita-land:#1a5c42; --orbita-highlight:#e8a020;
   --fs:16px; --radius:12px;
 }
 *{box-sizing:border-box}
@@ -30,7 +30,7 @@ body.reduce-motion .hero-train,body.reduce-motion .hero-belt,body.reduce-motion 
 /* Topbar */
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 2px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:10px}
-.vale-logo{display:block;flex:none;opacity:.95}
+.orbita-logo{display:block;flex:none;opacity:.95}
 .logo-badge{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;background:var(--green);font-size:1.2rem;border:1px solid rgba(255,255,255,.15)}
 .gd{font-weight:800;line-height:1;font-size:1.05rem}
 .gd small{display:block;font-weight:600;color:var(--steel);font-size:.72rem;margin-top:2px}
@@ -42,13 +42,13 @@ body.reduce-motion .hero-train,body.reduce-motion .hero-belt,body.reduce-motion 
 .chip-btn:hover{border-color:var(--gold);background:rgba(237,177,17,.12)}
 .hud-tip{cursor:help}
 .hud-a11y-group{display:inline-flex;align-items:center;gap:6px;flex:none;flex-wrap:wrap}
-.vale-a11y-quick{display:inline-flex;align-items:center;gap:3px;background:#fff;border:1px solid #d4e2e8;border-radius:10px;padding:2px 4px}
+.orbita-a11y-quick{display:inline-flex;align-items:center;gap:3px;background:#fff;border:1px solid #d4e2e8;border-radius:10px;padding:2px 4px}
 .font-ctrl{min-width:32px;height:32px;border:0;border-radius:8px;background:transparent;color:#0a1a24;font:inherit;font-weight:800;font-size:.82rem;cursor:pointer;padding:0 6px}
 .font-ctrl:hover{background:#e6f5f4}
 .contrast-quick.on{background:#e6f5f4;color:var(--green-d);box-shadow:inset 0 0 0 1px var(--green)}
 .font-scale-pill{min-width:22px;text-align:center;font-size:.72rem;font-weight:700;color:#5a6f78}
-.am-vale-link{font-size:.82rem;font-weight:700;color:var(--green-d);text-decoration:none}
-.am-vale-link:hover{text-decoration:underline}
+.am-orbita-link{font-size:.82rem;font-weight:700;color:var(--green-d);text-decoration:none}
+.am-orbita-link:hover{text-decoration:underline}
 .am-action .am-switch{display:none}
 .a11y-catalog{display:grid;gap:10px}
 .a11y-cat{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--card)}
@@ -176,7 +176,7 @@ body.onboard-open{overflow:hidden}
 .cert-actions{margin-top:8px}
 .row-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
 
-/* Home hero — cadeia Vale + segurança */
+/* Home hero — cadeia Orbita + segurança */
 .hero-scene{position:relative;height:160px;border-radius:10px;overflow:hidden;margin-bottom:12px;border:1px solid var(--line);background:#063540}
 .hero-scene-btn{display:block;width:100%;padding:0;font:inherit;text-align:left;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
 .hero-scene-btn:hover,.hero-scene-btn:focus-visible{border-color:var(--gold);box-shadow:0 0 0 2px rgba(237,177,17,.25);transform:translateY(-1px)}
@@ -242,7 +242,7 @@ body.onboard-open{overflow:hidden}
 .pick .pd{color:var(--steel);font-size:.75rem;margin-top:2px}
 input#playerName{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:#fff;font-size:1rem;font-family:inherit}
 
-/* MAP — imagem real Vale + overlay */
+/* MAP — imagem real Orbita + overlay */
 .map-controls-sticky{position:sticky;top:0;z-index:15;margin-bottom:10px;padding:10px 0 8px;background:linear-gradient(180deg,var(--bg) 70%,transparent);backdrop-filter:blur(6px)}
 .map-context{font-size:.78rem;font-weight:800;color:var(--gold);letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px;min-height:1.1em}
 .map-toolbar-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
@@ -313,36 +313,36 @@ input#playerName{width:100%;padding:12px 14px;border-radius:12px;border:1px soli
 .map-detail .md-chain{background:#f0faf9;border-left:3px solid #007E7A;padding:8px 10px;font-size:.82rem;line-height:1.4;margin-bottom:12px;color:#1a3340}
 .map-detail .md-progress{font-size:.8rem;color:#5a6f78;margin-bottom:12px}
 .map-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:10px 0 4px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:rgba(0,0,0,.1);font-size:.74rem}
-/* Vale world map — igual ao site oficial */
-.vale-world-map{--vwm-base:#005f5c;--vwm-highlight:#ecb11f;--vwm-accent:#c9a227;--vwm-ink:#1a1a1a;--vwm-muted:#3d4f55;background:#fff;color:var(--vwm-ink);border:1px solid #dfe9e7;border-radius:10px;overflow:hidden;margin-top:8px}
-.vale-world-map .map-vwm-sub{padding:0 28px 12px;color:#2d3f45;font-size:.88rem;line-height:1.5}
-.vale-world-map .map-about{margin:0 28px 12px;border:1px solid #dfe9e7;border-radius:10px;background:#f7fbfb}
-.vale-world-map .map-about summary{padding:10px 14px;cursor:pointer;font-weight:700;font-size:.88rem;color:#005f5c}
-.vale-world-map .map-about-body{padding:0 14px 14px}
-.vale-world-map .map-about-p{font-size:.84rem;color:#2d3f45;line-height:1.5;margin:0 0 8px}
-.vale-world-map .map-mission{margin:0 28px 12px;padding:12px;border:1px solid #c5e8e6;border-radius:10px;background:#f0faf9}
-.vale-world-map .map-mission-head{font-weight:800;font-size:.88rem;color:#005f5c;margin-bottom:6px}
-.vale-world-map .map-mission-p{font-size:.84rem;color:#2d3f45;line-height:1.45;margin:0 0 8px}
-.vale-world-map .map-chain-flow{font-size:.8rem;font-weight:700;color:#005f5c;margin:0}
-.vale-world-map .map-resilience{margin:0 28px 12px;padding:12px;border:1px solid #dfe9e7;border-radius:10px;background:#f7fbfb}
-.vale-world-map .map-resilience-head{display:flex;justify-content:space-between;font-size:.85rem;font-weight:700;color:#1a1a1a;margin-bottom:6px}
-.vale-world-map .map-resilience-tip{font-size:.78rem;color:#3d4f55;margin:8px 0 0;line-height:1.4}
-.vale-world-map .map-controls-sticky{margin:0;padding:8px 28px 10px;background:#fff}
-.vale-world-map .map-context{font-size:.78rem;font-weight:800;color:#005f5c;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px;min-height:1.1em}
-.vale-world-map .map-process-btn{background:#f7fbfb;color:#1a3340;border-color:#a8bcc2}
-.vale-world-map .map-process-btn.on{border-color:#c9a227;background:#fff8e6;color:#3d2f00}
-.vale-world-map .map-search{background:#fff;color:#1a1a1a;border-color:#a8bcc2}
-.vale-world-map .map-search::placeholder{color:#5c706e}
-.vale-world-map .map-toolbar .btn{color:#1a3340;border-color:#a8bcc2;background:#f7fbfb}
-.vale-world-map .map-toolbar .btn-ghost{color:#1a3340;border-color:#a8bcc2}
-.vale-world-map .presence-chip{background:#d4ecea;color:#004d49;border-color:#007e7a}
-.vale-world-map .mineral-chip{background:#fef3cd;color:#4a3800;border-color:#c9a227}
-.vale-world-map .bar{background:#c5d5db}
-.vale-world-map .bar .fill{background:linear-gradient(90deg,#005f5c,#007e7a)}
-.vale-world-map.mode-iron-map .vwm-map-stage-inner,
-.vale-world-map.mode-iron-map .vwm-legend{display:none!important}
-.vale-world-map.mode-iron-map #mapChainAnim{display:block!important;min-height:300px}
-.vale-world-map.mode-iron-map .map-stage{background:linear-gradient(#8fd3e8,#dff1f5)}
+/* Orbita world map — igual ao site oficial */
+.orbita-world-map{--vwm-base:#005f5c;--vwm-highlight:#ecb11f;--vwm-accent:#c9a227;--vwm-ink:#1a1a1a;--vwm-muted:#3d4f55;background:#fff;color:var(--vwm-ink);border:1px solid #dfe9e7;border-radius:10px;overflow:hidden;margin-top:8px}
+.orbita-world-map .map-vwm-sub{padding:0 28px 12px;color:#2d3f45;font-size:.88rem;line-height:1.5}
+.orbita-world-map .map-about{margin:0 28px 12px;border:1px solid #dfe9e7;border-radius:10px;background:#f7fbfb}
+.orbita-world-map .map-about summary{padding:10px 14px;cursor:pointer;font-weight:700;font-size:.88rem;color:#005f5c}
+.orbita-world-map .map-about-body{padding:0 14px 14px}
+.orbita-world-map .map-about-p{font-size:.84rem;color:#2d3f45;line-height:1.5;margin:0 0 8px}
+.orbita-world-map .map-mission{margin:0 28px 12px;padding:12px;border:1px solid #c5e8e6;border-radius:10px;background:#f0faf9}
+.orbita-world-map .map-mission-head{font-weight:800;font-size:.88rem;color:#005f5c;margin-bottom:6px}
+.orbita-world-map .map-mission-p{font-size:.84rem;color:#2d3f45;line-height:1.45;margin:0 0 8px}
+.orbita-world-map .map-chain-flow{font-size:.8rem;font-weight:700;color:#005f5c;margin:0}
+.orbita-world-map .map-resilience{margin:0 28px 12px;padding:12px;border:1px solid #dfe9e7;border-radius:10px;background:#f7fbfb}
+.orbita-world-map .map-resilience-head{display:flex;justify-content:space-between;font-size:.85rem;font-weight:700;color:#1a1a1a;margin-bottom:6px}
+.orbita-world-map .map-resilience-tip{font-size:.78rem;color:#3d4f55;margin:8px 0 0;line-height:1.4}
+.orbita-world-map .map-controls-sticky{margin:0;padding:8px 28px 10px;background:#fff}
+.orbita-world-map .map-context{font-size:.78rem;font-weight:800;color:#005f5c;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px;min-height:1.1em}
+.orbita-world-map .map-process-btn{background:#f7fbfb;color:#1a3340;border-color:#a8bcc2}
+.orbita-world-map .map-process-btn.on{border-color:#c9a227;background:#fff8e6;color:#3d2f00}
+.orbita-world-map .map-search{background:#fff;color:#1a1a1a;border-color:#a8bcc2}
+.orbita-world-map .map-search::placeholder{color:#5c706e}
+.orbita-world-map .map-toolbar .btn{color:#1a3340;border-color:#a8bcc2;background:#f7fbfb}
+.orbita-world-map .map-toolbar .btn-ghost{color:#1a3340;border-color:#a8bcc2}
+.orbita-world-map .presence-chip{background:#d4ecea;color:#004d49;border-color:#007e7a}
+.orbita-world-map .mineral-chip{background:#fef3cd;color:#4a3800;border-color:#c9a227}
+.orbita-world-map .bar{background:#c5d5db}
+.orbita-world-map .bar .fill{background:linear-gradient(90deg,#005f5c,#007e7a)}
+.orbita-world-map.mode-iron-map .vwm-map-stage-inner,
+.orbita-world-map.mode-iron-map .vwm-legend{display:none!important}
+.orbita-world-map.mode-iron-map #mapChainAnim{display:block!important;min-height:300px}
+.orbita-world-map.mode-iron-map .map-stage{background:linear-gradient(#8fd3e8,#dff1f5)}
 .vwm-header{align-items:flex-start;display:flex;flex-direction:column;gap:4px;min-height:38px;padding:12px 28px 6px}
 .vwm-title-row{align-items:center;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;width:100%}
 .vwm-title{color:#1a1a1a;font-size:1.15rem;font-weight:300;line-height:1.2;margin:0}
@@ -387,7 +387,7 @@ input#playerName{width:100%;padding:12px 14px;border-radius:12px;border:1px soli
 @media(max-width:720px){
   .vwm-legend{grid-template-columns:1fr}
   .vwm-legend-group-product{border-left:0;border-top:1px solid #e5e5e5}
-  .vale-world-map .map-vwm-sub,.vwm-header,.vwm-legend-group{padding-left:14px;padding-right:14px}
+  .orbita-world-map .map-vwm-sub,.vwm-header,.vwm-legend-group{padding-left:14px;padding-right:14px}
 }
 .map-legend .ml-item{display:flex;align-items:center;gap:6px;color:var(--steel)}
 .map-legend .ml-swatch{width:14px;height:4px;border-radius:2px;flex:none}
@@ -646,7 +646,7 @@ body.contrast .chain-map-wrap{background:#04141b}
 .am-reset{display:block;width:100%;margin-bottom:8px;padding:9px 12px;border:1px solid #d4e2e8;border-radius:10px;background:#fff;color:#0a1a24;font:inherit;font-weight:700;font-size:.84rem;cursor:pointer;text-align:center}
 .am-reset:hover{border-color:var(--green);background:#f0faf9}
 .logo-badge.frame-gold{box-shadow:0 0 0 3px var(--gold),0 0 12px rgba(237,177,17,.45)}
-.logo-badge.frame-vale{box-shadow:0 0 0 3px var(--green);border-color:var(--gold)!important}
+.logo-badge.frame-orbita{box-shadow:0 0 0 3px var(--green);border-color:var(--gold)!important}
 .logo-badge.frame-lock{box-shadow:0 0 0 2px #4da3ff;border:2px dashed #4da3ff}
 .logo-badge.frame-chain{box-shadow:0 0 0 2px var(--gold);border:3px double var(--gold)}
 .logo-badge.frame-trophy{background:linear-gradient(135deg,rgba(237,177,17,.35),var(--green));box-shadow:0 0 0 2px var(--gold)}

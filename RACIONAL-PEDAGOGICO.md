@@ -1,6 +1,6 @@
 # 🎓 Racional Pedagógico — Guardião Digital da Operação
 
-Este documento explica **por que** o jogo é construído do jeito que é: os princípios de aprendizagem, as escolhas de design e como cada elemento reforça a cultura de **Segurança da Informação** na Vale.
+Este documento explica **por que** o jogo é construído do jeito que é: os princípios de aprendizagem, as escolhas de design e como cada elemento reforça a cultura de **Segurança da Informação** na Orbita.
 
 ---
 
@@ -26,7 +26,7 @@ Desenvolver **comportamento seguro** no dia a dia — não apenas conhecimento t
 |---|---|
 | **Aprender fazendo** | Decisões situacionais em vez de textos passivos. |
 | **Feedback imediato** | Cada resposta explica *por que* está certa ou errada. |
-| **Contextualização** | Cenários ambientados em operações reais da Vale por país. |
+| **Contextualização** | Cenários ambientados em operações reais da Orbita por país. |
 | **Repetição espaçada** | Diárias e semanais reapresentam temas ao longo do tempo. |
 | **Gamificação com propósito** | XP, moedas, medalhas e níveis reforçam o hábito, não a competição tóxica. |
 | **Segurança psicológica** | Ranking **por equipe e anônimo** — celebra evolução, nunca expõe quem errou. |
@@ -38,7 +38,7 @@ Desenvolver **comportamento seguro** no dia a dia — não apenas conhecimento t
 
 O idioma é definido **na tela inicial** e percorre **toda** a experiência: enunciados, alternativas, explicações e **narração por voz**. Isso garante:
 - Consistência cognitiva (sem mistura de idiomas que atrapalha a compreensão).
-- Inclusão de equipes internacionais da Vale.
+- Inclusão de equipes internacionais da Orbita.
 - Reforço de vocabulário de segurança em cada idioma.
 
 ---
@@ -78,4 +78,4 @@ Objetivo: transformar dados em **ação educativa**, sem jamais individualizar o
 
 ## 7. Avisos e limites
 
-O conteúdo é **ilustrativo e educativo**. As decisões corretas seguem boas práticas gerais de mercado; as **políticas oficiais da Vale sempre prevalecem**. O mapa e as operações usam referências públicas (vale.com/pt/onde-estamos).
+O conteúdo é **ilustrativo e educativo**. As decisões corretas seguem boas práticas gerais de mercado; as **políticas oficiais da Orbita sempre prevalecem**. O mapa e as operações usam referências públicas (orbita.com/pt/onde-estamos).

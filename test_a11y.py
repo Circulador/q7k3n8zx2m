@@ -80,7 +80,7 @@ def main():
 
         # 2) Estado salvo problemático
         page.evaluate(
-            """() => localStorage.setItem('guardiao_vale_v7', JSON.stringify({
+            """() => localStorage.setItem('guardiao_orbita_v7', JSON.stringify({
                 lang:'pt', onboardingDone:true,
                 a11y:{voice:false,contrast:true,large:false,motion:true,signs:true,
                       fontScale:0,links:false,spacing:false,letterSpace:false,

@@ -1,8 +1,8 @@
-/* Accessibility suite — Hand Talk (Vale) + VLibras/ASL fallbacks */
+/* Accessibility suite — Hand Talk (Orbita) + VLibras/ASL fallbacks */
 (function(global){
 "use strict";
 
-/* Cole o token Hand Talk da Vale aqui para ativar os 22 recursos do plugin */
+/* Cole o token Hand Talk da Orbita aqui para ativar os 22 recursos do plugin */
 var HANDTALK_TOKEN = "";
 
 var htInstance = null;
@@ -156,10 +156,10 @@ function bindASL(){
 function setHandTalkStatus(lang, mode){
   var el = $("handTalkStatus"); if(!el) return;
   var msgs = {
-    "handtalk-pt": {pt: "Hand Talk ativo — Libras + 22 recursos assistivos (como vale.com).", en: "Hand Talk active — Libras + 22 assistive features (like vale.com)."},
-    "handtalk-en": {pt: "Hand Talk ativo — ASL + 22 recursos assistivos (como vale.com).", en: "Hand Talk active — ASL + 22 assistive features (like vale.com)."},
-    "vlibras": {pt: "VLibras ativo (fallback). Para o pacote completo Hand Talk, configure o token da Vale.", en: "VLibras active (fallback). For full Hand Talk suite, configure Vale token."},
-    "asl-fallback": {pt: "ASL via dicionário (fallback). Para Hand Talk completo, configure o token da Vale.", en: "ASL dictionary (fallback). For full Hand Talk, configure Vale token."},
+    "handtalk-pt": {pt: "Hand Talk ativo — Libras + 22 recursos assistivos (como orbita.com).", en: "Hand Talk active — Libras + 22 assistive features (like orbita.com)."},
+    "handtalk-en": {pt: "Hand Talk ativo — ASL + 22 recursos assistivos (como orbita.com).", en: "Hand Talk active — ASL + 22 assistive features (like orbita.com)."},
+    "vlibras": {pt: "VLibras ativo (fallback). Para o pacote completo Hand Talk, configure o token da Orbita.", en: "VLibras active (fallback). For full Hand Talk suite, configure Orbita token."},
+    "asl-fallback": {pt: "ASL via dicionário (fallback). Para Hand Talk completo, configure o token da Orbita.", en: "ASL dictionary (fallback). For full Hand Talk, configure Orbita token."},
     "off": {pt: "", en: ""}
   };
   var key = mode || "off";
