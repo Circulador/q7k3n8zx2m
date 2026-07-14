@@ -1010,3 +1010,49 @@ body.theme-light .bottom-nav{background:#f0f6f8;border-top-color:#c5d5dc}
 body.theme-light .bottom-nav button{color:#5a6f78}
 body.theme-dark{color:#e8f0f4;background:#01080c;background-image:linear-gradient(180deg,#031218 0%,#01080c 100%)}
 body.theme-dark .card{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1)}
+
+/* UX v67 */
+.offline-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px;padding:10px 12px;border-radius:10px;background:rgba(0,126,122,.15);border:1px solid rgba(0,126,122,.35);font-size:.82rem}
+.ctx-tip{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 10px;padding:10px 12px;border-radius:10px;background:rgba(237,177,17,.12);border:1px solid rgba(237,177,17,.35);font-size:.84rem}
+.ctx-tip-dismiss{margin-left:auto;padding:6px 12px;border:0;border-radius:8px;background:var(--green);color:#fff;font:inherit;font-weight:700;font-size:.78rem;cursor:pointer}
+.week-progress-wrap{display:grid;gap:6px;width:100%;margin:8px 0 10px;padding:10px 12px;border:1px solid rgba(0,126,122,.35);border-radius:10px;background:rgba(0,126,122,.08);cursor:pointer;text-align:left;font:inherit;color:inherit}
+.week-progress-k{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--green-l)}
+.week-progress-track{height:8px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden}
+.week-progress-fill{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),var(--gold));transition:width .3s ease}
+.week-progress-lab,.week-progress-go{font-size:.8rem;color:var(--steel)}
+.week-progress-go{color:var(--gold);font-weight:700}
+.first-day-hint{margin:0 0 8px;padding:8px 10px;border-radius:8px;background:rgba(237,177,17,.1);border-left:3px solid var(--gold);font-size:.84rem;color:#f4d875}
+.quiz-context-chip{display:inline-flex;align-items:center;gap:6px;margin-bottom:10px;padding:6px 10px;border-radius:999px;background:rgba(0,126,122,.18);border:1px solid rgba(0,126,122,.35);font-size:.8rem;font-weight:700}
+.quiz-glossary-hint{margin:0 0 8px}
+.quiz-gloss-btn{background:none;border:0;padding:0;color:var(--gold);font:inherit;font-size:.84rem;cursor:pointer;text-decoration:underline}
+.report-skip-main{display:block;width:100%;margin:10px 0 6px;padding:12px;font-weight:700}
+.session-feedback{margin-bottom:12px;border-color:rgba(47,191,113,.45)!important;background:linear-gradient(135deg,rgba(47,191,113,.12),rgba(0,126,122,.08))!important}
+.session-feedback-inner{display:flex;gap:12px;align-items:flex-start}
+.session-feedback-ico{font-size:2rem;line-height:1}
+.session-feedback-title{font-weight:800;font-size:1rem;margin-bottom:4px}
+.session-feedback-streak{color:var(--ok);font-weight:700;font-size:.88rem;margin-top:4px}
+.session-feedback-xp{font-size:.84rem;color:var(--steel);margin-top:4px}
+.weekly-goals-checklist{margin-top:12px;padding:10px 12px;border-radius:10px;background:rgba(0,0,0,.12);border:1px solid var(--line)}
+.wg-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);margin-bottom:8px}
+.wg-item{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:.86rem;border-bottom:1px solid rgba(255,255,255,.06)}
+.wg-item:last-child{border-bottom:0}
+.wg-item.done{color:var(--ok)}
+.wg-txt{flex:1}
+.wg-val{font-weight:700;color:var(--steel);font-size:.8rem}
+.boss-card--rec{border-color:rgba(237,177,17,.55);box-shadow:0 0 0 1px rgba(237,177,17,.25)}
+.boss-card--done{opacity:.92}
+.boss-rec-tag{color:var(--gold);font-weight:800}
+.map-explorer-hint{margin:4px 0 0;font-size:.82rem;color:var(--gold);font-weight:700}
+.nav-badge{position:absolute;top:2px;right:8px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:var(--bad);color:#fff;font-size:.62rem;font-weight:800;line-height:16px;text-align:center}
+.bottom-nav button{position:relative}
+.glossary-favs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.glossary-fav-chip{padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:inherit;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer}
+.glossary-fav-toggle{background:none;border:0;padding:0;font-size:1rem;cursor:pointer;vertical-align:middle}
+.flashcard-card{margin-top:8px}
+.dp-switch{display:inline-flex;margin-top:4px}
+.dp-section-compact .dp-link-btn{margin-bottom:6px}
+@media(max-width:640px){
+  .map-toolbar-row.map-toolbar-collapsed .map-toolbar{display:flex}
+  .map-toolbar-row.map-toolbar-collapsed .map-search-wrap{display:flex}
+  .toolbar-btn,.chip-btn{min-width:44px;min-height:44px}
+}

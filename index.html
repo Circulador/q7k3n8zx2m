@@ -9,22 +9,26 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=66">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=67">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=66">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=66">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=67">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=67">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=66"></script>
-<link rel="stylesheet" href="css/styles.css?v=66">
+<script src="js/access-gate.js?v=67"></script>
+<link rel="stylesheet" href="css/styles.css?v=67">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
 <div id="a11yLive" class="sr-only" aria-live="polite" role="status"></div>
 <div id="toastWrap" class="toast-wrap" aria-live="polite"></div>
+<div id="offlineBanner" class="offline-banner" hidden role="status">
+  <span data-i18n="offline.hint">📶 Funciona offline após a primeira visita — seu progresso fica neste dispositivo.</span>
+  <button type="button" class="btn btn-sm btn-ghost" id="offlineDismissBtn" data-i18n="offline.dismiss">Ok</button>
+</div>
 
 <div id="quitDialog" class="quit-dialog" hidden role="alertdialog" aria-modal="true" aria-labelledby="quitDialogTitle" aria-describedby="quitDialogMsg">
   <div class="quit-dialog-backdrop" id="quitDialogBackdrop"></div>
@@ -236,6 +240,15 @@
               </select>
             </div>
             <div class="dp-section">
+              <div class="dp-label" data-i18n="settings.simpleUi">Modo simples</div>
+              <p class="dp-sub" data-i18n="settings.simpleUiSub">Esconde nível, XP e maturidade no topo — ideal para começar.</p>
+              <label class="switch dp-switch"><input type="checkbox" id="optSimpleUiSettings" checked><span class="slider"></span></label>
+            </div>
+            <div class="dp-section dp-section-compact">
+              <button type="button" class="dp-link-btn" id="settingsEasyReadBtn" data-i18n="settings.easyRead">Leitura fácil</button>
+              <button type="button" class="dp-link-btn" id="settingsEditProfileBtn" data-i18n="settings.editProfile">✏️ Minha operação (equipe e papel)</button>
+            </div>
+            <div class="dp-section">
               <div class="dp-label" data-i18n="settings.glossary">📖 Glossário</div>
               <p class="dp-sub" data-i18n="settings.glossarySub">Siglas e termos do jogo — com exemplos do dia a dia.</p>
               <label class="sr-only" for="glossarySearch" data-i18n="settings.glossarySearch">Buscar termo</label>
@@ -244,6 +257,11 @@
               <label class="sr-only" for="glossaryPick" data-i18n="settings.glossaryPick">Escolha um termo</label>
               <select class="dp-select" id="glossaryPick"></select>
               <div class="glossary-card" id="glossaryCard"></div>
+              <div class="dp-label" data-i18n="settings.glossaryFavs">⭐ Favoritos do glossário</div>
+              <div class="glossary-favs" id="glossaryFavsList"></div>
+              <button type="button" class="dp-link-btn" id="flashcardBtn" data-i18n="settings.flashcard">🃏 Revisar termos (flashcards)</button>
+              <div class="glossary-card flashcard-card" id="flashcardCard" hidden></div>
+              <button type="button" class="btn btn-ghost btn-sm" id="flashcardNextBtn" hidden data-i18n="settings.flashcardNext">Próximo termo →</button>
             </div>
             <div class="dp-section dp-section-compact">
               <button type="button" class="dp-link-btn" id="settingsOpenA11yBtn" data-i18n="settings.openA11y">♿ Acessibilidade</button>
@@ -355,6 +373,13 @@
         </div>
         <p class="streak-status streak-status-inline" id="streakStatus" data-i18n="streak.risk">⚠️ Jogue hoje para não perder sua ofensiva!</p>
       </div>
+      <p class="first-day-hint" id="firstDayHint" hidden data-i18n="home.firstDay">Dia 1 da sua ofensiva — 5 minutos de treino bastam para começar.</p>
+      <button type="button" class="week-progress-wrap" id="weekProgressBar" aria-label="Meta da semana" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <span class="week-progress-k" data-i18n="home.weekBar">Meta da semana</span>
+        <span class="week-progress-track"><span class="week-progress-fill" id="weekProgressFill"></span></span>
+        <span class="week-progress-lab" id="weekProgressLabel"></span>
+        <span class="week-progress-go" data-i18n="home.weekBarGo">Ver metas da semana →</span>
+      </button>
       <div class="next-step-main">
         <span class="next-step-ico" id="nextStepIco" aria-hidden="true">▶️</span>
         <div class="next-step-txt">
@@ -398,6 +423,7 @@
 
   <!-- ============ MAP ============ -->
   <section id="screenMap" class="screen" aria-label="Mapa da operação">
+    <div class="ctx-tip" id="ctxTip_map" hidden><span data-i18n="tip.map">Toque no país destacado para iniciar sua expedição. Use +/− para zoom.</span><button type="button" class="ctx-tip-dismiss" data-tip="map" data-i18n="tip.dismiss">Entendi</button></div>
     <div class="card">
       <div class="orbita-world-map" id="orbitaWorldMap">
       <header class="vwm-header">
@@ -406,6 +432,7 @@
           <button type="button" class="vwm-clear" id="mapClearBtn" hidden><span class="vwm-clear-icon" aria-hidden="true">×</span><span data-i18n="map.clearSelection">Limpar seleção</span></button>
         </div>
         <p class="vwm-helper" data-i18n="map.vwmHelper">Toque num país para iniciar a expedição</p>
+        <p class="map-explorer-hint" id="mapExplorerHint" aria-live="polite"></p>
       </header>
       <div class="vwm-accent" aria-hidden="true"></div>
       <div class="map-expedition" id="mapExpeditionWrap">
@@ -485,6 +512,7 @@
   <!-- ============ QUIZ ============ -->
   <section id="screenQuiz" class="screen" aria-label="Situação de segurança">
     <div class="card">
+      <div class="quiz-context-chip" id="quizContextChip" aria-live="polite"></div>
       <div class="quiz-progress" id="quizProgress" aria-live="polite">
         <div class="quiz-progress-label" id="quizProgressLabel"></div>
         <div class="quiz-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
@@ -494,6 +522,7 @@
       <div class="quiz-head"><span class="theme-tag" id="themeTag">🔐</span><span class="diff-tag" id="diffTag"></span></div>
       <div class="progress-line" id="progressLine"></div>
       <h2 class="scene-title"><button class="speak-btn" id="speakBtn" title="Ouvir" aria-label="Ouvir cenário">🔊</button> <span id="sceneTitleTxt"></span></h2>
+      <p class="quiz-glossary-hint" id="quizGlossaryHint" hidden></p>
       <p class="scene-text" id="sceneText"></p>
       <p class="personal-bridge" id="personalBridge" hidden></p>
       <div class="options" id="options" role="group" aria-label="Alternativas"></div>
@@ -509,6 +538,7 @@
 
   <!-- ============ RESULT ============ -->
   <section id="screenResult" class="screen" aria-label="Resultado">
+    <div class="card session-feedback" id="sessionFeedback" hidden></div>
     <div class="card"><div class="result-hero" id="resultHero"></div><div class="stats-grid" id="statsGrid"></div><div class="theme-errors" id="themeErrors"></div></div>
     <div class="card" id="campaignDebrief" hidden></div>
     <div class="card"><div class="section-title" data-i18n="result.medals">🏅 Medalhas</div><div class="medals" id="medalsBox"></div></div>
@@ -521,6 +551,7 @@
 
   <!-- ============ CHEFÕES ============ -->
   <section id="screenBossList" class="screen" aria-label="Desafios / Crises">
+    <div class="ctx-tip" id="ctxTip_boss" hidden><span data-i18n="tip.boss">Crises estilo mesa — leia o cenário e tome decisões como na operação real.</span><button type="button" class="ctx-tip-dismiss" data-tip="boss" data-i18n="tip.dismiss">Entendi</button></div>
     <div class="card"><div class="section-title" data-i18n="boss.title">🎯 Desafios / Crises</div><div class="section-sub" data-i18n="boss.sub">Experiências estilo mesa com storytelling conectado e mapa vetorial animado — cada decisão avança a próxima cena.</div><div class="boss-list" id="bossList"></div></div>
   </section>
 
@@ -557,18 +588,19 @@
 
   <!-- ============ DAILY ============ -->
   <section id="screenDaily" class="screen" aria-label="Missões diárias">
+    <div class="ctx-tip" id="ctxTip_daily" hidden><span data-i18n="tip.daily">5 situações rápidas — 2 revisam erros anteriores. Mantém sua ofensiva!</span><button type="button" class="ctx-tip-dismiss" data-tip="daily" data-i18n="tip.dismiss">Entendi</button></div>
     <div class="card"><div class="section-title" data-i18n="daily.title">📅 Missões Diárias</div><div class="section-sub" id="dailyDate"></div><p class="daily-srs-note" id="dailySrsNote" hidden></p><div id="dailyList"></div></div>
     <div class="row-actions"><button class="btn btn-primary btn-lg" id="dailyStartBtn" data-i18n="daily.play">▶️ Jogar missão do dia</button></div>
   </section>
 
   <!-- ============ WEEKLY ============ -->
-  <section id="screenWeekly" class="screen" hidden aria-hidden="true" aria-label="Desafios semanais">
+  <section id="screenWeekly" class="screen" aria-label="Desafios semanais">
     <div class="card"><div class="section-title" data-i18n="weekly.title">🏆 Desafios Semanais</div><div class="section-sub" id="weeklyWeek"></div><p class="muted" data-i18n="weekly.intro">Metas maiores que renovam toda semana. Progridem enquanto você joga campanhas, diárias e bosses.</p><div id="weeklyList"></div></div>
     <div class="row-actions"><button class="btn btn-ghost" id="weeklyBackBtn" data-i18n="common.home">🏠 Início</button><button class="btn btn-primary" id="weeklyMapBtn" data-i18n="weekly.play">🗺️ Jogar campanha</button></div>
   </section>
 
   <!-- ============ SHOP ============ -->
-  <section id="screenShop" class="screen" hidden aria-hidden="true" aria-label="Loja">
+  <section id="screenShop" class="screen" aria-label="Loja">
     <div class="card">
       <div class="section-title shop-head"><span data-i18n="shop.title">🛒 Loja de Recompensas</span><span class="coins-badge">🪙 <span id="shopCoins">0</span></span></div>
       <div class="section-sub" data-i18n="shop.sub">Use suas moedas para desbloquear avatares e itens cosméticos.</div>
@@ -587,6 +619,12 @@
     <div class="card" id="completionCard">
       <div class="section-title" data-i18n="profile.completionTitle">🎯 Sua jornada</div>
       <div id="completionBody"></div>
+      <div class="weekly-goals-checklist" id="weeklyGoalsChecklist"></div>
+      <div class="row-actions" style="margin-top:10px">
+        <button type="button" class="btn btn-ghost btn-sm" id="profileEditSetupBtn" data-i18n="profile.editSetup">✏️ Alterar equipe e papel</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="profileWeeklyBtn" data-i18n="weekly.title">🏆 Desafios Semanais</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="profileShopBtn" data-i18n="shop.title">🛒 Loja</button>
+      </div>
     </div>
     <div class="card" id="profileCertCard">
       <div class="section-title" data-i18n="profile.certTitle">📜 Certificado</div>
@@ -598,6 +636,7 @@
       <div class="row-actions cert-actions">
         <button class="btn btn-primary btn-sm" id="certGenerateBtn" type="button" data-i18n="profile.certGenerate">🔄 Atualizar prévia</button>
         <button class="btn btn-gold btn-sm" id="certDownloadBtn" type="button" data-i18n="profile.certDownload">⬇️ Baixar PNG</button>
+        <button class="btn btn-blue btn-sm" id="certShareBtn" type="button" data-i18n="cert.share">📤 Compartilhar</button>
         <button class="btn btn-ghost btn-sm" id="certPrintBtn" type="button" data-i18n="profile.certPrint">🖨️ Imprimir</button>
       </div>
     </div>
@@ -633,7 +672,8 @@
     </details>
     <div class="card">
       <div class="section-title" data-i18n="setup.prefsTitle">⚙️ Preferências</div>
-      <div class="a11y-row"><div><div class="lab" data-i18n="setup.managerLabel">🧭 Exibir painel do gestor</div><div class="desc" data-i18n="setup.managerSub">Ative se você acompanha métricas da equipe. O painel aparece no menu Mais.</div></div><label class="switch"><input type="checkbox" id="optManagerProfile"><span class="slider"></span></label></div>
+      <div class="a11y-row"><div><div class="lab" data-i18n="setup.managerLabel">🧭 Exibir painel do gestor</div><div class="desc" data-i18n="setup.managerSub">Ative se você acompanha métricas da equipe.</div></div><label class="switch"><input type="checkbox" id="optManagerProfile"><span class="slider"></span></label></div>
+      <div class="a11y-row"><div><div class="lab" data-i18n="settings.simpleUi">Modo simples</div><div class="desc" data-i18n="settings.simpleUiSub">Esconde nível, XP e maturidade no topo.</div></div><label class="switch"><input type="checkbox" id="optSimpleUi" checked><span class="slider"></span></label></div>
     </div>
     <div class="card">
       <div class="section-title" data-i18n="profile.backupTitle">💾 Backup local</div>
@@ -672,9 +712,14 @@
 <nav class="bottom-nav" role="navigation" aria-label="Navegação principal">
   <button type="button" id="navHomeBtn" onclick="gdvNavClick('navHomeBtn',event)" data-i18n-attr="title:nav.tip.home;aria-label:nav.tip.home"><span class="ni" aria-hidden="true">🏠</span><span data-i18n="nav.home">Início</span></button>
   <button type="button" id="navMapBtn" onclick="gdvNavClick('navMapBtn',event)" data-i18n-attr="title:nav.tip.map;aria-label:nav.tip.map"><span class="ni" aria-hidden="true">🗺️</span><span data-i18n="nav.map">Mapa</span></button>
-  <button type="button" id="navDailyBtn" onclick="gdvNavClick('navDailyBtn',event)" data-i18n-attr="title:nav.tip.daily;aria-label:nav.tip.daily"><span class="ni" aria-hidden="true">📅</span><span data-i18n="nav.daily">Missões</span></button>
+  <button type="button" id="navDailyBtn" onclick="gdvNavClick('navDailyBtn',event)" data-i18n-attr="title:nav.tip.daily;aria-label:nav.tip.daily"><span class="ni" aria-hidden="true">📅</span><span class="nav-badge" id="navDailyBadge" hidden>!</span><span data-i18n="nav.daily">Missões</span></button>
   <button type="button" id="navBossBtn" onclick="gdvNavClick('navBossBtn',event)" data-i18n-attr="title:nav.tip.boss;aria-label:nav.tip.boss"><span class="ni" aria-hidden="true">🎯</span><span data-i18n="nav.boss">Desafios / Crises</span></button>
-  <button type="button" id="navStatsBtn" onclick="gdvNavClick('navStatsBtn',event)" data-i18n-attr="title:nav.tip.stats;aria-label:nav.tip.stats"><span class="ni" aria-hidden="true">📊</span><span data-i18n="nav.stats">Progresso</span></button>
+  <button type="button" id="navStatsBtn" onclick="gdvNavClick('navStatsBtn',event)" data-i18n-attr="title:nav.tip.stats;aria-label:nav.tip.stats"><span class="ni" aria-hidden="true">📊</span><span data-i18n="nav.stats">Eu</span></button>
+  <button type="button" id="navMoreBtn" onclick="gdvNavClick('navMoreBtn',event)" data-i18n-attr="title:nav.more;aria-label:nav.more" aria-haspopup="true" aria-expanded="false"><span class="ni" aria-hidden="true">⋯</span><span data-i18n="nav.more">Mais</span></button>
+  <div class="nav-more-sheet" id="navMoreSheet" hidden role="menu">
+    <button type="button" class="nav-more-item" id="navWeeklyBtn" onclick="gdvNavClick('navWeeklyBtn',event)" data-i18n="weekly.title">🏆 Desafios Semanais</button>
+    <button type="button" class="nav-more-item" id="navShopBtn" onclick="gdvNavClick('navShopBtn',event)" data-i18n="shop.title">🛒 Loja</button>
+  </div>
   <button type="button" id="navManagerBtn" hidden onclick="gdvNavClick('navManagerBtn',event)" data-i18n-attr="title:nav.tip.manager;aria-label:nav.tip.manager"><span class="ni" aria-hidden="true">🧭</span><span data-i18n="nav.manager">Gestor</span></button>
 </nav>
 
@@ -705,14 +750,14 @@
 </div>
 
 <script>window.APP_VERSION="59";</script>
-<script src="js/sign-lang.js?v=66"></script>
-<script src="js/orbita-world-map.js?v=66"></script>
-<script src="js/questions-data.js?v=66"></script>
-<script src="js/country-questions-data.js?v=66"></script>
-<script src="js/bosses-data.js?v=66"></script>
-<script src="js/chain-data.js?v=66"></script>
-<script src="js/boss-maps.js?v=66"></script>
-<script src="js/game.js?v=66"></script>
+<script src="js/sign-lang.js?v=67"></script>
+<script src="js/orbita-world-map.js?v=67"></script>
+<script src="js/questions-data.js?v=67"></script>
+<script src="js/country-questions-data.js?v=67"></script>
+<script src="js/bosses-data.js?v=67"></script>
+<script src="js/chain-data.js?v=67"></script>
+<script src="js/boss-maps.js?v=67"></script>
+<script src="js/game.js?v=67"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {

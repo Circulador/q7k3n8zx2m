@@ -18,7 +18,7 @@ var DEF = { lang:"pt", name:"", team:"mina", role:"admin",
   a11y:{voice:false, contrast:false, large:false, motion:false, signs:false, fontScale:0, links:false, spacing:false, letterSpace:false, dyslexia:false, colorblind:"none", readingMode:false},
   done:{}, themeStats:{}, medals:{}, owned:{}, equipped:{avatar:"🛡️",frame:"default",skin:"default"},
   bossDone:{}, bossStats:{}, onboardingDone:false, daily:{date:"",done:{}}, weekly:{week:"",prog:{}}, teamScores:{},
-  chainDone:{}, streak:{count:0,lastDate:"",best:0}, missed:{}, reports:0, managerMode:false, focusLearn:false, simpleUi:true, theme:"default" };
+  chainDone:{}, streak:{count:0,lastDate:"",best:0}, missed:{}, reports:0, managerMode:false, focusLearn:false, simpleUi:true, theme:"default", tipsSeen:{map:false,daily:false,boss:false}, glossaryFavs:[], offlineHintSeen:false };
 var S = merge(load(), DEF);
 
 function merge(a,b){ a=a||{}; for(var k in b){ if(a[k]===undefined) a[k]=b[k]; else if(b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])) a[k]=merge(a[k],b[k]); } return a; }
@@ -55,6 +55,51 @@ var UI = {
   "settings.glossaryPick":{pt:"Escolha um termo",en:"Choose a term"},
   "settings.glossaryFun":{pt:"No seu dia a dia",en:"In your daily life"},
   "settings.openA11y":{pt:"♿ Acessibilidade",en:"♿ Accessibility"},
+  "settings.simpleUi":{pt:"Modo simples",en:"Simple mode"},
+  "settings.simpleUiSub":{pt:"Esconde nível, XP e maturidade no topo — ideal para começar.",en:"Hides level, XP and maturity in the header — ideal for beginners."},
+  "settings.easyRead":{pt:"Leitura fácil",en:"Easy reading"},
+  "settings.easyReadSub":{pt:"Liga contraste, texto grande e espaçamento de uma vez.",en:"Enables contrast, large text and spacing at once."},
+  "settings.editProfile":{pt:"✏️ Minha operação (equipe e papel)",en:"✏️ My operation (team & role)"},
+  "settings.glossaryFavs":{pt:"⭐ Favoritos do glossário",en:"⭐ Glossary favorites"},
+  "settings.flashcard":{pt:"🃏 Revisar termos (flashcards)",en:"🃏 Review terms (flashcards)"},
+  "settings.flashcardNext":{pt:"Próximo termo →",en:"Next term →"},
+  "quiz.context":{pt:"Contexto",en:"Context"},
+  "quiz.glossaryTip":{pt:"O que é isso?",en:"What is this?"},
+  "quiz.repeatQ":{pt:"Repetir pergunta",en:"Repeat question"},
+  "report.skipVisible":{pt:"Pular por agora",en:"Skip for now"},
+  "tip.map":{pt:"Toque no país destacado para iniciar sua expedição. Use +/− para zoom.",en:"Tap the highlighted country to start your expedition. Use +/− to zoom."},
+  "tip.daily":{pt:"5 situações rápidas — 2 revisam erros anteriores. Mantém sua ofensiva!",en:"5 quick scenarios — 2 review past mistakes. Keeps your streak!"},
+  "tip.boss":{pt:"Crises estilo mesa — leia o cenário e tome decisões como na operação real.",en:"Tabletop crises — read the scenario and decide as in real operations."},
+  "tip.dismiss":{pt:"Entendi",en:"Got it"},
+  "home.weekBar":{pt:"Meta da semana",en:"Weekly goal"},
+  "home.weekBarGo":{pt:"Ver metas da semana →",en:"View weekly goals →"},
+  "home.firstDay":{pt:"Dia 1 da sua ofensiva — 5 minutos de treino bastam para começar.",en:"Day 1 of your streak — 5 minutes of training is enough to start."},
+  "session.title":{pt:"Resumo da sessão",en:"Session summary"},
+  "session.streakKept":{pt:"🔥 Ofensiva mantida hoje!",en:"🔥 Streak kept today!"},
+  "session.streakStart":{pt:"🔥 Ofensiva iniciada — volte amanhã!",en:"🔥 Streak started — come back tomorrow!"},
+  "session.xpGain":{pt:"+{n} XP nesta sessão",en:"+{n} XP this session"},
+  "weekly.checklist":{pt:"Metas da semana",en:"Weekly goals"},
+  "weekly.checkDaily":{pt:"Jogar 5 dias (ofensiva)",en:"Play 5 days (streak)"},
+  "weekly.checkCampaign":{pt:"3 campanhas no mapa",en:"3 map campaigns"},
+  "weekly.checkBoss":{pt:"1 crise vencida",en:"1 crisis beaten"},
+  "boss.estTime":{pt:"~{n} min",en:"~{n} min"},
+  "boss.recommended":{pt:"Recomendado",en:"Recommended"},
+  "boss.completed":{pt:"Concluído",en:"Completed"},
+  "boss.nextAction":{pt:"Próxima crise →",en:"Next crisis →"},
+  "boss.resultNext":{pt:"Continuar jornada",en:"Continue journey"},
+  "nav.more":{pt:"Mais",en:"More"},
+  "nav.me":{pt:"Eu",en:"Me"},
+  "nav.badgeDaily":{pt:"Missão pendente",en:"Mission pending"},
+  "offline.hint":{pt:"📶 Funciona offline após a primeira visita — seu progresso fica neste dispositivo.",en:"📶 Works offline after first visit — progress stays on this device."},
+  "offline.dismiss":{pt:"Ok",en:"OK"},
+  "profile.editSetup":{pt:"✏️ Alterar equipe e papel",en:"✏️ Change team and role"},
+  "profile.weeklyGoals":{pt:"✅ Metas da semana",en:"✅ Weekly goals"},
+  "cert.share":{pt:"📤 Compartilhar",en:"📤 Share"},
+  "onboard.langT":{pt:"1) Escolha o idioma",en:"1) Choose language"},
+  "onboard.langB":{pt:"Perguntas, respostas e narração seguem o idioma. Acessibilidade (♿) e configurações (⚙️) ficam no topo quando quiser.",en:"Questions, answers and narration follow the language. Accessibility (♿) and settings (⚙️) are in the top bar anytime."},
+  "mgr.kpiAdoption":{pt:"Adoção",en:"Adoption"},
+  "mgr.kpiWeak":{pt:"Tema mais fraco",en:"Weakest theme"},
+  "mgr.kpiStreak":{pt:"Ofensiva média",en:"Avg streak"},
   "hud.tip.settings":{pt:"Configurações — tema, glossário e mais",en:"Settings — theme, glossary and more"},
   "a11y.shortLabel":{pt:"Acessibilidade",en:"Accessibility"},
   "a11y.sec.read":{pt:"Leitura e narração",en:"Reading & narration"},
@@ -421,7 +466,7 @@ var UI = {
   "nav.daily":{pt:"Missões",en:"Missions"},
   "nav.weekly":{pt:"Semanal",en:"Weekly"},
   "nav.shop":{pt:"Loja",en:"Shop"},
-  "nav.stats":{pt:"Progresso",en:"Progress"},
+  "nav.stats":{pt:"Eu",en:"Me"},
   "nav.manager":{pt:"Gestor",en:"Manager"},
   "nav.tip.home":{pt:"Início — idioma, acessibilidade e começar",en:"Home — language, accessibility and start"},
   "nav.tip.map":{pt:"Mapa — campanhas por país",en:"Map — country campaigns"},
@@ -471,7 +516,8 @@ function renderSettingsUi(){
     dl.innerHTML="";
     GLOSSARY.forEach(function(g){ var op=document.createElement("option"); op.value=g.term+" — "+tt(g.name); dl.appendChild(op); });
   }
-  renderGlossarySelect();
+  renderGlossarySelect(); renderGlossaryFavs(); renderFlashcard();
+  var su=$("optSimpleUiSettings"); if(su) su.checked=S.simpleUi!==false;
 }
 function applyHudTips(){
   var map={
@@ -697,7 +743,7 @@ function stopSpeak(){ if("speechSynthesis" in window) try{ window.speechSynthesi
 
 /* -------------------- NAVEGAÇÃO -------------------- */
 var NAVMAP={screenMap:"navMapBtn",screenBossList:"navBossBtn",screenDaily:"navDailyBtn",screenProfile:"navStatsBtn",screenHome:"navHomeBtn",screenManager:"navManagerBtn"};
-var NAV_MORE_SCREENS=["screenHome","screenManager"];
+var NAV_MORE_SCREENS=["screenHome","screenManager","screenWeekly","screenShop"];
 var NAV_HIDE=["screenQuiz","screenBoss","screenResult","screenSetup","screenBossResult"];
 function toggleNavMore(open){
   var sheet=$("navMoreSheet"), btn=$("navMoreBtn");
@@ -716,12 +762,19 @@ function show(id){
   if(id!=="screenMap" && typeof glStop==="function") glStop();
   document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
   var el=$(id); if(el) el.classList.add("active");
-  if(id==="screenHome"){ renderNextStep(); renderWeekCard(); }
+  if(id==="screenHome"){ renderNextStep(); renderWeekCard(); renderFirstDayHint(); }
+  if(id==="screenMap"){ showContextTip("map"); renderMapExplorerHint(); }
+  if(id==="screenDaily") showContextTip("daily");
+  if(id==="screenBossList") showContextTip("boss");
+  updateNavBadges();
   window.scrollTo({top:0,behavior:S.a11y.motion?"auto":"smooth"});
   document.querySelectorAll(".bottom-nav button").forEach(function(b){ b.classList.remove("on"); });
   if(NAVMAP[id]){ var nb=$(NAVMAP[id]); if(nb) nb.classList.add("on"); }
   document.querySelectorAll(".nav-more-item").forEach(function(b){ b.classList.remove("on"); });
-  if(NAV_MORE_SCREENS.indexOf(id)>=0&&NAVMAP[id]){ var mi=$(NAVMAP[id]); if(mi) mi.classList.add("on"); }
+  if(NAV_MORE_SCREENS.indexOf(id)>=0){
+    var mi=id==="screenWeekly"||id==="screenShop"?$("navMoreBtn"):$(NAVMAP[id]);
+    if(mi) mi.classList.add("on");
+  }
   document.body.classList.toggle("nav-hidden",NAV_HIDE.indexOf(id)>=0);
   announce(el?(el.getAttribute("aria-label")||""):"");
 }
@@ -966,10 +1019,13 @@ function renderGlossarySelect(filter){
 }
 function showGlossaryTerm(id){
   var host=$("glossaryCard"); if(!host) return;
+  ensureUxState();
   if(!id){ host.innerHTML='<p class="glossary-empty muted">'+(L()==="pt"?"Escolha ou busque um termo acima.":"Pick or search a term above.")+'</p>'; return; }
   var g=GLOSSARY.filter(function(x){ return x.id===id; })[0];
   if(!g){ host.innerHTML=""; return; }
-  host.innerHTML='<div class="glossary-term">'+g.term+'</div><div class="glossary-name">'+tt(g.name)+'</div><p class="glossary-def">'+tt(g.def)+'</p><div class="glossary-fun-k">'+t("settings.glossaryFun")+'</div><p class="glossary-fun">'+tt(g.fun)+'</p>';
+  host.innerHTML='<div class="glossary-term">'+g.term+' <button type="button" class="glossary-fav-toggle" data-gid="'+g.id+'" aria-label="Favorito">'+(S.glossaryFavs&&S.glossaryFavs.indexOf(g.id)>=0?"⭐":"☆")+'</button></div><div class="glossary-name">'+tt(g.name)+'</div><p class="glossary-def">'+tt(g.def)+'</p><div class="glossary-fun-k">'+t("settings.glossaryFun")+'</div><p class="glossary-fun">'+tt(g.fun)+'</p>';
+  var fb=host.querySelector(".glossary-fav-toggle");
+  if(fb) fb.addEventListener("click",function(e){ e.stopPropagation(); toggleGlossaryFav(g.id); showGlossaryTerm(g.id); });
 }
 function toggleSettingsMenu(force){
   var menu=$("settingsMenu"),btn=$("settingsBtn"),bd=$("a11yBackdrop");
@@ -1209,15 +1265,14 @@ function prevQuestion(){
 function showReportPrompt(q){
   var rs=$("reportStep"); if(!rs) return;
   cur.reportPending=true; updateQuizNav(); rs.hidden=false;
-  rs.innerHTML='<div class="report-title">'+t("report.title")+'</div><p class="report-sub">'+t("report.sub")+'</p><div class="report-btns"></div><p class="report-how">'+t("report.how")+'</p>';
+  rs.innerHTML='<div class="report-title">'+t("report.title")+'</div><p class="report-sub">'+t("report.sub")+'</p><div class="report-btns"></div><button type="button" class="btn btn-ghost report-skip-main" id="reportSkipMain">'+t("report.skipVisible")+'</button><p class="report-how">'+t("report.how")+'</p>';
   var box=rs.querySelector(".report-btns");
   [{k:"report.helpdesk"},{k:"report.security"},{k:"report.privacy"}].forEach(function(ch){
     var b=document.createElement("button"); b.className="btn btn-blue btn-sm"; b.textContent=t(ch.k);
     b.addEventListener("click",function(){ completeReport(); }); box.appendChild(b);
   });
-  var sk=document.createElement("button"); sk.className="btn btn-ghost btn-sm"; sk.textContent=t("report.skip");
-  sk.addEventListener("click",function(){ cur.reportPending=false; rs.hidden=true; updateQuizNav(); $("nextBtn").focus(); });
-  box.appendChild(sk);
+  var sk=$("reportSkipMain")||rs.querySelector(".report-skip-main");
+  if(sk) sk.addEventListener("click",function(){ cur.reportPending=false; rs.hidden=true; updateQuizNav(); $("nextBtn").focus(); });
 }
 function completeReport(){ S.reports=(S.reports||0)+1; addReward(5,2,0); save(); cur.reportPending=false;
   if(cur.qStates&&cur.qStates[cur.i]) cur.qStates[cur.i].reportDone=true;
@@ -1763,7 +1818,7 @@ function openMapDetailCountry(id){
     +'<div class="md-chain"><b>'+t("map.chainImpact")+':</b> '+tt(c.chain)+'</div>'
     +'<div class="chip-row">'+themes+'</div>'
     +'<div class="md-progress">'+prog+'</div>'
-    +'<button class="btn btn-primary btn-sm" id="mapDetailPlay">'+t("region.start")+'</button>';
+    +'<button class="btn btn-primary btn-lg" id="mapDetailPlay">'+t("region.start")+'</button>';
   panel.hidden=false;
   $("mapDetailPlay").addEventListener("click",startCampaign);
   speak((official?official.name:tt(c.name))+". "+(official?official.phrase:tt(c.desc)));
@@ -1883,9 +1938,10 @@ function openMap(process, reset, focusExpedition){
   normalizeMapProcess();
   if(reset||!mapReady) view={x:0,y:0,w:VW,h:VH};
   ensureMap(); drawMap(); show("screenMap");
+  var row=$("mapToolbarRow"); if(row&&window.innerWidth<=640) row.classList.remove("map-toolbar-collapsed");
   if(focusExpedition){
     var next=nextExpeditionCountry();
-    if(next) setTimeout(function(){ focusExpeditionCountry(next.id); }, mapReady?120:480);
+    if(next) setTimeout(function(){ focusExpeditionCountry(next.id); pulseNextCountry(); }, mapReady?120:480);
   }
 }
 function returnToMap(){ openMap(null,false); }
@@ -1951,6 +2007,8 @@ function renderQuestion(){
   $("sceneTitleTxt").textContent=(L()==="pt"?"Decisão do Guardião":"Guardian's Decision");
   $("sceneText").textContent=tt(q.q);
   renderPersonalBridge(q);
+  renderQuizContext();
+  renderQuizGlossaryHint(q.theme);
   var opts=$("options"); opts.innerHTML="";
   var order=cur.optOrder[cur.i];
   if(!order){ order=shuffle(q.opts.map(function(o,idx){ return {o:o,idx:idx}; })); cur.optOrder[cur.i]=order; }
@@ -2017,6 +2075,7 @@ function finishCampaign(){
   var lab=L()==="pt"?{a:"Acertos",b:"Precisão",c:"Integridade",d:"XP total"}:{a:"Correct",b:"Accuracy",c:"Integrity",d:"Total XP"};
   $("statsGrid").innerHTML='<div class="stat"><div class="v">'+cur.correct+"/"+total+'</div><div class="l">'+lab.a+'</div></div><div class="stat"><div class="v">'+acc+'%</div><div class="l">'+lab.b+'</div></div><div class="stat"><div class="v">'+cur.integrity+'%</div><div class="l">'+lab.c+'</div></div><div class="stat"><div class="v">'+S.xp+'</div><div class="l">'+lab.d+'</div></div>';
   renderCampaignDebrief(); renderThemeErrors($("themeErrors")); renderMedals($("medalsBox")); renderRank($("rankList"));
+  renderSessionFeedback(win,acc);
   var rmb=$("resultMapBtn");
   if(rmb){
     if(cur.mode==="chain"){ rmb.textContent=L()==="pt"?"⛓️ Voltar a Desafios / Crises":"⛓️ Back to Challenges / Crises"; rmb.onclick=function(){ renderBossList(); show("screenBossList"); }; }
@@ -2445,13 +2504,19 @@ function renderBossList(){
     d.type="button";
     d.setAttribute("data-boss",b.id);
     d.addEventListener("click",function(){ startBoss(b.id); });
-    d.className="boss-card boss-card--tabletop boss-card--map";
+    var rec=getRecommendedBossId()===b.id;
+    var done=!!best;
+    d.className="boss-card boss-card--tabletop boss-card--map"+(rec?" boss-card--rec":"")+(done?" boss-card--done":"");
     var phaseN=b.phases&&b.phases.length?b.phases.length:0;
-    var meta=phaseN+" "+(L()==="pt"?"cenas · mapa dinâmico":"scenes · live map")+(b.tag?" · "+tt(b.tag):"");
+    var estMin=Math.max(3,Math.round(phaseN*1.5));
+    var meta=t("boss.estTime").replace("{n}",String(estMin));
+    if(rec) meta+=' · <span class="boss-rec-tag">'+t("boss.recommended")+'</span>';
+    if(done) meta+=' · '+t("boss.completed");
     if(best) meta+=" · "+(tier?tier.ico:"")+" "+best.index+"%";
     var badge=best?'<span class="bdone" title="'+tt(tier.title)+'">'+tier.ico+'</span>':'<span class="boss-card-play" aria-hidden="true">▶</span>';
     var tagLabel=t("boss.storyMapLabel");
-    d.innerHTML='<span class="be">'+b.emoji+'</span><div class="boss-card-body"><span class="boss-card-tag">'+tagLabel+'</span><div class="bt">'+tt(b.name)+'</div><div class="bd">'+tt(b.desc)+'</div><div class="boss-card-meta">'+meta+'</div></div>'+badge;
+    var preview=tt(b.desc).length>90?tt(b.desc).slice(0,87)+"…":tt(b.desc);
+    d.innerHTML='<span class="be">'+b.emoji+'</span><div class="boss-card-body"><span class="boss-card-tag">'+tagLabel+'</span><div class="bt">'+tt(b.name)+'</div><div class="bd">'+preview+'</div><div class="boss-card-meta">'+meta+'</div></div>'+badge;
     host.appendChild(d);
   });
 }
@@ -2827,6 +2892,7 @@ function renderNextStep(){
   if(sub) sub.textContent=ns.sub;
   if(btn){ btn.textContent=t("home.playNow"); btn.onclick=playNow; }
   renderWeekLine();
+  renderFirstDayHint();
   card.hidden=false;
 }
 function renderWeekLine(){
@@ -2839,6 +2905,7 @@ function renderWeekLine(){
     .replace("{correct}",String(wp.correct||0))
     .replace("{campaign}",String(wp.campaign||0))
     .replace("{daily}",daily);
+  renderWeekProgressBar();
 }
 function setFocusLearn(on){
   S.focusLearn=!!on; save(); applyFocusLearn(); refreshHud();
@@ -2920,7 +2987,7 @@ function renderProfile(){
   ensureStreak(); ensureBossStats();
   var avg=bossAvgIndex(), br=bossGuardianRank(avg);
   $("profileStats").innerHTML='<div class="stat"><div class="v">'+levelOf()+'</div><div class="l">'+lab.a+'</div></div><div class="stat"><div class="v">'+S.xp+'</div><div class="l">'+lab.b+'</div></div><div class="stat"><div class="v">'+Object.keys(S.done).length+"/"+COUNTRIES.length+'</div><div class="l">'+lab.c+'</div></div><div class="stat"><div class="v">'+bossCompletedCount()+"/"+BOSSES.length+'</div><div class="l">'+lab.d+'</div></div><div class="stat"><div class="v">'+br.ico+' '+avg+'%</div><div class="l">'+lab.f+'</div></div><div class="stat"><div class="v">🔥 '+(S.streak.count||0)+'</div><div class="l">'+lab.e+'</div></div><div class="stat"><div class="v">📢 '+(S.reports||0)+'</div><div class="l">'+lab.g+'</div></div>';
-  renderCompletionCard(); renderReviewSection(); renderCertChecklist();
+  renderCompletionCard(); renderWeeklyGoalsChecklist(); renderReviewSection(); renderCertChecklist();
   renderBossProgress(); renderProgressHub(); renderPedagogyRec("pedagogyRec"); drawRadar(); renderRadarTable(); renderThemeErrors($("profileThemes")); renderRank($("profileRank")); renderMedals($("profileMedals")); renderCertificatePreview();
 }
 function certTeamRole(){
@@ -3104,11 +3171,10 @@ function drawRadar(){
    PAINEL DO GESTOR + CSV
    ========================================================== */
 function renderManager(){
-  var demo=$("mgrDemo"); if(demo) demo.textContent=t("manager.demo");
-  var acc=overallAcc()||0, oa=Object.keys(S.done).length;
-  var lab=L()==="pt"?{a:"Sua taxa de acerto",b:"Campanhas",c:"Desafios / Crises",d:"Reportes",e:"Erros p/ revisar"}:{a:"Your accuracy",b:"Campaigns",c:"Challenges / Crises",d:"Reports",e:"Errors to review"};
-  $("mgrKpis").innerHTML='<div class="stat"><div class="v">'+acc+'%</div><div class="l">'+lab.a+'</div></div><div class="stat"><div class="v">'+oa+'</div><div class="l">'+lab.b+'</div></div><div class="stat"><div class="v">'+bossCompletedCount()+'</div><div class="l">'+lab.c+'</div></div><div class="stat"><div class="v">'+(S.reports||0)+'</div><div class="l">'+lab.d+'</div></div><div class="stat"><div class="v">'+Object.keys(S.missed||{}).length+'</div><div class="l">'+lab.e+'</div></div>';
+  var demo=$("mgrDemo");
+  renderManagerKpisSimple();
   var host=$("mgrTeams"); host.innerHTML="";
+  var acc=overallAcc()||0;
   var tmOnly=TEAMS.filter(function(t){ return t.id===S.team; })[0];
   if(tmOnly){
     var dYou=document.createElement("div"); dYou.className="mgr-row mgr-row-you";
@@ -3138,41 +3204,224 @@ function renderTeams(){ var g=$("teamsGrid"); g.innerHTML=""; TEAMS.forEach(func
 function renderRoles(){ var g=$("rolesGrid"); g.innerHTML=""; ROLES.forEach(function(r){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.role===r.id?"true":"false"); b.innerHTML='<div class="pi">'+r.ico+'</div><div class="pn">'+r[L()]+'</div><div class="pd">'+r[L()+"d"]+'</div>'; b.addEventListener("click",function(){ S.role=r.id; save(); renderRoles(); }); g.appendChild(b); }); }
 
 /* ==========================================================
+   UX ENHANCEMENTS (v67)
+   ========================================================== */
+var THEME_GLOSSARY={phishing:"phish",password:"mfa",ot:"ot",data:"dlp",device:"malware",remote:"vpn",bec:"bec",port:"port"};
+function ensureUxState(){
+  if(!S.tipsSeen) S.tipsSeen={map:false,daily:false,boss:false};
+  if(!S.glossaryFavs) S.glossaryFavs=[];
+}
+function setSimpleUi(on){
+  S.simpleUi=!!on; save(); applySimpleUi(); refreshHud();
+  var a=$("optSimpleUi"), b=$("optSimpleUiSettings");
+  if(a) a.checked=S.simpleUi; if(b) b.checked=S.simpleUi;
+}
+function applyEasyReadPreset(){
+  S.a11y.contrast=true; S.a11y.large=true; S.a11y.spacing=true;
+  save(); applyA11y(); toast(L()==="pt"?"Leitura fácil ativada":"Easy reading enabled");
+}
+function updateNavBadges(){
+  ensureDaily();
+  var badge=$("navDailyBadge"), btn=$("navDailyBtn");
+  if(badge){
+    var pending=!S.daily.done.mission;
+    badge.hidden=!pending;
+    if(pending) badge.textContent="!";
+  }
+  if(btn) btn.setAttribute("aria-label",t("nav.tip.daily")+(badge&&!badge.hidden?" — "+t("nav.badgeDaily"):""));
+}
+function showContextTip(key){
+  ensureUxState();
+  var el=$("ctxTip_"+key); if(!el||S.tipsSeen[key]) return;
+  el.hidden=false;
+}
+function dismissContextTip(key){
+  ensureUxState();
+  S.tipsSeen[key]=true; save();
+  var el=$("ctxTip_"+key); if(el) el.hidden=true;
+}
+function renderWeekProgressBar(){
+  ensureWeekly(); ensureDaily();
+  var host=$("weekProgressBar"), fill=$("weekProgressFill"), lab=$("weekProgressLabel");
+  if(!host) return;
+  var wp=S.weekly.prog||{}, correct=wp.correct||0, campaign=wp.campaign||0, boss=wp.boss||0;
+  var score=Math.min(100,Math.round((correct/20*40)+(campaign/3*35)+(boss/1*25)));
+  if(fill) fill.style.width=score+"%";
+  if(lab) lab.textContent=correct+"/20 · "+campaign+"/3 · "+(S.daily.done.mission?(L()==="pt"?"missão ✅":"mission ✅"):(L()==="pt"?"missão pendente":"mission pending"));
+  host.setAttribute("aria-valuenow",String(score));
+}
+function openWeeklyScreen(){ renderWeekly(); show("screenWeekly"); }
+function renderWeeklyGoalsChecklist(){
+  ensureWeekly(); ensureStreak();
+  var host=$("weeklyGoalsChecklist"); if(!host) return;
+  var wp=S.weekly.prog||{}, streakDays=S.streak.count||0;
+  var items=[
+    {ok:streakDays>=5, txt:t("weekly.checkDaily"), val:streakDays+"/5"},
+    {ok:(wp.campaign||0)>=3, txt:t("weekly.checkCampaign"), val:(wp.campaign||0)+"/3"},
+    {ok:(wp.boss||0)>=1, txt:t("weekly.checkBoss"), val:(wp.boss||0)+"/1"}
+  ];
+  host.innerHTML='<div class="wg-title">'+t("profile.weeklyGoals")+'</div>';
+  items.forEach(function(it){
+    host.innerHTML+='<div class="wg-item'+(it.ok?" done":"")+'"><span>'+(it.ok?"✅":"⬜")+'</span><span class="wg-txt">'+it.txt+'</span><span class="wg-val">'+it.val+'</span></div>';
+  });
+}
+function renderFirstDayHint(){
+  var el=$("firstDayHint"); if(!el) return;
+  ensureStreak();
+  var showHint=(S.streak.count||0)<=1&&!streakPlayedToday();
+  el.hidden=!showHint;
+}
+function openGlossaryForTerm(id){
+  toggleSettingsMenu(true);
+  var sel=$("glossaryPick"), search=$("glossarySearch");
+  if(sel) sel.value=id;
+  if(search){ var g=GLOSSARY.filter(function(x){return x.id===id;})[0]; if(g) search.value=g.term; }
+  showGlossaryTerm(id);
+  renderGlossarySelect();
+}
+function toggleGlossaryFav(id){
+  ensureUxState();
+  var i=S.glossaryFavs.indexOf(id);
+  if(i>=0) S.glossaryFavs.splice(i,1); else S.glossaryFavs.push(id);
+  save(); renderGlossaryFavs();
+}
+function renderGlossaryFavs(){
+  var host=$("glossaryFavsList"); if(!host) return;
+  ensureUxState();
+  if(!S.glossaryFavs.length){ host.innerHTML='<p class="muted">'+t("settings.glossaryPick")+'</p>'; return; }
+  host.innerHTML="";
+  S.glossaryFavs.forEach(function(id){
+    var g=GLOSSARY.filter(function(x){return x.id===id;})[0]; if(!g) return;
+    var b=document.createElement("button");
+    b.type="button"; b.className="glossary-fav-chip";
+    b.textContent=g.term;
+    b.addEventListener("click",function(){ openGlossaryForTerm(id); });
+    host.appendChild(b);
+  });
+}
+var flashcardIdx=0;
+function renderFlashcard(){
+  var host=$("flashcardCard"); if(!host) return;
+  ensureUxState();
+  var pool=S.glossaryFavs.length?S.glossaryFavs.map(function(id){ return GLOSSARY.filter(function(g){return g.id===id;})[0]; }).filter(Boolean):GLOSSARY;
+  if(!pool.length) return;
+  if(flashcardIdx>=pool.length) flashcardIdx=0;
+  var g=pool[flashcardIdx];
+  host.innerHTML='<div class="glossary-term">'+g.term+'</div><p class="glossary-def">'+tt(g.def)+'</p><p class="glossary-fun">'+tt(g.fun)+'</p>';
+}
+function nextFlashcard(){ flashcardIdx++; renderFlashcard(); }
+function themePreview(th){
+  document.body.classList.remove("theme-default","theme-light","theme-dark");
+  if(th!=="default") document.body.classList.add("theme-"+th);
+  setTimeout(function(){ applyTheme(); },1200);
+}
+function openEditSetup(){
+  renderTeams(); renderRoles();
+  if($("playerName")) $("playerName").value=S.name||"";
+  show("screenSetup");
+}
+function renderQuizContext(){
+  var el=$("quizContextChip"); if(!el) return;
+  var mode=cur.mode, label="", ico="🎯";
+  if(mode==="daily"){ ico="📅"; label=(L()==="pt"?"Missão diária":"Daily mission")+" · "+(cur.i+1)+"/"+cur.questions.length; }
+  else if(mode==="review"){ ico="📚"; label=t("pedagogy.reviewMode")+" · "+(cur.i+1)+"/"+cur.questions.length; }
+  else if(mode==="campaign"){ ico="🗺️"; label=(L()==="pt"?"Campanha":"Campaign")+" · "+(cur.country?cur.country.flag+" "+tt(cur.country.name):"")+" · "+(cur.i+1)+"/"+cur.questions.length; }
+  else { label=(cur.i+1)+"/"+cur.questions.length; }
+  el.innerHTML='<span aria-hidden="true">'+ico+'</span> '+label;
+}
+function renderQuizGlossaryHint(theme){
+  var el=$("quizGlossaryHint"); if(!el) return;
+  var gid=THEME_GLOSSARY[theme];
+  if(!gid){ el.hidden=true; return; }
+  var g=GLOSSARY.filter(function(x){return x.id===gid;})[0];
+  if(!g){ el.hidden=true; return; }
+  el.hidden=false;
+  el.innerHTML='<button type="button" class="quiz-gloss-btn" id="quizGlossBtn">'+t("quiz.glossaryTip")+': <b>'+g.term+'</b></button>';
+  var btn=$("quizGlossBtn");
+  if(btn) btn.onclick=function(e){ e.stopPropagation(); openGlossaryForTerm(gid); };
+}
+function renderSessionFeedback(win,acc){
+  var host=$("sessionFeedback"); if(!host) return;
+  host.hidden=false;
+  ensureStreak();
+  var streakMsg=streakPlayedToday()?(S.streak.count<=1?t("session.streakStart"):t("session.streakKept")):"";
+  var xpEst=cur.correct*10;
+  host.innerHTML='<div class="session-feedback-inner"><div class="session-feedback-ico">'+(win?"🏆":"💪")+'</div><div><div class="session-feedback-title">'+t("session.title")+'</div><div class="session-feedback-acc">'+(L()==="pt"?"Precisão":"Accuracy")+': <b>'+acc+'%</b></div>'+(streakMsg?'<div class="session-feedback-streak">'+streakMsg+'</div>':'')+'<div class="session-feedback-xp">'+t("session.xpGain").replace("{n}",String(xpEst))+'</div></div></div>';
+}
+function shareCertificate(){
+  var c=$("certCanvas"); if(!c||!c.toBlob){ toast(L()==="pt"?"Gere a prévia primeiro":"Generate preview first"); return; }
+  c.toBlob(function(blob){
+    if(!blob) return;
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[new File([blob],"certificado.png",{type:"image/png"})]})){
+      navigator.share({files:[new File([blob],"certificado.png",{type:"image/png"})],title:t("profile.certTitle")}).catch(function(){});
+    } else {
+      var a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="guardiao-certificado.png"; a.click(); URL.revokeObjectURL(a.href);
+      toast(L()==="pt"?"Imagem salva — compartilhe pelo seu app de fotos":"Image saved — share from your gallery");
+    }
+  });
+}
+function showOfflineBanner(){
+  if(S.offlineHintSeen) return;
+  var el=$("offlineBanner"); if(!el) return;
+  el.hidden=false;
+}
+function dismissOfflineBanner(){ S.offlineHintSeen=true; save(); var el=$("offlineBanner"); if(el) el.hidden=true; }
+function renderMapExplorerHint(){
+  var el=$("mapExplorerHint"); if(!el) return;
+  var next=nextExpeditionCountry();
+  if(next) el.textContent=(L()==="pt"?"Próximo: ":"Next: ")+next.flag+" "+tt(next.name);
+}
+function pulseNextCountry(){
+  var next=nextExpeditionCountry();
+  setMapHitHighlight(next?next.id:null);
+}
+function renderManagerKpisSimple(){
+  var host=$("mgrKpis"); if(!host) return;
+  var teams=TEAMS.length, active=0, i;
+  for(i=0;i<TEAMS.length;i++){ if(S.teamScores&&S.teamScores[TEAMS[i].id]) active++; }
+  var weak=weakestThemeKey(), weakName=weak?tt(THEMES[weak]):"—";
+  var avgStreak=S.streak?S.streak.best||0:0;
+  host.innerHTML='<div class="stat"><div class="v">'+active+'/'+teams+'</div><div class="l">'+t("mgr.kpiAdoption")+'</div></div><div class="stat"><div class="v">'+weakName+'</div><div class="l">'+t("mgr.kpiWeak")+'</div></div><div class="stat"><div class="v">🔥 '+avgStreak+'</div><div class="l">'+t("mgr.kpiStreak")+'</div></div>';
+}
+function getRecommendedBossId(){
+  var i,b,st;
+  for(i=0;i<BOSSES.length;i++){ b=BOSSES[i]; st=S.bossStats[b.id]; if(!st||!st.best) return b.id; }
+  return BOSSES[0]?BOSSES[0].id:null;
+}
+
+/* ==========================================================
    BIND / INIT
    ========================================================== */
 /* -------------------- ONBOARDING -------------------- */
 var ONBOARD_STEPS=[
-  {ico:"🌐",type:"setup",titleKey:"onboard.setupT",bodyKey:"onboard.setupB"},
+  {ico:"🌐",type:"lang",titleKey:"onboard.langT",bodyKey:"onboard.langB"},
   {ico:"🛡️",titleKey:"onboard.playT",bodyKey:"onboard.playB"},
   {ico:"▶️",titleKey:"onboard.readyT",bodyKey:"onboard.readyB"}
 ];
 var onboardStep=0, onboardReplay=false;
-function closeOnboarding(){
+function closeOnboarding(skipped){
   S.onboardingDone=true; save();
   onboardReplay=false;
   var ov=$("onboardOverlay"); if(ov) ov.hidden=true;
   document.body.classList.remove("onboard-open");
+  if(skipped&&!setupComplete()){
+    renderTeams(); renderRoles();
+    if($("playerName")) $("playerName").value=S.name||"";
+    show("screenSetup");
+    return;
+  }
   try{ renderNextStep(); }catch(e){}
 }
 function renderOnboarding(){
   var step=ONBOARD_STEPS[onboardStep], isSetup=step.type==="setup", isLang=step.type==="lang", isA11y=step.type==="a11y";
   var langPanel=$("onboardLangPanel"), a11yPanel=$("onboardA11yPanel"), feat=$("onboardFeature"), body=$("onboardBody"), mission=$("onboardMission");
   if($("onboardTitle")) $("onboardTitle").textContent=t(step.titleKey||"onboard.step");
-  if(feat) feat.hidden=isSetup||isLang||isA11y;
-  if(body){ body.hidden=!(isSetup||isLang||isA11y); if(isSetup||isLang||isA11y) body.textContent=t(step.bodyKey); }
-  if(mission) mission.textContent=(isSetup||isLang||isA11y)?"":t(step.bodyKey);
-  if(langPanel) langPanel.hidden=!(isSetup||isLang);
-  if(a11yPanel){
-    a11yPanel.hidden=!(isSetup||isA11y);
-    if(isSetup||isA11y){
-      var ov=$("onboardOptVoice"), oc=$("onboardOptContrast"), os=$("onboardOptSigns"), om=$("onboardOptMotion");
-      if(ov) ov.checked=!!S.a11y.voice;
-      if(oc) oc.checked=!!S.a11y.contrast;
-      if(os) os.checked=!!S.a11y.signs;
-      if(om) om.checked=!!S.a11y.motion;
-    }
-  }
-  if(isSetup||isLang){
+  if(feat) feat.hidden=isLang;
+  if(body){ body.hidden=!isLang; if(isLang) body.textContent=t(step.bodyKey); }
+  if(mission) mission.textContent=isLang?"":t(step.bodyKey);
+  if(langPanel) langPanel.hidden=!isLang;
+  if(a11yPanel) a11yPanel.hidden=true;
+  if(isLang){
     document.querySelectorAll("#onboardLangPanel .lang-card").forEach(function(b){ b.setAttribute("aria-pressed",b.getAttribute("data-lang")===S.lang?"true":"false"); });
   } else if(!isA11y) {
     var ico=$("onboardIco"); if(ico) ico.textContent=step.ico;
@@ -3201,7 +3450,6 @@ function onboardNext(){
   var firstTime=!S.onboardingDone;
   closeOnboarding();
   if(firstTime&&!onboardReplay){
-    if(!S.a11y.voice){ S.a11y.voice=true; }
     if(S.simpleUi===undefined) S.simpleUi=true;
     save(); applyA11y(); applySimpleUi();
     renderTeams(); renderRoles();
@@ -3231,7 +3479,7 @@ function bind(){
   on("settingsBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(); });
   on("settingsMenuClose","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); });
   on("settingsOpenA11yBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); toggleA11yMenu(true); if($("a11yBtn")) $("a11yBtn").focus(); });
-  on("themeSelect","change",function(e){ e.stopPropagation(); setTheme(this.value); });
+  on("themeSelect","change",function(e){ e.stopPropagation(); themePreview(this.value); setTheme(this.value); });
   on("glossaryPick","change",function(e){ e.stopPropagation(); showGlossaryTerm(this.value); });
   on("glossarySearch","input",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
   on("glossarySearch","change",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
@@ -3243,7 +3491,7 @@ function bind(){
   if(streakPopEl) streakPopEl.addEventListener("click",function(e){ e.stopPropagation(); });
   on("voiceBtn","click",function(){ S.a11y.voice=!S.a11y.voice; save(); applyA11y(); toast(S.a11y.voice?(L()==="pt"?"🔊 Narração ligada":"🔊 Narration on"):(L()==="pt"?"🔈 Narração desligada":"🔈 Narration off")); });
 
-  on("onboardSkipBtn","click",closeOnboarding);
+  on("onboardSkipBtn","click",function(){ closeOnboarding(true); });
   on("onboardNextBtn","click",onboardNext);
   on("onboardOpenBtn","click",function(){ showOnboarding(true); });
   on("onboardOverlay","click",function(e){ if(e.target===$("onboardOverlay")) closeOnboarding(); });
@@ -3312,6 +3560,20 @@ function bind(){
   on("weeklyMapBtn","click",function(){ openMap(null,true); });
 
   on("shopBackBtn","click",function(){ show("screenHome"); });
+  on("offlineDismissBtn","click",dismissOfflineBanner);
+  on("weekProgressBar","click",openWeeklyScreen);
+  on("nextStepWeek","click",openWeeklyScreen);
+  on("settingsEasyReadBtn","click",function(e){ e.stopPropagation(); applyEasyReadPreset(); });
+  on("settingsEditProfileBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); openEditSetup(); });
+  on("optSimpleUiSettings","change",function(e){ e.stopPropagation(); setSimpleUi(this.checked); });
+  on("optSimpleUi","change",function(){ setSimpleUi(this.checked); });
+  on("flashcardBtn","click",function(e){ e.stopPropagation(); var fc=$("flashcardCard"),fn=$("flashcardNextBtn"); if(fc){ fc.hidden=false; flashcardIdx=0; renderFlashcard(); } if(fn) fn.hidden=false; });
+  on("flashcardNextBtn","click",function(e){ e.stopPropagation(); nextFlashcard(); });
+  on("profileEditSetupBtn","click",openEditSetup);
+  on("profileWeeklyBtn","click",openWeeklyScreen);
+  on("profileShopBtn","click",function(){ renderShop(); show("screenShop"); });
+  on("certShareBtn","click",shareCertificate);
+  document.querySelectorAll(".ctx-tip-dismiss").forEach(function(b){ b.addEventListener("click",function(){ dismissContextTip(b.getAttribute("data-tip")); }); });
   on("profileResetBtn","click",resetProgress);
   on("certGenerateBtn","click",renderCertificatePreview);
   on("certDownloadBtn","click",downloadCertificate);
@@ -3398,7 +3660,7 @@ function wireBottomNav(){
     else if(id==="navManagerBtn"){ renderManager(); show("screenManager"); }
   }
   window.__gdvRunNav=runNav;
-  ["navMapBtn","navDailyBtn","navBossBtn","navStatsBtn","navMoreBtn","navHomeBtn","navManagerBtn"].forEach(function(nid){
+  ["navMapBtn","navDailyBtn","navBossBtn","navStatsBtn","navMoreBtn","navHomeBtn","navManagerBtn","navWeeklyBtn","navShopBtn"].forEach(function(nid){
     var el=$(nid);
     if(!el) return;
     el.addEventListener("click",function(ev){ runNav(nid,ev); });
@@ -3407,9 +3669,10 @@ function wireBottomNav(){
 }
 function init(){
   try{
-  sanitizeA11y(); ensureManagerMode();
+  sanitizeA11y(); ensureManagerMode(); ensureUxState();
   dismissBlockingUI();
   applyI18n(); applyA11y(); applyTheme(); applySimpleUi(); applyCosmetics(); applyFocusLearn(); ensureDaily(); ensureWeekly(); ensureTeamScores(); ensureStreak(); refreshHud();
+  updateNavBadges(); showOfflineBanner();
   try{ renderStreakCard(); }catch(e){ console.error(e); }
   try{ renderWeekCard(); }catch(e){ console.error(e); }
   try{ renderDaily(); }catch(e){ console.error(e); }
