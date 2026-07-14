@@ -53,7 +53,7 @@ var UI = {
   "home.weekLine":{pt:"Semana: {theme} · Acertos {correct}/20 · Campanhas {campaign}/3 · Missão {daily}",en:"Week: {theme} · Correct {correct}/20 · Campaigns {campaign}/3 · Mission {daily}"},
   "home.map":{pt:"🗺️ Mapa da Operação",en:"🗺️ Operations Map"},
   "home.install":{pt:"⬇️ Instalar app",en:"⬇️ Install app"},
-  "home.heroIronTip":{pt:"Toque para explorar a cadeia operacional nos Desafios.",en:"Tap to explore the operational chain in Challenges."},
+  "home.heroIronTip":{pt:"Toque para explorar a cadeia operacional em Desafios / Crises.",en:"Tap to explore the operational chain in Challenges / Crises."},
   "home.chain":{pt:"⛓️ Cadeia de Produção",en:"⛓️ Production Chain"},
   "home.weekTitle":{pt:"Minha semana",en:"My week"},
   "home.weekSub":{pt:"Metas da semana e próximo passo recomendado.",en:"Weekly goals and your recommended next step."},
@@ -63,20 +63,20 @@ var UI = {
   "home.nextDaily":{pt:"Sua missão diária está esperando",en:"Your daily mission is waiting"},
   "home.nextDailySub":{pt:"5 situações rápidas mantêm sua ofensiva e priorizam o que você errou.",en:"5 quick scenarios keep your streak and prioritize what you missed."},
   "home.nextCampaignSub":{pt:"Sua expedição continua — proteja o próximo país no mapa e avance na meta semanal.",en:"Your expedition continues — protect the next country on the map and advance your weekly goal."},
-  "home.nextBoss":{pt:"Enfrente um desafio",en:"Face a challenge"},
-  "home.nextBossSub":{pt:"Crises simuladas estilo mesa elevam sua maturidade operacional.",en:"Tabletop-style simulated crises raise your operational maturity."},
+  "home.nextBoss":{pt:"Enfrente uma crise",en:"Face a crisis"},
+  "home.nextBossSub":{pt:"Desafios / Crises estilo mesa elevam sua maturidade operacional.",en:"Tabletop Challenges / Crises raise your operational maturity."},
   "home.nextReview":{pt:"Revise seus erros",en:"Review your mistakes"},
   "home.nextReviewSub":{pt:"Você tem {n} itens em revisão espaçada prontos para hoje.",en:"You have {n} items in spaced review ready for today."},
   "home.nextGoDaily":{pt:"▶️ Jogar diária",en:"▶️ Play daily"},
   "home.nextGoMap":{pt:"🗺️ Abrir mapa",en:"🗺️ Open map"},
-  "home.nextGoBoss":{pt:"🎯 Ver desafios",en:"🎯 See challenges"},
+  "home.nextGoBoss":{pt:"🎯 Ver Desafios / Crises",en:"🎯 See Challenges / Crises"},
   "home.nextGoReview":{pt:"📚 Revisar agora",en:"📚 Review now"},
   "home.weekTheme":{pt:"Tema da semana",en:"Week theme"},
   "home.weekCorrect":{pt:"Acertos semanais",en:"Weekly correct"},
   "home.weekCampaign":{pt:"Campanhas",en:"Campaigns"},
   "home.weekDaily":{pt:"Diária",en:"Daily"},
-  "home.weekBoss":{pt:"Chefão",en:"Boss"},
-  "mode.mapchain.h":{pt:"Cadeia nos chefões",en:"Chain in bosses"},
+  "home.weekBoss":{pt:"Crise",en:"Crisis"},
+  "mode.mapchain.h":{pt:"Cadeia em Desafios / Crises",en:"Chain in Challenges / Crises"},
   "mode.mapchain.t":{pt:"Aventura Carajás → China em etapas — proteja cada elo da logística de ferro.",en:"Carajás → China adventure in stages — protect each iron logistics link."},
   "map.reset":{pt:"Ver mundo",en:"View world"},
   "map.detailChain":{pt:"Etapa da cadeia",en:"Chain stage"},
@@ -88,8 +88,8 @@ var UI = {
   "home.modesTitle":{pt:"Modos de jogo",en:"Game modes"},
   "mode.campaign.h":{pt:"🗺️ Campanhas por país",en:"🗺️ Campaigns by country"},
   "mode.campaign.t":{pt:"Presença oficial da Orbita em 19 países — atuação e portfólio do mapa orbita.com.",en:"Orbita's official presence in 19 countries — activities and portfolio from the orbita.com map."},
-  "mode.boss.h":{pt:"🎯 Desafios",en:"🎯 Challenges"},
-  "mode.boss.t":{pt:"Crises simuladas estilo mesa: storytelling encadeado com mapas vetoriais animados.",en:"Tabletop-style simulated crises: chained storytelling with animated vector maps."},
+  "mode.boss.h":{pt:"🎯 Desafios / Crises",en:"🎯 Challenges / Crises"},
+  "mode.boss.t":{pt:"Crises simuladas estilo mesa: storytelling encadeado com mapas vetoriais animados.",en:"Tabletop simulated crises: chained storytelling with animated vector maps."},
   "mode.dw.h":{pt:"📅 Diárias & 🏆 Semanais",en:"📅 Dailies & 🏆 Weeklies"},
   "mode.dw.t":{pt:"Desafios que renovam e rendem XP.",en:"Challenges that refresh and grant XP."},
   "streak.title":{pt:"🔥 Ofensiva",en:"🔥 Streak"},
@@ -106,10 +106,10 @@ var UI = {
   "hud.tip.lives":{pt:"Vidas restantes — você perde uma ao errar em situações críticas; recupere jogando bem.",en:"Lives remaining — you lose one on critical mistakes; recover by playing well."},
   "hud.tip.streak":{pt:"Ofensiva — dias seguidos jogando; mantenha a sequência para bônus de moedas.",en:"Streak — consecutive days played; keep it going for coin bonuses."},
   "hud.tip.level":{pt:"Nível do guardião — sobe a cada 50 XP; desbloqueia conquistas.",en:"Guardian level — increases every 50 XP; unlocks achievements."},
-  "hud.tip.xp":{pt:"Pontos de experiência (XP) — ganhos em campanhas, diárias, semanais e chefões.",en:"Experience points (XP) — earned in campaigns, dailies, weeklies and bosses."},
+  "hud.tip.xp":{pt:"Pontos de experiência (XP) — ganhos em campanhas, diárias, semanais e Desafios / Crises.",en:"Experience points (XP) — earned in campaigns, dailies, weeklies and Challenges / Crises."},
   "hud.tip.coins":{pt:"Moedas — moeda do jogo para comprar avatares, molduras e temas na loja.",en:"Coins — in-game currency to buy avatars, frames and themes in the shop."},
   "hud.tip.score":{pt:"Pontuação geral — soma do seu desempenho em acertos e missões concluídas.",en:"Overall score — sum of your performance in correct answers and completed missions."},
-  "hud.tip.maturity":{pt:"Maturidade operacional — média nos chefões tabletop.",en:"Operational maturity — average across tabletop bosses."},
+  "hud.tip.maturity":{pt:"Maturidade operacional — média em Desafios / Crises.",en:"Operational maturity — average across Challenges / Crises."},
   "hud.tip.fontDown":{pt:"Diminuir fonte — reduz o tamanho do texto em toda a interface.",en:"Decrease font — reduces text size across the interface."},
   "hud.tip.fontScale":{pt:"Tamanho atual da fonte — 0 é o padrão; use A− e A+ para ajustar.",en:"Current font size — 0 is default; use A− and A+ to adjust."},
   "hud.tip.fontUp":{pt:"Aumentar fonte — amplia o tamanho do texto em toda a interface.",en:"Increase font — enlarges text size across the interface."},
@@ -122,7 +122,7 @@ var UI = {
   "manager.yourTeam":{pt:"Sua equipe (dados reais)",en:"Your team (real data)"},
   "manager.pending":{pt:"Outras equipes — aguardando dados agregados corporativos",en:"Other teams — awaiting corporate aggregated data"},
   "manager.recTitle":{pt:"💡 Recomendações pedagógicas",en:"💡 Pedagogical recommendations"},
-  "manager.recEmpty":{pt:"Jogue campanhas, diárias ou chefões para gerar recomendações.",en:"Play campaigns, dailies or bosses to generate recommendations."},
+  "manager.recEmpty":{pt:"Jogue campanhas, diárias ou Desafios / Crises para gerar recomendações.",en:"Play campaigns, dailies or Challenges / Crises to generate recommendations."},
   "pedagogy.recTitle":{pt:"🎯 Plano de estudo sugerido",en:"🎯 Suggested study plan"},
   "pedagogy.recWeak":{pt:"Reforce o tema",en:"Strengthen theme"},
   "pedagogy.recPlay":{pt:"Jogar agora",en:"Play now"},
@@ -292,7 +292,7 @@ var UI = {
   "result.map":{pt:"🗺️ Mapa",en:"🗺️ Map"},
   "result.medals":{pt:"🏅 Medalhas",en:"🏅 Medals"},
   "result.rank":{pt:"📈 Ranking por equipe",en:"📈 Team ranking"},
-  "boss.title":{pt:"🎯 Desafios — Crises simuladas",en:"🎯 Challenges — Simulated crises"},
+  "boss.title":{pt:"🎯 Desafios / Crises",en:"🎯 Challenges / Crises"},
   "boss.sub":{pt:"Experiências estilo mesa com storytelling conectado e mapa vetorial animado — cada decisão avança a próxima cena.",en:"Tabletop experiences with connected storytelling and animated vector map — each decision advances the next scene."},
   "boss.storyMapLabel":{pt:"Storytelling · Mapa",en:"Storytelling · Map"},
   "boss.threat":{pt:"🛡️ Ameaça",en:"🛡️ Threat"},
@@ -309,7 +309,7 @@ var UI = {
   "boss.storyLabel":{pt:"História",en:"Story"},
   "boss.next":{pt:"Próxima cena →",en:"Next scene →"},
   "boss.finish":{pt:"Ver desfecho →",en:"See ending →"},
-  "boss.backList":{pt:"← Voltar aos Desafios",en:"← Back to Challenges"},
+  "boss.backList":{pt:"← Voltar a Desafios / Crises",en:"← Back to Challenges / Crises"},
   "boss.defeated":{pt:"🐉 Missão tabletop concluída!",en:"🐉 Tabletop mission complete!"},
   "boss.contained":{pt:"Avaliação de resiliência",en:"Resilience assessment"},
   "boss.replay":{pt:"🔁 Repetir missão",en:"🔁 Replay mission"},
@@ -320,7 +320,7 @@ var UI = {
   "boss.bestRun":{pt:"Melhor resultado",en:"Best run"},
   "boss.notPlayed":{pt:"Não jogado",en:"Not played"},
   "profile.moreTitle":{pt:"Ver estatísticas e detalhes",en:"View stats and details"},
-  "profile.bossRes":{pt:"🏭 Maturidade nos desafios",en:"🏭 Maturity in challenges"},
+  "profile.bossRes":{pt:"🏭 Maturidade em Desafios / Crises",en:"🏭 Maturity in Challenges / Crises"},
   "profile.bossResSub":{pt:"Sua maturidade operacional nas crises simuladas — repita para subir de patente.",en:"Your operational maturity in simulated crises — replay to advance your rank."},
   "profile.completionTitle":{pt:"🎯 Sua jornada",en:"🎯 Your journey"},
   "profile.completionPct":{pt:"da jornada concluída",en:"of journey complete"},
@@ -357,14 +357,14 @@ var UI = {
   "progress.mapD":{pt:"Campanhas por país no mapa mundial.",en:"Country campaigns on the world map."},
   "progress.daily":{pt:"Diária",en:"Daily"},
   "progress.dailyD":{pt:"5 situações (2 revisões de erros + temas fracos). Mantém ofensiva.",en:"5 scenarios (2 error reviews + weak themes). Keeps streak."},
-  "progress.boss":{pt:"Chefões",en:"Bosses"},
-  "progress.bossD":{pt:"Cadeia Norte + chefões tabletop. Alimenta maturidade, conquistas e selo do certificado.",en:"Northern Chain + tabletop bosses. Feeds maturity, achievements and certificate seal."},
+  "progress.boss":{pt:"Desafios / Crises",en:"Challenges / Crises"},
+  "progress.bossD":{pt:"Cadeia Norte + crises simuladas estilo mesa. Alimenta maturidade, conquistas e selo do certificado.",en:"Northern Chain + tabletop simulated crises. Feeds maturity, achievements and certificate seal."},
   "progress.weekly":{pt:"Semanal",en:"Weekly"},
   "progress.weeklyD":{pt:"Metas que somam automaticamente enquanto você joga qualquer modo acima.",en:"Goals that add up automatically as you play any mode above."},
   "daily.title":{pt:"📅 Missões Diárias",en:"📅 Daily Missions"},
   "daily.play":{pt:"▶️ Jogar missão do dia",en:"▶️ Play today's mission"},
   "weekly.title":{pt:"🏆 Desafios Semanais",en:"🏆 Weekly Challenges"},
-  "weekly.intro":{pt:"Metas maiores que renovam toda semana. Progridem enquanto você joga campanhas, diárias e chefões.",en:"Bigger goals that refresh every week. They progress as you play campaigns, dailies and bosses."},
+  "weekly.intro":{pt:"Metas maiores que renovam toda semana. Progridem enquanto você joga campanhas, diárias e Desafios / Crises.",en:"Bigger goals that refresh every week. They progress as you play campaigns, dailies and Challenges / Crises."},
   "weekly.play":{pt:"🗺️ Jogar campanha",en:"🗺️ Play a campaign"},
   "shop.title":{pt:"🛒 Loja de Recompensas",en:"🛒 Rewards Shop"},
   "shop.sub":{pt:"Use suas moedas para desbloquear avatares e itens cosméticos.",en:"Use your coins to unlock avatars and cosmetic items."},
@@ -399,7 +399,7 @@ var UI = {
   "nav.home":{pt:"Início",en:"Home"},
   "nav.map":{pt:"Mapa",en:"Map"},
   "nav.more":{pt:"Mais",en:"More"},
-  "nav.boss":{pt:"Desafios",en:"Challenges"},
+  "nav.boss":{pt:"Desafios / Crises",en:"Challenges / Crises"},
   "nav.daily":{pt:"Missões",en:"Missions"},
   "nav.weekly":{pt:"Semanal",en:"Weekly"},
   "nav.shop":{pt:"Loja",en:"Shop"},
@@ -409,7 +409,7 @@ var UI = {
   "nav.tip.map":{pt:"Mapa — campanhas por país",en:"Map — country campaigns"},
   "nav.tip.daily":{pt:"Missões diárias",en:"Daily missions"},
   "nav.tip.more":{pt:"Mais opções — início e gestor",en:"More options — home and manager"},
-  "nav.tip.boss":{pt:"Desafios — crises simuladas estilo mesa com storytelling",en:"Challenges — tabletop-style simulated crises with storytelling"},
+  "nav.tip.boss":{pt:"Desafios / Crises — crises simuladas estilo mesa com storytelling",en:"Challenges / Crises — tabletop simulated crises with storytelling"},
   "nav.tip.weekly":{pt:"Desafios semanais",en:"Weekly challenges"},
   "nav.tip.shop":{pt:"Loja de avatares e temas",en:"Avatar and theme shop"},
   "nav.tip.stats":{pt:"Seu progresso e medalhas",en:"Your progress and medals"},
@@ -625,7 +625,7 @@ var SKINS = [
   {id:"mine", ico:"⛰️", cost:70, css:"skin-mine", name:{pt:"Mineração",en:"Mining"}, desc:{pt:"Tons terrosos da operação",en:"Earthy mining operation tones"}},
   {id:"night", ico:"🌙", cost:80, css:"skin-night", name:{pt:"SOC Noturno",en:"Night SOC"}, desc:{pt:"Sala de controle 24h",en:"24h control room"}},
   {id:"neon", ico:"💠", cost:90, css:"skin-neon", name:{pt:"Cyber Neon",en:"Cyber Neon"}, desc:{pt:"Estética hacker educativa",en:"Educational hacker aesthetic"}},
-  {id:"alert", ico:"🔥", cost:100, css:"skin-alert", name:{pt:"Alerta Crítico",en:"Critical Alert"}, desc:{pt:"Modo crise e chefões",en:"Crisis mode and bosses"}}
+  {id:"alert", ico:"🔥", cost:100, css:"skin-alert", name:{pt:"Alerta Crítico",en:"Critical Alert"}, desc:{pt:"Modo crise e Desafios / Crises",en:"Crisis mode and Challenges / Crises"}}
 ];
 
 /* -------------------- MEDALHAS / ACHIEVEMENTS -------------------- */
@@ -966,7 +966,7 @@ function pedagogicalRecommendations(){
   if(weak) recs.push({ico:THEMES[weak].ico,txt:t("pedagogy.recWeak")+" "+tt(THEMES[weak]),action:"theme",theme:weak});
   if(Object.keys(S.missed||{}).length) recs.push({ico:"📚",txt:t("pedagogy.reviewErrors"),action:"review"});
   var wt=getWeekTheme(); recs.push({ico:THEMES[wt].ico,txt:(L()==="pt"?"Semana: ":"Week: ")+tt(THEMES[wt]),action:"weekly"});
-  if((bossCompletedCount()||0)<1) recs.push({ico:"🐉",txt:L()==="pt"?"Pratique transferência: jogue um chefão":"Practice transfer: play a boss",action:"boss"});
+  if((bossCompletedCount()||0)<1) recs.push({ico:"🎯",txt:L()==="pt"?"Pratique transferência: jogue uma crise":"Practice transfer: play a crisis",action:"boss"});
   return recs.slice(0,4);
 }
 function renderPedagogyRec(hostId){
@@ -1865,7 +1865,7 @@ function finishCampaign(){
   renderCampaignDebrief(); renderThemeErrors($("themeErrors")); renderMedals($("medalsBox")); renderRank($("rankList"));
   var rmb=$("resultMapBtn");
   if(rmb){
-    if(cur.mode==="chain"){ rmb.textContent=L()==="pt"?"⛓️ Voltar aos Chefões":"⛓️ Back to Bosses"; rmb.onclick=function(){ renderBossList(); show("screenBossList"); }; }
+    if(cur.mode==="chain"){ rmb.textContent=L()==="pt"?"⛓️ Voltar a Desafios / Crises":"⛓️ Back to Challenges / Crises"; rmb.onclick=function(){ renderBossList(); show("screenBossList"); }; }
     else { rmb.textContent=t("result.map"); rmb.onclick=returnToMap; }
   }
   show("screenResult"); speak((L()==="pt"?titlePt:titleEn)+". "+(L()==="pt"?"Precisão ":"Accuracy ")+acc+"%.");
@@ -2527,7 +2527,7 @@ function renderDaily(){
 var WEEKLY=[
   {id:"correct", goal:20, ico:"🎯", name:{pt:"Acerte 20 situações",en:"Get 20 scenarios right"}},
   {id:"campaign", goal:3, ico:"🗺️", name:{pt:"Complete 3 campanhas",en:"Complete 3 campaigns"}},
-  {id:"boss", goal:1, ico:"🐉", name:{pt:"Vença 1 chefão",en:"Beat 1 boss"}},
+  {id:"boss", goal:1, ico:"🎯", name:{pt:"Vença 1 crise",en:"Beat 1 crisis"}},
   {id:"theme", goal:8, ico:"📚", themed:true, name:{pt:"Acerte 8 do tema da semana",en:"Get 8 on the week theme"}}
 ];
 function ensureWeekly(){ if(S.weekly.week!==weekKey()){ S.weekly={week:weekKey(),prog:{}}; save(); } }
@@ -2579,7 +2579,7 @@ function renderShop(){
   renderGrid(SKINS,"themeShop","sk","skin");
 }
 function buyOrEquipCosmetic(prefix,equipKey,a,owned){
-  if(!owned&&!meetsUnlock(a)){ toast(L()==="pt"?"Complete desafios para desbloquear":"Complete challenges to unlock"); return; }
+  if(!owned&&!meetsUnlock(a)){ toast(L()==="pt"?"Complete Desafios / Crises para desbloquear":"Complete Challenges / Crises to unlock"); return; }
   if(!owned){
     if(S.coins<a.cost){ toast(L()==="pt"?"Moedas insuficientes":"Not enough coins"); return; }
     S.coins-=a.cost; S.owned[prefix+"_"+a.id]=true;
@@ -2629,9 +2629,9 @@ function journeyCompletionPct(){
 }
 function nextMilestoneText(){
   if(Object.keys(S.done).length<10) return (L()==="pt"?"Conclua 10 países no mapa":"Complete 10 countries on the map");
-  if(bossCompletedCount()<1) return (L()==="pt"?"Vença seu primeiro chefão":"Beat your first boss");
+  if(bossCompletedCount()<1) return (L()==="pt"?"Vença sua primeira crise":"Beat your first crisis");
   if(chainStagesDone()<3) return (L()==="pt"?"Proteja 3 etapas da Cadeia Norte":"Protect 3 Northern Chain stages");
-  if(bossAvgIndex()<70) return (L()==="pt"?"Alcance 70% de maturidade em um chefão":"Reach 70% maturity in a boss");
+  if(bossAvgIndex()<70) return (L()==="pt"?"Alcance 70% de maturidade em uma crise":"Reach 70% maturity in a crisis");
   if(medalsEarned()<6) return (L()==="pt"?"Desbloqueie mais conquistas":"Unlock more achievements");
   return (L()==="pt"?"Mantenha a ofensiva e revise temas fracos":"Keep your streak and review weak themes");
 }
@@ -2701,7 +2701,7 @@ function renderCompletionCard(){
   var pct=journeyCompletionPct();
   host.innerHTML='<div class="completion-ring">'+pct+'%</div><div class="completion-meta">'
     +Object.keys(S.done).length+'/'+COUNTRIES.length+' '+(L()==="pt"?"países":"countries")+' · '
-    +bossCompletedCount()+'/'+BOSSES.length+' '+(L()==="pt"?"desafios":"challenges")+' · '
+    +bossCompletedCount()+'/'+BOSSES.length+' '+(L()==="pt"?"crises":"challenges")+' · '
     +chainStagesDone()+'/'+chainTotalStages()+' '+(L()==="pt"?"etapas cadeia":"chain stages")+' · '
     +medalsEarned()+'/'+MEDALS.length+' '+(L()==="pt"?"conquistas":"achievements")
     +'</div><div class="completion-milestone"><b>'+t("profile.nextMilestone")+':</b> '+nextMilestoneText()+'</div>';
@@ -2718,8 +2718,8 @@ function renderCertChecklist(){
   var host=$("certChecklist"); if(!host) return;
   var items=[
     {ok:Object.keys(S.done).length>=10, pt:"10 países no mapa", en:"10 countries on the map"},
-    {ok:bossCompletedCount()>=4, pt:"4 chefões vencidos", en:"4 bosses beaten"},
-    {ok:bossAvgIndex()>=70, pt:"70% maturidade média nos chefões", en:"70% average boss maturity"},
+    {ok:bossCompletedCount()>=4, pt:"4 crises vencidas", en:"4 crises beaten"},
+    {ok:bossAvgIndex()>=70, pt:"70% maturidade média em Desafios / Crises", en:"70% average maturity in Challenges / Crises"},
     {ok:(S.streak&&S.streak.best>=7), pt:"Ofensiva de 7 dias", en:"7-day streak"}
   ];
   host.innerHTML='<div class="cert-check-k">'+t("profile.certCheckTitle")+'</div>';
@@ -2761,7 +2761,7 @@ function renderProgressHub(){
     '</div>';
 }
 function renderProfile(){
-  var lab=L()==="pt"?{a:"Nível",b:"XP",c:"Países",d:"Chefões",e:"Ofensiva",f:"Maturidade",g:"Reportes"}:{a:"Level",b:"XP",c:"Countries",d:"Bosses",e:"Streak",f:"Maturity",g:"Reports"};
+  var lab=L()==="pt"?{a:"Nível",b:"XP",c:"Países",d:"Desafios / Crises",e:"Ofensiva",f:"Maturidade",g:"Reportes"}:{a:"Level",b:"XP",c:"Countries",d:"Challenges / Crises",e:"Streak",f:"Maturity",g:"Reports"};
   ensureStreak(); ensureBossStats();
   var avg=bossAvgIndex(), br=bossGuardianRank(avg);
   $("profileStats").innerHTML='<div class="stat"><div class="v">'+levelOf()+'</div><div class="l">'+lab.a+'</div></div><div class="stat"><div class="v">'+S.xp+'</div><div class="l">'+lab.b+'</div></div><div class="stat"><div class="v">'+Object.keys(S.done).length+"/"+COUNTRIES.length+'</div><div class="l">'+lab.c+'</div></div><div class="stat"><div class="v">'+bossCompletedCount()+"/"+BOSSES.length+'</div><div class="l">'+lab.d+'</div></div><div class="stat"><div class="v">'+br.ico+' '+avg+'%</div><div class="l">'+lab.f+'</div></div><div class="stat"><div class="v">🔥 '+(S.streak.count||0)+'</div><div class="l">'+lab.e+'</div></div><div class="stat"><div class="v">📢 '+(S.reports||0)+'</div><div class="l">'+lab.g+'</div></div>';
@@ -2848,7 +2848,7 @@ function certDrawResilienceSeal(ctx,W,startY,pt){
   ctx.fillText(earned?rank.ico:"🔒", cx, cy+6);
   ctx.font=(earned?"600":"500")+" 9px Segoe UI,sans-serif";
   ctx.fillStyle=earned?"#005f5c":"#8a9aa0";
-  var sealTxt=earned?(rank[pt?"pt":"en"]+" · "+avg+"%"):(pt?"Conclua chefões com alta maturidade":"Complete bosses with high maturity");
+  var sealTxt=earned?(rank[pt?"pt":"en"]+" · "+avg+"%"):(pt?"Conclua Desafios / Crises com alta maturidade":"Complete Challenges / Crises with high maturity");
   ctx.fillText(certEllipsis(ctx,sealTxt,W-100), W/2, y+62);
   return y+72;
 }
@@ -2863,7 +2863,7 @@ function renderCertificatePreview(){
     [pt?"Nível":"Level", String(levelOf())],
     [pt?"XP":"XP", String(S.xp)],
     [pt?"Países":"Countries", Object.keys(S.done).length+"/"+COUNTRIES.length],
-    [L()==="pt"?"Chefões":"Bosses", bossCompletedCount()+"/"+BOSSES.length],
+    [L()==="pt"?"Desafios / Crises":"Challenges / Crises", bossCompletedCount()+"/"+BOSSES.length],
     [pt?"Resiliência":"Resilience", resRank.ico+" "+avgRes+"%"],
     [pt?"Ofensiva":"Streak", String(S.streak.count||0)+(pt?" dias":" days")]
   ];
@@ -2951,7 +2951,7 @@ function drawRadar(){
 function renderManager(){
   var demo=$("mgrDemo"); if(demo) demo.textContent=t("manager.demo");
   var acc=overallAcc()||0, oa=Object.keys(S.done).length;
-  var lab=L()==="pt"?{a:"Sua taxa de acerto",b:"Campanhas",c:"Chefões",d:"Reportes",e:"Erros p/ revisar"}:{a:"Your accuracy",b:"Campaigns",c:"Bosses",d:"Reports",e:"Errors to review"};
+  var lab=L()==="pt"?{a:"Sua taxa de acerto",b:"Campanhas",c:"Desafios / Crises",d:"Reportes",e:"Erros p/ revisar"}:{a:"Your accuracy",b:"Campaigns",c:"Challenges / Crises",d:"Reports",e:"Errors to review"};
   $("mgrKpis").innerHTML='<div class="stat"><div class="v">'+acc+'%</div><div class="l">'+lab.a+'</div></div><div class="stat"><div class="v">'+oa+'</div><div class="l">'+lab.b+'</div></div><div class="stat"><div class="v">'+bossCompletedCount()+'</div><div class="l">'+lab.c+'</div></div><div class="stat"><div class="v">'+(S.reports||0)+'</div><div class="l">'+lab.d+'</div></div><div class="stat"><div class="v">'+Object.keys(S.missed||{}).length+'</div><div class="l">'+lab.e+'</div></div>';
   var host=$("mgrTeams"); host.innerHTML="";
   var tmOnly=TEAMS.filter(function(t){ return t.id===S.team; })[0];

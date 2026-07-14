@@ -7,7 +7,7 @@
   var SRC_LABEL = {
     bank: { pt: "Campanha / Diária", en: "Campaign / Daily" },
     chain: { pt: "Cadeia Carajás", en: "Carajás Chain" },
-    boss: { pt: "Chefão tabletop", en: "Tabletop boss" }
+    boss: { pt: "Crise tabletop", en: "Tabletop crisis" }
   };
 
   function txt(obj, lang) {
@@ -55,7 +55,7 @@
           scene: ph.scene, q: ph.q, opts: ph.opts, correct: ph.correct,
           why: ph.impactOk || ph.why, impactBad: ph.impactBad, bridge: ph.bridge,
           personal: null,
-          labelPt: "Chefão — " + txt(b.name, "pt") + " · " + txt(ph.scene, "pt"),
+          labelPt: "Crise — " + txt(b.name, "pt") + " · " + txt(ph.scene, "pt"),
           labelEn: "Boss — " + txt(b.name, "en") + " · " + txt(ph.scene, "en")
         });
       });
@@ -207,7 +207,7 @@
     });
     var countEl = document.getElementById("reviewCount");
     countEl.textContent = n + " de " + totals.all + " pergunta(s) — " +
-      "BANK " + totals.bank + " · Cadeia " + totals.chain + " · Chefões " + totals.boss;
+      "BANK " + totals.bank + " · Cadeia " + totals.chain + " · Desafios / Crises " + totals.boss;
   }
 
   document.getElementById("reviewSearch").addEventListener("input", render);

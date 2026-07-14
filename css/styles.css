@@ -815,6 +815,7 @@ body.focus-learn #hudCoinsChip,body.focus-learn #hudScoreChip{display:none!impor
   .bottom-nav button{padding:5px 1px;font-size:.56rem;gap:1px;min-height:48px}
   .bottom-nav button .ni{font-size:1.15rem}
   .bottom-nav button span:not(.ni){overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;line-height:1.1}
+  #navBossBtn span:not(.ni){font-size:.5rem;line-height:1.05;white-space:normal;max-width:4.2rem;text-align:center}
   .footer{padding-bottom:68px}
 }
 @media(max-width:360px){

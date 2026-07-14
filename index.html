@@ -9,17 +9,17 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=60">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=61">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=60">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=60">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=61">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=61">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=60"></script>
-<link rel="stylesheet" href="css/styles.css?v=60">
+<script src="js/access-gate.js?v=61"></script>
+<link rel="stylesheet" href="css/styles.css?v=61">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -95,7 +95,7 @@
       <span class="chip hud-tip" id="hudStreak" aria-label="Ofensiva">🔥 0</span>
       <span class="chip hud-tip" id="hudLevelChip">Nv <span id="hudLevel">1</span></span>
       <span class="chip hud-tip" id="hudXpChip">⭐ <span id="hudXp">0</span></span>
-      <span class="chip hud-tip" id="hudMaturityChip" data-i18n-attr="title:hud.tip.maturity" title="Maturidade nos chefões">🛡️ 0%</span>
+      <span class="chip hud-tip" id="hudMaturityChip" data-i18n-attr="title:hud.tip.maturity" title="Maturidade em Desafios / Crises">🛡️ 0%</span>
       <span class="chip hud-tip hud-arcade" id="hudLives" aria-label="Vidas" hidden>❤️❤️❤️</span>
       <span class="chip hud-tip hud-arcade" id="hudCoinsChip" hidden>🪙 <span id="hudCoins">0</span></span>
       <span class="chip hud-tip hud-arcade" id="hudScoreChip" hidden>🎯 <span id="hudScore">0</span></span>
@@ -204,7 +204,7 @@
   <!-- ============ HOME: LANGUAGE + ACCESSIBILITY ============ -->
   <section id="screenHome" class="screen active" aria-label="Início">
     <div class="card hero">
-      <button type="button" class="hero-scene hero-scene-btn" id="heroIronBtn" data-i18n-attr="aria-label:home.heroIronTip;title:home.heroIronTip" aria-label="Explorar cadeia operacional nos Chefões">
+      <button type="button" class="hero-scene hero-scene-btn" id="heroIronBtn" data-i18n-attr="aria-label:home.heroIronTip;title:home.heroIronTip" aria-label="Explorar cadeia operacional em Desafios / Crises">
         <svg class="hero-svg" viewBox="0 0 900 168" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
             <linearGradient id="heroSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a4a52"/><stop offset="1" stop-color="#063540"/></linearGradient>
@@ -278,7 +278,7 @@
       <span class="badge" data-i18n="home.badge">Operações globais • Cyber Security</span>
       <h1 data-i18n="home.title">Você é o <span class="accent">Guardião Cibernético</span></h1>
       <p data-i18n="home.desc">Treino bilíngue para proteger a cadeia global de recursos — da extração ao mercado — com decisões certas em segurança da informação.</p>
-      <div class="mission" data-i18n="home.mission">🎯 <b>Sua missão:</b> antecipar ameaças em minas, plantas, logística, portos e escritórios. Enfrente cenários reais nos chefões, explore o mapa mundial e evolua como profissional de cyber.</div>
+      <div class="mission" data-i18n="home.mission">🎯 <b>Sua missão:</b> identificar riscos em minas, plantas, portos e escritórios. Enfrente crises simuladas, explore o mapa mundial e evolua como guardião digital.</div>
       <div class="row-actions hero-actions" id="homeHeroActions">
         <button class="btn btn-primary btn-lg" id="homeStartBtn" data-i18n="home.start">▶️ Começar</button>
         <button type="button" class="btn btn-ghost" id="pwaInstallBtn" hidden data-i18n="home.install">⬇️ Instalar app</button>
@@ -465,12 +465,12 @@
   </section>
 
   <!-- ============ CHEFÕES ============ -->
-  <section id="screenBossList" class="screen" aria-label="Desafios">
-    <div class="card"><div class="section-title" data-i18n="boss.title">🎯 Desafios — Crises simuladas</div><div class="section-sub" data-i18n="boss.sub">Experiências estilo mesa com storytelling conectado e mapa vetorial animado — cada decisão avança a próxima cena.</div><div class="boss-list" id="bossList"></div></div>
+  <section id="screenBossList" class="screen" aria-label="Desafios / Crises">
+    <div class="card"><div class="section-title" data-i18n="boss.title">🎯 Desafios / Crises</div><div class="section-sub" data-i18n="boss.sub">Experiências estilo mesa com storytelling conectado e mapa vetorial animado — cada decisão avança a próxima cena.</div><div class="boss-list" id="bossList"></div></div>
   </section>
 
   <!-- ============ DESAFIO DO CHEFÃO ============ -->
-  <section id="screenBoss" class="screen boss-tabletop" aria-label="Desafio do chefão">
+  <section id="screenBoss" class="screen boss-tabletop" aria-label="Crise simulada">
     <div class="card boss-tabletop-card">
       <div class="boss-tabletop-frame">
       <div class="boss-header" id="bossHeader"></div>
@@ -495,7 +495,7 @@
   <section id="screenBossResult" class="screen" aria-label="Resultado da crise">
     <div class="card" id="bossResult"></div>
     <div class="row-actions">
-      <button class="btn btn-ghost" id="bossResultBackBtn" data-i18n="boss.backList">← Voltar aos Chefões</button>
+      <button class="btn btn-ghost" id="bossResultBackBtn" data-i18n="boss.backList">← Voltar a Desafios / Crises</button>
       <button class="btn btn-gold" id="bossReplayBtn" data-i18n="boss.replay">🔁 Repetir missão</button>
     </div>
   </section>
@@ -556,7 +556,7 @@
         <div class="section-sub" data-i18n="profile.reviewSub">Treine seus erros ou consulte o banco de perguntas para autores.</div>
         <div class="review-actions" id="reviewActions"></div>
         <div id="pedagogyRec"></div>
-        <div class="section-title" data-i18n="profile.bossRes">🏭 Maturidade nos desafios</div>
+        <div class="section-title" data-i18n="profile.bossRes">🏭 Maturidade em Desafios / Crises</div>
         <div class="section-sub" data-i18n="profile.bossResSub">Sua maturidade operacional nas crises simuladas — repita para subir de patente.</div>
         <div class="boss-prog-head" id="bossProgressHead"></div>
         <div id="bossProgressList" class="boss-prog-list"></div>
@@ -619,7 +619,7 @@
   <button type="button" id="navHomeBtn" onclick="gdvNavClick('navHomeBtn',event)" data-i18n-attr="title:nav.tip.home;aria-label:nav.tip.home"><span class="ni" aria-hidden="true">🏠</span><span data-i18n="nav.home">Início</span></button>
   <button type="button" id="navMapBtn" onclick="gdvNavClick('navMapBtn',event)" data-i18n-attr="title:nav.tip.map;aria-label:nav.tip.map"><span class="ni" aria-hidden="true">🗺️</span><span data-i18n="nav.map">Mapa</span></button>
   <button type="button" id="navDailyBtn" onclick="gdvNavClick('navDailyBtn',event)" data-i18n-attr="title:nav.tip.daily;aria-label:nav.tip.daily"><span class="ni" aria-hidden="true">📅</span><span data-i18n="nav.daily">Missões</span></button>
-  <button type="button" id="navBossBtn" onclick="gdvNavClick('navBossBtn',event)" data-i18n-attr="title:nav.tip.boss;aria-label:nav.tip.boss"><span class="ni" aria-hidden="true">🎯</span><span data-i18n="nav.boss">Desafios</span></button>
+  <button type="button" id="navBossBtn" onclick="gdvNavClick('navBossBtn',event)" data-i18n-attr="title:nav.tip.boss;aria-label:nav.tip.boss"><span class="ni" aria-hidden="true">🎯</span><span data-i18n="nav.boss">Desafios / Crises</span></button>
   <button type="button" id="navStatsBtn" onclick="gdvNavClick('navStatsBtn',event)" data-i18n-attr="title:nav.tip.stats;aria-label:nav.tip.stats"><span class="ni" aria-hidden="true">📊</span><span data-i18n="nav.stats">Progresso</span></button>
   <button type="button" id="navManagerBtn" hidden onclick="gdvNavClick('navManagerBtn',event)" data-i18n-attr="title:nav.tip.manager;aria-label:nav.tip.manager"><span class="ni" aria-hidden="true">🧭</span><span data-i18n="nav.manager">Gestor</span></button>
 </nav>
@@ -651,14 +651,14 @@
 </div>
 
 <script>window.APP_VERSION="59";</script>
-<script src="js/sign-lang.js?v=60"></script>
-<script src="js/orbita-world-map.js?v=60"></script>
-<script src="js/questions-data.js?v=60"></script>
-<script src="js/country-questions-data.js?v=60"></script>
-<script src="js/bosses-data.js?v=60"></script>
-<script src="js/chain-data.js?v=60"></script>
-<script src="js/boss-maps.js?v=60"></script>
-<script src="js/game.js?v=60"></script>
+<script src="js/sign-lang.js?v=61"></script>
+<script src="js/orbita-world-map.js?v=61"></script>
+<script src="js/questions-data.js?v=61"></script>
+<script src="js/country-questions-data.js?v=61"></script>
+<script src="js/bosses-data.js?v=61"></script>
+<script src="js/chain-data.js?v=61"></script>
+<script src="js/boss-maps.js?v=61"></script>
+<script src="js/game.js?v=61"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {
