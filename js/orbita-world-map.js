@@ -403,29 +403,35 @@ var OrbitaWorldMap = (function () {
     opts = opts || {};
     var feature = findCountryFeature(gameId);
     if (!feature || !pathFn) return null;
-    var c = pathFn.centroid(feature);
     var b = pathFn.bounds(feature);
-    var bw = b[1][0] - b[0][0];
-    var bh = b[1][1] - b[0][1];
-    var span = Math.max(bw, bh * (VW / VH));
-    if (span < 0.5) span = 3;
+    var bw = Math.max(b[1][0] - b[0][0], 3);
+    var bh = Math.max(b[1][1] - b[0][1], 3);
     var narrow = window.innerWidth <= 640;
-    var tablet = !narrow && window.innerWidth <= 900;
-    var frac;
-    if (span >= 100) frac = narrow ? 0.78 : 0.82;
-    else if (span >= 55) frac = narrow ? 0.72 : 0.76;
-    else if (span >= 28) frac = narrow ? 0.66 : 0.7;
-    else if (span >= 14) frac = narrow ? 0.6 : 0.64;
-    else frac = narrow ? 0.54 : 0.58;
-    var margin = narrow ? 1.12 : tablet ? 1.14 : 1.16;
-    var targetW = (span / frac) * margin;
-    if (opts.panelOpen && !narrow) targetW *= 0.62;
-    var minW = span < 12 ? 58 : span < 22 ? 78 : span < 40 ? 110 : 140;
-    var maxW = span >= 100 ? VW * 0.62 : span >= 60 ? VW * 0.52 : VW * 0.42;
-    targetW = Math.max(minW, Math.min(maxW, targetW));
-    var shiftX = 0;
-    if (opts.panelOpen && !narrow) shiftX = targetW * 0.06;
-    return { cx: c[0], cy: c[1], targetW: targetW, shiftX: shiftX };
+    var panel = !!opts.panelOpen && !narrow;
+    var pad = narrow ? 1.18 : panel ? 1.1 : 1.08;
+    var boxW = bw * pad;
+    var boxH = bh * pad;
+    var aspect = VW / VH;
+    var nw, nh;
+    if (boxW / boxH > aspect) {
+      nw = boxW;
+      nh = nw / aspect;
+      if (nh < boxH) { nh = boxH; nw = nh * aspect; }
+    } else {
+      nh = boxH;
+      nw = nh * aspect;
+      if (nw < boxW) { nw = boxW; nh = nw / aspect; }
+    }
+    var maxW = panel ? VW * 0.72 : narrow ? VW * 0.85 : VW * 0.8;
+    if (nw > maxW) { nw = maxW; nh = nw / aspect; }
+    var minW = narrow ? 85 : 60;
+    if (nw < minW) { nw = minW; nh = nw / aspect; }
+    return {
+      cx: (b[0][0] + b[1][0]) / 2,
+      cy: (b[0][1] + b[1][1]) / 2,
+      targetW: nw,
+      targetH: nh
+    };
   }
 
   function drawRoutes(routes) {

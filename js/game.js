@@ -1972,11 +1972,10 @@ function zoomToCountry(gameId){
   var panelOpen=$("mapDetail")&&!$("mapDetail").hidden;
   var v=OrbitaWorldMap.getCountryView(gameId,{panelOpen:panelOpen});
   if(!v) return;
-  var nw=Math.max(55,Math.min(VW,v.targetW));
-  var nh=nw*(VH/VW);
-  var cx=v.cx-(v.shiftX||0);
+  var nw=Math.max(50,Math.min(VW,v.targetW));
+  var nh=Math.max(50,Math.min(VH,v.targetH||nw*(VH/VW)));
   view.w=nw; view.h=nh;
-  view.x=Math.max(0,Math.min(VW-nw,cx-nw/2));
+  view.x=Math.max(0,Math.min(VW-nw,v.cx-nw/2));
   view.y=Math.max(0,Math.min(VH-nh,v.cy-nh/2));
   updateViewBox();
 }
