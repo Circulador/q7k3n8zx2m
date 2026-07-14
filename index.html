@@ -9,17 +9,17 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=63">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=64">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=63">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=63">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=64">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=64">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=63"></script>
-<link rel="stylesheet" href="css/styles.css?v=63">
+<script src="js/access-gate.js?v=64"></script>
+<link rel="stylesheet" href="css/styles.css?v=64">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -115,12 +115,9 @@
         <span class="chip hud-tip hud-arcade" id="hudScoreChip" hidden>🎯 <span id="hudScore">0</span></span>
       </div>
       <div class="hud-actions">
-        <button class="chip chip-btn hud-tip onboard-chip" id="onboardOpenBtn" data-i18n-attr="aria-label:onboard.reopenTip;title:onboard.reopenTip" aria-label="Guia do jogo">📖 <span data-i18n="onboard.reopen">Guia</span></button>
+        <button type="button" class="toolbar-btn hud-tip" id="onboardOpenBtn" data-i18n-attr="aria-label:onboard.reopenTip;title:onboard.reopenTip" aria-label="Guia do jogo"><span aria-hidden="true">📖</span></button>
         <div class="a11y-menu-wrap">
-          <button class="a11y-trigger" id="a11yBtn" data-i18n-attr="aria-label:hud.tip.a11y;title:hud.tip.a11y" aria-label="Acessibilidade" aria-haspopup="true" aria-expanded="false">
-            <span class="a11y-trigger-icon" aria-hidden="true">♿</span>
-            <span class="a11y-trigger-label" data-i18n="a11y.shortLabel">Acessibilidade</span>
-          </button>
+          <button type="button" class="toolbar-btn hud-tip" id="a11yBtn" data-i18n-attr="aria-label:hud.tip.a11y;title:hud.tip.a11y" aria-label="Acessibilidade" aria-haspopup="true" aria-expanded="false"><span aria-hidden="true">♿</span></button>
           <div class="a11y-menu" id="a11yMenu" role="menu" aria-label="Acessibilidade" hidden>
             <div class="am-header">
               <h2 class="am-title" data-i18n="a11y.menuTitle">Acessibilidade</h2>
@@ -202,7 +199,37 @@
             </div>
           </div>
         </div>
-        <button class="mute-btn" id="voiceBtn" data-i18n-attr="aria-label:hud.tip.voice;title:hud.tip.voice" aria-label="Narração por voz">🔈</button>
+        <div class="settings-menu-wrap">
+          <button type="button" class="toolbar-btn hud-tip" id="settingsBtn" data-i18n-attr="aria-label:hud.tip.settings;title:hud.tip.settings" aria-label="Configurações" aria-haspopup="true" aria-expanded="false"><span aria-hidden="true">⚙️</span></button>
+          <div class="settings-menu dropdown-panel" id="settingsMenu" role="dialog" aria-labelledby="settingsMenuTitle" hidden>
+            <div class="dp-header">
+              <h2 class="dp-title" id="settingsMenuTitle" data-i18n="settings.title">Configurações</h2>
+              <button type="button" class="dp-close" id="settingsMenuClose" data-i18n-attr="aria-label:a11y.close" aria-label="Fechar">×</button>
+            </div>
+            <div class="dp-section">
+              <label class="dp-label" for="themeSelect" data-i18n="settings.theme">Tema visual</label>
+              <select class="dp-select" id="themeSelect">
+                <option value="default" data-i18n="settings.themeDefault">Padrão Orbita</option>
+                <option value="light" data-i18n="settings.themeLight">Claro</option>
+                <option value="dark" data-i18n="settings.themeDark">Escuro</option>
+              </select>
+            </div>
+            <div class="dp-section">
+              <div class="dp-label" data-i18n="settings.glossary">📖 Glossário</div>
+              <p class="dp-sub" data-i18n="settings.glossarySub">Siglas e termos do jogo — com exemplos do dia a dia.</p>
+              <label class="sr-only" for="glossarySearch" data-i18n="settings.glossarySearch">Buscar termo</label>
+              <input type="search" class="dp-input" id="glossarySearch" list="glossaryDatalist" autocomplete="off" data-i18n-attr="placeholder:settings.glossaryPh">
+              <datalist id="glossaryDatalist"></datalist>
+              <label class="sr-only" for="glossaryPick" data-i18n="settings.glossaryPick">Escolha um termo</label>
+              <select class="dp-select" id="glossaryPick"></select>
+              <div class="glossary-card" id="glossaryCard"></div>
+            </div>
+            <div class="dp-section dp-section-compact">
+              <button type="button" class="dp-link-btn" id="settingsOpenA11yBtn" data-i18n="settings.openA11y">♿ Acessibilidade</button>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="toolbar-btn hud-tip" id="voiceBtn" data-i18n-attr="aria-label:hud.tip.voice;title:hud.tip.voice" aria-label="Narração por voz"><span aria-hidden="true">🔈</span></button>
       </div>
     </div>
   </header>
@@ -291,7 +318,6 @@
         <button class="btn btn-primary btn-lg" id="homeStartBtn" data-i18n="home.start">▶️ Começar</button>
         <button type="button" class="btn btn-ghost" id="pwaInstallBtn" hidden data-i18n="home.install">⬇️ Instalar app</button>
       </div>
-      <p class="home-a11y-hint muted"><button type="button" class="btn-linkish" id="openA11yMenuBtn" data-i18n="a11y.openMenu">♿ Acessibilidade</button> — <span data-i18n="home.a11yHint">voz, contraste, Libras e mais no menu superior.</span></p>
       <p class="muted handtalk-status" id="handTalkStatus" hidden></p>
       <p class="muted asl-hint" id="aslHint" hidden data-i18n="a11y.signsHint">Sem token Hand Talk: VLibras (PT) ou dicionário ASL (EN) como alternativa.</p>
     </div>
@@ -658,14 +684,14 @@
 </div>
 
 <script>window.APP_VERSION="59";</script>
-<script src="js/sign-lang.js?v=63"></script>
-<script src="js/orbita-world-map.js?v=63"></script>
-<script src="js/questions-data.js?v=63"></script>
-<script src="js/country-questions-data.js?v=63"></script>
-<script src="js/bosses-data.js?v=63"></script>
-<script src="js/chain-data.js?v=63"></script>
-<script src="js/boss-maps.js?v=63"></script>
-<script src="js/game.js?v=63"></script>
+<script src="js/sign-lang.js?v=64"></script>
+<script src="js/orbita-world-map.js?v=64"></script>
+<script src="js/questions-data.js?v=64"></script>
+<script src="js/country-questions-data.js?v=64"></script>
+<script src="js/bosses-data.js?v=64"></script>
+<script src="js/chain-data.js?v=64"></script>
+<script src="js/boss-maps.js?v=64"></script>
+<script src="js/game.js?v=64"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {
