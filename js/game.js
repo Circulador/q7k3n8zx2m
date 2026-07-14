@@ -2181,8 +2181,9 @@ function renderBossList(){
   });
   list.forEach(function(b){
     var st=S.bossStats[b.id], best=st&&st.best, tier=best?bossTierInfo(best.tier):null;
-    var d=document.createElement("button");
-    d.type="button";
+    var d=document.createElement("div");
+    d.setAttribute("role","button");
+    d.setAttribute("tabindex","0");
     d.setAttribute("data-boss",b.id);
     d.className="boss-card boss-card--tabletop boss-card--map";
     var phaseN=b.phases&&b.phases.length?b.phases.length:0;
@@ -2194,7 +2195,7 @@ function renderBossList(){
     host.appendChild(d);
   });
 }
-var bossListWired=false;
+var bossListWired=false, bossListLastTap=0;
 function wireBossList(){
   if(bossListWired) return;
   var host=$("bossList"); if(!host) return;
@@ -2205,18 +2206,49 @@ function wireBossList(){
     var id=card.getAttribute("data-boss");
     if(id) startBoss(id);
   }
-  host.addEventListener("click",function(e){
+  function onBossCardTap(e){
+    if(e.pointerType==="mouse"&&e.button!==0) return;
+    var card=pickBossCard(e.target);
+    if(!card||!host.contains(card)) return;
+    var now=Date.now();
+    if(now-bossListLastTap<400) return;
+    bossListLastTap=now;
+    e.preventDefault();
+    e.stopPropagation();
+    launchBoss(card);
+  }
+  host.addEventListener("pointerup",onBossCardTap);
+  host.addEventListener("click",onBossCardTap);
+  host.addEventListener("keydown",function(e){
+    if(e.key!=="Enter"&&e.key!==" ") return;
     var card=pickBossCard(e.target);
     if(!card||!host.contains(card)) return;
     e.preventDefault();
     launchBoss(card);
   });
-  host.addEventListener("touchend",function(e){
-    var card=pickBossCard(e.target);
-    if(!card||!host.contains(card)) return;
+}
+var bossOptsWired=false, bossOptsLastTap=0;
+function wireBossOptions(){
+  if(bossOptsWired) return;
+  var host=$("bossOptions"); if(!host) return;
+  bossOptsWired=true;
+  function onBossOptTap(e){
+    if(e.pointerType==="mouse"&&e.button!==0) return;
+    var btn=e.target.closest?e.target.closest(".opt[data-opt-idx]:not([disabled])"):null;
+    if(!btn||!host.contains(btn)||bossCur.answered) return;
+    var now=Date.now();
+    if(now-bossOptsLastTap<400) return;
+    bossOptsLastTap=now;
     e.preventDefault();
-    launchBoss(card);
-  },{passive:false});
+    e.stopPropagation();
+    var idx=parseInt(btn.getAttribute("data-opt-idx"),10);
+    if(isNaN(idx)) return;
+    var b=bossCur.boss, ph=b&&b.phases?b.phases[bossCur.phase]:null;
+    if(!ph) return;
+    bossAnswer(idx,btn,ph,bossCur._optOrder);
+  }
+  host.addEventListener("pointerup",onBossOptTap);
+  host.addEventListener("click",onBossOptTap);
 }
 function startBoss(id){
   hydrateNorthernBoss();
@@ -2274,10 +2306,13 @@ function renderBossPhase(){
   if(!st) bossCur._optOrder=order;
   var letters=["A","B","C","D"];
   order.forEach(function(item,pos){
-    var btn=document.createElement("button"); btn.className="opt"; if(item.idx===ph.correct) btn.setAttribute("data-correct","1");
+    var btn=document.createElement("button");
+    btn.type="button";
+    btn.className="opt";
+    btn.setAttribute("data-opt-idx",String(item.idx));
+    if(item.idx===ph.correct) btn.setAttribute("data-correct","1");
     btn.innerHTML='<span class="kx">'+letters[pos]+'</span><span>'+tt(item.o)+'</span>';
     if(st){ btn.disabled=true; if(item.idx===st.selectedIdx) btn.classList.add(st.ok?"correct":"wrong"); if(item.idx===ph.correct) btn.classList.add("correct"); }
-    else btn.addEventListener("click",function(){ bossAnswer(item.idx,btn,ph,order); });
     opts.appendChild(btn);
   });
   var fb=$("bossFb");
@@ -3120,6 +3155,7 @@ function init(){
   document.querySelectorAll(".lang-card").forEach(function(x){ x.setAttribute("aria-pressed",x.getAttribute("data-lang")===S.lang?"true":"false"); });
   bind();
   wireBossList();
+  wireBossOptions();
   try{ bindMapPanZoom(); }catch(e){ console.error(e); }
   ensureBossStats(); hydrateNorthernBoss(); checkMedals(); showOnboarding();
   if("speechSynthesis" in window){ try{ window.speechSynthesis.getVoices(); }catch(e){} }
