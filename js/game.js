@@ -3058,7 +3058,6 @@ function bind(){
   });
   on("playerName","input",function(){ S.name=this.value; });
 
-  on("mapBackBtn","click",function(){ show("screenHome"); });
   on("mapDetailClose","click",closeMapDetail);
   on("zoomIn","click",function(){ zoomTo(view.x+view.w/2,view.y+view.h/2,.8); });
   on("zoomOut","click",function(){ zoomTo(view.x+view.w/2,view.y+view.h/2,1.25); });
@@ -3080,20 +3079,17 @@ function bind(){
   on("resultHomeBtn","click",function(){ show("screenHome"); });
   on("resultMapBtn","click",returnToMap);
 
-  on("bossListBackBtn","click",function(){ show("screenHome"); });
   on("bossQuitBtn","click",bossQuit);
   on("bossPrevBtn","click",bossPrev);
   on("bossNext","click",bossNext);
   on("bossResultBackBtn","click",function(){ renderBossList(); show("screenBossList"); });
   on("bossReplayBtn","click",function(){ if(bossCur.lastBossId) startBoss(bossCur.lastBossId); });
 
-  on("dailyBackBtn","click",function(){ show("screenHome"); });
   on("dailyStartBtn","click",startDaily);
   on("weeklyBackBtn","click",function(){ show("screenHome"); });
   on("weeklyMapBtn","click",function(){ openMap(null,true); });
 
   on("shopBackBtn","click",function(){ show("screenHome"); });
-  on("profileBackBtn","click",function(){ show("screenHome"); });
   on("profileResetBtn","click",resetProgress);
   on("certGenerateBtn","click",renderCertificatePreview);
   on("certDownloadBtn","click",downloadCertificate);
@@ -3137,7 +3133,7 @@ function dismissBlockingUI(){
 var navWired=false, lastNavTap=0;
 function wireQuizNavButtons(){
   var lastTap=0;
-  ["quitBtn","prevBtn","nextBtn","dailyBackBtn","bossQuitBtn","bossPrevBtn","bossNext"].forEach(function(id){
+  ["quitBtn","prevBtn","nextBtn","bossQuitBtn","bossPrevBtn","bossNext"].forEach(function(id){
     var el=$(id); if(!el) return;
     el.addEventListener("touchend",function(ev){
       var now=Date.now();
