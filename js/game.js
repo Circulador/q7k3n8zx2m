@@ -382,7 +382,7 @@ var UI = {
   "nav.map":{pt:"Mapa",en:"Map"},
   "nav.more":{pt:"Mais",en:"More"},
   "nav.boss":{pt:"Chefões",en:"Bosses"},
-  "nav.daily":{pt:"Diária",en:"Daily"},
+  "nav.daily":{pt:"Missões",en:"Missions"},
   "nav.weekly":{pt:"Semanal",en:"Weekly"},
   "nav.shop":{pt:"Loja",en:"Shop"},
   "nav.stats":{pt:"Progresso",en:"Progress"},
@@ -984,8 +984,13 @@ function updateQuizNav(){
   } else next.style.display="none";
 }
 function quizQuit(){
-  if(cur.reportPending) return;
+  if(cur.reportPending){
+    cur.reportPending=false;
+    var rs=$("reportStep"); if(rs) rs.hidden=true;
+  }
   if(!confirm(t("quiz.quitConfirm"))) return;
+  stopSpeak();
+  cur.reportPending=false;
   if(cur.mode==="daily"){ renderDaily(); show("screenDaily"); }
   else if(cur.mode==="review"){ renderProfile(); show("screenProfile"); }
   else if(cur.mode==="chain"){ renderBossList(); show("screenBossList"); }
@@ -3013,6 +3018,7 @@ function bind(){
   on("nextBtn","click",nextQuestion);
   on("prevBtn","click",prevQuestion);
   on("quitBtn","click",quizQuit);
+  wireQuizNavButtons();
   on("resultHomeBtn","click",function(){ show("screenHome"); });
   on("resultMapBtn","click",returnToMap);
 
@@ -3055,6 +3061,7 @@ function bind(){
 
   document.addEventListener("keydown",function(e){
     if(e.key==="Escape"){
+      if($("screenQuiz")&&$("screenQuiz").classList.contains("active")){ quizQuit(); return; }
       if($("mapDetail")&&!$("mapDetail").hidden){ closeMapDetail(); return; }
       var tip=$("mapTooltip"); if(tip&&!tip.hidden){ tip.hidden=true; if(typeof OrbitaWorldMap!=="undefined") OrbitaWorldMap.clearSelection(); return; }
     }
@@ -3073,6 +3080,20 @@ function dismissBlockingUI(){
   }catch(e){}
 }
 var navWired=false, lastNavTap=0;
+function wireQuizNavButtons(){
+  var lastTap=0;
+  ["quitBtn","prevBtn","nextBtn","dailyBackBtn","bossQuitBtn","bossPrevBtn","bossNext"].forEach(function(id){
+    var el=$(id); if(!el) return;
+    el.addEventListener("touchend",function(ev){
+      var now=Date.now();
+      if(now-lastTap<500) return;
+      lastTap=now;
+      ev.preventDefault();
+      ev.stopPropagation();
+      el.click();
+    },{passive:false});
+  });
+}
 function wireBottomNav(){
   if(navWired) return;
   navWired=true;
