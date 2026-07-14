@@ -59,7 +59,7 @@ var UI = {
   "home.nextContinue":{pt:"Continue de onde parou",en:"Continue where you left off"},
   "home.nextDaily":{pt:"Sua missão diária está esperando",en:"Your daily mission is waiting"},
   "home.nextDailySub":{pt:"5 situações rápidas mantêm sua ofensiva e priorizam o que você errou.",en:"5 quick scenarios keep your streak and prioritize what you missed."},
-  "home.nextCampaignSub":{pt:"Proteja mais um país no mapa e avance na meta semanal.",en:"Protect another country on the map and advance your weekly goal."},
+  "home.nextCampaignSub":{pt:"Sua expedição continua — proteja o próximo país no mapa e avance na meta semanal.",en:"Your expedition continues — protect the next country on the map and advance your weekly goal."},
   "home.nextBoss":{pt:"Enfrente um chefão",en:"Face a boss"},
   "home.nextBossSub":{pt:"Crises tabletop e a Cadeia Norte elevam sua maturidade operacional.",en:"Tabletop crises and the Northern Chain raise your operational maturity."},
   "home.nextReview":{pt:"Revise seus erros",en:"Review your mistakes"},
@@ -88,7 +88,7 @@ var UI = {
   "mode.boss.h":{pt:"🐉 Chefões",en:"🐉 Bosses"},
   "mode.boss.t":{pt:"Aventuras estilo mesa (tabletop): crises encadeadas com storytelling.",en:"Tabletop-style adventures: chained crises with storytelling."},
   "mode.dw.h":{pt:"📅 Diárias & 🏆 Semanais",en:"📅 Dailies & 🏆 Weeklies"},
-  "mode.dw.t":{pt:"Desafios que renovam e rendem XP e moedas.",en:"Challenges that refresh and grant XP and coins."},
+  "mode.dw.t":{pt:"Desafios que renovam e rendem XP.",en:"Challenges that refresh and grant XP."},
   "streak.title":{pt:"🔥 Ofensiva",en:"🔥 Streak"},
   "streak.sub":{pt:"Jogue todo dia para manter sua sequência e ganhar bônus.",en:"Play every day to keep your streak and earn bonuses."},
   "streak.days":{pt:"dias seguidos",en:"day streak"},
@@ -102,7 +102,7 @@ var UI = {
   "hud.tip.title":{pt:"Seu título na carreira — evolui conforme você acumula XP nas missões.",en:"Your career title — grows as you earn XP from missions."},
   "hud.tip.lives":{pt:"Vidas restantes — você perde uma ao errar em situações críticas; recupere jogando bem.",en:"Lives remaining — you lose one on critical mistakes; recover by playing well."},
   "hud.tip.streak":{pt:"Ofensiva — dias seguidos jogando; mantenha a sequência para bônus de moedas.",en:"Streak — consecutive days played; keep it going for coin bonuses."},
-  "hud.tip.level":{pt:"Nível do guardião — sobe a cada 50 XP; desbloqueia conquistas e itens na loja.",en:"Guardian level — increases every 50 XP; unlocks achievements and shop items."},
+  "hud.tip.level":{pt:"Nível do guardião — sobe a cada 50 XP; desbloqueia conquistas.",en:"Guardian level — increases every 50 XP; unlocks achievements."},
   "hud.tip.xp":{pt:"Pontos de experiência (XP) — ganhos em campanhas, diárias, semanais e chefões.",en:"Experience points (XP) — earned in campaigns, dailies, weeklies and bosses."},
   "hud.tip.coins":{pt:"Moedas — moeda do jogo para comprar avatares, molduras e temas na loja.",en:"Coins — in-game currency to buy avatars, frames and themes in the shop."},
   "hud.tip.score":{pt:"Pontuação geral — soma do seu desempenho em acertos e missões concluídas.",en:"Overall score — sum of your performance in correct answers and completed missions."},
@@ -114,6 +114,7 @@ var UI = {
   "hud.tip.a11y":{pt:"Menu de acessibilidade — idioma, voz, Libras, contraste, fonte e mais opções.",en:"Accessibility menu — language, voice, sign language, contrast, font and more."},
   "hud.tip.voice":{pt:"Narração por voz — lê em voz alta cenários e opções do quiz.",en:"Voice narration — reads scenarios and quiz options aloud."},
   "streak.bonus":{pt:"Bônus de ofensiva!",en:"Streak bonus!"},
+  "streak.bonusXp":{pt:"Bônus de ofensiva! +{n} XP",en:"Streak bonus! +{n} XP"},
   "manager.demo":{pt:"ℹ️ Piloto local — métricas reais deste dispositivo para sua equipe. Integração corporativa agregada requer backend/LMS.",en:"ℹ️ Local pilot — real metrics from this device for your team. Corporate aggregation requires backend/LMS."},
   "manager.yourTeam":{pt:"Sua equipe (dados reais)",en:"Your team (real data)"},
   "manager.pending":{pt:"Outras equipes — aguardando dados agregados corporativos",en:"Other teams — awaiting corporate aggregated data"},
@@ -186,14 +187,19 @@ var UI = {
   "a11y.src.both":{pt:"Hand Talk + Nativo",en:"Hand Talk + Native"},
   "home.langPtDesc":{pt:"Português (Brasil)",en:"Portuguese (Brazil)"},
   "home.langEnDesc":{pt:"Inglês (Estados Unidos)",en:"English (United States)"},
-  "setup.nameTitle":{pt:"👤 Identifique-se, Guardião",en:"👤 Identify yourself, Guardian"},
-  "setup.nameSub":{pt:"Seu nome fica salvo só no seu navegador.",en:"Your name is saved only in your browser."},
+  "setup.nameTitle":{pt:"Seu nome",en:"Your name"},
+  "setup.nameSub":{pt:"Opcional — aparece no certificado e no ranking da equipe.",en:"Optional — shown on your certificate and team ranking."},
   "setup.namePh":{pt:"Seu nome ou apelido",en:"Your name or nickname"},
-  "setup.teamTitle":{pt:"👥 Escolha sua equipe",en:"👥 Choose your team"},
-  "setup.teamSub":{pt:"O ranking é por equipe e anônimo — celebramos a evolução do time, nunca expomos quem errou.",en:"Ranking is by team and anonymous — we celebrate the team's growth, never exposing who erred."},
-  "setup.roleTitle":{pt:"🎭 Escolha seu papel",en:"🎭 Choose your role"},
-  "setup.roleSub":{pt:"As situações se adaptam à sua rotina.",en:"Scenarios adapt to your routine."},
-  "setup.go":{pt:"🗺️ Ir para o mapa",en:"🗺️ Go to the map"},
+  "setup.badge":{pt:"🗺️ Expedição global",en:"🗺️ Global expedition"},
+  "setup.head":{pt:"Prepare sua missão de treino",en:"Prepare your training mission"},
+  "setup.intro":{pt:"Explore o mapa país a país — cada região traz situações de cyber security ligadas à operação da Orbita. Equipe e papel personalizam os cenários.",en:"Explore the map country by country — each region brings cyber security scenarios tied to Orbita's operations. Team and role personalize the scenarios."},
+  "setup.teamTitle":{pt:"Equipe",en:"Team"},
+  "setup.teamSub":{pt:"Ranking anônimo — celebramos a evolução do time, nunca expomos quem errou.",en:"Anonymous ranking — we celebrate team growth, never exposing who erred."},
+  "setup.roleTitle":{pt:"Papel no dia a dia",en:"Your day-to-day role"},
+  "setup.roleSub":{pt:"As situações do mapa se adaptam à sua rotina (escritório, campo, OT ou liderança).",en:"Map scenarios adapt to your routine (office, field, OT or leadership)."},
+  "setup.go":{pt:"▶️ Iniciar expedição no mapa",en:"▶️ Start expedition on map"},
+  "setup.teamRequired":{pt:"Escolha uma equipe para continuar.",en:"Choose a team to continue."},
+  "setup.roleRequired":{pt:"Escolha um papel para continuar.",en:"Choose a role to continue."},
   "setup.managerTitle":{pt:"🧭 Modo gestor",en:"🧭 Manager mode"},
   "setup.managerSub":{pt:"Ative se você acompanha métricas da equipe. O painel aparece no menu Mais.",en:"Enable if you track team metrics. The panel appears in the More menu."},
   "setup.managerLabel":{pt:"Exibir painel do gestor",en:"Show manager panel"},
@@ -217,7 +223,7 @@ var UI = {
   "map.activityTitle":{pt:"Atuação",en:"Activity"},
   "map.productsTitle":{pt:"Portfólio de produtos",en:"Product portfolio"},
   "map.countryListTitle":{pt:"Lista de países",en:"Country list"},
-  "map.countryListSub":{pt:"Clique no país para ver atuação completa e iniciar a campanha.",en:"Click a country to see full activities and start the campaign."},
+  "map.countryListSub":{pt:"Clique no país para ver a operação e iniciar a missão de treino.",en:"Click a country to see the operation and start the training mission."},
   "map.countryListFilterSub":{pt:"Países com: {label}",en:"Countries with: {label}"},
   "map.countryListEmpty":{pt:"Nenhum país com este filtro.",en:"No countries match this filter."},
   "map.countryListMore":{pt:"e mais {n} tipos",en:"and {n} more types"},
@@ -243,8 +249,16 @@ var UI = {
   "office.chainFlow":{pt:"E-mail → Estação → Reunião → Nuvem → Remoto → SOC",en:"Email → Workstation → Meeting → Cloud → Remote → SOC"},
   "office.impactOk":{pt:"🟢 Escritórios íntegros: fluxo digital seguro entre Rio, Singapura e Roterdã.",en:"🟢 Offices intact: secure digital flow between Rio, Singapore and Rotterdam."},
   "office.impactBreach":{pt:"🔴 Brecha em \"{stage}\": o impacto se propaga pelos escritórios conectados — contratos, dados e reputação em risco.",en:"🔴 Breach at \"{stage}\": impact propagates across connected offices — contracts, data and reputation at risk."},
-  "map.missionTitle":{pt:"Missão da mineração Orbita",en:"Orbita mining mission"},
-  "map.missionText":{pt:"Proteger a cadeia global de minério de ferro, pelotas, níquel, cobre, cobalto, PGM, ouro e prata — da mina ao cliente.",en:"Protect the global chain of iron ore, pellets, nickel, copper, cobalt, PGM, gold and silver — from mine to customer."},
+  "map.missionTitle":{pt:"Por que explorar o mapa?",en:"Why explore the map?"},
+  "map.missionText":{pt:"Cada país é uma missão de treino: você conhece a operação da Orbita e pratica decisões de cyber security no contexto local.",en:"Each country is a training mission: learn Orbita's operations and practice cyber security decisions in the local context."},
+  "map.expeditionTitle":{pt:"🔍 Expedição de treinamento",en:"🔍 Training expedition"},
+  "map.expeditionSub":{pt:"Explore o mundo como numa missão global — desbloqueie desafios específicos em cada país.",en:"Explore the world like a global mission — unlock country-specific challenges."},
+  "map.expeditionProgress":{pt:"{done}/{total} países explorados",en:"{done}/{total} countries explored"},
+  "map.expeditionNext":{pt:"Próxima missão",en:"Next mission"},
+  "map.expeditionGo":{pt:"▶️ Ir para próxima missão",en:"▶️ Go to next mission"},
+  "map.expeditionDone":{pt:"Todos os países explorados — revise os com menor nota!",en:"All countries explored — revisit your lowest scores!"},
+  "map.expeditionNew":{pt:"Novo destino",en:"New destination"},
+  "map.trainingLabel":{pt:"6 situações de treino",en:"6 training scenarios"},
   "map.chainFlow":{pt:"Mina → Usina → Ferrovia → Terminal → Porto → Cliente",en:"Mine → Plant → Railway → Terminal → Port → Customer"},
   "map.resilience":{pt:"Maturidade operacional",en:"Operational maturity"},
   "map.resilienceTip":{pt:"Ataques reduzem produção, aumentam custos e emissões. Proteja cada elo da cadeia.",en:"Attacks reduce production, raise costs and emissions. Protect every link in the chain."},
@@ -259,7 +273,7 @@ var UI = {
   "chain.scenarios":{pt:"situações",en:"scenarios"},
   "chain.impactOk":{pt:"🟢 Cadeia íntegra: minério fluindo de Carajás (S11D) até a China sem interrupções.",en:"🟢 Chain intact: ore flowing from Carajás (S11D) to China without interruptions."},
   "chain.impactBreach":{pt:"🔴 Brecha em \"{stage}\": o impacto se propaga por toda a cadeia a jusante — produção parada, ~230 Mt/ano no porto em risco e o abastecimento da China ameaçado.",en:"🔴 Breach at \"{stage}\": the impact propagates down the whole chain — production halted, ~230 Mtpy at the port at risk and China's supply threatened."},
-  "region.start":{pt:"🚀 Iniciar campanha",en:"🚀 Start campaign"},
+  "region.start":{pt:"▶️ Iniciar missão de treino",en:"▶️ Start training mission"},
   "quiz.integrity":{pt:"🏭 Integridade da operação",en:"🏭 Operation integrity"},
   "quiz.resilience":{pt:"🛡️ Maturidade operacional",en:"🛡️ Operational maturity"},
   "quiz.quit":{pt:"✖ Sair",en:"✖ Quit"},
@@ -325,8 +339,8 @@ var UI = {
   "onboard.langB":{pt:"O jogo, as perguntas, as respostas e a narração por voz seguem o idioma escolhido.",en:"The game, questions, answers and voice narration follow the chosen language."},
   "onboard.s1t":{pt:"3) Bem-vindo, Guardião!",en:"3) Welcome, Guardian!"},
   "onboard.s1b":{pt:"Você protege a operação da Orbita — da mina ao porto — contra ameaças cibernéticas. Suas decisões fortalecem a resiliência da cadeia global.",en:"You protect Orbita's operations — from mine to port — against cyber threats. Your decisions strengthen the global chain's resilience."},
-  "onboard.s2t":{pt:"4) Mapa e campanhas",en:"4) Map and campaigns"},
-  "onboard.s2b":{pt:"Explore o mapa mundial, escolha países e enfrente situações reais de segurança. Cada campanha aumenta seu XP e suas competências.",en:"Explore the world map, pick countries and face real security scenarios. Each campaign increases your XP and skills."},
+  "onboard.s2t":{pt:"4) Expedição no mapa",en:"4) Map expedition"},
+  "onboard.s2b":{pt:"Explore países como numa missão global — cada destino traz situações de cyber security no contexto da operação local.",en:"Explore countries like a global mission — each destination brings cyber security scenarios in the local operation context."},
   "onboard.s3t":{pt:"5) Chefões e cadeia",en:"5) Bosses and chain"},
   "onboard.s3b":{pt:"Chefões tabletop simulam crises reais. A Cadeia Norte (Carajás → China) fica nos Chefões — proteja mina, ferrovia e porto.",en:"Tabletop bosses simulate real crises. The Northern Chain (Carajás → China) lives in Bosses — protect mine, railway and port."},
   "onboard.s4t":{pt:"6) Progresso e certificado",en:"6) Progress and certificate"},
@@ -434,7 +448,7 @@ function setLang(lang){
   document.querySelectorAll(".lang-card").forEach(function(x){ x.setAttribute("aria-pressed",x.getAttribute("data-lang")===lang?"true":"false"); });
   applyI18n(); renderTeams(); renderRoles(); refreshHud(); applySignLanguage();
   var ov=$("onboardOverlay"); if(ov&&!ov.hidden) renderOnboarding();
-  if($("screenMap").classList.contains("active")) drawMap();
+  if($("screenMap").classList.contains("active")){ drawMap(); renderMapExpedition(); }
 }
 
 /* -------------------- EQUIPES / TEAMS -------------------- */
@@ -620,7 +634,7 @@ var MEDALS = [
   {id:"bossAll", ico:"🛡️", name:{pt:"Cadeia Protegida",en:"Chain Protected"}, test:function(){ return bossCompletedCount()>=BOSSES.length; }},
   {id:"bossLegend", ico:"👑", name:{pt:"Resiliência Lendária",en:"Legendary Resilience"}, test:function(){ return bossHasTier("legendary"); }},
   {id:"bossResil", ico:"💎", name:{pt:"Guardião Resiliente",en:"Resilient Guardian"}, test:function(){ return bossAvgIndex()>=75||bossGoldCount()>=3; }},
-  {id:"rich", ico:"🪙", name:{pt:"Colecionador",en:"Collector"}, test:function(){ return S.coins>=150 || Object.keys(S.owned).length>=3; }},
+  {id:"rich", ico:"⭐", name:{pt:"Veterano",en:"Veteran"}, test:function(){ return S.xp>=250 || medalsEarned()>=5; }},
   {id:"streak7", ico:"🔥", name:{pt:"Ofensiva 7 dias",en:"7-day streak"}, test:function(){ return (S.streak&&S.streak.best>=7)||(S.streak&&S.streak.count>=7); }},
   {id:"streak30", ico:"💥", name:{pt:"Ofensiva 30 dias",en:"30-day streak"}, test:function(){ return S.streak&&S.streak.best>=30; }},
   {id:"master", ico:"👑", name:{pt:"Mestre da Segurança",en:"Security Master"}, test:function(){ return S.xp>=500; }}
@@ -868,9 +882,8 @@ function applyCosmetics(){
   if(sk) document.body.classList.add(sk.css);
 }
 function refreshHud(){
-  var xp=$("hudXp"), coins=$("hudCoins"), score=$("hudScore"), lvl=$("hudLevel"), title=$("hudTitle");
+  var xp=$("hudXp"), score=$("hudScore"), lvl=$("hudLevel"), title=$("hudTitle");
   if(xp) xp.textContent=S.xp;
-  if(coins) coins.textContent=S.coins;
   if(score) score.textContent=S.score;
   if(lvl) lvl.textContent=levelOf();
   if(title){ var ti=currentTitle(); title.textContent=ti.ico+" "+tt(ti); }
@@ -883,7 +896,7 @@ function refreshHud(){
   renderLives();
 }
 function renderLives(){ var el=$("hudLives"); if(!el) return; var n=Math.max(0,S.lives||0); el.textContent="❤️".repeat(n)+"🖤".repeat(Math.max(0,3-n)); }
-function addReward(xp,coins,scr){ S.xp+=xp||0; S.coins+=coins||0; S.score+=scr||0; checkMedals(); refreshHud(); save(); }
+function addReward(xp,coins,scr){ S.xp+=xp||0; S.score+=scr||0; checkMedals(); refreshHud(); save(); }
 
 /* -------------------- ESTATÍSTICAS DE TEMA -------------------- */
 function recordTheme(theme,ok){
@@ -1445,6 +1458,7 @@ function renderCountryList(){
     rows.innerHTML='<p class="country-list-empty">'+t("map.countryListEmpty")+'</p>';
   } else playable.forEach(function(vc){
     var c=COUNTRIES.filter(function(x){ return x.id===vc.gameId; })[0]; if(!c) return;
+    var nextExp=nextExpeditionCountry();
     var actLabels=vc.activities.map(function(id){ return OrbitaWorldMap.getActivityLabel(id,L()); });
     var prodLabels=vc.products.map(function(id){ return OrbitaWorldMap.getProductLabel(id,L()); });
     var lines=formatCountryListLines(vc);
@@ -1459,7 +1473,7 @@ function renderCountryList(){
       +'<span class="country-row-main"><span class="cn">'+vc.name+'</span>'
       +(detailHtml?'<span class="country-row-summary">'+detailHtml+'</span>':'')
       +'</span>'
-      +(S.done[c.id]?'<span class="ck">'+S.done[c.id]+'%</span>':'<span class="country-row-go" aria-hidden="true">›</span>');
+      +(S.done[c.id]?'<span class="ck">'+S.done[c.id]+'%</span>':(c.id===nextExp.id?'<span class="country-badge country-badge-next">🎯</span>':'<span class="country-badge country-badge-new">'+(L()==="pt"?"Novo":"New")+'</span>'));
     b.addEventListener("click",function(){ openMapDetailCountry(c.id); });
     b.addEventListener("mouseenter",function(){ setMapHitHighlight(c.id); });
     b.addEventListener("mouseleave",function(){ if(mapHitActive!==c.id) setMapHitHighlight(mapHitActive); });
@@ -1533,6 +1547,7 @@ function finishWorldMapUI(){
   updateMapContext();
   renderMapAbout();
   renderMapMission();
+  renderMapExpedition();
   renderMapResilience();
   applyMapSearch();
   restoreMapTabFocus();
@@ -1547,9 +1562,11 @@ function openMapDetailCountry(id){
   var body=$("mapDetailBody"), panel=$("mapDetail"); if(!body||!panel) return;
   var official=(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.getCountry)?OrbitaWorldMap.getCountry(id,L()):null;
   var themes=c.themes.map(function(th){ return '<span class="tag">'+tt(THEMES[th])+'</span>'; }).join(" ");
-  var prog=S.done[c.id]? ((L()==="pt"?"Melhor: ":"Best: ")+S.done[c.id]+"%") : (L()==="pt"?"Ainda não jogada":"Not played yet");
+  var nextExp=nextExpeditionCountry();
+  var prog=S.done[c.id]? ((L()==="pt"?"Melhor: ":"Best: ")+S.done[c.id]+"%") : (L()==="pt"?"Missão de treino disponível":"Training mission available");
   body.innerHTML='<h3>'+c.flag+' '+(official?official.name:tt(c.name))+'</h3>'
     +(official?'<p class="md-tag md-tag-official">'+official.phrase+'</p>':'')
+    +'<p class="md-tag md-tag-train">'+t("map.trainingLabel")+'</p>'
     +officialPresenceHTML(id)
     +'<p class="md-desc">'+tt(c.desc)+'</p>'
     +'<div class="md-chain"><b>'+t("map.chainImpact")+':</b> '+tt(c.chain)+'</div>'
@@ -1642,12 +1659,43 @@ function bindMapPanZoom(){
   window.addEventListener("pointermove",function(e){ if(!drag) return; var r=svg.getBoundingClientRect(); var kx=view.w/r.width,ky=view.h/r.height; view.x=Math.max(0,Math.min(VW-view.w,ox-(e.clientX-sx)*kx)); view.y=Math.max(0,Math.min(VH-view.h,oy-(e.clientY-sy)*ky)); updateViewBox(); });
   wrap.addEventListener("wheel",function(e){ if(mapChainMode()) return; e.preventDefault(); var r=svg.getBoundingClientRect(); var mx=view.x+(e.clientX-r.left)/r.width*view.w,my=view.y+(e.clientY-r.top)/r.height*view.h; zoomTo(mx,my,e.deltaY>0?1.2:.83); },{passive:false});
 }
-function openMap(process, reset){
+function countriesExploredCount(){ return Object.keys(S.done||{}).length; }
+function nextExpeditionCountry(){
+  var i,c,played=S.done||{};
+  for(i=0;i<COUNTRIES.length;i++){ if(!played[COUNTRIES[i].id]) return COUNTRIES[i]; }
+  var worst=null,worstAcc=101;
+  for(i=0;i<COUNTRIES.length;i++){
+    c=COUNTRIES[i];
+    if(played[c.id]<worstAcc){ worstAcc=played[c.id]; worst=c; }
+  }
+  return worst||COUNTRIES[0];
+}
+function setupComplete(){ return !!S.team&&!!S.role; }
+function focusExpeditionCountry(id){
+  if(!id) return;
+  setMapHitHighlight(id,true);
+  openMapDetailCountry(id);
+}
+function renderMapExpedition(){
+  var host=$("mapExpedition"); if(!host) return;
+  var next=nextExpeditionCountry(), done=countriesExploredCount(), total=COUNTRIES.length;
+  var allDone=done>=total;
+  host.innerHTML='<div class="map-expedition-head"><div><div class="map-expedition-title">'+t("map.expeditionTitle")+'</div><div class="map-expedition-sub">'+t("map.expeditionSub")+'</div></div><span class="map-expedition-progress">'+t("map.expeditionProgress").replace("{done}",String(done)).replace("{total}",String(total))+'</span></div>'
+    +'<div class="map-expedition-next"><span class="map-expedition-flag">'+next.flag+'</span><div><div class="map-expedition-k">'+(allDone?t("map.expeditionDone"):t("map.expeditionNext"))+'</div><div class="map-expedition-name">'+tt(next.name)+'</div><div class="map-expedition-meta">'+t("map.trainingLabel")+(S.done[next.id]?' · '+(L()==="pt"?"Melhor: ":"Best: ")+S.done[next.id]+"%":' · '+t("map.expeditionNew"))+'</div></div></div>'
+    +'<button type="button" class="btn btn-primary btn-sm" id="mapExpeditionGo">'+t("map.expeditionGo")+'</button>';
+  var btn=$("mapExpeditionGo");
+  if(btn) btn.addEventListener("click",function(){ focusExpeditionCountry(next.id); });
+}
+function openMap(process, reset, focusExpedition){
   if(process==="iron"){ openBossChain(true); return; }
   if(arguments.length>0) mapProcess=process||null;
   normalizeMapProcess();
   if(reset||!mapReady) view={x:0,y:0,w:VW,h:VH};
   ensureMap(); drawMap(); show("screenMap");
+  if(focusExpedition){
+    var next=nextExpeditionCountry();
+    if(next) setTimeout(function(){ focusExpeditionCountry(next.id); }, mapReady?120:480);
+  }
 }
 function returnToMap(){ openMap(null,false); }
 var cur={country:null,questions:[],i:0,correct:0,integrity:100,mode:"campaign"};
@@ -2132,7 +2180,7 @@ function bossComputeMetrics(cur){
   var rank=bossGuardianRank(index);
   return {availability:availability,resilience:resilience,exposure:exposure,preparation:preparation,maturity:maturity,index:index,tier:tier,rankId:rank.id};
 }
-function bossTierReward(tier){ var r={legendary:{xp:60,coins:30},gold:{xp:50,coins:25},silver:{xp:40,coins:20},bronze:{xp:30,coins:15},severe:{xp:20,coins:10},systemic:{xp:15,coins:5}}; return r[tier]||r.bronze; }
+function bossTierReward(tier){ var r={legendary:{xp:60},gold:{xp:50},silver:{xp:40},bronze:{xp:30},severe:{xp:20},systemic:{xp:15}}; return r[tier]||r.bronze; }
 function bossSaveRun(bossId,metrics){
   ensureBossStats();
   var prev=S.bossStats[bossId], best=prev&&prev.best?prev.best:null;
@@ -2342,7 +2390,7 @@ function finishBoss(){
   var prevBest=S.bossStats&&S.bossStats[b.id]&&S.bossStats[b.id].best?S.bossStats[b.id].best.index:0;
   bossSaveRun(b.id,m);
   var rew=bossTierReward(m.tier);
-  addReward(rew.xp,rew.coins,m.index);
+  addReward(rew.xp,0,m.index);
   bumpWeekly("boss",1); recordStreak(); checkMedals(); save();
   var debrief=bossDebriefFromLog(bossCur.log);
   var improved=m.index>prevBest;
@@ -2390,7 +2438,7 @@ function recordStreak(){
   S.streak.lastDate=today;
   if(S.streak.count>(S.streak.best||0)) S.streak.best=S.streak.count;
   var bonuses={3:10,7:25,14:50,30:100};
-  if(bonuses[S.streak.count]){ addReward(S.streak.count*5,bonuses[S.streak.count],0); toast(t("streak.bonus")+" +"+bonuses[S.streak.count]+" 🪙"); }
+  if(bonuses[S.streak.count]){ addReward(S.streak.count*5); toast(t("streak.bonusXp").replace("{n}",String(S.streak.count*5))); }
   else if(S.streak.count>1) toast(t("streak.up")+S.streak.count+" "+t("streak.days"));
   save(); refreshHud(); renderStreakCard(); checkMedals();
   return S.streak.count;
@@ -2417,7 +2465,7 @@ function markDailyDone(won){
   ensureDaily();
   var first=!S.daily.done.mission;
   S.daily.done.mission=true;
-  if(first&&won){ addReward(50,25,0); toast(L()==="pt"?"📅 Diária concluída! +50 XP +25 🪙":"📅 Daily done! +50 XP +25 🪙"); }
+  if(first&&won){ addReward(50); toast(L()==="pt"?"📅 Diária concluída! +50 XP":"📅 Daily done! +50 XP"); }
   save();
 }
 function renderDaily(){
@@ -2436,7 +2484,7 @@ function renderDaily(){
   var host=$("dailyList"); host.innerHTML="";
   var done=!!S.daily.done.mission;
   var item=document.createElement("div"); item.className="mission-item"+(done?" done":"");
-  item.innerHTML='<span class="mem">'+(done?"✅":"📅")+'</span><div class="mtxt"><div class="mname">'+(L()==="pt"?"Missão do dia — 5 situações":"Daily mission — 5 scenarios")+'</div><div class="mrew">+50 XP • +25 🪙 • 🔥 '+(L()==="pt"?"mantém ofensiva":"keeps streak")+'</div></div>';
+  item.innerHTML='<span class="mem">'+(done?"✅":"📅")+'</span><div class="mtxt"><div class="mname">'+(L()==="pt"?"Missão do dia — 5 situações":"Daily mission — 5 scenarios")+'</div><div class="mrew">+50 XP • 🔥 '+(L()==="pt"?"mantém ofensiva":"keeps streak")+'</div></div>';
   host.appendChild(item);
   $("dailyStartBtn").disabled=done; $("dailyStartBtn").textContent=done?(L()==="pt"?"✅ Concluída hoje":"✅ Done today"):t("daily.play");
 }
@@ -2447,7 +2495,7 @@ var WEEKLY=[
   {id:"theme", goal:8, ico:"📚", themed:true, name:{pt:"Acerte 8 do tema da semana",en:"Get 8 on the week theme"}}
 ];
 function ensureWeekly(){ if(S.weekly.week!==weekKey()){ S.weekly={week:weekKey(),prog:{}}; save(); } }
-function bumpWeekly(id,n){ if(!n) return; ensureWeekly(); S.weekly.prog[id]=(S.weekly.prog[id]||0)+n; var w=WEEKLY.filter(function(x){return x.id===id;})[0]; if(w && S.weekly.prog[id]===w.goal){ addReward(40,20,0); toast((L()==="pt"?"🏆 Semanal concluída: ":"🏆 Weekly done: ")+tt(w.name)); } save(); renderWeekCard(); }
+function bumpWeekly(id,n){ if(!n) return; ensureWeekly(); S.weekly.prog[id]=(S.weekly.prog[id]||0)+n; var w=WEEKLY.filter(function(x){return x.id===id;})[0]; if(w && S.weekly.prog[id]===w.goal){ addReward(40); toast((L()==="pt"?"🏆 Semanal concluída: ":"🏆 Weekly done: ")+tt(w.name)+" (+40 XP)"); } save(); renderWeekCard(); }
 function renderWeekly(){
   ensureWeekly();
   var wt=getWeekTheme();
@@ -2458,7 +2506,7 @@ function renderWeekly(){
     var label=tt(w.name);
     if(w.themed) label=(L()==="pt"?"Acerte 8 em ":"Get 8 on ")+tt(THEMES[wt]);
     var d=document.createElement("div"); d.className="mission-item"+(done?" done":"");
-    d.innerHTML='<span class="mem">'+(done?"✅":w.ico)+'</span><div class="mtxt"><div class="mname">'+label+'</div><div class="mrew">'+p+"/"+w.goal+' • +40 XP • +20 🪙</div><div class="mini-bar"><span class="mf" style="width:'+pct+'%"></span></div></div>';
+    d.innerHTML='<span class="mem">'+(done?"✅":w.ico)+'</span><div class="mtxt"><div class="mname">'+label+'</div><div class="mrew">'+p+"/"+w.goal+' • +40 XP</div><div class="mini-bar"><span class="mf" style="width:'+pct+'%"></span></div></div>';
     host.appendChild(d);
   });
 }
@@ -2554,7 +2602,7 @@ function nextMilestoneText(){
 function weekPlayAction(){
   ensureDaily(); ensureWeekly();
   if(!S.daily.done.mission) return function(){ renderDaily(); show("screenDaily"); };
-  if((S.weekly.prog.campaign||0)<3) return function(){ openMap(null,true); };
+  if((S.weekly.prog.campaign||0)<3) return function(){ openMap(null,true,true); };
   if(bossCompletedCount()<1||(S.weekly.prog.boss||0)<1) return function(){ renderBossList(); show("screenBossList"); };
   return function(){ renderProfile(); show("screenProfile"); };
 }
@@ -2572,7 +2620,7 @@ function computeNextStep(){
     return {ico:"📚",title:t("home.nextReview"),sub:t("home.nextReviewSub").replace("{n}",String(due)),btn:t("home.nextGoReview"),act:startReviewErrors};
   }
   if((S.weekly.prog.campaign||0)<3){
-    return {ico:"🗺️",title:t("home.nextContinue"),sub:t("home.nextCampaignSub"),btn:t("home.nextGoMap"),act:function(){ openMap(null,true); }};
+    return {ico:"🗺️",title:t("home.nextContinue"),sub:t("home.nextCampaignSub"),btn:t("home.nextGoMap"),act:function(){ openMap(null,true,true); }};
   }
   return {ico:"🐉",title:t("home.nextBoss"),sub:t("home.nextBossSub"),btn:t("home.nextGoBoss"),act:function(){ renderBossList(); show("screenBossList"); }};
 }
@@ -2993,11 +3041,21 @@ function bind(){
   on("onboardOverlay","click",function(e){ if(e.target===$("onboardOverlay")) closeOnboarding(); });
   document.addEventListener("keydown",function(e){ var ov=$("onboardOverlay"); if(e.key==="Escape"&&ov&&!ov.hidden) closeOnboarding(); });
 
-  on("homeStartBtn","click",function(){ renderTeams(); renderRoles(); if($("playerName")) $("playerName").value=S.name||""; show("screenSetup"); });
-  on("homeMapBtn","click",function(){ openMap(null,true); });
+  on("homeStartBtn","click",function(){
+    if(setupComplete()){ openMap(null,true,true); return; }
+    renderTeams(); renderRoles();
+    if($("playerName")) $("playerName").value=S.name||"";
+    show("screenSetup");
+  });
+  on("homeMapBtn","click",function(){ openMap(null,true,setupComplete()); });
   on("heroIronBtn","click",function(){ openBossChain(true); });
   on("setupBackBtn","click",function(){ show("screenHome"); });
-  on("setupGoBtn","click",function(){ if($("playerName")) S.name=$("playerName").value.trim(); save(); openMap(null,true); });
+  on("setupGoBtn","click",function(){
+    if($("playerName")) S.name=$("playerName").value.trim();
+    if(!S.team){ toast(t("setup.teamRequired")); return; }
+    if(!S.role){ toast(t("setup.roleRequired")); return; }
+    save(); openMap(null,true,true);
+  });
   on("playerName","input",function(){ S.name=this.value; });
 
   on("mapBackBtn","click",function(){ show("screenHome"); });
@@ -3047,10 +3105,7 @@ function bind(){
   on("profileExportBtn","click",exportProgress);
   on("profileImportBtn","click",function(){ var f=$("profileImportFile"); if(f) f.click(); });
   on("profileImportFile","change",function(){ if(this.files&&this.files[0]) importProgress(this.files[0]); this.value=""; });
-  if($("optManager")){ $("optManager").checked=!!S.managerMode; on("optManager","change",function(){ setManagerMode(this.checked); }); }
   if($("optManagerProfile")){ $("optManagerProfile").checked=!!S.managerMode; on("optManagerProfile","change",function(){ setManagerMode(this.checked); }); }
-  if($("optFocusLearn")){ $("optFocusLearn").checked=!!S.focusLearn; on("optFocusLearn","change",function(){ setFocusLearn(this.checked); }); }
-  if($("optFocusLearnProfile")){ $("optFocusLearnProfile").checked=!!S.focusLearn; on("optFocusLearnProfile","change",function(){ setFocusLearn(this.checked); }); }
   [["onboardOptVoice","voice"],["onboardOptContrast","contrast"],["onboardOptSigns","signs"],["onboardOptMotion","motion"]].forEach(function(pair){
     var el=$(pair[0]); if(!el) return;
     el.addEventListener("change",function(){ S.a11y[pair[1]]=this.checked; save(); applyA11y(); });

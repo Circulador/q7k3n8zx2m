@@ -224,6 +224,26 @@ body.onboard-open{overflow:hidden}
 .btn-linkish:hover{color:var(--gold)}
 .card-lang-home .section-sub{margin-bottom:10px}
 .card-lang-home{padding:16px 20px}
+.setup-card h1{font-size:1.5rem;margin:.35em 0 .5em}
+.setup-intro{margin-bottom:14px}
+.setup-block{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.setup-block:first-of-type{border-top:0;padding-top:0;margin-top:10px}
+.setup-block input{width:100%;margin-top:6px}
+.map-expedition{margin:12px 0;padding:14px;border:1px solid rgba(0,126,122,.45);border-radius:12px;background:linear-gradient(135deg,rgba(0,126,122,.12),rgba(237,177,17,.08))}
+.map-expedition-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-bottom:12px}
+.map-expedition-title{font-weight:800;font-size:.95rem;color:var(--gold)}
+.map-expedition-sub{font-size:.8rem;color:var(--steel);margin-top:2px;max-width:520px;line-height:1.4}
+.map-expedition-progress{font-size:.78rem;font-weight:700;color:var(--green-l);white-space:nowrap}
+.map-expedition-next{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.map-expedition-flag{font-size:2rem;line-height:1}
+.map-expedition-k{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--steel)}
+.map-expedition-name{font-weight:800;font-size:1.05rem}
+.map-expedition-meta{font-size:.8rem;color:var(--steel);margin-top:2px}
+#mapExpeditionGo{width:100%}
+.country-badge{font-size:.72rem;font-weight:700;padding:3px 8px;border-radius:999px;flex:none}
+.country-badge-next{background:rgba(237,177,17,.2);color:var(--gold);border:1px solid rgba(237,177,17,.45)}
+.country-badge-new{background:rgba(0,126,122,.15);color:var(--green-l);border:1px solid rgba(0,126,122,.35)}
+.md-tag-train{display:inline-block;margin:4px 0 8px;padding:3px 10px;border-radius:999px;font-size:.72rem;font-weight:700;background:rgba(0,126,122,.18);color:var(--green-l);border:1px solid rgba(0,126,122,.35)}
 .week-streak-row{margin:-4px 0 12px;padding:10px 12px;border-radius:10px;border:1px solid rgba(237,177,17,.35);background:linear-gradient(135deg,rgba(237,177,17,.1),rgba(0,126,122,.06))}
 .streak-inline{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:.88rem}
 .streak-inline-flame{font-size:1.1rem}

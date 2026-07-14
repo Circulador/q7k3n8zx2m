@@ -9,17 +9,17 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=57">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=58">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=57">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=57">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=58">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=58">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=57"></script>
-<link rel="stylesheet" href="css/styles.css?v=57">
+<script src="js/access-gate.js?v=58"></script>
+<link rel="stylesheet" href="css/styles.css?v=58">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -330,30 +330,29 @@
 
   <!-- ============ SETUP ============ -->
   <section id="screenSetup" class="screen" aria-label="Configuração">
-    <div class="card">
-      <div class="section-title" data-i18n="setup.nameTitle">👤 Identifique-se, Guardião</div>
-      <div class="section-sub" data-i18n="setup.nameSub">Seu nome fica salvo só no seu navegador.</div>
-      <input id="playerName" maxlength="24" data-i18n-ph="setup.namePh" placeholder="Seu nome ou apelido">
-    </div>
-    <div class="card">
-      <div class="section-title" data-i18n="setup.teamTitle">👥 Escolha sua equipe</div>
-      <div class="section-sub" data-i18n="setup.teamSub">O ranking é por equipe e anônimo — celebramos a evolução do time, nunca expomos quem errou.</div>
-      <div class="teams-grid" id="teamsGrid" role="group" aria-label="Equipes"></div>
-    </div>
-    <div class="card">
-      <div class="section-title" data-i18n="setup.roleTitle">🎭 Escolha seu papel</div>
-      <div class="section-sub" data-i18n="setup.roleSub">As situações se adaptam à sua rotina.</div>
-      <div class="roles-grid" id="rolesGrid" role="group" aria-label="Papéis"></div>
-    </div>
-    <div class="card">
-      <div class="section-title" data-i18n="setup.prefsTitle">⚙️ Preferências</div>
-      <div class="section-sub" data-i18n="setup.prefsSub">Ajuste o jogo ao seu perfil. Você pode mudar depois no Progresso.</div>
-      <div class="a11y-row"><div><div class="lab" data-i18n="setup.focusLabel">🎯 Foco em aprender</div><div class="desc" data-i18n="setup.focusDesc">Reduz moedas, loja e placar para focar no conteúdo.</div></div><label class="switch"><input type="checkbox" id="optFocusLearn"><span class="slider"></span></label></div>
-      <div class="a11y-row"><div><div class="lab" data-i18n="setup.managerLabel">🧭 Exibir painel do gestor</div><div class="desc" data-i18n="setup.managerSub">Para quem acompanha métricas da equipe. Aparece no menu Mais.</div></div><label class="switch"><input type="checkbox" id="optManager"><span class="slider"></span></label></div>
+    <div class="card setup-card">
+      <span class="badge" data-i18n="setup.badge">🗺️ Expedição global</span>
+      <h1 data-i18n="setup.head">Prepare sua missão de treino</h1>
+      <p class="section-sub setup-intro" data-i18n="setup.intro">Explore o mapa país a país — cada região traz situações de cyber security ligadas à operação da Orbita. Equipe e papel personalizam os cenários.</p>
+      <div class="setup-block">
+        <div class="section-title" data-i18n="setup.nameTitle">Seu nome</div>
+        <div class="section-sub" data-i18n="setup.nameSub">Opcional — aparece no certificado e no ranking da equipe.</div>
+        <input id="playerName" maxlength="24" data-i18n-ph="setup.namePh" placeholder="Seu nome ou apelido">
+      </div>
+      <div class="setup-block">
+        <div class="section-title" data-i18n="setup.teamTitle">Equipe</div>
+        <div class="section-sub" data-i18n="setup.teamSub">Ranking anônimo — celebramos a evolução do time, nunca expomos quem errou.</div>
+        <div class="teams-grid" id="teamsGrid" role="group" aria-label="Equipes"></div>
+      </div>
+      <div class="setup-block">
+        <div class="section-title" data-i18n="setup.roleTitle">Papel no dia a dia</div>
+        <div class="section-sub" data-i18n="setup.roleSub">As situações do mapa se adaptam à sua rotina (escritório, campo, OT ou liderança).</div>
+        <div class="roles-grid" id="rolesGrid" role="group" aria-label="Papéis"></div>
+      </div>
     </div>
     <div class="row-actions">
       <button class="btn btn-ghost" id="setupBackBtn" data-i18n="common.home">🏠 Início</button>
-      <button class="btn btn-primary" id="setupGoBtn" data-i18n="setup.go">🗺️ Ir para o mapa</button>
+      <button class="btn btn-primary btn-lg" id="setupGoBtn" data-i18n="setup.go">▶️ Iniciar expedição no mapa</button>
     </div>
   </section>
 
@@ -374,6 +373,9 @@
         <summary data-i18n="map.aboutTitle">Presença global da Orbita</summary>
         <div id="mapAbout" class="map-about-body"></div>
       </details>
+      <div class="map-expedition" id="mapExpeditionWrap">
+        <div id="mapExpedition"></div>
+      </div>
       <div class="map-mission" id="mapMissionWrap">
         <div class="map-mission-head"><span data-i18n="map.missionTitle">Missão da mineração Orbita</span></div>
         <div id="mapMission"></div>
@@ -585,8 +587,7 @@
     </details>
     <div class="card">
       <div class="section-title" data-i18n="setup.prefsTitle">⚙️ Preferências</div>
-      <div class="a11y-row"><div><div class="lab" data-i18n="setup.focusLabel">🎯 Foco em aprender</div><div class="desc" data-i18n="setup.focusDesc">Reduz moedas e recompensas cosméticas para focar no conteúdo.</div></div><label class="switch"><input type="checkbox" id="optFocusLearnProfile"><span class="slider"></span></label></div>
-      <div class="a11y-row"><div><div class="lab" data-i18n="setup.managerLabel">🧭 Exibir painel do gestor</div><div class="desc" data-i18n="setup.managerSub">Para quem acompanha métricas da equipe. Aparece no menu Mais.</div></div><label class="switch"><input type="checkbox" id="optManagerProfile"><span class="slider"></span></label></div>
+      <div class="a11y-row"><div><div class="lab" data-i18n="setup.managerLabel">🧭 Exibir painel do gestor</div><div class="desc" data-i18n="setup.managerSub">Ative se você acompanha métricas da equipe. O painel aparece no menu Mais.</div></div><label class="switch"><input type="checkbox" id="optManagerProfile"><span class="slider"></span></label></div>
     </div>
     <div class="card">
       <div class="section-title" data-i18n="profile.backupTitle">💾 Backup local</div>
@@ -659,15 +660,15 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="57";</script>
-<script src="js/sign-lang.js?v=57"></script>
-<script src="js/orbita-world-map.js?v=57"></script>
-<script src="js/questions-data.js?v=57"></script>
-<script src="js/country-questions-data.js?v=57"></script>
-<script src="js/bosses-data.js?v=57"></script>
-<script src="js/chain-data.js?v=57"></script>
-<script src="js/boss-maps.js?v=57"></script>
-<script src="js/game.js?v=57"></script>
+<script>window.APP_VERSION="58";</script>
+<script src="js/sign-lang.js?v=58"></script>
+<script src="js/orbita-world-map.js?v=58"></script>
+<script src="js/questions-data.js?v=58"></script>
+<script src="js/country-questions-data.js?v=58"></script>
+<script src="js/bosses-data.js?v=58"></script>
+<script src="js/chain-data.js?v=58"></script>
+<script src="js/boss-maps.js?v=58"></script>
+<script src="js/game.js?v=58"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {
