@@ -9,17 +9,17 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=72">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=74">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=72">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=72">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=74">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=74">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=72"></script>
-<link rel="stylesheet" href="css/styles.css?v=72">
+<script src="js/access-gate.js?v=74"></script>
+<link rel="stylesheet" href="css/styles.css?v=74">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -105,6 +105,40 @@
   </div>
 </div>
 
+<div class="demo-menu-sheet" id="demoMenuSheet" hidden role="dialog" aria-labelledby="demoMenuTitle" aria-modal="true">
+  <div class="demo-menu-backdrop" id="demoMenuBackdrop"></div>
+  <div class="demo-menu-panel">
+    <div class="demo-menu-head">
+      <h2 class="demo-menu-title" id="demoMenuTitle">🧪 Demo — testes integrados</h2>
+      <button type="button" class="dp-close" id="demoMenuClose" aria-label="Fechar">×</button>
+    </div>
+    <p class="demo-menu-sub">Simule progresso de 0% a 100% e valide missões, mapa, crises e loja.</p>
+    <div class="demo-status" id="demoStatus" aria-live="polite"></div>
+    <div class="demo-section">
+      <div class="demo-section-k">Jornada rápida</div>
+      <div class="demo-preset-row">
+        <button type="button" class="demo-preset-btn" data-preset="0">0%</button>
+        <button type="button" class="demo-preset-btn" data-preset="25">25%</button>
+        <button type="button" class="demo-preset-btn" data-preset="50">50%</button>
+        <button type="button" class="demo-preset-btn" data-preset="75">75%</button>
+        <button type="button" class="demo-preset-btn" data-preset="100">100%</button>
+      </div>
+    </div>
+    <div class="demo-section">
+      <div class="demo-section-k">Atalhos de estado</div>
+      <div class="demo-action-grid" id="demoStateActions"></div>
+    </div>
+    <div class="demo-section">
+      <div class="demo-section-k">Ir para tela</div>
+      <div class="demo-nav-grid" id="demoNavGrid"></div>
+    </div>
+    <div class="demo-section demo-section-foot">
+      <button type="button" class="btn btn-ghost btn-sm" id="demoRefreshBtn">↻ Atualizar painel</button>
+      <button type="button" class="btn btn-ghost btn-sm demo-danger" id="demoResetBtn">🗑️ Zerar e recarregar</button>
+    </div>
+  </div>
+</div>
+
 <div class="app">
   <div class="a11y-backdrop" id="a11yBackdrop" hidden aria-hidden="true"></div>
   <header class="topbar" role="banner">
@@ -159,7 +193,30 @@
         <span class="chip hud-tip hud-arcade" id="hudScoreChip" hidden>🎯 <span id="hudScore">0</span></span>
       </div>
       <div class="hud-actions">
-        <button type="button" class="toolbar-btn hud-tip" id="onboardOpenBtn" data-i18n-attr="aria-label:onboard.reopenTip;title:onboard.reopenTip" aria-label="Guia do jogo"><span aria-hidden="true">📖</span></button>
+        <button type="button" class="toolbar-btn hud-tip" id="onboardOpenBtn" data-i18n-attr="aria-label:onboard.reopenTip;title:onboard.reopenTip" aria-label="Guia do jogo"><span aria-hidden="true">🧭</span></button>
+        <div class="glossary-menu-wrap">
+          <button type="button" class="toolbar-btn hud-tip" id="glossaryBtn" data-i18n-attr="aria-label:hud.tip.glossary;title:hud.tip.glossary" aria-label="Glossário" aria-haspopup="true" aria-expanded="false"><span aria-hidden="true">📖</span></button>
+          <div class="glossary-menu dropdown-panel" id="glossaryMenu" role="dialog" aria-labelledby="glossaryMenuTitle" hidden>
+            <div class="dp-header">
+              <h2 class="dp-title" id="glossaryMenuTitle" data-i18n="settings.glossary">📖 Glossário</h2>
+              <button type="button" class="dp-close" id="glossaryMenuClose" data-i18n-attr="aria-label:a11y.close" aria-label="Fechar">×</button>
+            </div>
+            <div class="dp-section glossary-menu-body">
+              <p class="dp-sub" data-i18n="settings.glossarySub">Siglas e termos do jogo — com exemplos do dia a dia.</p>
+              <label class="sr-only" for="glossarySearch" data-i18n="settings.glossarySearch">Buscar termo</label>
+              <input type="search" class="dp-input" id="glossarySearch" list="glossaryDatalist" autocomplete="off" data-i18n-attr="placeholder:settings.glossaryPh">
+              <datalist id="glossaryDatalist"></datalist>
+              <label class="sr-only" for="glossaryPick" data-i18n="settings.glossaryPick">Escolha um termo</label>
+              <select class="dp-select" id="glossaryPick"></select>
+              <div class="glossary-card" id="glossaryCard"></div>
+              <div class="dp-label" data-i18n="settings.glossaryFavs">⭐ Favoritos do glossário</div>
+              <div class="glossary-favs" id="glossaryFavsList"></div>
+              <button type="button" class="dp-link-btn" id="flashcardBtn" data-i18n="settings.flashcard">🃏 Revisar termos (flashcards)</button>
+              <div class="glossary-card flashcard-card" id="flashcardCard" hidden></div>
+              <button type="button" class="btn btn-ghost btn-sm" id="flashcardNextBtn" hidden data-i18n="settings.flashcardNext">Próximo termo →</button>
+            </div>
+          </div>
+        </div>
         <div class="a11y-menu-wrap">
           <button type="button" class="toolbar-btn hud-tip" id="a11yBtn" data-i18n-attr="aria-label:hud.tip.a11y;title:hud.tip.a11y" aria-label="Acessibilidade" aria-haspopup="true" aria-expanded="false"><span aria-hidden="true">♿</span></button>
           <div class="a11y-menu" id="a11yMenu" role="menu" aria-label="Acessibilidade" hidden>
@@ -249,6 +306,7 @@
           </div>
         </div>
         <div class="settings-menu-wrap">
+          <button type="button" class="toolbar-btn hud-tip demo-toolbar-btn" id="demoMenuBtn" title="Menu demo — testar jornada 0→100%" aria-label="Menu demo" aria-haspopup="dialog" aria-expanded="false"><span aria-hidden="true">🧪</span></button>
           <button type="button" class="toolbar-btn hud-tip" id="settingsBtn" data-i18n-attr="aria-label:hud.tip.settings;title:hud.tip.settings" aria-label="Configurações" aria-haspopup="true" aria-expanded="false"><span aria-hidden="true">⚙️</span></button>
           <div class="settings-menu dropdown-panel" id="settingsMenu" role="dialog" aria-labelledby="settingsMenuTitle" hidden>
             <div class="dp-header">
@@ -290,22 +348,8 @@
               <div class="dp-label" data-i18n="settings.a11yCatalog">Recursos de acessibilidade</div>
               <div class="a11y-catalog" id="a11yCatalog"></div>
             </div>
-            <div class="dp-section">
-              <div class="dp-label" data-i18n="settings.glossary">📖 Glossário</div>
-              <p class="dp-sub" data-i18n="settings.glossarySub">Siglas e termos do jogo — com exemplos do dia a dia.</p>
-              <label class="sr-only" for="glossarySearch" data-i18n="settings.glossarySearch">Buscar termo</label>
-              <input type="search" class="dp-input" id="glossarySearch" list="glossaryDatalist" autocomplete="off" data-i18n-attr="placeholder:settings.glossaryPh">
-              <datalist id="glossaryDatalist"></datalist>
-              <label class="sr-only" for="glossaryPick" data-i18n="settings.glossaryPick">Escolha um termo</label>
-              <select class="dp-select" id="glossaryPick"></select>
-              <div class="glossary-card" id="glossaryCard"></div>
-              <div class="dp-label" data-i18n="settings.glossaryFavs">⭐ Favoritos do glossário</div>
-              <div class="glossary-favs" id="glossaryFavsList"></div>
-              <button type="button" class="dp-link-btn" id="flashcardBtn" data-i18n="settings.flashcard">🃏 Revisar termos (flashcards)</button>
-              <div class="glossary-card flashcard-card" id="flashcardCard" hidden></div>
-              <button type="button" class="btn btn-ghost btn-sm" id="flashcardNextBtn" hidden data-i18n="settings.flashcardNext">Próximo termo →</button>
-            </div>
             <div class="dp-section dp-section-compact">
+              <button type="button" class="dp-link-btn" id="settingsOpenDemoBtn">🧪 Menu demo (testes)</button>
               <button type="button" class="dp-link-btn" id="settingsOpenA11yBtn" data-i18n="settings.openA11y">♿ Acessibilidade</button>
             </div>
           </div>
@@ -825,16 +869,18 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="72";</script>
-<script src="js/sign-lang.js?v=72"></script>
-<script src="js/orbita-world-map.js?v=72"></script>
-<script src="js/questions-data.js?v=72"></script>
-<script src="js/country-questions-data.js?v=72"></script>
-<script src="js/bosses-data.js?v=72"></script>
-<script src="js/chain-data.js?v=72"></script>
-<script src="js/boss-maps.js?v=72"></script>
-<script src="js/game.js?v=72"></script>
-<script src="js/review-bank.js?v=72"></script>
+<script>window.APP_VERSION="74";</script>
+<script src="js/sign-lang.js?v=74"></script>
+<script src="js/orbita-world-map.js?v=74"></script>
+<script src="js/questions-data.js?v=74"></script>
+<script src="js/country-questions-data.js?v=74"></script>
+<script src="js/bosses-data.js?v=74"></script>
+<script src="js/boss-personal-tips.js?v=74"></script>
+<script src="js/chain-data.js?v=74"></script>
+<script src="js/boss-maps.js?v=74"></script>
+<script src="js/game.js?v=74"></script>
+<script src="js/demo-menu.js?v=74"></script>
+<script src="js/review-bank.js?v=74"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {

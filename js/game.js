@@ -3839,6 +3839,64 @@ function init(){
     try{ bind(); }catch(e2){ console.error("bind recovery",e2); }
   }
 }
+function progressPct(){
+  ensureDaily(); ensureWeekly();
+  var map=Object.keys(S.done).length/Math.max(1,COUNTRIES.length)*28;
+  var boss=bossCompletedCount()/Math.max(1,BOSSES.length)*22;
+  var week=0, wp=S.weekly.prog||{};
+  WEEKLY.forEach(function(w){ week+=Math.min(1,(wp[w.id]||0)/w.goal); });
+  week=week/Math.max(1,WEEKLY.length)*20;
+  var daily=S.daily.done.mission?12:0;
+  var onboard=(S.onboardingDone?8:0)+(setupComplete()?8:0);
+  var streak=Math.min(10,(S.streak&&S.streak.best||0)/3);
+  return Math.min(100,Math.round(map+boss+week+daily+onboard+streak));
+}
+window.gdvDemoApi={
+  getState:function(){ return S; },
+  getDef:function(){ return DEF; },
+  save:save,
+  storeKey:STORE_KEY,
+  toast:toast,
+  lang:L,
+  show:show,
+  countryIds:function(){ return COUNTRIES.map(function(c){ return c.id; }); },
+  bossesCount:function(){ return BOSSES.length; },
+  bossIds:function(){ return BOSSES.map(function(b){ return b.id; }); },
+  bossCompletedCount:bossCompletedCount,
+  bossMetrics:bossDefaultMetrics,
+  bossSaveRun:bossSaveRun,
+  computeNextStep:computeNextStep,
+  progressPct:progressPct,
+  ensureDaily:ensureDaily,
+  ensureWeekly:ensureWeekly,
+  bumpWeekly:bumpWeekly,
+  todayKey:todayKey,
+  weekKey:weekKey,
+  checkMedals:checkMedals,
+  chainById:chainById,
+  toggleSettingsMenu:toggleSettingsMenu,
+  closeOverlays:function(){ dismissBlockingUI(); },
+  refreshAll:function(){
+    refreshHud(); applyCosmetics(); renderNextStep(); renderWeekCard(); renderDaily(); renderWeekly();
+    renderWeekProgressBar(); renderFirstDayHint(); updateSetupBanner(); updateNavBadges(); updateManagerNav();
+    checkMedals(); renderBossList();
+    if($("screenMap")&&$("screenMap").classList.contains("active")){ try{ drawMap(); renderMapExpedition(); }catch(e){} }
+    if($("screenProfile")&&$("screenProfile").classList.contains("active")) renderProfile();
+    if($("screenShop")&&$("screenShop").classList.contains("active")) renderShop();
+  },
+  nav:{
+    home:function(){ show("screenHome"); },
+    map:function(){ openMap(null,true,true); },
+    daily:function(){ renderDaily(); renderWeekly(); show("screenDaily"); },
+    boss:function(){ renderBossList(); show("screenBossList"); },
+    profile:function(){ renderProfile(); show("screenProfile"); },
+    shop:function(){ renderShop(); show("screenShop"); },
+    setup:function(){ renderTeams(); renderRoles(); if($("playerName")) $("playerName").value=S.name||""; show("screenSetup"); },
+    manager:function(){ renderManager(); show("screenManager"); },
+    review:function(){ show("screenReview"); if(typeof window.initReviewBank==="function") window.initReviewBank(); }
+  }
+};
+if(typeof window.initDemoMenu==="function") window.initDemoMenu(window.gdvDemoApi);
 window.__gdvStartBoss=function(id){ startBoss(id); };
 window.__gdvCmapScene=cmapScene;
 window.__gdvOffmapScene=offmapScene;
