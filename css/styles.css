@@ -257,6 +257,12 @@ body.onboard-open{overflow:hidden}
 @keyframes heroCrane{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-6deg)}}
 @keyframes heroNode{0%,100%{opacity:.5}50%{opacity:1}}
 .hero-actions{margin-top:14px;margin-bottom:0}
+.hero-lead{margin:10px 0 0;font-size:1rem;line-height:1.55;color:#eaf2f6}
+.hero-body{margin:10px 0 0;font-size:.9rem;line-height:1.55;color:var(--steel)}
+.hero-journey{margin:12px 0 0;padding:10px 12px;border-radius:10px;background:rgba(0,126,122,.1);border:1px solid rgba(0,126,122,.28);font-size:.88rem;line-height:1.5;color:#d4e8ee}
+.hero-journey .nav-ref{font-weight:800;color:var(--gold)}
+body.theme-light .hero-lead{color:#0a1a24}
+body.theme-light .hero-journey{color:#1a3a44;background:rgba(0,126,122,.08)}
 .home-a11y-hint{margin:10px 0 0;font-size:.82rem;text-align:center}
 .btn-linkish{background:none;border:none;padding:0;color:var(--green-l);font:inherit;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .btn-linkish:hover{color:var(--gold)}
