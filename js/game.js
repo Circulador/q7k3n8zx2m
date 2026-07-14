@@ -770,7 +770,7 @@ function show(id){
   if(id==="screenBossList") showContextTip("boss");
   updateNavBadges();
   window.scrollTo({top:0,behavior:S.a11y.motion?"auto":"smooth"});
-  document.querySelectorAll(".bottom-nav button").forEach(function(b){ b.classList.remove("on"); });
+  document.querySelectorAll(".bottom-nav-row button").forEach(function(b){ b.classList.remove("on"); });
   if(NAVMAP[id]){ var nb=$(NAVMAP[id]); if(nb) nb.classList.add("on"); }
   document.querySelectorAll(".nav-more-item").forEach(function(b){ b.classList.remove("on"); });
   if(NAV_MORE_SCREENS.indexOf(id)>=0){
@@ -3520,7 +3520,6 @@ function bind(){
   });
   on("nextStepBtn","click",playNow);
   on("heroIronBtn","click",function(){ openBossChain(true); });
-  on("setupBackBtn","click",function(){ show("screenHome"); });
   on("setupGoBtn","click",function(){
     if($("playerName")) S.name=$("playerName").value.trim();
     if(!S.team){ toast(t("setup.teamRequired")); return; }
@@ -3561,7 +3560,6 @@ function bind(){
   on("prevBtn","click",prevQuestion);
   on("quitBtn","click",quizQuit);
   wireQuizNavButtons();
-  on("resultHomeBtn","click",function(){ show("screenHome"); });
   on("resultMapBtn","click",returnToMap);
 
   on("bossQuitBtn","click",bossQuit);
@@ -3571,10 +3569,7 @@ function bind(){
   on("bossReplayBtn","click",function(){ if(bossCur.lastBossId) startBoss(bossCur.lastBossId); });
 
   on("dailyStartBtn","click",startDaily);
-  on("weeklyBackBtn","click",function(){ show("screenHome"); });
   on("weeklyMapBtn","click",function(){ openMap(null,true); });
-
-  on("shopBackBtn","click",function(){ show("screenHome"); });
   on("offlineDismissBtn","click",dismissOfflineBanner);
   on("weekProgressBar","click",openWeeklyScreen);
   on("nextStepWeek","click",openWeeklyScreen);
