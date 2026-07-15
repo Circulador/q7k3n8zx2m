@@ -1249,7 +1249,8 @@ body.home-cta-visible #aslAccess{bottom:calc(var(--bottom-shell-h) + 78px + env(
 .glossary-browse .dp-select{margin-bottom:0}
 .glossary-term-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:4px}
 .glossary-cat{display:inline-block;padding:3px 8px;border-radius:999px;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;background:rgba(0,126,122,.12);color:var(--green-d);border:1px solid rgba(0,126,122,.28)}
-.glossary-acr{margin:0 0 10px;padding:8px 10px;border-radius:8px;background:#eef6f8;border:1px solid #d4e2e8;font-size:.8rem;line-height:1.45;color:#2a4550}
+.glossary-name-block{margin:2px 0 10px}
+.glossary-acr-prominent{margin:0 0 12px;padding:10px 12px;border-radius:8px;background:#eef6f8;border:1px solid #d4e2e8;font-size:.84rem;line-height:1.5;color:#2a4550}
 .glossary-acr-k{display:block;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#5a6f78;margin-bottom:4px}
 .glossary-def-k{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#5a6f78;margin-bottom:4px}
 .settings-menu-wrap{position:relative;display:inline-flex;flex:none}

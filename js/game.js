@@ -1238,7 +1238,7 @@ function toggleGlossaryLearned(id, goNext){
   save(); checkMedals();
   if(goNext!==false&&!was){
     var next=glossaryNextUnlearnedId(id);
-    if(next&&next!==id){ selectGlossaryTerm(next,true); return; }
+    if(next&&next!==id){ selectGlossaryTerm(next,false); return; }
   }
 }
 function glossaryNextUnlearnedId(afterId){
@@ -1357,7 +1357,7 @@ function bindGlossaryCardActions(g){
     });
   });
   document.querySelectorAll(".glossary-related-chip").forEach(function(b){
-    b.addEventListener("click",function(){ selectGlossaryTerm(b.getAttribute("data-gid")); });
+    b.addEventListener("click",function(){ selectGlossaryTerm(b.getAttribute("data-gid"), false); });
   });
 }
 function updateGlossaryMobileBar(g){
@@ -1461,8 +1461,13 @@ function syncGlossaryFromSearch(){
 }
 function getGlossaryNavIds(){
   var search=$("glossarySearch");
-  var q=search?search.value:"";
-  return glossaryFilter(q).slice().sort(function(a,b){ return a.term.localeCompare(b.term); }).map(function(g){ return g.id; });
+  var q=search?search.value.trim():"";
+  var list=glossaryFilter(q);
+  if(list.length<=1){
+    if(glossaryActiveCat) list=GLOSSARY.filter(function(g){ return g.cat===glossaryActiveCat; });
+    else list=GLOSSARY.slice();
+  }
+  return list.slice().sort(function(a,b){ return a.term.localeCompare(b.term); }).map(function(g){ return g.id; });
 }
 function glossaryNavIndex(){
   if(!glossaryActiveId) return -1;
@@ -1476,7 +1481,7 @@ function navigateGlossaryTerm(dir){
   var next=idx+dir;
   if(next<0) next=ids.length-1;
   if(next>=ids.length) next=0;
-  selectGlossaryTerm(ids[next], true);
+  selectGlossaryTerm(ids[next], false);
   var card=$("glossaryCard"); if(card){ try{ card.focus(); }catch(e){} }
 }
 function updateGlossaryNav(){
@@ -1501,6 +1506,10 @@ function updateGlossaryNav(){
     btn.disabled=solo;
     btn.setAttribute("aria-disabled",solo?"true":"false");
   });
+  if(prev) prev.onclick=function(e){ e.preventDefault(); e.stopPropagation(); navigateGlossaryTerm(-1); };
+  if(next) next.onclick=function(e){ e.preventDefault(); e.stopPropagation(); navigateGlossaryTerm(1); };
+  if(prevM) prevM.onclick=function(e){ e.preventDefault(); e.stopPropagation(); navigateGlossaryTerm(-1); };
+  if(nextM) nextM.onclick=function(e){ e.preventDefault(); e.stopPropagation(); navigateGlossaryTerm(1); };
 }
 function bindGlossaryKeyboard(){
   var menu=$("glossaryMenu"); if(!menu||menu._gkb) return;
@@ -1509,8 +1518,8 @@ function bindGlossaryKeyboard(){
     if(menu.hidden) return;
     var t=e.target, inSearch=t&&t.id==="glossarySearch";
     if(e.key==="/"&&!inSearch){ e.preventDefault(); var gs=$("glossarySearch"); if(gs) gs.focus(); return; }
-    if(inSearch&&(e.key==="ArrowDown"||e.key==="ArrowRight")){ e.preventDefault(); if(!glossaryActiveId){ var ids=getGlossaryNavIds(); if(ids.length) selectGlossaryTerm(ids[0],true); } else navigateGlossaryTerm(1); return; }
-    if(inSearch&&(e.key==="ArrowUp"||e.key==="ArrowLeft")){ e.preventDefault(); if(!glossaryActiveId){ var ids2=getGlossaryNavIds(); if(ids2.length) selectGlossaryTerm(ids2[ids2.length-1],true); } else navigateGlossaryTerm(-1); return; }
+    if(inSearch&&(e.key==="ArrowDown"||e.key==="ArrowRight")){ e.preventDefault(); if(!glossaryActiveId){ var ids=getGlossaryNavIds(); if(ids.length) selectGlossaryTerm(ids[0],false); } else navigateGlossaryTerm(1); return; }
+    if(inSearch&&(e.key==="ArrowUp"||e.key==="ArrowLeft")){ e.preventDefault(); if(!glossaryActiveId){ var ids2=getGlossaryNavIds(); if(ids2.length) selectGlossaryTerm(ids2[ids2.length-1],false); } else navigateGlossaryTerm(-1); return; }
     if(inSearch) return;
     if(e.key==="ArrowRight"||e.key==="ArrowDown"){ e.preventDefault(); navigateGlossaryTerm(1); }
     else if(e.key==="ArrowLeft"||e.key==="ArrowUp"){ e.preventDefault(); navigateGlossaryTerm(-1); }
@@ -1562,7 +1571,7 @@ function renderGlossaryWordList(){
     var novo=glossaryIsNew(g.id)?'<span class="glossary-new-badge">'+t("settings.glossaryNew")+'</span>':"";
     var reviewMark=S.glossaryReview&&S.glossaryReview.indexOf(g.id)>=0?'<span class="glossary-word-review" aria-hidden="true">🔖</span>':"";
     b.innerHTML=cat+'<span class="glossary-word-term">'+g.term+'</span>'+novo+'<span class="glossary-word-sep">—</span><span class="glossary-word-name">'+tt(g.name)+'</span>'+learned+reviewMark;
-    b.addEventListener("click",function(e){ e.stopPropagation(); selectGlossaryTerm(g.id); });
+    b.addEventListener("click",function(e){ e.stopPropagation(); selectGlossaryTerm(g.id, false); });
     host.appendChild(b);
   });
   renderGlossaryMeta(q);
@@ -1592,19 +1601,18 @@ function showGlossaryTerm(id){
     return '<button type="button" class="glossary-related-chip" data-gid="'+rid+'">'+rg.term+'</button>';
   }).join("")+'</div>':"";
   var sum=glossarySummary(g), fullDef=tt(g.def)||"";
-  var fullName=g.fullName?tt(g.fullName):tt(g.name);
+  var nameBlock='<div class="glossary-name-block"><div class="glossary-def-k">'+t("settings.glossaryDef")+'</div><div class="glossary-name">'+tt(g.name)+'</div></div>';
+  var acrBlock=g.acr?'<p class="glossary-acr glossary-acr-prominent"><span class="glossary-acr-k">'+t("settings.glossaryAcr")+'</span>'+tt(g.acr)+'</p>':"";
   var details="";
-  if(g.acr||fullDef.length>sum.length||fullName){
-    details='<details class="glossary-more"><summary>'+t("settings.glossaryMore")+'</summary>';
-    if(fullName&&fullName!==g.term) details+='<p class="glossary-fullname"><span class="glossary-acr-k">'+t("settings.glossaryDef")+'</span>'+fullName+'</p>';
-    if(g.acr) details+='<p class="glossary-acr"><span class="glossary-acr-k">'+t("settings.glossaryAcr")+'</span>'+tt(g.acr)+'</p>';
-    if(fullDef.length>sum.length) details+='<div class="glossary-def-k">'+t("settings.glossaryFullDef")+'</div><p class="glossary-def">'+fullDef+'</p>';
-    details+='</details>';
+  if(fullDef.length>sum.length){
+    details='<details class="glossary-more"><summary>'+t("settings.glossaryMore")+'</summary>'
+      +'<div class="glossary-def-k">'+t("settings.glossaryFullDef")+'</div><p class="glossary-def">'+fullDef+'</p></details>';
   }
   host.innerHTML=
     cat+
     '<div class="glossary-term-row2"><div class="glossary-term">'+g.term+'</div>'+novo+'</div>'+
-    '<div class="glossary-name">'+tt(g.name)+'</div>'+
+    nameBlock+
+    acrBlock+
     '<div class="glossary-card-actions">'+
       '<button type="button" class="glossary-action-btn glossary-fav-toggle'+(isFav?" on":"")+'" data-act="fav" aria-label="'+(L()==="pt"?"Favorito":"Favorite")+'">'+(isFav?"⭐":"☆")+'</button>'+
       '<button type="button" class="glossary-action-btn glossary-learn-toggle'+(isLearned?" on":"")+'" data-act="learn">✅ '+(isLearned?t("settings.glossaryLearnedDone"):t("settings.glossaryLearned"))+'</button>'+
