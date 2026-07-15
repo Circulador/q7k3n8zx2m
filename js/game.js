@@ -400,7 +400,13 @@ var UI = {
   "setup.editBadge":{pt:"✏️ Editar perfil",en:"✏️ Edit profile"},
   "setup.head":{pt:"Personalize seu perfil",en:"Personalize your profile"},
   "setup.intro":{pt:"Nome (opcional). Em seguida, escolha onde você atua e como é seu trabalho. Leva cerca de 20 segundos.",en:"Name (optional). Then choose where you work and what best describes your routine. Takes about 20 seconds."},
-  "setup.why":{pt:"💡 O jogo combina onde você atua com a forma como você trabalha para criar missões mais relevantes para a sua realidade.",en:"💡 The game combines where you work with how you work to create missions that are more relevant to your reality."},
+  "setup.why":{pt:"💡 Todas as combinações são permitidas. Onde você atua define o contexto; como você trabalha define os riscos. O jogo usa suas escolhas para priorizar missões mais próximas da sua realidade.",en:"💡 All combinations are allowed. Where you work defines the context; how you work defines the risks. The game uses your choices to prioritize missions closer to your reality."},
+  "setup.feedPartial":{pt:"⚠️ Falta uma escolha para completar seu perfil. Selecione onde você atua e como é seu trabalho para personalizar suas missões.",en:"⚠️ One choice is missing. Select where you work and what best describes your routine to personalize your missions."},
+  "setup.feedHigh":{pt:"✅ Perfil personalizado: {area} + {rotina}. O jogo irá priorizar cenários, riscos e decisões próximos do seu dia a dia.",en:"✅ Personalized profile: {area} + {rotina}. The game will prioritize scenarios, risks and decisions close to your daily work."},
+  "setup.feedMedium":{pt:"✅ Perfil ajustado: {area} + {rotina}. O jogo irá combinar situações do seu ambiente com desafios da sua rotina de trabalho.",en:"✅ Adjusted profile: {area} + {rotina}. The game will combine situations from your environment with challenges from your work routine."},
+  "setup.feedLow":{pt:"ℹ️ Essa combinação é menos comum, mas pode acontecer. O jogo irá adaptar as missões para misturar os contextos selecionados de forma coerente.",en:"ℹ️ This combination is less common, but it can happen. The game will adapt missions to blend your selected contexts coherently."},
+  "setup.feedSpecial":{pt:"🎯 Perfil especial identificado: {area} + {rotina}. As missões serão adaptadas com situações gerais e específicas do seu contexto — acessos, informações e decisões do dia a dia.",en:"🎯 Special profile identified: {area} + {rotina}. Missions will blend general and specific situations for your context — access, information and day-to-day decisions."},
+  "setup.startToast":{pt:"🎮 Missão personalizada iniciada. Seus desafios foram ajustados com base em onde você atua e em como é seu trabalho.",en:"🎮 Personalized mission started. Your challenges were adjusted based on where you work and how you work."},
   "setup.editHead":{pt:"Editar perfil",en:"Edit profile"},
   "setup.editIntro":{pt:"Ajuste nome, área ou rotina — as próximas missões já refletem sua escolha.",en:"Adjust name, area or routine — upcoming missions reflect your choices right away."},
   "setup.nameOptional":{pt:"Adicionar nome (opcional)",en:"Add name (optional)"},
@@ -768,6 +774,7 @@ function questionProfileScore(q){
   if(q.teams&&q.teams.indexOf(S.team)>=0) score+=5;
   if(q.roles&&q.roles.indexOf(S.role)>=0) score+=4;
   if(q.qByTeam&&q.qByTeam[S.team]) score+=6;
+  if(typeof PROFILE!=="undefined") score+=PROFILE.correlationScore(S.team,S.role);
   if(themes.indexOf(q.theme)>=0) score+=2;
   return score;
 }
@@ -5036,10 +5043,40 @@ function exportThemes(){ var rows=[[L()==="pt"?"Tema":"Theme",L()==="pt"?"Acerto
 /* ==========================================================
    SETUP
    ========================================================== */
-function renderTeams(){ var g=$("teamsGrid"); if(!g) return; g.innerHTML=""; TEAMS.forEach(function(tm){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.team===tm.id?"true":"false"); b.innerHTML='<div class="pi">'+tm.ico+'</div><div class="pn">'+tt(tm)+'</div>'; b.addEventListener("click",function(){ S.team=tm.id; save(); renderTeams(); }); g.appendChild(b); }); }
-function renderRoles(){ var g=$("rolesGrid"); if(!g) return; g.innerHTML=""; ROLES.forEach(function(r){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.role===r.id?"true":"false"); b.innerHTML='<div class="pi">'+r.ico+'</div><div class="pn">'+r[L()]+'</div><div class="pd">'+r[L()+"d"]+'</div>'; b.addEventListener("click",function(){ S.role=r.id; save(); renderRoles(); }); g.appendChild(b); }); }
+function renderTeams(){ var g=$("teamsGrid"); if(!g) return; g.innerHTML=""; TEAMS.forEach(function(tm){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.team===tm.id?"true":"false"); b.innerHTML='<div class="pi">'+tm.ico+'</div><div class="pn">'+tt(tm)+'</div>'; b.addEventListener("click",function(){ S.team=tm.id; save(); renderTeams(); }); g.appendChild(b); }); renderSetupProfileFeedback(); }
+function renderRoles(){ var g=$("rolesGrid"); if(!g) return; g.innerHTML=""; ROLES.forEach(function(r){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.role===r.id?"true":"false"); b.innerHTML='<div class="pi">'+r.ico+'</div><div class="pn">'+r[L()]+'</div><div class="pd">'+r[L()+"d"]+'</div>'; b.addEventListener("click",function(){ S.role=r.id; save(); renderRoles(); }); g.appendChild(b); }); renderSetupProfileFeedback(); }
+function setupProfileLabels(){
+  var area="", rotina="";
+  if(S.team){ var tm=PROFILE.getTeam(S.team); area=tm?tt(tm):S.team; }
+  if(S.role){ var r=PROFILE.getRole(S.role); rotina=r?r[L()]:S.role; }
+  return {area:area,rotina:rotina};
+}
+function renderSetupProfileFeedback(){
+  var el=$("setupProfileFeedback");
+  if(!el) return;
+  if(setupEditMode){ el.hidden=true; return; }
+  var team=S.team||"", role=S.role||"", labels=setupProfileLabels();
+  if(!team&&!role){ el.hidden=true; return; }
+  if(!team||!role){
+    el.className="setup-profile-feedback warn";
+    el.textContent=t("setup.feedPartial");
+    el.hidden=false;
+    return;
+  }
+  var st=PROFILE.setupProfileState(team,role), key="setup.feed"+(st==="high"?"High":st==="medium"?"Medium":st==="low"?"Low":st==="special"?"Special":"Medium");
+  el.className="setup-profile-feedback "+st;
+  el.textContent=t(key).replace(/\{area\}/g,labels.area).replace(/\{rotina\}/g,labels.rotina);
+  el.hidden=false;
+}
+function setupStartToast(){
+  var labels=setupProfileLabels();
+  var msg=t("setup.startToast");
+  if(labels.area&&labels.rotina) msg+=" "+labels.area+" + "+labels.rotina;
+  toast(msg);
+}
 var setupEditMode=false;
 function applySetupDefaults(){
+  if(!setupEditMode) return;
   if(!S.team) S.team=PROFILE.defaultTeam;
   if(!S.role) S.role=PROFILE.defaultRole;
   save();
@@ -5064,10 +5101,12 @@ function renderSetupUi(){
     if(intro) intro.textContent=t("setup.intro");
     if(why){ why.hidden=false; why.textContent=t("setup.why"); }
     if(btn) btn.textContent=t("setup.goFirst");
+    renderSetupProfileFeedback();
   }
 }
 function openFirstSetup(){
   setupEditMode=false;
+  S.team=""; S.role=""; save();
   renderTeams(); renderRoles();
   if($("playerName")) $("playerName").value=S.name||"";
   renderSetupUi();
@@ -5486,6 +5525,7 @@ function bind(){
       renderNextStep();
       return;
     }
+    setupStartToast();
     playNow();
   });
   on("playerName","input",function(){ S.name=this.value; });

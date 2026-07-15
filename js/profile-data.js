@@ -18,7 +18,12 @@
       - roles: ["id_papel"] — prioriza para quem tem o papel
       - qByTeam: { id_equipe: { q: { pt, en } } } — texto exclusivo por equipe
 
-   4) Publique com nova versão (?v=) no index.html e sw.js.
+   4) CORRELAÇÃO (PROFILE_CORRELATION neste arquivo):
+      - Matriz área × rotina: high | medium | low
+      - leader, contractor, trainee → sempre special (nunca bloqueia)
+      - Afeta mensagens na tela de perfil e prioridade de perguntas
+
+   5) Publique com nova versão (?v=) no index.html e sw.js.
 
    Não é necessário alterar game.js ao adicionar equipe ou papel.
    ============================================================================= */
@@ -171,6 +176,22 @@ var PROFILE_CONFIG = {
   ]
 };
 
+/* Matriz de correlação área × rotina (high | medium | low). Papéis leader/contractor/trainee → special. */
+var PROFILE_CORRELATION = {
+  mina:       { admin:"medium", field:"high", ot:"high", leader:"high", analyst:"medium", tech:"high", contractor:"high", trainee:"medium" },
+  ferrovia:   { admin:"medium", field:"high", ot:"high", leader:"high", analyst:"medium", tech:"high", contractor:"high", trainee:"medium" },
+  porto:      { admin:"medium", field:"high", ot:"high", leader:"high", analyst:"medium", tech:"high", contractor:"high", trainee:"medium" },
+  corporativo:{ admin:"high", field:"low", ot:"low", leader:"high", analyst:"high", tech:"medium", contractor:"medium", trainee:"medium" },
+  ti:         { admin:"high", field:"low", ot:"medium", leader:"high", analyst:"high", tech:"high", contractor:"high", trainee:"high" },
+  ot:         { admin:"medium", field:"high", ot:"high", leader:"high", analyst:"high", tech:"high", contractor:"high", trainee:"medium" },
+  logistica:  { admin:"high", field:"high", ot:"medium", leader:"high", analyst:"high", tech:"medium", contractor:"high", trainee:"medium" },
+  energia:    { admin:"medium", field:"high", ot:"high", leader:"high", analyst:"high", tech:"high", contractor:"high", trainee:"medium" },
+  projetos:   { admin:"high", field:"medium", ot:"high", leader:"high", analyst:"high", tech:"high", contractor:"high", trainee:"high" },
+  esg:        { admin:"high", field:"medium", ot:"medium", leader:"high", analyst:"high", tech:"medium", contractor:"high", trainee:"high" }
+};
+var PROFILE_SPECIAL_ROLES = ["leader", "contractor", "trainee"];
+var PROFILE_CORRELATION_SCORE = { high: 4, medium: 2, low: 1, special: 3 };
+
 function buildProfileRegistry(cfg) {
   var teams = [], roles = [], teamById = {}, roleById = {};
   var ROLE_THEMES = {}, TEAM_THEMES = {}, GLOSSARY_TEAM_PICKS = {}, GLOSSARY_ROLE_PICKS = {}, TEAM_SCENARIO_REPLACE = {};
@@ -219,6 +240,21 @@ function buildProfileRegistry(cfg) {
     teamSkipsScenarioAdapt: function(id) {
       var tm = teamById[id];
       return !!(tm && tm.skipScenarioAdapt);
+    },
+    correlationLevel: function(teamId, roleId) {
+      if (!teamId || !roleId) return "none";
+      if (PROFILE_SPECIAL_ROLES.indexOf(roleId) >= 0) return "special";
+      var row = PROFILE_CORRELATION[teamId];
+      return (row && row[roleId]) || "medium";
+    },
+    correlationScore: function(teamId, roleId) {
+      var lv = this.correlationLevel(teamId, roleId);
+      return PROFILE_CORRELATION_SCORE[lv] || 0;
+    },
+    setupProfileState: function(teamId, roleId) {
+      if (!teamId && !roleId) return "empty";
+      if (!teamId || !roleId) return "partial";
+      return this.correlationLevel(teamId, roleId);
     },
     ensureState: function(state) {
       if (!state) return;

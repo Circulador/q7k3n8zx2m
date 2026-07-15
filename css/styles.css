@@ -410,6 +410,12 @@ body.theme-light .hero-journey{color:#1a3a44;background:rgba(0,126,122,.08)}
 .setup-block{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
 .setup-block:first-of-type{border-top:0;padding-top:0;margin-top:10px}
 .setup-why{margin:0 0 14px;padding:10px 12px;border-radius:8px;background:rgba(0,126,122,.12);border:1px solid rgba(0,126,122,.35);font-size:.86rem;line-height:1.45;color:#eaf2f6}
+.setup-profile-feedback{margin:12px 0 0;padding:10px 12px;border-radius:8px;font-size:.86rem;line-height:1.5}
+.setup-profile-feedback.warn{background:rgba(237,177,17,.12);border:1px solid rgba(237,177,17,.45);color:#eaf2f6}
+.setup-profile-feedback.high{background:rgba(0,126,122,.14);border:1px solid rgba(0,126,122,.45);color:#eaf2f6}
+.setup-profile-feedback.medium{background:rgba(0,126,122,.1);border:1px solid rgba(0,126,122,.3);color:#eaf2f6}
+.setup-profile-feedback.low{background:rgba(100,149,237,.12);border:1px solid rgba(100,149,237,.35);color:#eaf2f6}
+.setup-profile-feedback.special{background:rgba(237,177,17,.1);border:1px solid rgba(237,177,17,.4);color:#eaf2f6}
 .setup-block-primary{margin-top:12px}
 .setup-block-top{margin-top:8px;padding-top:0;border-top:0}
 .setup-block-name{margin-bottom:4px}
