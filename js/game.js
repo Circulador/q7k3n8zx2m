@@ -95,7 +95,7 @@ var UI = {
   "nav.me":{pt:"Eu",en:"Me"},
   "nav.badgeDaily":{pt:"Missão pendente",en:"Mission pending"},
   "offline.hint":{pt:"📶 Funciona offline após a primeira visita — seu progresso fica neste dispositivo.",en:"📶 Works offline after first visit — progress stays on this device."},
-  "offline.dismiss":{pt:"Ok",en:"OK"},
+  "onboard.offlineNote":{pt:"📶 Após a primeira visita, funciona offline e seu progresso fica salvo neste dispositivo.",en:"📶 After the first visit, it works offline and your progress is saved on this device."},
   "profile.editSetup":{pt:"✏️ Alterar equipe e papel",en:"✏️ Change team and role"},
   "profile.weeklyGoals":{pt:"✅ Metas da semana",en:"✅ Weekly goals"},
   "cert.share":{pt:"📤 Compartilhar",en:"📤 Share"},
@@ -106,7 +106,8 @@ var UI = {
   "mgr.kpiAdoption":{pt:"Adoção",en:"Adoption"},
   "mgr.kpiWeak":{pt:"Tema mais fraco",en:"Weakest theme"},
   "mgr.kpiStreak":{pt:"Ofensiva média",en:"Avg streak"},
-  "hud.tip.settings":{pt:"Configurações — tema, glossário e mais",en:"Settings — theme, glossary and more"},
+  "hud.tip.settings":{pt:"Configurações — tema, perfil e preferências",en:"Settings — theme, profile and preferences"},
+  "hud.tip.glossary":{pt:"Glossário — siglas e termos de cyber security",en:"Glossary — cyber security acronyms and terms"},
   "a11y.shortLabel":{pt:"Acessibilidade",en:"Accessibility"},
   "a11y.sec.read":{pt:"Leitura e narração",en:"Reading & narration"},
   "a11y.sec.visual":{pt:"Visual e cores",en:"Visual & colors"},
@@ -218,7 +219,7 @@ var UI = {
   "hud.tip.fontScale":{pt:"Tamanho atual da fonte — 0 é o padrão; use A− e A+ para ajustar.",en:"Current font size — 0 is default; use A− and A+ to adjust."},
   "hud.tip.fontUp":{pt:"Aumentar fonte — amplia o tamanho do texto em toda a interface.",en:"Increase font — enlarges text size across the interface."},
   "hud.tip.contrast":{pt:"Alto contraste — alterna cores fortes para facilitar a leitura.",en:"High contrast — toggles strong colors for easier reading."},
-  "hud.tip.a11y":{pt:"Menu de acessibilidade — idioma, voz, Libras, contraste, fonte e mais opções.",en:"Accessibility menu — language, voice, sign language, contrast, font and more."},
+  "hud.tip.a11y":{pt:"Acessibilidade — voz, contraste, Libras e fonte",en:"Accessibility — voice, contrast, sign language and font"},
   "hud.tip.voice":{pt:"Narração por voz — lê em voz alta cenários e opções do quiz.",en:"Voice narration — reads scenarios and quiz options aloud."},
   "streak.bonus":{pt:"Bônus de ofensiva!",en:"Streak bonus!"},
   "streak.bonusXp":{pt:"Bônus de ofensiva! +{n} XP",en:"Streak bonus! +{n} XP"},
@@ -572,10 +573,15 @@ function applyHudTips(){
     hudTitle:"hud.tip.title", hudLives:"hud.tip.lives",
     hudStreakBtn:"hud.tip.streak", hudLevelChip:"hud.tip.level", hudXpChip:"hud.tip.xp",
     hudCoinsChip:"hud.tip.coins", hudScoreChip:"hud.tip.score", hudMaturityChip:"hud.tip.maturity",
-    a11yBtn:"hud.tip.a11y", settingsBtn:"hud.tip.settings",
+    glossaryBtn:"hud.tip.glossary", a11yBtn:"hud.tip.a11y", settingsBtn:"hud.tip.settings",
     onboardOpenBtn:"onboard.reopenTip"
   };
-  for(var id in map){ var el=$(id); if(el) el.setAttribute("title", t(map[id])); }
+  for(var id in map){
+    var el=$(id), text=t(map[id]);
+    if(!el) continue;
+    el.setAttribute("title", text);
+    el.setAttribute("aria-label", text);
+  }
 }
 function setLang(lang){
   if(lang!=="pt"&&lang!=="en") return;
@@ -3682,12 +3688,6 @@ function shareCertificate(){
     }
   });
 }
-function showOfflineBanner(){
-  if(S.offlineHintSeen) return;
-  var el=$("offlineBanner"); if(!el) return;
-  el.hidden=false;
-}
-function dismissOfflineBanner(){ S.offlineHintSeen=true; save(); var el=$("offlineBanner"); if(el) el.hidden=true; if($("screenMap")&&$("screenMap").classList.contains("map-screen-fit")) measureMapViewport(); }
 function renderMapExplorerHint(){
   var el=$("mapExplorerHint"); if(!el) return;
   var next=nextExpeditionCountry();
@@ -3723,7 +3723,9 @@ var ONBOARD_STEPS=[
 ];
 var onboardStep=0, onboardReplay=false;
 function closeOnboarding(skipped){
-  S.onboardingDone=true; save();
+  S.onboardingDone=true;
+  S.offlineHintSeen=true;
+  save();
   onboardReplay=false;
   var ov=$("onboardOverlay"); if(ov) ov.hidden=true;
   document.body.classList.remove("onboard-open");
@@ -3741,7 +3743,11 @@ function renderOnboarding(){
   if($("onboardTitle")) $("onboardTitle").textContent=t(step.titleKey||"onboard.step");
   if(feat) feat.hidden=isLang||isA11y;
   if(body){ body.hidden=!isLang; if(isLang) body.textContent=t(step.bodyKey); }
-  if(mission) mission.textContent=(isLang||isA11y)?"":t(step.bodyKey);
+  if(mission){
+    if(isLang||isA11y) mission.textContent="";
+    else if(step.type==="ready") mission.textContent=t(step.bodyKey)+"\n\n"+t("onboard.offlineNote");
+    else mission.textContent=t(step.bodyKey);
+  }
   if(langPanel) langPanel.hidden=!isLang;
   if(a11yPanel) a11yPanel.hidden=!isA11y;
   if(isLang){
@@ -3907,7 +3913,6 @@ function bind(){
 
   on("dailyStartBtn","click",startDaily);
   on("weeklyMapBtn","click",function(){ openMap(null,true); });
-  on("offlineDismissBtn","click",dismissOfflineBanner);
   on("weekProgressBar","click",openWeeklyScreen);
   on("nextStepWeek","click",openWeeklyScreen);
   on("settingsEditProfileBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); openEditSetup(); });
@@ -4024,7 +4029,7 @@ function init(){
   dismissBlockingUI();
   applyI18n(); applyA11y(); applyTheme(); applySimpleUi(); applyCosmetics(); applyFocusLearn(); ensureDaily(); ensureWeekly(); ensureTeamScores(); ensureStreak(); refreshHud();
   applyHeroCompact(); updateSetupBanner(); renderA11yCatalog();
-  updateNavBadges(); showOfflineBanner();
+  updateNavBadges();
   try{ renderStreakCard(); }catch(e){ console.error(e); }
   try{ renderWeekCard(); }catch(e){ console.error(e); }
   try{ renderDaily(); }catch(e){ console.error(e); }

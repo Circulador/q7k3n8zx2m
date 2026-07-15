@@ -9,26 +9,22 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=94">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=95">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=94">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=94">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=95">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=95">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=94"></script>
-<link rel="stylesheet" href="css/styles.css?v=94">
+<script src="js/access-gate.js?v=95"></script>
+<link rel="stylesheet" href="css/styles.css?v=95">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
 <div id="a11yLive" class="sr-only" aria-live="polite" role="status"></div>
 <div id="toastWrap" class="toast-wrap" aria-live="polite"></div>
-<div id="offlineBanner" class="offline-banner" hidden role="status">
-  <span data-i18n="offline.hint">📶 Funciona offline após a primeira visita — seu progresso fica neste dispositivo.</span>
-  <button type="button" class="btn btn-sm btn-ghost" id="offlineDismissBtn" data-i18n="offline.dismiss">Ok</button>
-</div>
 
 <div id="setupBanner" class="setup-banner" hidden role="status">
   <span data-i18n="setup.banner">⚙️ Complete equipe e papel para personalizar suas missões.</span>
@@ -222,7 +218,7 @@
           <div class="a11y-menu" id="a11yMenu" role="menu" aria-label="Acessibilidade" hidden>
             <div class="am-header">
               <h2 class="am-title" data-i18n="a11y.menuTitle">Acessibilidade</h2>
-              <button type="button" class="am-close" id="a11yMenuClose" aria-label="Fechar menu">×</button>
+              <button type="button" class="am-close" id="a11yMenuClose" data-i18n-attr="aria-label:a11y.close" aria-label="Fechar menu">×</button>
             </div>
             <div class="am-section">
               <span class="am-section-label" data-i18n="a11y.sec.read">Leitura e narração</span>
@@ -883,18 +879,18 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="94";</script>
-<script src="js/sign-lang.js?v=94"></script>
-<script src="js/orbita-world-map.js?v=94"></script>
-<script src="js/questions-data.js?v=94"></script>
-<script src="js/country-questions-data.js?v=94"></script>
-<script src="js/bosses-data.js?v=94"></script>
-<script src="js/boss-personal-tips.js?v=94"></script>
-<script src="js/chain-data.js?v=94"></script>
-<script src="js/boss-maps.js?v=94"></script>
-<script src="js/game.js?v=94"></script>
-<script src="js/demo-menu.js?v=94"></script>
-<script src="js/review-bank.js?v=94"></script>
+<script>window.APP_VERSION="95";</script>
+<script src="js/sign-lang.js?v=95"></script>
+<script src="js/orbita-world-map.js?v=95"></script>
+<script src="js/questions-data.js?v=95"></script>
+<script src="js/country-questions-data.js?v=95"></script>
+<script src="js/bosses-data.js?v=95"></script>
+<script src="js/boss-personal-tips.js?v=95"></script>
+<script src="js/chain-data.js?v=95"></script>
+<script src="js/boss-maps.js?v=95"></script>
+<script src="js/game.js?v=95"></script>
+<script src="js/demo-menu.js?v=95"></script>
+<script src="js/review-bank.js?v=95"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {
