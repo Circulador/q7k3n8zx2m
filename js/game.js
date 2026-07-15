@@ -21,6 +21,8 @@ var DEF = { lang:"pt", name:"", team:"mina", role:"field",
   bossDone:{}, bossStats:{}, onboardingDone:false, daily:{date:"",done:{}}, weekly:{week:"",prog:{}}, teamScores:{},
   chainDone:{}, streak:{count:0,lastDate:"",best:0}, missed:{}, reports:0, managerMode:false, focusLearn:false, simpleUi:true, theme:"default", tipsSeen:{map:false,daily:false,boss:false}, glossaryFavs:[], glossaryLearned:{}, glossaryReview:[], glossaryReviewMeta:{}, glossaryLearnedXp:{}, glossaryQuizDone:0, offlineHintSeen:false, heroExpanded:false, uxV122:false };
 var S = merge(load(), DEF);
+function ensureValidProfile(){ if(typeof PROFILE!=="undefined") PROFILE.ensureState(S); }
+ensureValidProfile();
 
 function merge(a,b){ a=a||{}; for(var k in b){ if(a[k]===undefined) a[k]=b[k]; else if(b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])) a[k]=merge(a[k],b[k]); } return a; }
 function ensureManagerMode(){ if(S.managerMode===undefined) S.managerMode=false; if(S.focusLearn===undefined) S.focusLearn=false; if(S.simpleUi===undefined) S.simpleUi=true; if(!S.theme) S.theme="default"; }
@@ -187,7 +189,7 @@ var UI = {
   "onboard.a11yT":{pt:"Acessibilidade",en:"Accessibility"},
   "onboard.a11yB":{pt:"Ative narração, contraste, Libras ou redução de animações agora — ou ajuste depois no menu ♿.",en:"Enable narration, contrast, sign language or reduced motion now — or adjust later in the ♿ menu."},
   "onboard.profileT":{pt:"Personalize seu perfil",en:"Personalize your profile"},
-  "onboard.profileB":{pt:"Na próxima tela você pode adicionar seu nome (opcional), escolher equipe e dia a dia — os cenários ficam parecidos com sua rotina. Leva cerca de 20 segundos.",en:"On the next screen you can add your name (optional), pick your team and day-to-day role — scenarios will match your routine. Takes about 20 seconds."},
+  "onboard.profileB":{pt:"Na próxima tela: nome (opcional), equipe e dia a dia. O jogo prioriza temas e situações da sua operação — cerca de 20 segundos.",en:"On the next screen: name (optional), team and day-to-day role. The game prioritizes themes and situations from your operation — about 20 seconds."},
   "onboard.playT":{pt:"Como funciona",en:"How it works"},
   "onboard.playB":{pt:"📅 Atividade de hoje → 🗺️ Jornada no mapa → 🎯 Simulação de crise. Cada acerto fortalece a operação — erros mostram o que revisar.",en:"📅 Today's activity → 🗺️ Map journey → 🎯 Crisis simulation. Each correct answer strengthens operations — mistakes show what to review."},
   "onboard.readyT":{pt:"Pronto para começar",en:"Ready to start"},
@@ -393,10 +395,10 @@ var UI = {
   "setup.badge":{pt:"👤 Perfil rápido",en:"👤 Quick profile"},
   "setup.editBadge":{pt:"✏️ Editar perfil",en:"✏️ Edit profile"},
   "setup.head":{pt:"Personalize seu perfil",en:"Personalize your profile"},
-  "setup.intro":{pt:"Nome (opcional), equipe e papel — os cenários ficam parecidos com seu dia a dia. Leva cerca de 20 segundos.",en:"Name (optional), team and role — scenarios match your daily work. Takes about 20 seconds."},
-  "setup.why":{pt:"💡 Situações de phishing, senha e dados aparecem no contexto da sua operação.",en:"💡 Phishing, password and data scenarios appear in the context of your operation."},
+  "setup.intro":{pt:"Nome (opcional), equipe e dia a dia — o jogo prioriza missões e perguntas do seu ambiente de trabalho. Leva cerca de 20 segundos.",en:"Name (optional), team and day-to-day role — the game prioritizes missions and questions from your work environment. Takes about 20 seconds."},
+  "setup.why":{pt:"💡 A equipe define o cenário (mina, porto, corporativo…); o dia a dia define os riscos do seu papel.",en:"💡 Your team sets the setting (mine, port, corporate…); your role sets the risks you face."},
   "setup.editHead":{pt:"Editar perfil",en:"Edit profile"},
-  "setup.editIntro":{pt:"Ajuste nome, equipe ou rotina — os cenários do jogo se adaptam na hora.",en:"Adjust name, team or routine — game scenarios adapt immediately."},
+  "setup.editIntro":{pt:"Ajuste nome, equipe ou dia a dia — as próximas missões já refletem sua escolha.",en:"Adjust name, team or role — upcoming missions reflect your choices right away."},
   "setup.nameOptional":{pt:"Adicionar nome (opcional)",en:"Add name (optional)"},
   "setup.goFirst":{pt:"▶️ Começar primeira atividade",en:"▶️ Start first activity"},
   "setup.save":{pt:"💾 Salvar e voltar",en:"💾 Save and go back"},
@@ -406,7 +408,7 @@ var UI = {
   "setup.roleTitle":{pt:"Seu dia a dia",en:"Your day-to-day"},
   "setup.roleSub":{pt:"Administrativo, campo, OT, liderança, técnico, analista, terceiros ou em formação.",en:"Office, field, OT, leadership, technician, analyst, contractor or in training."},
   "setup.go":{pt:"▶️ Começar primeira atividade",en:"▶️ Start first activity"},
-  "setup.banner":{pt:"👤 Personalize seu perfil (nome, equipe e papel) para cenários do seu dia a dia.",en:"👤 Set up your profile (name, team and role) for scenarios from your daily work."},
+  "setup.banner":{pt:"👤 Defina equipe e dia a dia para missões no contexto da sua operação.",en:"👤 Set team and role for missions in your operation's context."},
   "setup.bannerGo":{pt:"Personalizar agora",en:"Personalize now"},
   "setup.teamRequired":{pt:"Escolha uma equipe para continuar.",en:"Choose a team to continue."},
   "setup.roleRequired":{pt:"Escolha um papel para continuar.",en:"Choose a role to continue."},
@@ -734,8 +736,73 @@ function streakRiskMsg(){
 }
 function roleBasedNextSub(){
   var r=ROLES.filter(function(x){ return x.id===S.role; })[0];
+  var tm=TEAMS.filter(function(x){ return x.id===S.team; })[0];
   if(!r) return "";
-  return (L()==="pt"?"Situações do seu dia a dia: ":"Scenarios from your work: ")+(L()==="pt"?r.ptd:r.end);
+  var teamStr=tm?tt(tm)+(L()==="pt"?" · ":" · "):"";
+  return (L()==="pt"?"Cenários da sua operação: ":"Scenarios from your operation: ")+teamStr+(L()==="pt"?r.ptd:r.end);
+}
+function profileThemeList(){
+  var role=ROLE_THEMES[S.role]||[], team=TEAM_THEMES[S.team]||[], out=[], seen={}, i;
+  for(i=0;i<role.length;i++){ if(!seen[role[i]]){ seen[role[i]]=1; out.push(role[i]); } }
+  for(i=0;i<team.length;i++){ if(!seen[team[i]]){ seen[team[i]]=1; out.push(team[i]); } }
+  return out;
+}
+function questionMatchesProfile(q){
+  var role=S.role||"field", team=S.team||"mina";
+  if(q.roles&&q.roles.indexOf(role)<0){
+    var rt=ROLE_THEMES[role]||[];
+    if(rt.indexOf(q.theme)<0) return false;
+  }
+  if(q.teams&&q.teams.indexOf(team)<0){
+    var tt2=TEAM_THEMES[team]||[];
+    if(tt2.indexOf(q.theme)<0) return false;
+  }
+  return true;
+}
+function questionProfileScore(q){
+  var themes=profileThemeList(), score=0;
+  if(q.teams&&q.teams.indexOf(S.team)>=0) score+=5;
+  if(q.roles&&q.roles.indexOf(S.role)>=0) score+=4;
+  if(q.qByTeam&&q.qByTeam[S.team]) score+=6;
+  if(themes.indexOf(q.theme)>=0) score+=2;
+  return score;
+}
+function applyTeamScenarioText(text,team){
+  if(!text||!team||PROFILE.teamSkipsScenarioAdapt(team)) return text;
+  var rep=TEAM_SCENARIO_REPLACE[team]; if(!rep) return text;
+  var lang=L(), rules=rep[lang]||rep.pt||[], out=text, i;
+  for(i=0;i<rules.length;i++) out=out.replace(rules[i][0],rules[i][1]);
+  return out;
+}
+function getQuestionField(q,field){
+  field=field||"q";
+  var team=S.team||"mina", byTeam=q.qByTeam&&q.qByTeam[team];
+  if(byTeam&&byTeam[field]) return tt(byTeam[field]);
+  var raw=field==="q"?q.q:q[field];
+  var text=tt(raw);
+  if(field==="q"&&!PROFILE.teamSkipsScenarioAdapt(team)&&(q.theme==="port"||/\bporto\b|\bport terminal\b/i.test(text)))
+    text=applyTeamScenarioText(text,team);
+  return text;
+}
+function pickProfileQuestions(pool,count){
+  count=count||6;
+  var list=pool.filter(function(q){ return questionMatchesProfile(q); });
+  if(list.length<count) list=pool.slice();
+  var tierA=[], tierB=[], tierC=[], i, s;
+  for(i=0;i<list.length;i++){
+    s=questionProfileScore(list[i]);
+    if(s>=5) tierA.push(list[i]); else if(s>=3) tierB.push(list[i]); else tierC.push(list[i]);
+  }
+  var picked=[].concat(shuffle(tierA),shuffle(tierB),shuffle(tierC)), seen={}, out=[];
+  for(i=0;i<picked.length&&out.length<count;i++){
+    var k=picked[i].id||("t"+picked[i].theme+i);
+    if(!seen[k]){ seen[k]=1; out.push(picked[i]); }
+  }
+  if(out.length<count) shuffle(list).forEach(function(q){
+    var k2=q.id||("f"+q.theme);
+    if(!seen[k2]&&out.length<count){ seen[k2]=1; out.push(q); }
+  });
+  return shuffleQuestions(out.slice(0,count));
 }
 function nextStepPreviewText(ns){
   if(!ns||uxLegacy()) return "";
@@ -806,6 +873,7 @@ function applyI18n(){
   updateLangSwitch();
   applyHudTips();
   renderA11yMenu(); renderA11yCatalog(); updateHeroCaption(); renderSettingsUi();
+  renderProfileSetupSubs();
 }
 function renderSettingsUi(){
   var sel=$("themeSelect");
@@ -857,31 +925,7 @@ function setLang(lang){
   if($("screenMap").classList.contains("active")){ drawMap(); renderMapExpedition(); }
 }
 
-/* -------------------- EQUIPES / TEAMS -------------------- */
-var TEAMS = [
-  {id:"mina", ico:"⛏️", pt:"Mina", en:"Mine"},
-  {id:"ferrovia", ico:"🚂", pt:"Ferrovia", en:"Railway"},
-  {id:"porto", ico:"🚢", pt:"Porto", en:"Port"},
-  {id:"corporativo", ico:"🏢", pt:"Corporativo", en:"Corporate"},
-  {id:"ti", ico:"💻", pt:"TI & Segurança", en:"IT & Security"},
-  {id:"ot", ico:"🏭", pt:"Automação (OT)", en:"Automation (OT)"},
-  {id:"logistica", ico:"📦", pt:"Logística", en:"Logistics"},
-  {id:"energia", ico:"⚡", pt:"Energia", en:"Energy"},
-  {id:"projetos", ico:"📐", pt:"Projetos & Engenharia", en:"Projects & Engineering"},
-  {id:"esg", ico:"🌿", pt:"Sustentabilidade", en:"Sustainability"}
-];
-
-var ROLE_THEMES={admin:["phishing","password","data","bec","device"],field:["port","ot","device","phishing","data"],ot:["ot","device","password","phishing","port"],leader:["bec","data","phishing","remote","ot"],analyst:["data","password","phishing","bec","remote"],tech:["ot","device","port","password","phishing"],contractor:["phishing","remote","device","password","data"],trainee:["phishing","password","device","data","remote"]};
-var ROLES = [
-  {id:"admin", ico:"🏢", pt:"Administrativo", en:"Office", ptd:"E-mails, planilhas, sistemas", end:"Emails, spreadsheets, systems"},
-  {id:"field", ico:"⛏️", pt:"Operação/Campo", en:"Field/Operations", ptd:"Mina, ferrovia, porto", end:"Mine, railway, port"},
-  {id:"ot",    ico:"🏭", pt:"Automação (OT)", en:"Automation (OT)", ptd:"Sistemas industriais/ICS", end:"Industrial systems/ICS"},
-  {id:"leader",ico:"🧭", pt:"Liderança", en:"Leadership", ptd:"Gestão e decisões", end:"Management & decisions"},
-  {id:"analyst",ico:"📊", pt:"Analista", en:"Analyst", ptd:"Dados, relatórios, indicadores", end:"Data, reports, metrics"},
-  {id:"tech", ico:"🔧", pt:"Técnico", en:"Technician", ptd:"Manutenção, inspeção, campo", end:"Maintenance, inspection, field"},
-  {id:"contractor",ico:"🤝", pt:"Terceiros", en:"Contractors", ptd:"Prestadores e parceiros externos", end:"External providers & partners"},
-  {id:"trainee",ico:"🎓", pt:"Em formação", en:"In training", ptd:"Estágio, trainee, capacitação", end:"Internship, trainee, learning"}
-];
+/* -------------------- EQUIPES / PAPÉIS — ver js/profile-data.js (escalável) -------------------- */
 
 /* -------------------- PROGRESSÃO / TITLES (níveis 1–10, escada de raridade) -------------------- */
 var MAX_LEVEL = 10;
@@ -1154,7 +1198,6 @@ var focusTrapState=null, toastQueue=[], toastShowing=false, glossaryFromQuiz=fal
 var GLOSSARY_SUGGESTIONS=["mfa","phishing","dlp","ransomware"];
 var GLOSSARY_CAT_EMOJI={access:"🔐",threat:"⚠️",network:"🌐",data:"📁",ops:"🛠️",ot:"🏭",compliance:"📜",remote:"🏠",control:"🛡️",device:"📱",physical:"🔒"};
 var GLOSSARY_NEW_IDS=["typosquat","baiting","fakeportal","credtheft","imperson","supplierfraud","deepfake","macros","juicejack","lateral","backdoor","pwdmanager","screenlock","defaultpwd","homolog","permissions","exfiltr","firmware","remoteacc","rdp","itotbridge","recon","tabletop","playbook","phishreport"];
-var GLOSSARY_ROLE_PICKS={admin:["phishing","mfa","lgpd","bec"],field:["homolog","screenlock","badusb","permissions"],ot:["scada","plc","hmi","itotbridge"],leader:["bec","supplierfraud","classification","dlp"],analyst:["dlp","classification","mfa","phishing"],tech:["homolog","scada","permissions","badusb"],contractor:["phishing","vpn","screenlock","mfa"],trainee:["phishing","mfa","ransomware","vpn"],default:["phishing","mfa","ransomware","vpn"]};
 var GLOSSARY_CAT_THEME={threat:"phishing",access:"password",data:"data",ot:"ot",network:"port",remote:"remote",device:"device",control:"device",compliance:"data",ops:"port",physical:"port"};
 var GLOSSARY_TERM_THEME={phishing:"phishing",mfa:"password",password:"password","2fa":"password",dlp:"data",vpn:"remote",scada:"ot",ics:"ot",hmi:"ot",plc:"ot",ot:"ot",bec:"bec",ransomware:"phishing",malware:"phishing",homolog:"device",badusb:"device",typosquat:"phishing",recon:"port"};
 var GLOSSARY_RELATED={
@@ -1468,8 +1511,12 @@ function glossaryCatLearnedCount(cat){
   return n;
 }
 function getRoleGlossaryPicks(){
-  var role=S.role||"admin", picks=GLOSSARY_ROLE_PICKS[role]||GLOSSARY_ROLE_PICKS.default;
-  return picks.slice(0,4);
+  var role=S.role||"admin", team=S.team||"mina";
+  var picks=GLOSSARY_ROLE_PICKS[role]||GLOSSARY_ROLE_PICKS.default;
+  var teamExtra=GLOSSARY_TEAM_PICKS[team]||[], out=[], seen={}, i;
+  for(i=0;i<teamExtra.length;i++){ if(!seen[teamExtra[i]]){ seen[teamExtra[i]]=1; out.push(teamExtra[i]); } }
+  for(i=0;i<picks.length;i++){ if(!seen[picks[i]]){ seen[picks[i]]=1; out.push(picks[i]); } }
+  return out.slice(0,4);
 }
 function glossaryIsNew(id){ return GLOSSARY_NEW_IDS.indexOf(id)>=0; }
 function glossaryReviewDue(id){
@@ -1560,9 +1607,11 @@ function glossaryQuizQuestionForTerm(g){
   if(g.cat&&GLOSSARY_CAT_THEME[g.cat]&&themes.indexOf(GLOSSARY_CAT_THEME[g.cat])<0) themes.push(GLOSSARY_CAT_THEME[g.cat]);
   var pool=BANK.filter(function(q){ return themes.indexOf(q.theme)>=0; });
   if(!pool.length) pool=BANK.slice();
-  if(S.role&&S.role!=="admin") pool=pool.filter(function(q){ return !q.roles||q.roles.indexOf(S.role)>=0||q.roles.indexOf("all")>=0; });
+  pool=pool.filter(function(q){ return questionMatchesProfile(q); });
+  if(!pool.length) pool=BANK.filter(function(q){ return themes.indexOf(q.theme)>=0; });
   if(!pool.length) pool=BANK.slice();
-  return pool[Math.floor(Math.random()*pool.length)];
+  pool.sort(function(a,b){ return questionProfileScore(b)-questionProfileScore(a); });
+  return pool[Math.floor(Math.random()*Math.min(3,pool.length))];
 }
 function startGlossaryQuiz(id){
   var g=GLOSSARY.filter(function(x){return x.id===id;})[0]; if(!g) return;
@@ -1572,7 +1621,7 @@ function startGlossaryQuiz(id){
   if(!panel||!qEl||!opts) return;
   panel.hidden=false;
   if(why){ why.hidden=true; why.textContent=""; }
-  qEl.textContent=tt(q.q);
+  qEl.textContent=getQuestionField(q,"q");
   opts.innerHTML="";
   (q.opts||[]).forEach(function(o,i){
     var b=document.createElement("button");
@@ -2255,12 +2304,12 @@ function startReviewErrors(){
 }
 function startThemeDrill(theme){
   if(!theme||!THEMES[theme]){ openMap(null,true); return; }
-  var pool=fullBank().filter(function(q){ return q.theme===theme; });
-  if(pool.length<3) pool=fullBank().filter(function(q){ return q.theme===theme||!q.countries; });
+  var pool=fullBank().filter(function(q){ return q.theme===theme&&questionMatchesProfile(q); });
+  if(pool.length<3) pool=fullBank().filter(function(q){ return q.theme===theme; });
   if(!pool.length){ toast(L()==="pt"?"Sem perguntas deste tema — abrindo mapa.":"No questions for this theme — opening map."); openMap(null,true); return; }
   cur.mode="themeDrill";
   cur.country={id:"theme_"+theme,name:{pt:"Reforço: "+tt(THEMES[theme]),en:"Drill: "+tt(THEMES[theme])},flag:THEMES[theme].ico};
-  cur.questions=shuffleQuestions(pool.slice(0,Math.min(6,pool.length))); cur.i=0; cur.correct=0; cur.integrity=100; S.lives=99; initQuizSession();
+  cur.questions=pickProfileQuestions(pool,Math.min(6,pool.length)); cur.i=0; cur.correct=0; cur.integrity=100; S.lives=99; initQuizSession();
   show("screenQuiz"); renderQuestion();
 }
 
@@ -3242,28 +3291,32 @@ function weakThemes(n){
   return themesNeedingWork(70).slice(0,n||3).map(function(x){ return x.k; });
 }
 function buildCampaign(c){
-  var roleThemes=ROLE_THEMES[S.role]||[];
   var pool=fullBank().filter(function(q){
     var countryOk=!q.countries||q.countries.indexOf(c.id)>=0;
     return countryOk&&(c.themes.indexOf(q.theme)>=0||q.countries&&q.countries.indexOf(c.id)>=0);
   });
-  var rolePool=pool.filter(function(q){ return !q.roles||q.roles.indexOf(S.role)>=0||roleThemes.indexOf(q.theme)>=0; });
-  if(rolePool.length<4) rolePool=pool.length?pool:fullBank().filter(function(q){ return c.themes.indexOf(q.theme)>=0; });
-  pool=shuffle(rolePool.slice());
-  var picked=pool.slice(0,6);
-  if(picked.length<6){ var extra=shuffle(fullBank().filter(function(q){ return picked.indexOf(q)<0&&(!q.countries||q.countries.indexOf(c.id)>=0); }));
-    if(extra.length<6-picked.length) extra=extra.concat(shuffle(fullBank().filter(function(q){ return picked.indexOf(q)<0; })));
-    picked=picked.concat(extra.slice(0,6-picked.length)); }
-  return shuffleQuestions(picked);
+  var picked=pickProfileQuestions(pool,6), pickedIds={}, pi;
+  for(pi=0;pi<picked.length;pi++){ if(picked[pi].id) pickedIds[picked[pi].id]=1; }
+  if(picked.length<6){
+    var extra=shuffle(fullBank().filter(function(q){ return !pickedIds[q.id]&&(!q.countries||q.countries.indexOf(c.id)>=0); }));
+    if(extra.length<6-picked.length) extra=extra.concat(shuffle(fullBank().filter(function(q){ return !pickedIds[q.id]; })));
+    picked=picked.concat(shuffleQuestions(extra.slice(0,6-picked.length)));
+  }
+  return picked.length>6?shuffleQuestions(picked.slice(0,6)):picked;
 }
 function buildDaily(){
   var pool=shuffle(fullBank().slice()), weak=weakThemes(2), picked=[], i,q, due=srsDueItems();
   for(i=0;i<due.length&&picked.length<2;i++){ if(picked.indexOf(due[i])<0) picked.push(due[i]); }
   for(i=0;i<weak.length;i++){
-    q=pool.filter(function(x){ return x.theme===weak[i]&&picked.indexOf(x)<0; })[0];
+    var themePool=pool.filter(function(x){ return x.theme===weak[i]&&picked.indexOf(x)<0&&questionMatchesProfile(x); });
+    if(!themePool.length) themePool=pool.filter(function(x){ return x.theme===weak[i]&&picked.indexOf(x)<0; });
+    themePool.sort(function(a,b){ return questionProfileScore(b)-questionProfileScore(a); });
+    q=themePool[0];
     if(q) picked.push(q);
   }
-  for(i=0;i<pool.length&&picked.length<5;i++){ if(picked.indexOf(pool[i])<0) picked.push(pool[i]); }
+  var rest=pool.filter(function(x){ return picked.indexOf(x)<0; });
+  rest.sort(function(a,b){ return questionProfileScore(b)-questionProfileScore(a); });
+  for(i=0;i<rest.length&&picked.length<5;i++){ if(picked.indexOf(rest[i])<0) picked.push(rest[i]); }
   return shuffleQuestions(picked.slice(0,5));
 }
 function startCampaign(){
@@ -3292,7 +3345,7 @@ function renderQuestion(){
   var modeLbl=cur.mode==="review"?t("pedagogy.reviewMode"):(L()==="pt"?"Situação ":"Scenario ");
   $("progressLine").textContent=modeLbl+" "+(cur.i+1)+"/"+cur.questions.length+" • "+c.flag+" "+tt(c.name);
   $("sceneTitleTxt").textContent=(L()==="pt"?"Decisão do Guardião":"Guardian's Decision");
-  $("sceneText").textContent=tt(q.q);
+  $("sceneText").textContent=getQuestionField(q,"q");
   renderPersonalBridge(q);
   renderQuizContext();
   renderQuizGlossaryHint(q.theme);
@@ -3315,7 +3368,7 @@ function renderQuestion(){
     if(st.reportDone&&rs){ rs.hidden=false; rs.innerHTML='<p class="report-done">'+t("report.done")+'</p>'; }
   } else { $("feedback").className="feedback"; $("feedback").innerHTML=""; }
   updateQuizNav();
-  speak(tt(q.q));
+  speak(getQuestionField(q,"q"));
 }
 function setIntegrity(){
   $("integrityVal").textContent=cur.integrity+"%"; var f=$("integrityFill"), bar=f&&f.parentNode;
@@ -4980,12 +5033,18 @@ function exportThemes(){ var rows=[[L()==="pt"?"Tema":"Theme",L()==="pt"?"Acerto
 /* ==========================================================
    SETUP
    ========================================================== */
-function renderTeams(){ var g=$("teamsGrid"); if(!g) return; g.innerHTML=""; TEAMS.forEach(function(tm){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.team===tm.id?"true":"false"); b.innerHTML='<div class="pi">'+tm.ico+'</div><div class="pn">'+tt(tm)+'</div>'; b.addEventListener("click",function(){ S.team=tm.id; save(); renderTeams(); }); g.appendChild(b); }); }
-function renderRoles(){ var g=$("rolesGrid"); if(!g) return; g.innerHTML=""; ROLES.forEach(function(r){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.role===r.id?"true":"false"); b.innerHTML='<div class="pi">'+r.ico+'</div><div class="pn">'+r[L()]+'</div><div class="pd">'+r[L()+"d"]+'</div>'; b.addEventListener("click",function(){ S.role=r.id; save(); renderRoles(); }); g.appendChild(b); }); }
+function renderProfileSetupSubs(){
+  if(typeof PROFILE==="undefined") return;
+  var ts=$("setupTeamSub"), rs=$("setupRoleSub");
+  if(ts) ts.textContent=PROFILE.teamSubtitle(L());
+  if(rs) rs.textContent=PROFILE.roleSubtitle(L());
+}
+function renderTeams(){ var g=$("teamsGrid"); if(!g) return; g.innerHTML=""; TEAMS.forEach(function(tm){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.team===tm.id?"true":"false"); b.innerHTML='<div class="pi">'+tm.ico+'</div><div class="pn">'+tt(tm)+'</div>'; b.addEventListener("click",function(){ S.team=tm.id; save(); renderTeams(); }); g.appendChild(b); }); renderProfileSetupSubs(); }
+function renderRoles(){ var g=$("rolesGrid"); if(!g) return; g.innerHTML=""; ROLES.forEach(function(r){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.role===r.id?"true":"false"); b.innerHTML='<div class="pi">'+r.ico+'</div><div class="pn">'+r[L()]+'</div><div class="pd">'+r[L()+"d"]+'</div>'; b.addEventListener("click",function(){ S.role=r.id; save(); renderRoles(); }); g.appendChild(b); }); renderProfileSetupSubs(); }
 var setupEditMode=false;
 function applySetupDefaults(){
-  if(!S.team) S.team="mina";
-  if(!S.role) S.role="field";
+  if(!S.team) S.team=PROFILE.defaultTeam;
+  if(!S.role) S.role=PROFILE.defaultRole;
   save();
 }
 function renderSetupUi(){

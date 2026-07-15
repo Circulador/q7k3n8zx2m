@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=147">
+<link rel="stylesheet" href="css/styles.css?v=150">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -27,7 +27,7 @@
 <div id="toastWrap" class="toast-wrap" aria-live="polite"></div>
 
 <div id="setupBanner" class="setup-banner" hidden role="status">
-  <span data-i18n="setup.banner">⚙️ Complete equipe e papel para personalizar suas missões.</span>
+  <span data-i18n="setup.banner">👤 Defina equipe e dia a dia para missões no contexto da sua operação.</span>
   <button type="button" class="btn btn-sm btn-primary" id="setupBannerBtn" data-i18n="setup.bannerGo">Configurar agora</button>
 </div>
 
@@ -432,7 +432,7 @@
           <path d="M44 112 L44 100 L58 94 L72 100 L72 112 Z" fill="#7a5a32"/>
           <g class="hero-exc"><rect x="54" y="82" width="5" height="16" fill="#EDB111"/><path d="M59 82 L74 74 L74 78 L62 86 Z" fill="#aaa"/></g>
           <!-- Britagem / usina -->
-          <rect x="148" y="96" width="40" height="16" rx="2" fill="#6a6a6a"/>
+          <rect x="150" y="96" width="40" height="16" rx="2" fill="#6a6a6a"/>
           <rect x="156" y="86" width="24" height="10" fill="#555"/>
           <rect x="162" y="76" width="6" height="12" fill="#888"/>
           <circle cx="165" cy="72" r="3" fill="#bbb" class="hero-smoke"/>
@@ -562,16 +562,16 @@
         <div class="section-sub" data-i18n="setup.nameSub">Opcional — aparece no certificado e no ranking da equipe.</div>
         <input id="playerName" maxlength="24" data-i18n-ph="setup.namePh" placeholder="Exemplo: Rodolfo Conte">
     </div>
-      <p class="section-sub setup-intro" id="setupIntro" data-i18n="setup.intro">Nome (opcional), equipe e papel — os cenários ficam parecidos com seu dia a dia. Leva cerca de 20 segundos.</p>
-      <p class="setup-why" id="setupWhy" data-i18n="setup.why">💡 Situações de phishing, senha e dados aparecem no contexto da sua operação.</p>
+      <p class="section-sub setup-intro" id="setupIntro" data-i18n="setup.intro">Nome (opcional), equipe e dia a dia — o jogo prioriza missões e perguntas do seu ambiente de trabalho. Leva cerca de 20 segundos.</p>
+      <p class="setup-why" id="setupWhy" data-i18n="setup.why">💡 A equipe define o cenário (mina, porto, corporativo…); o dia a dia define os riscos do seu papel.</p>
       <div class="setup-block setup-block-primary">
         <div class="section-title" data-i18n="setup.teamTitle">Sua equipe</div>
-        <div class="section-sub" data-i18n="setup.teamSub">Onde você trabalha — mina, ferrovia, porto, corporativo, TI, logística, energia…</div>
+        <div class="section-sub" id="setupTeamSub" data-i18n="setup.teamSub">Onde você trabalha</div>
       <div class="teams-grid" id="teamsGrid" role="group" aria-label="Equipes"></div>
     </div>
       <div class="setup-block setup-block-primary">
         <div class="section-title" data-i18n="setup.roleTitle">Seu dia a dia</div>
-        <div class="section-sub" data-i18n="setup.roleSub">Administrativo, campo, OT, liderança, técnico, analista, terceiros ou em formação.</div>
+        <div class="section-sub" id="setupRoleSub" data-i18n="setup.roleSub">Seu dia a dia</div>
       <div class="roles-grid" id="rolesGrid" role="group" aria-label="Papéis"></div>
       </div>
     </div>
@@ -953,18 +953,19 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="147";</script>
-<script src="js/sign-lang.js?v=147"></script>
-<script src="js/orbita-world-map.js?v=147"></script>
-<script src="js/questions-data.js?v=147"></script>
-<script src="js/country-questions-data.js?v=147"></script>
-<script src="js/bosses-data.js?v=147"></script>
-<script src="js/boss-personal-tips.js?v=147"></script>
-<script src="js/chain-data.js?v=147"></script>
-<script src="js/boss-maps.js?v=147"></script>
-<script src="js/glossary-data.js?v=147"></script>
-<script src="js/game.js?v=147"></script>
-<script src="js/demo-menu.js?v=147"></script>
+<script>window.APP_VERSION="150";</script>
+<script src="js/sign-lang.js?v=150"></script>
+<script src="js/orbita-world-map.js?v=150"></script>
+<script src="js/questions-data.js?v=150"></script>
+<script src="js/country-questions-data.js?v=150"></script>
+<script src="js/bosses-data.js?v=150"></script>
+<script src="js/boss-personal-tips.js?v=150"></script>
+<script src="js/chain-data.js?v=150"></script>
+<script src="js/boss-maps.js?v=150"></script>
+<script src="js/glossary-data.js?v=150"></script>
+<script src="js/profile-data.js?v=150"></script>
+<script src="js/game.js?v=150"></script>
+<script src="js/demo-menu.js?v=150"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
