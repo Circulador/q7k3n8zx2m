@@ -298,7 +298,7 @@ var UI = {
   "hud.tip.langPt":{pt:"Jogar em Português",en:"Play in Portuguese"},
   "hud.tip.langEn":{pt:"Jogar em Inglês",en:"Play in English"},
   "lang.switchLabel":{pt:"Idioma do jogo",en:"Game language"},
-  "hud.tip.title":{pt:"Seu título na carreira — evolui conforme você acumula XP nas missões.",en:"Your career title — grows as you earn XP from missions."},
+  "hud.tip.title":{pt:"Patente de maturidade (1–10) — evolui com XP; não é cargo na empresa.",en:"Maturity rank (1–10) — grows with XP; not your job title."},
   "hud.tip.lives":{pt:"Vidas restantes — você perde uma ao errar em situações críticas; recupere jogando bem.",en:"Lives remaining — you lose one on critical mistakes; recover by playing well."},
   "hud.tip.streak":{pt:"Sequência — dias seguidos jogando; mantenha para ganhar bônus.",en:"Streak — consecutive days played; keep it for bonuses."},
   "hud.tip.level":{pt:"Nível do guardião (1–10) — XP vem do mapa, missões e crises.",en:"Guardian level (1–10) — XP from map, missions and crises."},
@@ -883,16 +883,21 @@ var ROLES = [
   {id:"trainee",ico:"🎓", pt:"Em formação", en:"In training", ptd:"Estágio, trainee, capacitação", end:"Internship, trainee, learning"}
 ];
 
-/* -------------------- PROGRESSÃO / TITLES (níveis 1–10) -------------------- */
+/* -------------------- PROGRESSÃO / TITLES (níveis 1–10, escada de raridade) -------------------- */
 var MAX_LEVEL = 10;
 /* XP acumulado para entrar em cada nível; ~2600 XP no nível 10 (mapa + missões + crises). */
 var LEVEL_XP = [0, 80, 200, 360, 560, 800, 1080, 1400, 1760, 2160, 2600];
-var TITLES = [
-  {xp:0,   ico:"🌱", pt:"Estagiário", en:"Intern"},
-  {xp:60,  ico:"🛡️", pt:"Guardião Jr.", en:"Junior Guardian"},
-  {xp:150, ico:"⚔️", pt:"Guardião Pleno", en:"Guardian"},
-  {xp:300, ico:"🎖️", pt:"Guardião Sênior", en:"Senior Guardian"},
-  {xp:500, ico:"👑", pt:"Mestre da Segurança", en:"Security Master"}
+var LEVEL_TITLES = [
+  {lv:1,  ico:"🔰", pt:"Guardião em Jornada", en:"Journey Guardian"},
+  {lv:2,  ico:"🥉", pt:"Guardião Bronze", en:"Bronze Guardian"},
+  {lv:3,  ico:"🥈", pt:"Guardião Prata", en:"Silver Guardian"},
+  {lv:4,  ico:"🥇", pt:"Guardião Ouro", en:"Gold Guardian"},
+  {lv:5,  ico:"🔹", pt:"Guardião Platina", en:"Platinum Guardian"},
+  {lv:6,  ico:"💎", pt:"Guardião Diamante", en:"Diamond Guardian"},
+  {lv:7,  ico:"🛡️", pt:"Guardião Élite", en:"Elite Guardian"},
+  {lv:8,  ico:"⚔️", pt:"Guardião Épico", en:"Epic Guardian"},
+  {lv:9,  ico:"🌟", pt:"Guardião Mítico", en:"Mythic Guardian"},
+  {lv:10, ico:"👑", pt:"Guardião Lendário", en:"Legendary Guardian"}
 ];
 function levelOf(){
   var xp=S.xp||0, lv=1, i;
@@ -907,14 +912,7 @@ function levelProgress(){
 }
 function xpForLevel(lv){ return LEVEL_XP[Math.max(0, Math.min(MAX_LEVEL, lv|0)-1)]||0; }
 function xpForMaxLevel(){ return LEVEL_XP[MAX_LEVEL]; }
-function currentTitle(){
-  var lv=levelOf();
-  if(lv>=10) return TITLES[4];
-  if(lv>=8) return TITLES[3];
-  if(lv>=6) return TITLES[2];
-  if(lv>=4) return TITLES[1];
-  return TITLES[0];
-}
+function currentTitle(){ var lv=levelOf(); return LEVEL_TITLES[lv-1]||LEVEL_TITLES[0]; }
 
 /* -------------------- TEMAS / THEMES -------------------- */
 var THEMES = {
