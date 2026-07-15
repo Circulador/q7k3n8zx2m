@@ -137,6 +137,31 @@
 
 <div class="app">
   <div class="a11y-backdrop" id="a11yBackdrop" hidden aria-hidden="true"></div>
+  <div class="glossary-menu" id="glossaryMenu" role="dialog" aria-labelledby="glossaryMenuTitle" hidden>
+    <div class="am-header">
+      <h2 class="am-title" id="glossaryMenuTitle" data-i18n="settings.glossary">📖 Glossário</h2>
+      <button type="button" class="am-close" id="glossaryMenuClose" data-i18n-attr="aria-label:a11y.close" aria-label="Fechar">×</button>
+    </div>
+    <div class="am-section">
+      <span class="am-section-label" data-i18n="settings.glossarySearch">Buscar termo</span>
+      <p class="glossary-meta" id="glossaryCount"></p>
+      <label class="sr-only" for="glossarySearch" data-i18n="settings.glossarySearch">Buscar termo</label>
+      <input type="search" class="dp-input glossary-search" id="glossarySearch" list="glossaryDatalist" autocomplete="off" data-i18n-attr="placeholder:settings.glossaryPh">
+      <datalist id="glossaryDatalist"></datalist>
+    </div>
+    <div class="am-section glossary-term-section">
+      <div class="glossary-card" id="glossaryCard"></div>
+    </div>
+    <details class="glossary-browse am-section" open>
+      <summary class="glossary-browse-sum" data-i18n="settings.glossaryBrowse">Ver lista completa</summary>
+      <label class="sr-only" for="glossaryPick" data-i18n="settings.glossaryPick">Escolha um termo</label>
+      <select class="dp-select" id="glossaryPick"></select>
+    </details>
+    <div class="am-section">
+      <span class="am-section-label" data-i18n="settings.glossaryFavs">⭐ Favoritos</span>
+      <div class="glossary-favs" id="glossaryFavsList"></div>
+    </div>
+  </div>
   <header class="topbar" role="banner">
     <div class="topbar-brand">
       <div class="brand">
@@ -192,31 +217,6 @@
         <button type="button" class="toolbar-btn hud-tip" id="onboardOpenBtn" data-i18n-attr="aria-label:onboard.reopenTip;title:onboard.reopenTip" aria-label="Guia do jogo"><span aria-hidden="true">🧭</span></button>
         <div class="glossary-menu-wrap">
           <button type="button" class="toolbar-btn hud-tip" id="glossaryBtn" data-i18n-attr="aria-label:hud.tip.glossary;title:hud.tip.glossary" aria-label="Glossário" aria-haspopup="dialog" aria-expanded="false" aria-controls="glossaryMenu"><span aria-hidden="true">📖</span></button>
-          <div class="glossary-menu" id="glossaryMenu" role="dialog" aria-labelledby="glossaryMenuTitle" hidden>
-            <div class="am-header">
-              <h2 class="am-title" id="glossaryMenuTitle" data-i18n="settings.glossary">📖 Glossário</h2>
-              <button type="button" class="am-close" id="glossaryMenuClose" data-i18n-attr="aria-label:a11y.close" aria-label="Fechar">×</button>
-            </div>
-            <div class="am-section">
-              <span class="am-section-label" data-i18n="settings.glossarySearch">Buscar termo</span>
-              <p class="glossary-meta" id="glossaryCount"></p>
-              <label class="sr-only" for="glossarySearch" data-i18n="settings.glossarySearch">Buscar termo</label>
-              <input type="search" class="dp-input glossary-search" id="glossarySearch" list="glossaryDatalist" autocomplete="off" data-i18n-attr="placeholder:settings.glossaryPh">
-              <datalist id="glossaryDatalist"></datalist>
-            </div>
-            <div class="am-section glossary-term-section">
-              <div class="glossary-card" id="glossaryCard"></div>
-            </div>
-            <details class="glossary-browse am-section">
-              <summary class="glossary-browse-sum" data-i18n="settings.glossaryBrowse">Ver lista completa</summary>
-              <label class="sr-only" for="glossaryPick" data-i18n="settings.glossaryPick">Escolha um termo</label>
-              <select class="dp-select" id="glossaryPick"></select>
-            </details>
-            <div class="am-section">
-              <span class="am-section-label" data-i18n="settings.glossaryFavs">⭐ Favoritos</span>
-              <div class="glossary-favs" id="glossaryFavsList"></div>
-            </div>
-          </div>
         </div>
         <div class="a11y-menu-wrap">
           <button type="button" class="toolbar-btn hud-tip" id="a11yBtn" data-i18n-attr="aria-label:hud.tip.a11y;title:hud.tip.a11y" aria-label="Acessibilidade" aria-haspopup="true" aria-expanded="false"><span aria-hidden="true">♿</span></button>

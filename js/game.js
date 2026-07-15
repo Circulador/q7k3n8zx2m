@@ -79,9 +79,7 @@ var UI = {
   "settings.easyReadSub":{pt:"Liga ou desliga contraste, texto grande e espaçamento de uma vez.",en:"Turns contrast, large text and spacing on or off together."},
   "settings.easyReadOff":{pt:"Leitura fácil desativada",en:"Easy reading disabled"},
   "settings.editProfile":{pt:"✏️ Minha operação (equipe e papel)",en:"✏️ My operation (team & role)"},
-  "settings.glossaryFavs":{pt:"⭐ Favoritos do glossário",en:"⭐ Glossary favorites"},
-  "settings.flashcard":{pt:"🃏 Revisar termos (flashcards)",en:"🃏 Review terms (flashcards)"},
-  "settings.flashcardNext":{pt:"Próximo termo →",en:"Next term →"},
+  "settings.glossaryFavs":{pt:"⭐ Favoritos",en:"⭐ Favorites"},
   "quiz.context":{pt:"Contexto",en:"Context"},
   "quiz.glossaryTip":{pt:"O que é isso?",en:"What is this?"},
   "quiz.repeatQ":{pt:"Repetir pergunta",en:"Repeat question"},
@@ -1104,35 +1102,59 @@ function showGlossaryTerm(id){
   var fb=host.querySelector(".glossary-fav-toggle");
   if(fb) fb.addEventListener("click",function(e){ e.stopPropagation(); toggleGlossaryFav(g.id); showGlossaryTerm(g.id); });
 }
+function syncOverlayBackdrop(){
+  var bd=$("a11yBackdrop"); if(!bd) return;
+  var am=$("a11yMenu"), sm=$("settingsMenu"), gm=$("glossaryMenu");
+  var open=(am&&!am.hidden)||(sm&&!sm.hidden)||(gm&&!gm.hidden);
+  bd.hidden=!open;
+  bd.setAttribute("aria-hidden",open?"false":"true");
+}
+function positionGlossaryMenu(){
+  var menu=$("glossaryMenu"), btn=$("glossaryBtn");
+  if(!menu||!btn||menu.hidden) return;
+  if(window.matchMedia("(max-width:640px)").matches){
+    menu.style.top=""; menu.style.right=""; menu.style.left=""; menu.style.bottom=""; menu.style.width="";
+    return;
+  }
+  var r=btn.getBoundingClientRect(), w=Math.min(340, window.innerWidth-28);
+  menu.style.top=(r.bottom+8)+"px";
+  menu.style.right=Math.max(8, window.innerWidth-r.right)+"px";
+  menu.style.left="auto";
+  menu.style.width=w+"px";
+}
 function toggleGlossaryMenu(force){
-  var menu=$("glossaryMenu"),btn=$("glossaryBtn"),bd=$("a11yBackdrop");
+  var menu=$("glossaryMenu"),btn=$("glossaryBtn");
   if(!menu) return;
   var open=force!==undefined?!!force:menu.hidden;
   if(open){ toggleA11yMenu(false); toggleSettingsMenu(false); toggleStreakPopover(false); }
   menu.hidden=!open;
   if(btn) btn.setAttribute("aria-expanded",open?"true":"false");
-  if(bd){ bd.hidden=!open; bd.setAttribute("aria-hidden",open?"false":"true"); }
+  syncOverlayBackdrop();
   document.body.classList.toggle("glossary-menu-open",open);
-  if(open){ renderGlossarySelect(); renderGlossaryFavs(); var gs=$("glossarySearch"); if(gs){ gs.focus(); try{ gs.select(); }catch(e){} } }
+  if(open){
+    positionGlossaryMenu();
+    renderGlossarySelect(); renderGlossaryFavs();
+    var gs=$("glossarySearch"); if(gs){ gs.focus(); try{ gs.select(); }catch(e){} }
+  }
 }
 function toggleSettingsMenu(force){
-  var menu=$("settingsMenu"),btn=$("settingsBtn"),bd=$("a11yBackdrop");
+  var menu=$("settingsMenu"),btn=$("settingsBtn");
   if(!menu) return;
   var open=force!==undefined?!!force:menu.hidden;
   if(open){ toggleA11yMenu(false); toggleStreakPopover(false); toggleGlossaryMenu(false); }
   menu.hidden=!open;
   if(btn) btn.setAttribute("aria-expanded",open?"true":"false");
-  if(bd){ bd.hidden=!open; bd.setAttribute("aria-hidden",open?"false":"true"); }
+  syncOverlayBackdrop();
   document.body.classList.toggle("settings-menu-open",open);
   if(open){ renderA11yCatalog(); var ts=$("themeSelect"); if(ts) ts.value=S.theme||"default"; }
 }
 function toggleA11yMenu(force){
-  var menu=$("a11yMenu"),btn=$("a11yBtn"),bd=$("a11yBackdrop"); if(!menu) return;
+  var menu=$("a11yMenu"),btn=$("a11yBtn"); if(!menu) return;
   var open=force!==undefined?!!force:menu.hidden;
   if(open){ toggleSettingsMenu(false); toggleStreakPopover(false); toggleGlossaryMenu(false); }
   menu.hidden=!open;
   if(btn) btn.setAttribute("aria-expanded", open?"true":"false");
-  if(bd){ bd.hidden=!open; bd.setAttribute("aria-hidden", open?"false":"true"); }
+  syncOverlayBackdrop();
   document.body.classList.toggle("a11y-menu-open", open);
   if(open) renderA11yCatalog();
 }
@@ -3791,17 +3813,6 @@ function renderGlossaryFavs(){
     host.appendChild(b);
   });
 }
-var flashcardIdx=0;
-function renderFlashcard(){
-  var host=$("flashcardCard"); if(!host) return;
-  ensureUxState();
-  var pool=S.glossaryFavs.length?S.glossaryFavs.map(function(id){ return GLOSSARY.filter(function(g){return g.id===id;})[0]; }).filter(Boolean):GLOSSARY;
-  if(!pool.length) return;
-  if(flashcardIdx>=pool.length) flashcardIdx=0;
-  var g=pool[flashcardIdx];
-  host.innerHTML='<div class="glossary-term">'+g.term+'</div><div class="glossary-name">'+tt(g.name)+'</div><p class="glossary-def">'+tt(g.def)+'</p><p class="glossary-fun">'+tt(g.fun)+'</p>';
-}
-function nextFlashcard(){ flashcardIdx++; renderFlashcard(); }
 function themePreview(th){
   document.body.classList.remove("theme-default","theme-light","theme-dark");
   if(th!=="default") document.body.classList.add("theme-"+th);
@@ -3997,6 +4008,8 @@ function bind(){
   if(a11yMenuEl) a11yMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
   if(settingsMenuEl) settingsMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
   if(glossaryMenuEl) glossaryMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
+  window.addEventListener("resize",function(){ var gm=$("glossaryMenu"); if(gm&&!gm.hidden) positionGlossaryMenu(); });
+  window.addEventListener("scroll",function(){ var gm=$("glossaryMenu"); if(gm&&!gm.hidden) positionGlossaryMenu(); },true);
   if(streakPopEl) streakPopEl.addEventListener("click",function(e){ e.stopPropagation(); });
   wireToolbarTouch("glossaryBtn",function(e){ e.stopPropagation(); toggleGlossaryMenu(); });
   wireToolbarTouch("settingsBtn",function(e){ e.stopPropagation(); toggleSettingsMenu(); });
@@ -4054,7 +4067,7 @@ function bind(){
     var am=$("a11yMenu"), sm=$("settingsMenu"), gm=$("glossaryMenu"), sp=$("streakPopover");
     if(am&&!am.hidden){ if(e.target.closest&&(e.target.closest(".a11y-menu-wrap")||e.target.closest("#a11yMenu"))) return; toggleA11yMenu(false); }
     if(sm&&!sm.hidden){ if(e.target.closest&&(e.target.closest(".settings-menu-wrap")||e.target.closest("#settingsMenu"))) return; toggleSettingsMenu(false); }
-    if(gm&&!gm.hidden){ if(e.target.closest&&(e.target.closest(".glossary-menu-wrap")||e.target.closest("#glossaryMenu"))) return; toggleGlossaryMenu(false); }
+    if(gm&&!gm.hidden){ if(e.target.closest&&(e.target.closest("#glossaryMenu")||e.target.closest("#glossaryBtn"))) return; toggleGlossaryMenu(false); }
     if(sp&&!sp.hidden){ if(e.target.closest&&(e.target.closest(".streak-hud-wrap")||e.target.closest("#streakPopover"))) return; toggleStreakPopover(false); }
   });
   document.querySelectorAll("#a11yMenu .am-toggle").forEach(function(b){ b.addEventListener("click",function(e){ e.stopPropagation(); var k=b.getAttribute("data-opt"); if(k==="colorblind"){ cycleColorblind(); return; } S.a11y[k]=!S.a11y[k]; if(k==="contrast"||k==="large"||k==="spacing") S.a11y.easyRead=false; save(); applyA11y(); syncEasyReadUi(); if(k==="voice"&&S.a11y.voice) speak(L()==="pt"?"Narração por voz ativada.":"Voice narration enabled."); if(k==="signs"&&S.a11y.signs) speak(L()==="pt"?"Hand Talk e Libras ativados.":"Hand Talk and ASL enabled."); }); });

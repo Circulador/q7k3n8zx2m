@@ -142,7 +142,7 @@ body.glossary-menu-open .topbar,body.a11y-menu-open .topbar,body.settings-menu-o
   .a11y-menu{position:fixed;top:auto;bottom:calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px));left:0;right:0;width:100%;max-width:100%;max-height:min(72dvh,100%);border-radius:16px 16px 0 0;z-index:10150;box-shadow:0 -8px 40px rgba(0,0,0,.5)}
   .a11y-menu-wrap{position:static}
   .am-header{position:sticky;top:0;z-index:1}
-  .glossary-menu{position:fixed;top:auto;bottom:calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px));left:0;right:0;width:100%;max-width:100%;max-height:min(72dvh,100%);border-radius:16px 16px 0 0;z-index:10150;box-shadow:0 -8px 40px rgba(0,0,0,.5)}
+  .glossary-menu{top:auto!important;right:0!important;left:0!important;width:100%!important;max-width:100%!important;max-height:min(72dvh,100%);border-radius:16px 16px 0 0;bottom:calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 40px rgba(0,0,0,.5)}
   .glossary-menu-wrap{position:static}
   .glossary-menu .am-header{position:sticky;top:0;z-index:1}
 }
@@ -989,7 +989,7 @@ body.focus-learn #hudCoinsChip,body.focus-learn #hudScoreChip{display:none!impor
   body:not(.simple-ui) #hudTitle{display:none}
   .toolbar-btn{width:36px;height:36px;font-size:1rem}
   .lang-switch-btn{padding:6px 10px;font-size:.76rem}
-  .settings-menu,.glossary-menu,.dropdown-panel,.a11y-menu,.streak-popover{position:fixed;top:auto;bottom:calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px));left:0;right:0;width:100%;max-width:100%;max-height:min(72dvh,100%);border-radius:16px 16px 0 0;z-index:10150;margin:0}
+  .settings-menu,.dropdown-panel,.a11y-menu,.streak-popover{position:fixed;top:auto;bottom:calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px));left:0;right:0;width:100%;max-width:100%;max-height:min(72dvh,100%);border-radius:16px 16px 0 0;z-index:10150;margin:0}
   .settings-menu-wrap,.glossary-menu-wrap,.a11y-menu-wrap,.streak-hud-wrap{position:static}
   .missions-weekly-card{margin-top:12px}
   .bottom-nav-row{padding:3px 2px 3px}
@@ -1119,7 +1119,7 @@ body.contrast .quit-btn-leave{background:#1a1a1a;border-color:#ff7b72;color:#ffb
 
 /* Configurações, glossário e temas */
 .glossary-menu-wrap{position:relative;display:inline-flex;flex:none}
-.glossary-menu{position:absolute;top:calc(100% + 8px);right:0;z-index:10150;width:min(340px,calc(100vw - 28px));max-height:min(78vh,560px);overflow:auto;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto}
+.glossary-menu{position:fixed;z-index:10200;width:min(340px,calc(100vw - 28px));max-height:min(78vh,560px);overflow:auto;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto}
 .glossary-menu[hidden]{display:none!important}
 #glossaryBtn[aria-expanded="true"]{background:#e6f5f4;border-color:var(--green);color:var(--green-d);box-shadow:0 0 0 2px rgba(0,126,122,.25)}
 .glossary-meta{margin:0 0 8px;font-size:.78rem;color:#5a6f78;line-height:1.35}
@@ -1205,8 +1205,7 @@ body.theme-dark .card{background:rgba(255,255,255,.04);border-color:rgba(255,255
 .bottom-nav-row button{position:relative}
 .glossary-favs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
 .glossary-fav-chip{padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:inherit;font:inherit;font-size:.78rem;font-weight:700;cursor:pointer}
-.glossary-fav-toggle{background:none;border:0;padding:0;font-size:1rem;cursor:pointer;vertical-align:middle}
-.flashcard-card{margin-top:8px}
+.glossary-fav-toggle{background:none;border:0;padding:0;font-size:1rem;cursor:pointer;vertical-align:middle;margin-left:auto}
 .dp-switch{display:inline-flex;margin-top:4px}
 .dp-section-compact .dp-link-btn{margin-bottom:6px}
 @media(max-width:640px){
