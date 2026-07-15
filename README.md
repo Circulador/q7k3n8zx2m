@@ -2,7 +2,7 @@
 
 Jogo web **bilíngue (Português 🇧🇷 / Inglês 🇬🇧)** de conscientização em **Cyber Security e Segurança da Informação**, ambientado nas operações reais da Orbita ao redor do mundo. Funciona 100% no navegador, sem login, com suporte **PWA** (instalável e offline após a primeira visita).
 
-**Versão atual:** `v156` · **Demo ao vivo:** [circulador.github.io/q7k3n8zx2m](https://circulador.github.io/q7k3n8zx2m/?v=156)
+**Versão atual:** `v157` · **Demo ao vivo:** [circulador.github.io/q7k3n8zx2m](https://circulador.github.io/q7k3n8zx2m/?v=157)
 
 ---
 
@@ -36,7 +36,7 @@ Configuração centralizada em **`js/profile-data.js`** — novas equipes e pap�
 
 **Barra inferior (5 itens):**
 
-Início → Mapa → Desafios / Crises → Missões → Eu
+Início → Missões → Mapa → Desafios / Crises → Eu
 
 **Barra superior:** idioma, ofensiva, progresso, 📖 glossário, ♿ acessibilidade, ⚙️ configurações
 
@@ -85,7 +85,7 @@ Inclui atalhos de estado e **ir para tela** (mapa, missões, crises, loja, etc.)
 .
 ├── index.html              # Telas, topbar, taskbar inferior, PWA
 ├── manifest.webmanifest
-├── sw.js                   # Service Worker (cache v156)
+├── sw.js                   # Service Worker (cache v157)
 ├── README.md
 ├── RACIONAL-PEDAGOGICO.md
 ├── review.html             # Banco de revisão (legado; revisão também in-app)
@@ -115,7 +115,7 @@ Inclui atalhos de estado e **ir para tela** (mapa, missões, crises, loja, etc.)
     └── demo-menu.js        # Menu demo temporário (QA)
 ```
 
-> Lógica principal: **`js/game.js`**. Versão de cache: `window.APP_VERSION` em `index.html` e `CACHE_VERSION` em `sw.js` (atualmente **156**). Ao publicar, altere ambos e use `?v=156` na URL para forçar atualização.
+> Lógica principal: **`js/game.js`**. Versão de cache: `window.APP_VERSION` em `index.html` e `CACHE_VERSION` em `sw.js` (atualmente **157**). Ao publicar, altere ambos e use `?v=157` na URL para forçar atualização.
 
 ---
 
@@ -128,18 +128,18 @@ cd GuardiaoDigitalVale
 python -m http.server 8093
 ```
 
-Abra **[http://localhost:8093/?v=156](http://localhost:8093/?v=156)** após mudanças em CSS/JS.
+Abra **[http://localhost:8093/?v=157](http://localhost:8093/?v=157)** após mudanças em CSS/JS.
 
 ### Opção 2 — GitHub Pages
 
-Deploy automático na branch `main`. URL: [circulador.github.io/q7k3n8zx2m/?v=156](https://circulador.github.io/q7k3n8zx2m/?v=156)
+Deploy automático na branch `main`. URL: [circulador.github.io/q7k3n8zx2m/?v=157](https://circulador.github.io/q7k3n8zx2m/?v=157)
 
 ### Fluxo do jogador
 
 1. Escolha **idioma** e **acessibilidade** (onboarding ou menu ♿).
 2. **Personalize seu perfil** — onde você atua e como é seu trabalho.
 3. Na **Início**, use o botão ▶️ principal para o próximo passo do treino.
-4. Navegue pela **taskbar inferior** (Início, Mapa, Desafios/Crises, Missões, Eu).
+4. Navegue pela **taskbar inferior** (Início, Missões, Mapa, Desafios/Crises, Eu).
 5. **Loja** e **guia** ficam em **⚙️ Configurações**.
 6. Progresso, preferências e conquistas ficam em `localStorage` (`guardiao_orbita_v7`).
 
