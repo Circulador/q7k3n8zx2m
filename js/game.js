@@ -323,6 +323,7 @@ var UI = {
   "map.vwmTitle":{pt:"A Orbita no mundo",en:"Orbita in the world"},
   "map.vwmHelper":{pt:"Toque num país para iniciar a expedição",en:"Tap a country to start the expedition"},
   "map.zoomToggle":{pt:"🔍 Ajustar zoom",en:"🔍 Adjust zoom"},
+  "map.reset":{pt:"Ver mundo",en:"View world"},
   "map.moreOptions":{pt:"Mais informações do mapa",en:"More map information"},
   "map.clearSelection":{pt:"Limpar seleção",en:"Clear selection"},
   "map.legendActivity":{pt:"Atuação:",en:"Activity:"},
@@ -1654,6 +1655,7 @@ function renderAnimatedChainMap(){
   });
 }
 var mapBgClickHintShown=false;
+var _mapResetDepth=0;
 function isMapDetailOpen(){
   var stage=$("mapStage"), panel=$("mapDetail");
   return !!(stage&&stage.classList.contains("map-detail-open")&&panel&&!panel.hidden);
@@ -1850,8 +1852,8 @@ function ensureOrbitaWorldMap(cb){
         return true;
       },
       onClearSelection:function(){
-        if(isMapDetailOpen()) return;
-        closeMapDetail();
+        if(_mapResetDepth>0) return;
+        resetMapView();
       },
       onFilterChange:function(){ renderCountryList(); }
     });
@@ -1883,6 +1885,16 @@ function finishWorldMapUI(){
   updateMapCountryNav();
 }
 function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open","map-detail-dense"); syncMapDetailLayout(); updateMapCountryNav(); }
+function resetMapView(){
+  if(_mapResetDepth>0) return;
+  _mapResetDepth++;
+  closeMapDetail();
+  resetView();
+  renderMapExplorerHint();
+  updateMapContext();
+  if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.clearSelection) OrbitaWorldMap.clearSelection(true);
+  _mapResetDepth--;
+}
 function getPlayableCountryIds(){
   if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getCountries) return COUNTRIES.map(function(c){ return c.id; });
   var countries=OrbitaWorldMap.getCountries(L());
@@ -2218,7 +2230,6 @@ function openMap(process, reset, focusExpedition){
   if(mapReady) drawMap();
   else ensureMap();
   show("screenMap");
-  var row=$("mapToolbarRow"); if(row&&window.innerWidth<=640) row.classList.remove("map-toolbar-collapsed");
   if(focusExpedition){
     var next=nextExpeditionCountry();
     if(next) setTimeout(function(){ focusExpeditionCountry(next.id); pulseNextCountry(); }, mapReady?120:480);
@@ -3902,19 +3913,12 @@ function bind(){
   });
   on("playerName","input",function(){ S.name=this.value; });
 
-  on("mapDetailClose","click",closeMapDetail);
-  on("zoomIn","click",function(){ zoomTo(view.x+view.w/2,view.y+view.h/2,.8); });
-  on("zoomOut","click",function(){ zoomTo(view.x+view.w/2,view.y+view.h/2,1.25); });
+  on("mapDetailClose","click",resetMapView);
   on("mapZoomInFloat","click",function(e){ e.stopPropagation(); zoomTo(view.x+view.w/2,view.y+view.h/2,.8); });
   on("mapZoomOutFloat","click",function(e){ e.stopPropagation(); zoomTo(view.x+view.w/2,view.y+view.h/2,1.25); });
+  on("mapZoomResetFloat","click",function(e){ e.stopPropagation(); resetMapView(); });
   on("mapCountryPrev","click",function(e){ e.stopPropagation(); navigateMapCountry(-1); });
   on("mapCountryNext","click",function(e){ e.stopPropagation(); navigateMapCountry(1); });
-  on("zoomReset","click",function(){ resetView(); });
-  on("mapZoomToggleBtn","click",function(){
-    var row=$("mapToolbarRow"); if(!row) return;
-    row.classList.toggle("map-toolbar-collapsed");
-    this.setAttribute("aria-expanded",row.classList.contains("map-toolbar-collapsed")?"false":"true");
-  });
   on("quitDialogCancel","click",hideQuitDialog);
   on("quitDialogBackdrop","click",hideQuitDialog);
   on("quitDialogConfirm","click",function(){ var fn=quitCallback; hideQuitDialog(); if(fn) fn(); });

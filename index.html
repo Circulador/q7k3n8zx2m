@@ -9,17 +9,17 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=103">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=104">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=103">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=103">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=104">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=104">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=103"></script>
-<link rel="stylesheet" href="css/styles.css?v=103">
+<script src="js/access-gate.js?v=104"></script>
+<link rel="stylesheet" href="css/styles.css?v=104">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -525,20 +525,13 @@
       <div class="map-expedition" id="mapExpeditionWrap">
         <div id="mapExpedition"></div>
       </div>
-      <div class="map-controls-sticky">
+      <div class="map-workspace" id="mapWorkspace">
+      <div class="map-mapbar" id="mapMapbar">
         <div class="map-context" id="mapContext" aria-live="polite"></div>
-        <button type="button" class="btn btn-sm btn-ghost map-zoom-toggle" id="mapZoomToggleBtn" data-i18n="map.zoomToggle">🔍 Ajustar zoom</button>
-        <div class="map-toolbar-row map-toolbar-collapsed" id="mapToolbarRow">
-          <div class="map-toolbar">
-            <button class="btn btn-sm btn-ghost" id="zoomIn" aria-label="Aproximar">+</button>
-            <button class="btn btn-sm btn-ghost" id="zoomOut" aria-label="Afastar">−</button>
-            <button class="btn btn-sm btn-ghost" id="zoomReset" data-i18n="map.reset">Ver mundo</button>
-          </div>
-          <label class="map-search-wrap" id="mapSearchWrap">
-            <span class="sr-only" data-i18n="map.searchLabel">Buscar país</span>
-            <input type="search" class="map-search" id="mapSearch" autocomplete="off" data-i18n-attr="placeholder:map.searchPh;aria-label:map.searchLabel" placeholder="Buscar país…">
-          </label>
-        </div>
+        <label class="map-search-wrap" id="mapSearchWrap">
+          <span class="sr-only" data-i18n="map.searchLabel">Buscar país</span>
+          <input type="search" class="map-search" id="mapSearch" autocomplete="off" data-i18n-attr="placeholder:map.searchPh;aria-label:map.searchLabel" placeholder="Buscar país…">
+        </label>
       </div>
       <div class="map-stage" id="mapStage" role="tabpanel" tabindex="0" aria-live="polite">
         <div id="mapChainAnim" class="map-chain-anim" hidden aria-label="Cadeia digital dos escritórios"></div>
@@ -548,6 +541,7 @@
           <div class="map-zoom-float" id="mapZoomFloat" aria-label="Zoom do mapa">
             <button type="button" class="map-zoom-float-btn" id="mapZoomInFloat" aria-label="Aproximar">+</button>
             <button type="button" class="map-zoom-float-btn" id="mapZoomOutFloat" aria-label="Afastar">−</button>
+            <button type="button" class="map-zoom-float-btn map-zoom-float-reset" id="mapZoomResetFloat" data-i18n-attr="aria-label:map.reset;title:map.reset" aria-label="Ver mundo" title="Ver mundo">🌐</button>
           </div>
           <div class="map-country-nav" id="mapCountryNav" hidden>
             <button type="button" class="map-country-nav-btn map-country-nav-prev" id="mapCountryPrev" data-i18n-attr="aria-label:map.countryPrev" aria-label="País anterior">‹</button>
@@ -602,6 +596,7 @@
           <div class="country-groups" id="countryList" aria-label="Países no mapa oficial"></div>
         </div>
       </details>
+      </div>
       <div class="chain-list-panel card" id="mapChainPanel" hidden>
         <div class="section-title" id="mapChainTitle" data-i18n="office.chainTitle">🏢 Cadeia Digital — Escritórios</div>
         <div class="section-sub" id="mapChainSub" data-i18n="office.chainSub">Storytelling conectado: cada cena no escritório leva à próxima. Clique numa etapa para proteger.</div>
@@ -879,18 +874,18 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="103";</script>
-<script src="js/sign-lang.js?v=103"></script>
-<script src="js/orbita-world-map.js?v=103"></script>
-<script src="js/questions-data.js?v=103"></script>
-<script src="js/country-questions-data.js?v=103"></script>
-<script src="js/bosses-data.js?v=103"></script>
-<script src="js/boss-personal-tips.js?v=103"></script>
-<script src="js/chain-data.js?v=103"></script>
-<script src="js/boss-maps.js?v=103"></script>
-<script src="js/game.js?v=103"></script>
-<script src="js/demo-menu.js?v=103"></script>
-<script src="js/review-bank.js?v=103"></script>
+<script>window.APP_VERSION="104";</script>
+<script src="js/sign-lang.js?v=104"></script>
+<script src="js/orbita-world-map.js?v=104"></script>
+<script src="js/questions-data.js?v=104"></script>
+<script src="js/country-questions-data.js?v=104"></script>
+<script src="js/bosses-data.js?v=104"></script>
+<script src="js/boss-personal-tips.js?v=104"></script>
+<script src="js/chain-data.js?v=104"></script>
+<script src="js/boss-maps.js?v=104"></script>
+<script src="js/game.js?v=104"></script>
+<script src="js/demo-menu.js?v=104"></script>
+<script src="js/review-bank.js?v=104"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {
