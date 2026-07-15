@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=154">
+<link rel="stylesheet" href="css/styles.css?v=156">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -255,12 +255,10 @@
         <div class="toolbar-overflow-wrap">
           <button type="button" class="toolbar-btn hud-tip toolbar-more-btn" id="toolbarMoreBtn" data-i18n-attr="aria-label:toolbar.more;title:toolbar.more" aria-haspopup="true" aria-expanded="false" aria-controls="toolbarMoreMenu"><span aria-hidden="true">⋯</span></button>
           <div class="toolbar-more-menu" id="toolbarMoreMenu" role="menu" hidden>
-            <button type="button" class="toolbar-more-item" role="menuitem" data-toolbar-action="onboard"><span aria-hidden="true">🧭</span> <span data-i18n="onboard.reopen">Guia</span></button>
             <button type="button" class="toolbar-more-item demo-toolbar-btn" role="menuitem" data-toolbar-action="demo" id="toolbarMoreDemo"><span aria-hidden="true">🧪</span> Demo</button>
             <button type="button" class="toolbar-more-item" role="menuitem" data-toolbar-action="settings"><span aria-hidden="true">⚙️</span> <span data-i18n="settings.title">Configurações</span></button>
           </div>
         </div>
-        <button type="button" class="toolbar-btn hud-tip toolbar-overflow-item" id="onboardOpenBtn" data-i18n-attr="aria-label:onboard.reopenTip;title:onboard.reopenTip" aria-label="Guia do jogo"><span aria-hidden="true">🧭</span></button>
         <div class="glossary-menu-wrap">
           <button type="button" class="toolbar-btn hud-tip" id="glossaryBtn" data-i18n-attr="aria-label:hud.tip.glossary;title:hud.tip.glossary" aria-label="Glossário" aria-haspopup="dialog" aria-expanded="false" aria-controls="glossaryMenu"><span aria-hidden="true">📖</span></button>
         </div>
@@ -370,6 +368,10 @@
             </div>
             <div class="dp-section dp-section-compact">
               <button type="button" class="dp-link-btn" id="settingsEditProfileBtn" data-i18n="settings.editProfile">✏️ Editar perfil</button>
+            </div>
+            <div class="dp-section dp-section-compact settings-nav-links">
+              <button type="button" class="dp-link-btn" id="settingsOpenGuideBtn" data-i18n="settings.openGuide">🧭 Reabrir guia do jogo</button>
+              <button type="button" class="dp-link-btn" id="settingsOpenShopBtn" data-i18n="settings.openShop">🛒 Loja</button>
             </div>
             <div class="dp-section dp-section-compact demo-settings-section">
               <div class="dp-label" data-i18n="settings.demoTitle">🧪 Menu demo (temporário)</div>
@@ -933,10 +935,9 @@
   <div class="bottom-nav-row">
   <button type="button" id="navHomeBtn" onclick="gdvNavClick('navHomeBtn',event)" data-i18n-attr="title:nav.tip.home;aria-label:nav.tip.home"><span class="ni" aria-hidden="true">🏠</span><span data-i18n="nav.home">Início</span></button>
   <button type="button" id="navMapBtn" onclick="gdvNavClick('navMapBtn',event)" data-i18n-attr="title:nav.tip.map;aria-label:nav.tip.map"><span class="ni" aria-hidden="true">🗺️</span><span data-i18n="nav.map">Mapa</span></button>
-  <button type="button" id="navDailyBtn" onclick="gdvNavClick('navDailyBtn',event)" data-i18n-attr="title:nav.tip.missions;aria-label:nav.tip.missions"><span class="ni" aria-hidden="true">📅</span><span class="nav-badge" id="navDailyBadge" hidden>!</span><span data-i18n="nav.missions">Missões</span></button>
   <button type="button" id="navBossBtn" onclick="gdvNavClick('navBossBtn',event)" data-i18n-attr="title:nav.tip.boss;aria-label:nav.tip.boss"><span class="ni" aria-hidden="true">🎯</span><span data-i18n="nav.boss">Desafios / Crises</span></button>
+  <button type="button" id="navDailyBtn" onclick="gdvNavClick('navDailyBtn',event)" data-i18n-attr="title:nav.tip.missions;aria-label:nav.tip.missions"><span class="ni" aria-hidden="true">📅</span><span class="nav-badge" id="navDailyBadge" hidden>!</span><span data-i18n="nav.missions">Missões</span></button>
   <button type="button" id="navStatsBtn" onclick="gdvNavClick('navStatsBtn',event)" data-i18n-attr="title:nav.tip.stats;aria-label:nav.tip.stats"><span class="ni" aria-hidden="true">📊</span><span data-i18n="nav.stats">Eu</span></button>
-  <button type="button" id="navShopBtn" onclick="gdvNavClick('navShopBtn',event)" data-i18n-attr="title:nav.tip.shop;aria-label:nav.tip.shop"><span class="ni" aria-hidden="true">🛒</span><span data-i18n="nav.shop">Loja</span></button>
   <button type="button" id="navManagerBtn" hidden onclick="gdvNavClick('navManagerBtn',event)" data-i18n-attr="title:nav.tip.manager;aria-label:nav.tip.manager"><span class="ni" aria-hidden="true">🧭</span><span data-i18n="nav.manager">Gestor</span></button>
   </div>
   </nav>
@@ -967,19 +968,19 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="153";</script>
-<script src="js/sign-lang.js?v=154"></script>
-<script src="js/orbita-world-map.js?v=154"></script>
-<script src="js/questions-data.js?v=154"></script>
-<script src="js/country-questions-data.js?v=154"></script>
-<script src="js/bosses-data.js?v=154"></script>
-<script src="js/boss-personal-tips.js?v=154"></script>
-<script src="js/chain-data.js?v=154"></script>
-<script src="js/boss-maps.js?v=154"></script>
-<script src="js/glossary-data.js?v=154"></script>
-<script src="js/profile-data.js?v=154"></script>
-<script src="js/game.js?v=154"></script>
-<script src="js/demo-menu.js?v=154"></script>
+<script>window.APP_VERSION="156";</script>
+<script src="js/sign-lang.js?v=156"></script>
+<script src="js/orbita-world-map.js?v=156"></script>
+<script src="js/questions-data.js?v=156"></script>
+<script src="js/country-questions-data.js?v=156"></script>
+<script src="js/bosses-data.js?v=156"></script>
+<script src="js/boss-personal-tips.js?v=156"></script>
+<script src="js/chain-data.js?v=156"></script>
+<script src="js/boss-maps.js?v=156"></script>
+<script src="js/glossary-data.js?v=156"></script>
+<script src="js/profile-data.js?v=156"></script>
+<script src="js/game.js?v=156"></script>
+<script src="js/demo-menu.js?v=156"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */

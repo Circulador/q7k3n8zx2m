@@ -85,7 +85,7 @@ var UI = {
   "home.explore":{pt:"Explore minas, usinas, portos, ferrovias e escritórios, identifique ameaças cibernéticas, responda a incidentes simulados e fortaleça a resiliência das operações.",en:"Explore mines, plants, ports, railways and offices — identify cyber threats, respond to simulated incidents and strengthen operational resilience."},
   "home.impact":{pt:"Cada decisão que você toma pode proteger pessoas, informações e processos essenciais para o negócio.",en:"Every decision you make can protect people, information and processes essential to the business."},
   "home.objective":{pt:"🎯 <b>Objetivo do jogo:</b> reconhecer riscos digitais, aplicar boas práticas de segurança da informação e desenvolver a mentalidade de um verdadeiro Guardião Digital.",en:"🎯 <b>Game objective:</b> recognize digital risks, apply information security best practices and develop the mindset of a true Digital Guardian."},
-  "home.journey":{pt:"🌍 Use o menu inferior — <strong>Mapa</strong>, <strong>Desafios / Crises</strong>, <strong>Missões</strong> e <strong>Eu</strong>. Na Início, o botão ▶️ sempre indica por onde continuar; a ilustração do topo é apenas decorativa.",en:"🌍 Use the bottom menu — <strong>Map</strong>, <strong>Challenges / Crises</strong>, <strong>Missions</strong> and <strong>Me</strong>. On Home, the ▶️ button always shows where to continue; the top illustration is decorative only."},
+  "home.journey":{pt:"🌍 Use o menu inferior — <strong>Início</strong>, <strong>Mapa</strong>, <strong>Desafios / Crises</strong>, <strong>Missões</strong> e <strong>Eu</strong>. Loja e guia ficam em ⚙️ Configurações.",en:"🌍 Use the bottom menu — <strong>Home</strong>, <strong>Map</strong>, <strong>Challenges / Crises</strong>, <strong>Missions</strong> and <strong>Me</strong>. Shop and guide are in ⚙️ Settings."},
   "home.langTitle":{pt:"Idioma / Language",en:"Language / Idioma"},
   "home.langSub":{pt:"Perguntas, respostas e narração seguem o idioma escolhido.",en:"Questions, answers and narration follow the chosen language."},
   "home.a11yTitle":{pt:"Acessibilidade / Accessibility",en:"Accessibility / Acessibilidade"},
@@ -166,6 +166,8 @@ var UI = {
   "settings.easyReadSub":{pt:"Liga ou desliga contraste, texto grande e espaçamento de uma vez.",en:"Turns contrast, large text and spacing on or off together."},
   "settings.easyReadOff":{pt:"Leitura fácil desativada",en:"Easy reading disabled"},
   "settings.editProfile":{pt:"✏️ Editar perfil",en:"✏️ Edit profile"},
+  "settings.openGuide":{pt:"🧭 Reabrir guia do jogo",en:"🧭 Reopen game guide"},
+  "settings.openShop":{pt:"🛒 Loja",en:"🛒 Shop"},
   "settings.glossaryFavs":{pt:"⭐ Favoritos",en:"⭐ Favorites"},
   "quiz.context":{pt:"Contexto",en:"Context"},
   "quiz.glossaryTip":{pt:"O que é isso?",en:"What is this?"},
@@ -216,12 +218,12 @@ var UI = {
   "onboard.playT":{pt:"Como jogar",en:"How to play"},
   "onboard.playB":{pt:"Fluxo do treino: 📅 Atividade de hoje → 🗺️ Jornada no mapa → 🎯 Desafios / Crises.\n\nNa tela Início, o botão principal sempre indica o próximo passo (ex.: ▶️ Atividade de hoje · 5 min). A barra de metas da semana só mostra o resumo — não inicia o jogo.",en:"Training flow: 📅 Today's activity → 🗺️ Map journey → 🎯 Challenges / Crises.\n\nOn Home, the main button always shows your next step (e.g. ▶️ Today's activity · 5 min). The weekly goals bar is for progress summary only — it does not start a session."},
   "onboard.readyT":{pt:"Pronto para começar",en:"Ready to start"},
-  "onboard.readyB":{pt:"1) Defina onde você atua e como trabalha.\n2) Na Início, toque ▶️ Jogar agora — comece pela atividade de hoje.\n3) Use o menu inferior para Mapa, Desafios / Crises, Missões e Eu.",en:"1) Set where you work and your routine.\n2) On Home, tap ▶️ Play now — start with today's activity.\n3) Use the bottom menu for Map, Challenges / Crises, Missions and Me."},
+  "onboard.readyB":{pt:"1) Defina onde você atua e como trabalha.\n2) Na Início, toque ▶️ Jogar agora — comece pela atividade de hoje.\n3) Menu inferior: Início → Mapa → Desafios / Crises → Missões → Eu. Loja e guia em ⚙️ Configurações.",en:"1) Set where you work and your routine.\n2) On Home, tap ▶️ Play now — start with today's activity.\n3) Bottom menu: Home → Map → Challenges / Crises → Missions → Me. Shop and guide in ⚙️ Settings."},
   "onboard.startSetup":{pt:"Personalizar agora →",en:"Personalize now →"},
   "mgr.kpiAdoption":{pt:"Adoção",en:"Adoption"},
   "mgr.kpiWeak":{pt:"Tema mais fraco",en:"Weakest theme"},
   "mgr.kpiStreak":{pt:"Sequência média",en:"Avg streak"},
-  "hud.tip.settings":{pt:"Configurações — tema, perfil e preferências",en:"Settings — theme, profile and preferences"},
+  "hud.tip.settings":{pt:"Configurações — tema, perfil, loja, guia e preferências",en:"Settings — theme, profile, shop, guide and preferences"},
   "hud.tip.glossary":{pt:"Glossário — siglas e termos de cyber security",en:"Glossary — cyber security acronyms and terms"},
   "a11y.shortLabel":{pt:"Acessibilidade",en:"Accessibility"},
   "a11y.sec.read":{pt:"Leitura e narração",en:"Reading & narration"},
@@ -1024,8 +1026,7 @@ function applyHudTips(){
     hudTitle:"hud.tip.title", hudLives:"hud.tip.lives",
     hudStreakBtn:"hud.tip.streak", hudLevelChip:"hud.tip.level", hudXpChip:"hud.tip.xp",
     hudCoinsChip:"hud.tip.coins", hudScoreChip:"hud.tip.score", hudMaturityChip:"hud.tip.maturity",
-    glossaryBtn:"hud.tip.glossary", a11yBtn:"hud.tip.a11y", settingsBtn:"hud.tip.settings",
-    onboardOpenBtn:"onboard.reopenTip"
+    glossaryBtn:"hud.tip.glossary", a11yBtn:"hud.tip.a11y", settingsBtn:"hud.tip.settings"
   };
   for(var id in map){
     var el=$(id), text=t(map[id]);
@@ -5332,6 +5333,7 @@ function updateNavBadges(){
     if(pending) tip+=" — "+t("nav.badgeDaily");
     else if(pendingW) tip+=" — "+pendingW+" "+t("nav.badgeWeekly");
     btn.setAttribute("aria-label",tip);
+    btn.setAttribute("title",tip);
   }
 }
 function showContextTip(key){
@@ -5628,14 +5630,15 @@ function bind(){
       e.stopPropagation();
       toggleToolbarMore(false);
       var act=b.getAttribute("data-toolbar-action");
-      if(act==="onboard") showOnboarding(true);
-      else if(act==="demo"){ var db=$("demoMenuBtn"); if(db&&!db.hidden) db.click(); }
+      if(act==="demo"){ var db=$("demoMenuBtn"); if(db&&!db.hidden) db.click(); }
       else if(act==="settings") toggleSettingsMenu(true);
     });
   });
   on("settingsBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(); });
   on("settingsMenuClose","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); });
   on("settingsOpenA11yBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); toggleA11yMenu(true); if($("a11yBtn")) $("a11yBtn").focus(); });
+  on("settingsOpenGuideBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); showOnboarding(true); });
+  on("settingsOpenShopBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); renderShop(); show("screenShop"); });
   on("themeSelect","change",function(e){ e.stopPropagation(); themePreview(this.value); setTheme(this.value); });
   on("glossarySearch","input",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
   on("glossarySearch","change",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
@@ -5657,12 +5660,10 @@ function bind(){
   wireToolbarTouch("glossaryBtn",function(e){ e.stopPropagation(); toggleGlossaryMenu(); });
   wireToolbarTouch("settingsBtn",function(e){ e.stopPropagation(); toggleSettingsMenu(); });
   wireToolbarTouch("a11yBtn",function(e){ e.stopPropagation(); toggleA11yMenu(); });
-  wireToolbarTouch("onboardOpenBtn",function(e){ e.stopPropagation(); showOnboarding(true); });
   wireToolbarTouch("hudStreakBtn",function(e){ e.stopPropagation(); toggleStreakPopover(); });
 
   on("onboardSkipBtn","click",function(){ closeOnboarding(true); });
   on("onboardNextBtn","click",onboardNext);
-  on("onboardOpenBtn","click",function(){ showOnboarding(true); });
   on("onboardOverlay","click",function(e){ if(e.target===$("onboardOverlay")) closeOnboarding(true); });
 
   on("homeStartBtn","click",function(){
@@ -5832,13 +5833,12 @@ function wireBottomNav(){
     if(id==="navMapBtn") returnToMap();
     else if(id==="navBossBtn"){ hydrateNorthernBoss(); renderBossList(); show("screenBossList"); }
     else if(id==="navDailyBtn") show("screenDaily");
-    else if(id==="navShopBtn"){ renderShop(); show("screenShop"); }
     else if(id==="navStatsBtn"){ renderProfile(); show("screenProfile"); }
     else if(id==="navHomeBtn") show("screenHome");
     else if(id==="navManagerBtn"){ renderManager(); show("screenManager"); }
   }
   window.__gdvRunNav=runNav;
-  ["navMapBtn","navDailyBtn","navBossBtn","navStatsBtn","navShopBtn","navHomeBtn","navManagerBtn"].forEach(function(nid){
+  ["navMapBtn","navBossBtn","navDailyBtn","navStatsBtn","navHomeBtn","navManagerBtn"].forEach(function(nid){
     var el=$(nid);
     if(!el) return;
     el.addEventListener("click",function(ev){ runNav(nid,ev); });
