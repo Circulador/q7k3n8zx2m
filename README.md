@@ -2,7 +2,7 @@
 
 Jogo web **bilíngue (Português 🇧🇷 / Inglês 🇬🇧)** de conscientização em **Cyber Security e Segurança da Informação**, ambientado nas operações reais da Orbita ao redor do mundo. Funciona 100% no navegador, sem login, com suporte **PWA** (instalável e offline após a primeira visita).
 
-**Versão atual:** `v157` · **Demo ao vivo:** [circulador.github.io/q7k3n8zx2m](https://circulador.github.io/q7k3n8zx2m/?v=157)
+**Versão atual:** `v159` · **Demo ao vivo:** [circulador.github.io/q7k3n8zx2m](https://circulador.github.io/q7k3n8zx2m/?v=159)
 
 ---
 
@@ -43,6 +43,7 @@ Início → Missões → Mapa → Desafios / Crises → Eu
 **Dentro de ⚙️ Configurações:**
 
 - 🧭 Reabrir guia do jogo
+- 📝 Banco de perguntas (autores)
 - 🛒 Loja
 - ✏️ Editar perfil
 - Tema, acessibilidade, modo simples, painel do gestor, menu demo
@@ -85,7 +86,7 @@ Inclui atalhos de estado e **ir para tela** (mapa, missões, crises, loja, etc.)
 .
 ├── index.html              # Telas, topbar, taskbar inferior, PWA
 ├── manifest.webmanifest
-├── sw.js                   # Service Worker (cache v157)
+├── sw.js                   # Service Worker (cache v159)
 ├── README.md
 ├── RACIONAL-PEDAGOGICO.md
 ├── review.html             # Banco de revisão (legado; revisão também in-app)
@@ -115,7 +116,7 @@ Inclui atalhos de estado e **ir para tela** (mapa, missões, crises, loja, etc.)
     └── demo-menu.js        # Menu demo temporário (QA)
 ```
 
-> Lógica principal: **`js/game.js`**. Versão de cache: `window.APP_VERSION` em `index.html` e `CACHE_VERSION` em `sw.js` (atualmente **157**). Ao publicar, altere ambos e use `?v=157` na URL para forçar atualização.
+> Lógica principal: **`js/game.js`**. Versão de cache: `window.APP_VERSION` em `index.html` e `CACHE_VERSION` em `sw.js` (atualmente **159**). Ao publicar, altere ambos e use `?v=159` na URL para forçar atualização.
 
 ---
 
@@ -128,11 +129,11 @@ cd GuardiaoDigitalVale
 python -m http.server 8093
 ```
 
-Abra **[http://localhost:8093/?v=157](http://localhost:8093/?v=157)** após mudanças em CSS/JS.
+Abra **[http://localhost:8093/?v=159](http://localhost:8093/?v=159)** após mudanças em CSS/JS.
 
 ### Opção 2 — GitHub Pages
 
-Deploy automático na branch `main`. URL: [circulador.github.io/q7k3n8zx2m/?v=157](https://circulador.github.io/q7k3n8zx2m/?v=157)
+Deploy automático na branch `main`. URL: [circulador.github.io/q7k3n8zx2m/?v=159](https://circulador.github.io/q7k3n8zx2m/?v=159)
 
 ### Fluxo do jogador
 

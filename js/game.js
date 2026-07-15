@@ -167,6 +167,7 @@ var UI = {
   "settings.easyReadOff":{pt:"Leitura fácil desativada",en:"Easy reading disabled"},
   "settings.editProfile":{pt:"✏️ Editar perfil",en:"✏️ Edit profile"},
   "settings.openGuide":{pt:"🧭 Reabrir guia do jogo",en:"🧭 Reopen game guide"},
+  "settings.openReviewBank":{pt:"📝 Banco de perguntas (autores)",en:"📝 Question bank (authors)"},
   "settings.openShop":{pt:"🛒 Loja",en:"🛒 Shop"},
   "settings.glossaryFavs":{pt:"⭐ Favoritos",en:"⭐ Favorites"},
   "quiz.context":{pt:"Contexto",en:"Context"},
@@ -4684,9 +4685,6 @@ function renderReviewSection(){
   tr.textContent=due?t("profile.reviewTrainDue").replace("{n}",String(due)):t("profile.reviewTrain");
   tr.onclick=startReviewErrors;
   host.appendChild(tr);
-  var lk=document.createElement("button"); lk.className="btn btn-ghost btn-sm"; lk.textContent=t("profile.reviewBank");
-  lk.onclick=function(){ if(typeof window.initReviewBank==="function") window.initReviewBank(); show("screenReview"); };
-  host.appendChild(lk);
 }
 function renderCertChecklist(){
   var host=$("certChecklist"); if(!host) return;
@@ -5638,6 +5636,7 @@ function bind(){
   on("settingsMenuClose","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); });
   on("settingsOpenA11yBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); toggleA11yMenu(true); if($("a11yBtn")) $("a11yBtn").focus(); });
   on("settingsOpenGuideBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); showOnboarding(true); });
+  on("settingsOpenReviewBankBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); if(typeof window.initReviewBank==="function") window.initReviewBank(); show("screenReview"); });
   on("settingsOpenShopBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); renderShop(); show("screenShop"); });
   on("themeSelect","change",function(e){ e.stopPropagation(); themePreview(this.value); setTheme(this.value); });
   on("glossarySearch","input",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
