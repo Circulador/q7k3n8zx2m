@@ -580,7 +580,7 @@ function renderSettingsUi(){
     dl.innerHTML="";
     GLOSSARY.forEach(function(g){ var op=document.createElement("option"); op.value=g.term+" — "+tt(g.name); dl.appendChild(op); });
   }
-  renderGlossarySelect(); renderGlossaryFavs(); renderGlossaryMeta(); renderFlashcard();
+  renderGlossarySelect(); renderGlossaryFavs(); renderGlossaryMeta();
   var su=$("optSimpleUiSettings"); if(su) su.checked=S.simpleUi!==false;
   syncEasyReadUi();
   requestAnimationFrame(syncBottomShellHeight);
@@ -4080,8 +4080,6 @@ function bind(){
   on("optEasyReadSettings","change",function(e){ e.stopPropagation(); setEasyRead(this.checked); });
   on("optSimpleUiSettings","change",function(e){ e.stopPropagation(); setSimpleUi(this.checked); });
   on("optSimpleUi","change",function(){ setSimpleUi(this.checked); });
-  on("flashcardBtn","click",function(e){ e.stopPropagation(); var fc=$("flashcardCard"),fn=$("flashcardNextBtn"); if(fc){ fc.hidden=false; flashcardIdx=0; renderFlashcard(); } if(fn) fn.hidden=false; });
-  on("flashcardNextBtn","click",function(e){ e.stopPropagation(); nextFlashcard(); });
   on("profileEditSetupBtn","click",openEditSetup);
   on("profileWeeklyBtn","click",openWeeklyScreen);
   on("profileShopBtn","click",function(){ renderShop(); show("screenShop"); });
