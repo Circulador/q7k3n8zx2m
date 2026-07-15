@@ -378,7 +378,7 @@ var UI = {
   "home.langEnDesc":{pt:"Inglês (Estados Unidos)",en:"English (United States)"},
   "setup.nameTitle":{pt:"Seu nome",en:"Your name"},
   "setup.nameSub":{pt:"Opcional — aparece no certificado e no ranking da equipe.",en:"Optional — shown on your certificate and team ranking."},
-  "setup.namePh":{pt:"Rodolfo Conte",en:"Rodolfo Conte"},
+  "setup.namePh":{pt:"Exemplo: Rodolfo Conte",en:"Example: Rodolfo Conte"},
   "setup.badge":{pt:"👤 Perfil rápido",en:"👤 Quick profile"},
   "setup.head":{pt:"Personalize seu treino",en:"Personalize your training"},
   "setup.intro":{pt:"Assim os cenários ficam parecidos com seu dia a dia — leva cerca de 20 segundos.",en:"This way scenarios match your daily work — takes about 20 seconds."},
