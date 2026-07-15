@@ -1009,23 +1009,7 @@ function updateHeroCaption(){
 }
 
 /* -------------------- GLOSSÁRIO / TEMA / CONFIG -------------------- */
-var GLOSSARY=[
-  {id:"mfa",term:"MFA",name:{pt:"Autenticação multifator",en:"Multi-factor authentication"},def:{pt:"Confirma sua identidade com mais de uma prova — senha + código do celular, por exemplo.",en:"Confirms your identity with more than one proof — password plus phone code, for example."},fun:{pt:"É como entrar na portaria da mina: crachá + digitar um código que chega no seu celular. Só o crachá não basta.",en:"Like entering the mine gate: badge plus a code on your phone. The badge alone is not enough."}},
-  {id:"dlp",term:"DLP",name:{pt:"Prevenção de vazamento de dados",en:"Data loss prevention"},def:{pt:"Ferramentas que impedem envio indevido de informações sensíveis — por e-mail, pendrive ou nuvem.",en:"Tools that block improper sharing of sensitive data — via email, USB or cloud."},fun:{pt:"Imagine um fiscal na saída do escritório que avisa: 'esse PDF com dados de produção não pode ir para seu e-mail pessoal'.",en:"Imagine a guard at the office exit saying: 'that production PDF cannot go to your personal email'."}},
-  {id:"phishing",term:"Phishing",name:{pt:"Golpe por mensagem falsa",en:"Fake message scam"},def:{pt:"Mensagem que imita banco, TI ou colega para roubar senha ou clicar em link malicioso.",en:"A message mimicking your bank, IT or a colleague to steal passwords or click malicious links."},fun:{pt:"É o 'e-mail da diretoria urgente' pedindo gift card — só que a diretoria nunca pediu.",en:"The 'urgent email from leadership' asking for gift cards — except leadership never asked."}},
-  {id:"ransomware",term:"Ransomware",name:{pt:"Sequestro digital",en:"Digital hostage-taking"},def:{pt:"Malware que criptografa arquivos e exige pagamento para liberar o acesso.",en:"Malware that encrypts files and demands payment to restore access."},fun:{pt:"Como alguém trancar o armário de EPIs e cobrar para devolver a chave — só que são seus relatórios e planilhas.",en:"Like someone locking the PPE cabinet and charging for the key — except it's your reports and spreadsheets."}},
-  {id:"vpn",term:"VPN",name:{pt:"Rede privada virtual",en:"Virtual private network"},def:{pt:"Túnel criptografado entre seu dispositivo e a rede da empresa.",en:"Encrypted tunnel between your device and the company network."},fun:{pt:"É o corredor seguro entre sua casa e o escritório — em vez de andar pela rua exposta com documentos na mão.",en:"A secure corridor from home to the office — instead of walking the open street with documents in hand."}},
-  {id:"firewall",term:"Firewall",name:{pt:"Barreira de rede",en:"Network barrier"},def:{pt:"Filtra tráfego entre redes, bloqueando acessos não autorizados.",en:"Filters traffic between networks, blocking unauthorized access."},fun:{pt:"Portaria da planta: só entra quem tem autorização; o resto fica do lado de fora.",en:"Plant security gate: only authorized people enter; everyone else stays outside."}},
-  {id:"scada",term:"SCADA",name:{pt:"Supervisão de processos industriais",en:"Industrial process supervision"},def:{pt:"Sistema que monitora e comanda equipamentos em mina, usina ou ferrovia.",en:"System that monitors and controls equipment in mines, plants or railways."},fun:{pt:"O painel onde o operador vê se o britador, a esteira ou a bomba estão ok — como o painel do carro, mas da operação inteira.",en:"The dashboard where operators see if crushers, belts or pumps are OK — like a car dashboard for the whole operation."}},
-  {id:"ot",term:"OT",name:{pt:"Tecnologia operacional",en:"Operational technology"},def:{pt:"Sistemas que controlam máquinas e processos físicos — distinto do TI de escritório.",en:"Systems controlling physical machines and processes — distinct from office IT."},fun:{pt:"TI cuida do e-mail; OT cuida do que mexe minério, vapor e trem. São vizinhos que precisam conversar.",en:"IT handles email; OT handles what moves ore, steam and trains. Neighbors that must talk to each other."}},
-  {id:"bec",term:"BEC",name:{pt:"Fraude do e-mail do executivo",en:"Business email compromise"},def:{pt:"Golpe em que criminosos fingem ser diretores ou fornecedores para pedir pagamentos.",en:"Scam where criminals pose as executives or vendors to request payments."},fun:{pt:"O 'gerente' pedindo transferência urgente num sábado — mas o número da conta mudou. Sempre confirme por outro canal.",en:"The 'manager' requesting an urgent transfer on Saturday — but the account number changed. Always confirm another way."}},
-  {id:"zerotrust",term:"Zero Trust",name:{pt:"Confiança zero",en:"Zero Trust"},def:{pt:"Modelo que não presume confiança só por estar na rede — valida identidade e contexto sempre.",en:"Model that never trusts you just because you're on the network — always validates identity and context."},fun:{pt:"Mesmo dentro da empresa, cada acesso é como passar de novo na catraca — não basta 'já conheço você'.",en:"Even inside the company, each access is like swiping the turnstile again — 'I know you' is not enough."}},
-  {id:"patch",term:"Patch",name:{pt:"Atualização de correção",en:"Security update"},def:{pt:"Correção de falha em sistema ou aplicativo para fechar brecha explorável.",en:"Fix for a flaw in software to close an exploitable gap."},fun:{pt:"Remendo no capacete após recall — parece chato, mas evita acidente. Patch é o remendo digital.",en:"A helmet recall fix — tedious but prevents accidents. A patch is the digital fix."}},
-  {id:"backup",term:"Backup",name:{pt:"Cópia de segurança",en:"Safety copy"},def:{pt:"Cópia dos dados para recuperar após falha, ransomware ou erro humano.",en:"Data copy to recover after failure, ransomware or human error."},fun:{pt:"Segunda chave do armário de documentos guardada com segurança — se perder a primeira, a operação não para.",en:"A second key to the document cabinet kept safe — lose the first and work still continues."}},
-  {id:"malware",term:"Malware",name:{pt:"Software malicioso",en:"Malicious software"},def:{pt:"Programa criado para prejudicar, espionar ou tomar controle do dispositivo.",en:"Program designed to harm, spy on or take control of a device."},fun:{pt:"Como um 'aplicativo grátis' que na verdade copia sua agenda de contatos — só que na empresa pode parar a linha.",en:"Like a 'free app' that copies your contacts — except at work it can stop the line."}},
-  {id:"soc",term:"SOC",name:{pt:"Centro de operações de segurança",en:"Security operations center"},def:{pt:"Equipe que monitora alertas 24/7 e coordena resposta a incidentes.",en:"Team monitoring alerts 24/7 and coordinating incident response."},fun:{pt:"A central de monitoramento da segurança — como a sala que vê câmeras da planta, mas para alertas digitais.",en:"Security's monitoring room — like the plant camera hub, but for digital alerts."}},
-  {id:"spear",term:"Spear phishing",name:{pt:"Phishing direcionado",en:"Targeted phishing"},def:{pt:"Golpe personalizado para uma pessoa ou equipe específica, com detalhes críveis.",en:"Personalized scam aimed at a specific person or team with believable details."},fun:{pt:"Não é spam genérico — é mensagem com seu nome, sua obra e seu projeto. Por isso engana mais.",en:"Not generic spam — a message with your name, site and project. That's why it fools more people."}}
-];
+/* GLOSSARY definido em js/glossary-data.js */
 function applyTheme(){
   document.body.classList.remove("theme-default","theme-light","theme-dark");
   var th=S.theme||"default";
@@ -1088,21 +1072,32 @@ function showGlossaryTerm(id){
   var fb=host.querySelector(".glossary-fav-toggle");
   if(fb) fb.addEventListener("click",function(e){ e.stopPropagation(); toggleGlossaryFav(g.id); showGlossaryTerm(g.id); });
 }
+function toggleGlossaryMenu(force){
+  var menu=$("glossaryMenu"),btn=$("glossaryBtn"),bd=$("a11yBackdrop");
+  if(!menu) return;
+  var open=force!==undefined?!!force:menu.hidden;
+  if(open){ toggleA11yMenu(false); toggleSettingsMenu(false); toggleStreakPopover(false); }
+  menu.hidden=!open;
+  if(btn) btn.setAttribute("aria-expanded",open?"true":"false");
+  if(bd){ bd.hidden=!open; bd.setAttribute("aria-hidden",open?"false":"true"); }
+  document.body.classList.toggle("glossary-menu-open",open);
+  if(open){ renderGlossarySelect(); renderGlossaryFavs(); }
+}
 function toggleSettingsMenu(force){
   var menu=$("settingsMenu"),btn=$("settingsBtn"),bd=$("a11yBackdrop");
   if(!menu) return;
   var open=force!==undefined?!!force:menu.hidden;
-  if(open){ toggleA11yMenu(false); toggleStreakPopover(false); }
+  if(open){ toggleA11yMenu(false); toggleStreakPopover(false); toggleGlossaryMenu(false); }
   menu.hidden=!open;
   if(btn) btn.setAttribute("aria-expanded",open?"true":"false");
   if(bd){ bd.hidden=!open; bd.setAttribute("aria-hidden",open?"false":"true"); }
   document.body.classList.toggle("settings-menu-open",open);
-  if(open){ renderGlossarySelect(); renderA11yCatalog(); var ts=$("themeSelect"); if(ts) ts.value=S.theme||"default"; }
+  if(open){ renderA11yCatalog(); var ts=$("themeSelect"); if(ts) ts.value=S.theme||"default"; }
 }
 function toggleA11yMenu(force){
   var menu=$("a11yMenu"),btn=$("a11yBtn"),bd=$("a11yBackdrop"); if(!menu) return;
   var open=force!==undefined?!!force:menu.hidden;
-  if(open){ toggleSettingsMenu(false); toggleStreakPopover(false); }
+  if(open){ toggleSettingsMenu(false); toggleStreakPopover(false); toggleGlossaryMenu(false); }
   menu.hidden=!open;
   if(btn) btn.setAttribute("aria-expanded", open?"true":"false");
   if(bd){ bd.hidden=!open; bd.setAttribute("aria-hidden", open?"false":"true"); }
@@ -1130,7 +1125,7 @@ function toggleStreakPopover(force){
   var pop=$("streakPopover"), btn=$("hudStreakBtn");
   if(!pop) return;
   var open=force!==undefined?!!force:pop.hidden;
-  if(open){ toggleA11yMenu(false); toggleSettingsMenu(false); renderHudStreak(); }
+  if(open){ toggleA11yMenu(false); toggleSettingsMenu(false); toggleGlossaryMenu(false); renderHudStreak(); }
   pop.hidden=!open;
   if(btn) btn.setAttribute("aria-expanded", open?"true":"false");
   document.body.classList.toggle("streak-pop-open", open);
@@ -3647,7 +3642,7 @@ function renderRoles(){ var g=$("rolesGrid"); g.innerHTML=""; ROLES.forEach(func
 /* ==========================================================
    UX ENHANCEMENTS (v67)
    ========================================================== */
-var THEME_GLOSSARY={phishing:"phish",password:"mfa",ot:"ot",data:"dlp",device:"malware",remote:"vpn",bec:"bec",port:"port"};
+var THEME_GLOSSARY={phishing:"phishing",password:"mfa",ot:"ot",data:"dlp",device:"malware",remote:"vpn",bec:"bec",port:"port"};
 function ensureUxState(){
   if(!S.tipsSeen) S.tipsSeen={map:false,daily:false,boss:false};
   if(!S.glossaryFavs) S.glossaryFavs=[];
@@ -3737,7 +3732,7 @@ function renderFirstDayHint(){
   el.hidden=!showHint;
 }
 function openGlossaryForTerm(id){
-  toggleSettingsMenu(true);
+  toggleGlossaryMenu(true);
   var sel=$("glossaryPick"), search=$("glossarySearch");
   if(sel) sel.value=id;
   if(search){ var g=GLOSSARY.filter(function(x){return x.id===id;})[0]; if(g) search.value=g.term; }
@@ -3955,6 +3950,8 @@ function bind(){
   on("colorblindBtn","click",function(){ cycleColorblind(); });
   if($("resetA11yBtn")) on("resetA11yBtn","click",function(){ resetA11yDefaults(); });
   on("resetA11yMenuBtn","click",function(){ resetA11yDefaults(); toggleA11yMenu(false); });
+  on("glossaryBtn","click",function(e){ e.stopPropagation(); toggleGlossaryMenu(); });
+  on("glossaryMenuClose","click",function(e){ e.stopPropagation(); toggleGlossaryMenu(false); });
   on("settingsBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(); });
   on("settingsMenuClose","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); });
   on("settingsOpenA11yBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); toggleA11yMenu(true); if($("a11yBtn")) $("a11yBtn").focus(); });
@@ -3964,10 +3961,12 @@ function bind(){
   on("glossarySearch","change",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
   on("hudStreakBtn","click",function(e){ e.stopPropagation(); toggleStreakPopover(); });
   on("streakPopClose","click",function(e){ e.stopPropagation(); toggleStreakPopover(false); });
-  var a11yMenuEl=$("a11yMenu"), settingsMenuEl=$("settingsMenu"), streakPopEl=$("streakPopover");
+  var a11yMenuEl=$("a11yMenu"), settingsMenuEl=$("settingsMenu"), glossaryMenuEl=$("glossaryMenu"), streakPopEl=$("streakPopover");
   if(a11yMenuEl) a11yMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
   if(settingsMenuEl) settingsMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
+  if(glossaryMenuEl) glossaryMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
   if(streakPopEl) streakPopEl.addEventListener("click",function(e){ e.stopPropagation(); });
+  wireToolbarTouch("glossaryBtn",function(e){ e.stopPropagation(); toggleGlossaryMenu(); });
   wireToolbarTouch("settingsBtn",function(e){ e.stopPropagation(); toggleSettingsMenu(); });
   wireToolbarTouch("a11yBtn",function(e){ e.stopPropagation(); toggleA11yMenu(); });
   wireToolbarTouch("onboardOpenBtn",function(e){ e.stopPropagation(); showOnboarding(true); });
@@ -4018,11 +4017,12 @@ function bind(){
   });
   on("a11yBtn","click",function(e){ e.stopPropagation(); toggleA11yMenu(); });
   on("a11yMenuClose","click",function(e){ e.stopPropagation(); toggleA11yMenu(false); });
-  on("a11yBackdrop","click",function(){ toggleA11yMenu(false); toggleSettingsMenu(false); });
+  on("a11yBackdrop","click",function(){ toggleA11yMenu(false); toggleSettingsMenu(false); toggleGlossaryMenu(false); });
   document.addEventListener("click",function(e){
-    var am=$("a11yMenu"), sm=$("settingsMenu"), sp=$("streakPopover");
+    var am=$("a11yMenu"), sm=$("settingsMenu"), gm=$("glossaryMenu"), sp=$("streakPopover");
     if(am&&!am.hidden){ if(e.target.closest&&(e.target.closest(".a11y-menu-wrap")||e.target.closest("#a11yMenu"))) return; toggleA11yMenu(false); }
     if(sm&&!sm.hidden){ if(e.target.closest&&(e.target.closest(".settings-menu-wrap")||e.target.closest("#settingsMenu"))) return; toggleSettingsMenu(false); }
+    if(gm&&!gm.hidden){ if(e.target.closest&&(e.target.closest(".glossary-menu-wrap")||e.target.closest("#glossaryMenu"))) return; toggleGlossaryMenu(false); }
     if(sp&&!sp.hidden){ if(e.target.closest&&(e.target.closest(".streak-hud-wrap")||e.target.closest("#streakPopover"))) return; toggleStreakPopover(false); }
   });
   document.querySelectorAll("#a11yMenu .am-toggle").forEach(function(b){ b.addEventListener("click",function(e){ e.stopPropagation(); var k=b.getAttribute("data-opt"); if(k==="colorblind"){ cycleColorblind(); return; } S.a11y[k]=!S.a11y[k]; if(k==="contrast"||k==="large"||k==="spacing") S.a11y.easyRead=false; save(); applyA11y(); syncEasyReadUi(); if(k==="voice"&&S.a11y.voice) speak(L()==="pt"?"Narração por voz ativada.":"Voice narration enabled."); if(k==="signs"&&S.a11y.signs) speak(L()==="pt"?"Hand Talk e Libras ativados.":"Hand Talk and ASL enabled."); }); });
@@ -4075,6 +4075,7 @@ function bind(){
     if(e.key==="Escape"){
       var qd=$("quitDialog"); if(qd&&!qd.hidden){ hideQuitDialog(); return; }
       var sm=$("settingsMenu"); if(sm&&!sm.hidden){ toggleSettingsMenu(false); return; }
+      var gm=$("glossaryMenu"); if(gm&&!gm.hidden){ toggleGlossaryMenu(false); return; }
       var sp=$("streakPopover"); if(sp&&!sp.hidden){ toggleStreakPopover(false); return; }
       var am=$("a11yMenu"); if(am&&!am.hidden){ toggleA11yMenu(false); return; }
       if($("screenQuiz")&&$("screenQuiz").classList.contains("active")){ quizQuit(); return; }
@@ -4090,6 +4091,7 @@ function dismissBlockingUI(){
     if(ov&&!ov.hidden){ closeOnboarding(); }
     toggleA11yMenu(false);
     toggleSettingsMenu(false);
+    toggleGlossaryMenu(false);
     toggleStreakPopover(false);
     var tip=$("mapTooltip"); if(tip) tip.hidden=true;
     if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.clearSelection) OrbitaWorldMap.clearSelection();
@@ -4213,6 +4215,7 @@ window.gdvDemoApi={
   checkMedals:checkMedals,
   chainById:chainById,
   toggleSettingsMenu:toggleSettingsMenu,
+  toggleGlossaryMenu:toggleGlossaryMenu,
   closeOverlays:function(){ dismissBlockingUI(); },
   refreshAll:function(){
     refreshHud(); applyCosmetics(); renderNextStep(); renderWeekCard(); renderDaily(); renderWeekly();
