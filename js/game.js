@@ -1846,7 +1846,7 @@ function finishWorldMapUI(){
   mapReady=true;
   updateMapCountryNav();
 }
-function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open"); syncMapDetailFit(); updateMapCountryNav(); }
+function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open"); updateMapCountryNav(); }
 function getPlayableCountryIds(){
   if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getCountries) return COUNTRIES.map(function(c){ return c.id; });
   var countries=OrbitaWorldMap.getCountries(L());
@@ -1919,7 +1919,6 @@ function openMapDetailCountry(id){
   zoomToCountry(id);
   scrollMapIntoView();
   $("mapDetailPlay").addEventListener("click",startCampaign);
-  syncMapDetailFit();
   updateMapCountryNav();
   speak((official?official.name:tt(c.name))+". "+(official?official.phrase:tt(c.desc)));
 }
@@ -3132,10 +3131,6 @@ function applyHeroCompact(){
     btn.hidden=!showBtn;
     if(showBtn) btn.textContent=expanded?t("home.collapse"):t("home.expand");
   }
-}
-function syncMapDetailFit(){
-  var sm=$("screenMap"), st=$("mapStage");
-  if(sm) sm.classList.toggle("map-detail-fit",!!(st&&st.classList.contains("map-detail-open")));
 }
 function updateSetupBanner(){
   var ban=$("setupBanner"); if(!ban) return;
