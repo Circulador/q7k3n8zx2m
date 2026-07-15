@@ -1377,7 +1377,7 @@ function renderRank(host){
 /* ==========================================================
    MAPA GLOBAL (D3 / orbita-world-map.js)
    ========================================================== */
-var VW=960,VH=520,mapProcess=null,chainStageActive=null,mapSearchQuery="",view={x:0,y:0,w:VW,h:VH};
+var VW=960,VH=520,mapProcess=null,mapHitActive=null,chainStageActive=null,mapSearchQuery="",view={x:0,y:0,w:VW,h:VH};
 var MAP_PROCESSES=[{id:null, label:"map.procWorld", tip:"map.procWorldTip"}];
 function normalizeMapProcess(){ mapProcess=null; }
 function mapChainMode(){ return false; }
@@ -1706,7 +1706,7 @@ function restoreVwmLegendHTML(){
 function renderMapLegend(){
   var leg=$("mapLegend"); if(!leg) return;
   restoreVwmLegendHTML();
-  if(typeof OrbitaWorldMap!=="undefined") OrbitaWorldMap.refresh();
+  if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.isReady()) OrbitaWorldMap.refresh();
 }
 function formatCountryListSummary(vc){
   var lines=formatCountryListLines(vc);
@@ -2215,7 +2215,9 @@ function openMap(process, reset, focusExpedition){
   if(arguments.length>0) mapProcess=process||null;
   normalizeMapProcess();
   if(reset||!mapReady) view={x:0,y:0,w:VW,h:VH};
-  ensureMap(); drawMap(); show("screenMap");
+  if(mapReady) drawMap();
+  else ensureMap();
+  show("screenMap");
   var row=$("mapToolbarRow"); if(row&&window.innerWidth<=640) row.classList.remove("map-toolbar-collapsed");
   if(focusExpedition){
     var next=nextExpeditionCountry();

@@ -60,7 +60,9 @@ var OrbitaWorldMap = (function () {
 
   var state = { filterId: null, filterType: null, selectedIso: null };
   var projection, pathFn, countrySel, svgNode, tooltipNode, clearBtn, loadingNode;
-  var itemById, onCountryClick, onFilterChange, onClearSelection, onBeforeClearSelection, langFn, ready = false, routesLayer, countryFeatures;
+  var itemById, onCountryClick, onFilterChange, onClearSelection, onBeforeClearSelection;
+  var langFn = function () { return "pt"; };
+  var ready = false, routesLayer, countryFeatures;
   var progressByGame = {};
 
   function notifyFilterChange() {
@@ -71,9 +73,10 @@ var OrbitaWorldMap = (function () {
     return { filterType: state.filterType, filterId: state.filterId, selectedIso: state.selectedIso };
   }
 
-  function label(item) { return langFn() === "en" ? item.labelEn : item.labelPt; }
-  function countryName(data) { return langFn() === "en" ? data.nameEn : data.namePt; }
-  function countryPhrase(data) { return langFn() === "en" ? data.phraseEn : data.phrasePt; }
+  function currentLang() { return typeof langFn === "function" ? langFn() : "pt"; }
+  function label(item) { return currentLang() === "en" ? item.labelEn : item.labelPt; }
+  function countryName(data) { return currentLang() === "en" ? data.nameEn : data.namePt; }
+  function countryPhrase(data) { return currentLang() === "en" ? data.phraseEn : data.phrasePt; }
 
   function loadScript(src, globalName) {
     if (window[globalName]) return Promise.resolve(window[globalName]);
@@ -385,6 +388,7 @@ var OrbitaWorldMap = (function () {
   }
 
   function refresh() {
+    if (!ready) return;
     buildLegend(document.getElementById("mapActivityLegend"), activityItems, "activity");
     buildLegend(document.getElementById("mapProductLegend"), productItems, "product");
     if (countrySel) updateState();
