@@ -1482,6 +1482,8 @@ function navigateGlossaryTerm(dir){
   if(next<0) next=ids.length-1;
   if(next>=ids.length) next=0;
   selectGlossaryTerm(ids[next], false);
+  var panel=document.querySelector(".glossary-panel-detail");
+  if(panel) panel.scrollTop=0;
   var card=$("glossaryCard"); if(card){ try{ card.focus(); }catch(e){} }
 }
 function updateGlossaryNav(){
@@ -1506,10 +1508,6 @@ function updateGlossaryNav(){
     btn.disabled=solo;
     btn.setAttribute("aria-disabled",solo?"true":"false");
   });
-  if(prev) prev.onclick=function(e){ e.preventDefault(); e.stopPropagation(); navigateGlossaryTerm(-1); };
-  if(next) next.onclick=function(e){ e.preventDefault(); e.stopPropagation(); navigateGlossaryTerm(1); };
-  if(prevM) prevM.onclick=function(e){ e.preventDefault(); e.stopPropagation(); navigateGlossaryTerm(-1); };
-  if(nextM) nextM.onclick=function(e){ e.preventDefault(); e.stopPropagation(); navigateGlossaryTerm(1); };
 }
 function bindGlossaryKeyboard(){
   var menu=$("glossaryMenu"); if(!menu||menu._gkb) return;
@@ -4618,10 +4616,10 @@ function bind(){
   on("themeSelect","change",function(e){ e.stopPropagation(); themePreview(this.value); setTheme(this.value); });
   on("glossarySearch","input",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
   on("glossarySearch","change",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
-  on("glossaryPrev","click",function(e){ e.stopPropagation(); navigateGlossaryTerm(-1); });
-  on("glossaryNext","click",function(e){ e.stopPropagation(); navigateGlossaryTerm(1); });
-  on("glossaryPrevM","click",function(e){ e.stopPropagation(); navigateGlossaryTerm(-1); });
-  on("glossaryNextM","click",function(e){ e.stopPropagation(); navigateGlossaryTerm(1); });
+  on("glossaryPrev","click",function(e){ e.preventDefault(); e.stopPropagation(); navigateGlossaryTerm(-1); });
+  on("glossaryNext","click",function(e){ e.preventDefault(); e.stopPropagation(); navigateGlossaryTerm(1); });
+  on("glossaryPrevM","click",function(e){ e.preventDefault(); e.stopPropagation(); navigateGlossaryTerm(-1); });
+  on("glossaryNextM","click",function(e){ e.preventDefault(); e.stopPropagation(); navigateGlossaryTerm(1); });
   on("glossaryExploreBtn","click",function(e){ e.stopPropagation(); startGlossaryExplore(); });
   on("glossaryQuizClose","click",function(e){ e.stopPropagation(); closeGlossaryQuiz(); });
   on("hudStreakBtn","click",function(e){ e.stopPropagation(); toggleStreakPopover(); });
