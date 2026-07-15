@@ -323,7 +323,7 @@ function renderBossMapSvg(boss,active,phaseStates,lang){
   var route=bossMapRoute(sceneId,n);
   var label=bossMapLabel(sceneId,lang);
   var pinFn=function(i){ return route[i]?{x:route[i][0],y:route[i][1]}:bossRoutePoint(route,i/(n>1?n-1:1)); };
-  var svg='<svg viewBox="0 0 1000 300" preserveAspectRatio="xMidYMid meet" width="100%" role="img" aria-label="'+(boss.name&&boss.name[lang]?boss.name[lang]:"")+'">';
+  var svg='<svg class="boss-map-svg" viewBox="0 0 1000 300" preserveAspectRatio="xMidYMid meet" width="100%" role="img" aria-label="'+(boss.name&&boss.name[lang]?boss.name[lang]:"")+'">';
   svg+='<defs>'+bossMapDefs(sfx,theme)+'</defs>';
   svg+=bossMapSceneContent(sceneId,sfx,lang);
   var d="M"+route.map(function(p){return p[0]+","+p[1];}).join(" L");

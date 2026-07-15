@@ -944,7 +944,7 @@ body.nav-hidden .app{padding-bottom:24px}
 .report-how{margin:10px 0 0;font-size:.82rem;line-height:1.45;color:var(--steel);border-top:1px solid var(--line);padding-top:10px}
 .content-reviewed{opacity:.85;font-style:italic}
 .boss-chain-visual{min-height:220px;border-radius:10px;overflow:hidden;background:linear-gradient(#1a3a4a,#2d5a6e);margin:10px 0 12px;border:1px solid rgba(0,0,0,.12);position:relative;z-index:1}
-.boss-chain-visual svg{pointer-events:none;display:block}
+.boss-chain-visual svg.boss-map-svg{pointer-events:none;display:block;width:100%;height:auto}
 #screenBoss .boss-prompt,#screenBoss .options,#screenBoss .feedback,#screenBoss .boss-nav{position:relative;z-index:12}
 .boss-chain-visual.boss-chain-visual--iron{background:linear-gradient(#8fd3e8,#dff1f5)}
 .boss-chain-visual.boss-chain-visual--office{background:linear-gradient(#1a3a4a,#2d5a6e)}
@@ -954,6 +954,41 @@ body.nav-hidden .app{padding-bottom:24px}
 .boss-chain-visual.boss-chain-visual--data{background:linear-gradient(#2a3a5a,#1a2840)}
 .boss-chain-visual.boss-chain-visual--port{background:linear-gradient(#1a4a5a,#0d3040)}
 .boss-chain-visual[hidden]{display:none!important}
+/* Retrato no celular: mapa alto + rolagem horizontal (mesma escala do landscape) */
+@media (orientation:portrait){
+  .boss-chain-visual{
+    --boss-map-h:clamp(240px,36dvh,380px);
+    height:var(--boss-map-h);
+    min-height:var(--boss-map-h);
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x proximity;
+    scroll-padding:0 12px;
+    touch-action:pan-x pan-y;
+  }
+  .boss-chain-visual svg.boss-map-svg{
+    height:var(--boss-map-h)!important;
+    width:calc(var(--boss-map-h) * 10 / 3)!important;
+    min-width:calc(var(--boss-map-h) * 10 / 3)!important;
+    max-width:none!important;
+    scroll-snap-align:center;
+  }
+}
+/* Landscape no celular: aproveita a largura */
+@media (orientation:landscape) and (max-height:520px){
+  .boss-chain-visual{
+    min-height:min(58dvh,300px);
+    height:auto;
+    overflow:hidden;
+  }
+  .boss-chain-visual svg.boss-map-svg{
+    width:100%!important;
+    height:auto!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+}
 #screenBossList.active{position:relative;z-index:3}
 #screenBoss.active{position:relative;z-index:3}
 .boss-card--chain,.boss-card--map{border-color:rgba(237,177,17,.55);background:rgba(237,177,17,.06)}

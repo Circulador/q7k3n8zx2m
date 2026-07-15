@@ -2358,6 +2358,22 @@ function hydrateAllBossMaps(){
   });
 }
 function bossHasMap(b){ return !!(b&&b.mapVisual); }
+function scrollBossMapToActive(){
+  var host=$("bossChainVisual");
+  if(!host||host.hidden||!window.matchMedia("(orientation:portrait)").matches) return;
+  requestAnimationFrame(function(){
+    var pin=host.querySelector(".cmap-pin.active");
+    var svg=host.querySelector("svg.boss-map-svg");
+    if(!pin||!svg) return;
+    var tr=pin.getAttribute("transform")||"";
+    var m=tr.match(/translate\(([\d.]+)/);
+    if(!m) return;
+    var pinX=parseFloat(m[1])/1000;
+    var svgW=svg.offsetWidth;
+    var hostW=host.clientWidth;
+    host.scrollLeft=Math.max(0,Math.min(pinX*svgW-hostW*0.38,svgW-hostW));
+  });
+}
 function renderBossChainVisual(){
   var host=$("bossChainVisual"); if(!host) return;
   var b=bossCur.boss;
@@ -2368,6 +2384,7 @@ function renderBossChainVisual(){
     host.className="boss-chain-visual boss-chain-visual--"+(out.theme||"finance");
     host.innerHTML=out.svg||"";
     host.hidden=!out.svg;
+    scrollBossMapToActive();
   }catch(err){
     console.error("renderBossChainVisual",err);
     host.hidden=true; host.innerHTML="";
@@ -5093,6 +5110,12 @@ function wireBottomNav(){
   window.addEventListener("resize",function(){
     syncBottomShellHeight();
     if($("screenMap")&&$("screenMap").classList.contains("map-screen-fit")) measureMapViewport();
+    if($("screenBoss")&&$("screenBoss").classList.contains("active")) renderBossChainVisual();
+  },{passive:true});
+  window.addEventListener("orientationchange",function(){
+    setTimeout(function(){
+      if($("screenBoss")&&$("screenBoss").classList.contains("active")) renderBossChainVisual();
+    },120);
   },{passive:true});
 }
 function init(){
