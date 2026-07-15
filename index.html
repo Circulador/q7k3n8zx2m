@@ -9,17 +9,17 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=117">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=118">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=117">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=117">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=118">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=118">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=117"></script>
-<link rel="stylesheet" href="css/styles.css?v=117">
+<script src="js/access-gate.js?v=118"></script>
+<link rel="stylesheet" href="css/styles.css?v=118">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -147,10 +147,18 @@
       <p class="glossary-meta" id="glossaryCount"></p>
       <label class="sr-only" for="glossarySearch" data-i18n="settings.glossarySearch">Buscar termo</label>
       <input type="search" class="dp-input glossary-search" id="glossarySearch" autocomplete="off" data-i18n-attr="placeholder:settings.glossaryPh">
-      <div class="glossary-word-list" id="glossaryWordList" role="listbox" data-i18n-attr="aria-label:settings.glossaryList"></div>
     </div>
     <div class="am-section glossary-term-section">
-      <div class="glossary-card" id="glossaryCard"></div>
+      <div class="glossary-nav" id="glossaryNav" hidden>
+        <button type="button" class="glossary-nav-btn" id="glossaryPrev" data-i18n-attr="aria-label:settings.glossaryPrev;title:settings.glossaryPrev" aria-label="Termo anterior">‹</button>
+        <span class="glossary-nav-pos" id="glossaryNavPos" aria-live="polite"></span>
+        <button type="button" class="glossary-nav-btn" id="glossaryNext" data-i18n-attr="aria-label:settings.glossaryNext;title:settings.glossaryNext" aria-label="Próximo termo">›</button>
+      </div>
+      <p class="glossary-nav-hint muted" id="glossaryNavHint" hidden data-i18n="settings.glossaryNavHint">Use ← → ou os botões para ver o próximo termo</p>
+      <div class="glossary-card" id="glossaryCard" tabindex="0"></div>
+    </div>
+    <div class="am-section glossary-browse-section">
+      <div class="glossary-word-list" id="glossaryWordList" role="listbox" data-i18n-attr="aria-label:settings.glossaryList"></div>
     </div>
     <div class="am-section">
       <span class="am-section-label" data-i18n="settings.glossaryFavs">⭐ Favoritos</span>
@@ -887,19 +895,19 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="117";</script>
-<script src="js/sign-lang.js?v=117"></script>
-<script src="js/orbita-world-map.js?v=117"></script>
-<script src="js/questions-data.js?v=117"></script>
-<script src="js/country-questions-data.js?v=117"></script>
-<script src="js/bosses-data.js?v=117"></script>
-<script src="js/boss-personal-tips.js?v=117"></script>
-<script src="js/chain-data.js?v=117"></script>
-<script src="js/boss-maps.js?v=117"></script>
-<script src="js/glossary-data.js?v=117"></script>
-<script src="js/game.js?v=117"></script>
-<script src="js/demo-menu.js?v=117"></script>
-<script src="js/review-bank.js?v=117"></script>
+<script>window.APP_VERSION="118";</script>
+<script src="js/sign-lang.js?v=118"></script>
+<script src="js/orbita-world-map.js?v=118"></script>
+<script src="js/questions-data.js?v=118"></script>
+<script src="js/country-questions-data.js?v=118"></script>
+<script src="js/bosses-data.js?v=118"></script>
+<script src="js/boss-personal-tips.js?v=118"></script>
+<script src="js/chain-data.js?v=118"></script>
+<script src="js/boss-maps.js?v=118"></script>
+<script src="js/glossary-data.js?v=118"></script>
+<script src="js/game.js?v=118"></script>
+<script src="js/demo-menu.js?v=118"></script>
+<script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {

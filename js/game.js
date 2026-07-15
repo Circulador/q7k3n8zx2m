@@ -56,6 +56,9 @@ var UI = {
   "settings.glossarySearch":{pt:"Buscar termo",en:"Search term"},
   "settings.glossaryList":{pt:"Lista de termos do glossário",en:"Glossary term list"},
   "settings.glossaryPh":{pt:"Digite ou escolha na lista…",en:"Type or pick from the list…"},
+  "settings.glossaryPrev":{pt:"Termo anterior",en:"Previous term"},
+  "settings.glossaryNext":{pt:"Próximo termo",en:"Next term"},
+  "settings.glossaryNavHint":{pt:"Use ← → ou os botões para ver o próximo termo",en:"Use ← → or the buttons to see the next term"},
   "settings.glossaryPick":{pt:"Escolha um termo",en:"Choose a term"},
   "settings.glossaryBrowse":{pt:"Ver lista completa",en:"Browse full list"},
   "settings.glossaryDef":{pt:"O que significa",en:"What it means"},
@@ -1178,7 +1181,54 @@ function syncGlossaryFromSearch(){
   if(id){ selectGlossaryTerm(id, false); return; }
   var list=glossaryFilter(search.value);
   if(list.length===1){ selectGlossaryTerm(list[0].id, false); return; }
-  if(!q){ glossaryActiveId=null; renderGlossaryEmptyState(); }
+  if(!q){ glossaryActiveId=null; renderGlossaryEmptyState(); updateGlossaryNav(); }
+}
+function getGlossaryNavIds(){
+  var search=$("glossarySearch");
+  var q=search?search.value:"";
+  return glossaryFilter(q).slice().sort(function(a,b){ return a.term.localeCompare(b.term); }).map(function(g){ return g.id; });
+}
+function glossaryNavIndex(){
+  if(!glossaryActiveId) return -1;
+  return getGlossaryNavIds().indexOf(glossaryActiveId);
+}
+function navigateGlossaryTerm(dir){
+  var ids=getGlossaryNavIds();
+  if(!ids.length) return;
+  var idx=glossaryNavIndex();
+  if(idx<0) idx=dir>0?-1:0;
+  var next=idx+dir;
+  if(next<0) next=ids.length-1;
+  if(next>=ids.length) next=0;
+  selectGlossaryTerm(ids[next], true);
+  var card=$("glossaryCard"); if(card){ try{ card.focus(); }catch(e){} }
+}
+function updateGlossaryNav(){
+  var nav=$("glossaryNav"), pos=$("glossaryNavPos"), prev=$("glossaryPrev"), next=$("glossaryNext"), hint=$("glossaryNavHint");
+  if(!nav) return;
+  var ids=getGlossaryNavIds(), idx=glossaryNavIndex();
+  var show=!!glossaryActiveId&&idx>=0&&ids.length>0;
+  nav.hidden=!show;
+  if(hint) hint.hidden=!show;
+  if(!show) return;
+  var filtered=ids.length<(GLOSSARY?GLOSSARY.length:ids.length);
+  if(pos) pos.textContent=(idx+1)+" / "+ids.length+(filtered?(L()==="pt"?" · filtrados":" · filtered"):"");
+  var solo=ids.length<=1;
+  if(prev){ prev.disabled=solo; prev.setAttribute("aria-disabled",solo?"true":"false"); }
+  if(next){ next.disabled=solo; next.setAttribute("aria-disabled",solo?"true":"false"); }
+}
+function bindGlossaryKeyboard(){
+  var menu=$("glossaryMenu"); if(!menu||menu._gkb) return;
+  menu._gkb=true;
+  menu.addEventListener("keydown",function(e){
+    if(menu.hidden) return;
+    var t=e.target, inSearch=t&&t.id==="glossarySearch";
+    if(inSearch&&(e.key==="ArrowDown"||e.key==="ArrowRight")){ e.preventDefault(); if(!glossaryActiveId){ var ids=getGlossaryNavIds(); if(ids.length) selectGlossaryTerm(ids[0],true); } else navigateGlossaryTerm(1); return; }
+    if(inSearch&&(e.key==="ArrowUp"||e.key==="ArrowLeft")){ e.preventDefault(); if(!glossaryActiveId){ var ids2=getGlossaryNavIds(); if(ids2.length) selectGlossaryTerm(ids2[ids2.length-1],true); } else navigateGlossaryTerm(-1); return; }
+    if(inSearch) return;
+    if(e.key==="ArrowRight"||e.key==="ArrowDown"){ e.preventDefault(); navigateGlossaryTerm(1); }
+    else if(e.key==="ArrowLeft"||e.key==="ArrowUp"){ e.preventDefault(); navigateGlossaryTerm(-1); }
+  });
 }
 function selectGlossaryTerm(id, updateSearch){
   glossaryActiveId=id||null;
@@ -1189,7 +1239,7 @@ function selectGlossaryTerm(id, updateSearch){
   }
   renderGlossaryWordList();
   if(id) showGlossaryTerm(id);
-  else renderGlossaryEmptyState();
+  else { renderGlossaryEmptyState(); updateGlossaryNav(); }
 }
 function renderGlossaryWordList(){
   var host=$("glossaryWordList"), search=$("glossarySearch");
@@ -1234,9 +1284,13 @@ function showGlossaryTerm(id){
   host.innerHTML='<div class="glossary-term-row">'+cat+'<div class="glossary-term">'+g.term+'</div><button type="button" class="glossary-fav-toggle" data-gid="'+g.id+'" aria-label="'+(L()==="pt"?"Favorito":"Favorite")+'">'+fav+'</button></div><div class="glossary-name">'+tt(g.name)+'</div>'+acr+'<div class="glossary-def-k">'+t("settings.glossaryDef")+'</div><p class="glossary-def">'+tt(g.def)+'</p><div class="glossary-fun-k">'+t("settings.glossaryFun")+'</div><p class="glossary-fun">'+tt(g.fun)+'</p>';
   var fb=host.querySelector(".glossary-fav-toggle");
   if(fb) fb.addEventListener("click",function(e){ e.stopPropagation(); toggleGlossaryFav(g.id); showGlossaryTerm(g.id); });
+  updateGlossaryNav();
 }
 function renderGlossaryEmptyState(){
   var host=$("glossaryCard"); if(!host) return;
+  var nav=$("glossaryNav"), hint=$("glossaryNavHint");
+  if(nav) nav.hidden=true;
+  if(hint) hint.hidden=true;
   var chips=GLOSSARY_SUGGESTIONS.map(function(id){
     var g=GLOSSARY.filter(function(x){return x.id===id;})[0]; if(!g) return "";
     return '<button type="button" class="glossary-suggest-chip" data-gid="'+id+'">'+g.term+'</button>';
@@ -1282,6 +1336,7 @@ function toggleGlossaryMenu(force){
     if(glossaryActiveId) showGlossaryTerm(glossaryActiveId);
     else renderGlossaryEmptyState();
     trapFocus(menu, btn);
+    bindGlossaryKeyboard();
     var gs=$("glossarySearch"); if(gs){ gs.focus(); try{ gs.select(); }catch(e){} }
   } else {
     releaseFocusTrap();
@@ -4196,6 +4251,8 @@ function bind(){
   on("themeSelect","change",function(e){ e.stopPropagation(); themePreview(this.value); setTheme(this.value); });
   on("glossarySearch","input",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
   on("glossarySearch","change",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
+  on("glossaryPrev","click",function(e){ e.stopPropagation(); navigateGlossaryTerm(-1); });
+  on("glossaryNext","click",function(e){ e.stopPropagation(); navigateGlossaryTerm(1); });
   on("hudStreakBtn","click",function(e){ e.stopPropagation(); toggleStreakPopover(); });
   on("streakPopClose","click",function(e){ e.stopPropagation(); toggleStreakPopover(false); });
   var a11yMenuEl=$("a11yMenu"), settingsMenuEl=$("settingsMenu"), glossaryMenuEl=$("glossaryMenu"), streakPopEl=$("streakPopover");

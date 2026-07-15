@@ -1128,9 +1128,17 @@ body.contrast .quit-btn-leave{background:#1a1a1a;border-color:#ff7b72;color:#ffb
 .glossary-menu{position:fixed;z-index:10200;width:min(340px,calc(100vw - 28px));max-height:min(78vh,560px);overflow:auto;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto}
 .glossary-menu[hidden]{display:none!important}
 #glossaryBtn[aria-expanded="true"]{background:#e6f5f4;border-color:var(--green);color:var(--green-d);box-shadow:0 0 0 2px rgba(0,126,122,.25)}
-.glossary-search-section{padding-bottom:8px}
+.glossary-search-section{padding-bottom:4px}
 .glossary-search{margin-bottom:0}
-.glossary-word-list{display:flex;flex-direction:column;gap:2px;max-height:min(240px,38vh);overflow-y:auto;margin-top:8px;border:1px solid #dce8ec;border-radius:8px;padding:4px;background:#fafcfd;-webkit-overflow-scrolling:touch}
+.glossary-term-section{padding-top:4px;padding-bottom:8px}
+.glossary-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;padding:4px 2px}
+.glossary-nav-btn{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:40px;padding:0 14px;border:1px solid #c5d5dc;border-radius:8px;background:#fff;color:var(--green-d);font:inherit;font-size:1.25rem;font-weight:800;line-height:1;cursor:pointer}
+.glossary-nav-btn:hover:not(:disabled){background:rgba(0,126,122,.1);border-color:var(--green)}
+.glossary-nav-btn:disabled{opacity:.35;cursor:not-allowed}
+.glossary-nav-pos{flex:1;text-align:center;font-size:.78rem;font-weight:700;color:#5a6f78}
+.glossary-nav-hint{margin:0 0 8px;font-size:.72rem;text-align:center;line-height:1.35}
+.glossary-browse-section{padding-top:0;padding-bottom:8px}
+.glossary-word-list{display:flex;flex-direction:column;gap:2px;max-height:min(180px,28vh);overflow-y:auto;border:1px solid #dce8ec;border-radius:8px;padding:4px;background:#fafcfd;-webkit-overflow-scrolling:touch}
 .glossary-word-item{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 6px;width:100%;padding:8px 10px;border:0;border-radius:6px;background:transparent;color:inherit;font:inherit;font-size:.84rem;line-height:1.35;text-align:left;cursor:pointer}
 .glossary-word-item:hover,.glossary-word-item:focus-visible{background:rgba(0,126,122,.1);outline:none}
 .glossary-word-item.active{background:rgba(0,126,122,.16);box-shadow:inset 3px 0 0 var(--green)}
@@ -1139,8 +1147,8 @@ body.contrast .quit-btn-leave{background:#1a1a1a;border-color:#ff7b72;color:#ffb
 .glossary-word-sep{color:#9aaeb6;font-weight:400}
 .glossary-word-name{color:#5a6f78;font-size:.8rem}
 .glossary-list-empty{margin:8px 6px;font-size:.82rem;text-align:center}
-.glossary-term-section{padding-top:8px;padding-bottom:10px}
-.glossary-meta{margin:0 0 8px;font-size:.78rem;color:#5a6f78;line-height:1.35}
+.glossary-card{margin-top:0;padding:12px;border-radius:10px;background:#f4fafb;border:1px solid #dce8ec;outline:none}
+.glossary-card:focus-visible{box-shadow:0 0 0 2px rgba(0,126,122,.35)}
 .glossary-suggest-k{font-size:.76rem;font-weight:700;color:var(--green-d);margin:8px 0 6px}
 .glossary-suggest{display:flex;flex-wrap:wrap;gap:6px}
 .glossary-suggest-chip{padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:inherit;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer}
@@ -1181,7 +1189,7 @@ body.home-cta-visible #aslAccess{bottom:calc(var(--bottom-shell-h) + 78px + env(
 .dp-select:focus,.dp-input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 2px rgba(0,126,122,.2)}
 .dp-link-btn{width:100%;padding:10px 12px;border:2px solid var(--green);border-radius:10px;background:#e6f5f4;color:var(--green-d);font:inherit;font-weight:700;font-size:.88rem;cursor:pointer}
 .dp-link-btn:hover{background:#dff0ef}
-.glossary-card{margin-top:0;padding:12px;border-radius:10px;background:#f4fafb;border:1px solid #dce8ec}
+.glossary-meta{margin:0 0 8px;font-size:.78rem;color:#5a6f78;line-height:1.35}
 .glossary-term{flex:1;font-size:1.15rem;font-weight:800;color:var(--green-d);margin:0}
 .glossary-name{font-size:.88rem;font-weight:700;color:#2a4550;margin:2px 0 8px}
 .glossary-def{margin:0 0 10px;font-size:.86rem;line-height:1.45;color:#3a5560}
