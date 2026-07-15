@@ -1915,6 +1915,7 @@ function resetMapView(){
   if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.clearSelection) OrbitaWorldMap.clearSelection(true);
   syncMapDetailLayout();
   updateMapCountryNav();
+  requestAnimationFrame(measureMapViewport);
   _mapResetDepth--;
 }
 function getPlayableCountryIds(){
@@ -1999,6 +2000,7 @@ function openMapDetailCountry(id){
   zoomToCountry(id);
   scrollMapIntoView();
   updateMapCountryNav();
+  requestAnimationFrame(measureMapViewport);
   speak((official?official.name:tt(c.name))+". "+(official?official.phrase:tt(c.desc)));
 }
 function openMapDetailChain(stageId){
@@ -2125,10 +2127,16 @@ function measureMapViewport(){
   if(!sm||!sm.classList.contains("map-screen-fit")) return;
   syncBottomShellHeight();
   var anchor=sm.querySelector(".card")||sm;
-  var top=anchor.getBoundingClientRect().top;
+  var top=Math.max(0,anchor.getBoundingClientRect().top);
   var shell=document.querySelector(".bottom-shell");
   var bottomH=shell?shell.getBoundingClientRect().height:parseInt(getComputedStyle(document.documentElement).getPropertyValue("--bottom-shell-h"),10)||112;
-  var h=Math.max(300,Math.floor(window.innerHeight-top-bottomH-1));
+  var more=$("mapMoreOptions");
+  var moreH=0;
+  if(more&&!more.hidden){
+    var sum=more.querySelector("summary");
+    if(sum) moreH=Math.ceil(sum.getBoundingClientRect().height)+6;
+  }
+  var h=Math.max(320,Math.floor(window.innerHeight-top-bottomH-moreH-2));
   document.documentElement.style.setProperty("--map-viewport-h",h+"px");
 }
 function syncMapDetailLayout(){
