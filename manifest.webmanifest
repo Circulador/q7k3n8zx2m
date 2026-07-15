@@ -1,7 +1,7 @@
 {
   "name": "Guardião Cibernético — Orbita",
   "short_name": "Guardião Orbita",
-  "description": "Jogo bilíngue (PT/EN) de conscientização em Cyber Security e Segurança da Informação, ambientado nas operações da Orbita. Funciona offline.",
+  "description": "Guardião Cibernético — Da mina ao porto, a segurança passa por você. Jogo bilíngue (PT/EN) de cyber security nas operações da Orbita. Funciona offline.",
   "lang": "pt-BR",
   "dir": "ltr",
   "start_url": "./index.html?src=pwa",

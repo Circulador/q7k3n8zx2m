@@ -525,7 +525,7 @@ var UI = {
   "nav.tip.shop":{pt:"Loja de recompensas",en:"Rewards shop"},
   "nav.tip.stats":{pt:"Seu progresso e medalhas",en:"Your progress and medals"},
   "nav.tip.manager":{pt:"Painel do gestor",en:"Manager dashboard"},
-  "footer.txt":{pt:"conscientização em Cyber Security e Segurança da Informação — Orbita.",en:"Cyber Security and Information Security awareness — Orbita."}
+  "footer.txt":{pt:"Da mina ao porto, a segurança passa por você. Um clique pode impactar a operação... o seu pode proteger a Orbita.",en:"From mine to port, security starts with you. One click can impact operations... yours can protect Orbita."}
 };
 function t(key){ var e=UI[key]; return e? (e[L()]||e.pt) : key; }
 function langFlagSvg(lang){
@@ -567,6 +567,13 @@ function renderSettingsUi(){
   renderGlossarySelect(); renderGlossaryFavs(); renderFlashcard();
   var su=$("optSimpleUiSettings"); if(su) su.checked=S.simpleUi!==false;
   syncEasyReadUi();
+  requestAnimationFrame(syncBottomShellHeight);
+}
+function syncBottomShellHeight(){
+  var shell=document.querySelector(".bottom-shell");
+  if(!shell) return;
+  var h=Math.ceil(shell.getBoundingClientRect().height);
+  if(h>0) document.documentElement.style.setProperty("--bottom-shell-h",h+"px");
 }
 function applyHudTips(){
   var map={
@@ -2075,11 +2082,18 @@ function scrollMapIntoView(){
 function measureMapViewport(){
   var sm=$("screenMap");
   if(!sm||!sm.classList.contains("map-screen-fit")) return;
+  syncBottomShellHeight();
   var anchor=sm.querySelector(".card")||sm;
   var top=anchor.getBoundingClientRect().top;
   var shell=document.querySelector(".bottom-shell");
   var bottomH=shell?shell.getBoundingClientRect().height:112;
-  var h=Math.max(320,Math.floor(window.innerHeight-top-bottomH-2));
+  var more=$("mapMoreOptions");
+  var moreH=0;
+  if(more&&!more.hidden){
+    var sum=more.querySelector("summary");
+    moreH=sum?Math.ceil(sum.getBoundingClientRect().height)+10:40;
+  }
+  var h=Math.max(280,Math.floor(window.innerHeight-top-bottomH-moreH-4));
   document.documentElement.style.setProperty("--map-viewport-h",h+"px");
 }
 function syncMapDetailLayout(){
@@ -2090,7 +2104,10 @@ function syncMapDetailLayout(){
   document.body.classList.toggle("map-viewport-lock",open);
   if(open){
     requestAnimationFrame(function(){
-      requestAnimationFrame(measureMapViewport);
+      requestAnimationFrame(function(){
+        syncBottomShellHeight();
+        measureMapViewport();
+      });
       setTimeout(measureMapViewport,400);
     });
   } else {
@@ -4036,6 +4053,7 @@ function wireBottomNav(){
     el.addEventListener("touchend",function(ev){ runNav(nid,ev); },{passive:false});
   });
   window.addEventListener("resize",function(){
+    syncBottomShellHeight();
     if($("screenMap")&&$("screenMap").classList.contains("map-screen-fit")) measureMapViewport();
   },{passive:true});
 }
@@ -4044,6 +4062,7 @@ function init(){
   sanitizeA11y(); ensureManagerMode(); ensureUxState();
   dismissBlockingUI();
   applyI18n(); applyA11y(); applyTheme(); applySimpleUi(); applyCosmetics(); applyFocusLearn(); ensureDaily(); ensureWeekly(); ensureTeamScores(); ensureStreak(); refreshHud();
+  requestAnimationFrame(syncBottomShellHeight);
   applyHeroCompact(); updateSetupBanner(); renderA11yCatalog();
   updateNavBadges();
   try{ renderStreakCard(); }catch(e){ console.error(e); }
