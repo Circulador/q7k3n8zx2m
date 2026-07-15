@@ -384,7 +384,7 @@ input#playerName{width:100%;padding:12px 14px;border-radius:12px;border:1px soli
 .map-zoom-float-btn{width:38px;height:38px;border:1px solid #a8bcc2;border-radius:8px;background:#fff;color:#1a3340;font-size:1.15rem;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.14);display:flex;align-items:center;justify-content:center;padding:0}
 .map-zoom-float-btn:hover{background:#f0faf9;border-color:#007E7A}
 .map-zoom-float-btn:active{transform:scale(.96)}
-.map-country-nav{position:absolute;inset:0;z-index:15;pointer-events:none}
+.map-country-nav{position:absolute;inset:0;z-index:25;pointer-events:none}
 .map-country-nav[hidden]{display:none!important}
 .map-country-nav-btn{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:60px;border:1px solid #a8bcc2;border-radius:10px;background:rgba(255,255,255,.94);color:#005f5c;font-size:1.45rem;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.16);display:flex;align-items:center;justify-content:center;padding:0;pointer-events:auto;transition:background .15s,border-color .15s,transform .1s}
 .map-country-nav-btn:hover{background:#f0faf9;border-color:#007E7A}
@@ -457,7 +457,7 @@ body.map-viewport-lock{overflow:hidden}
 #screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-stage.map-detail-open{min-height:0;height:100%;max-height:100%;overflow:hidden}
 #screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-stage.map-detail-open .vwm-map-stage-inner,
 #screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-stage.map-detail-open .vwm-svg{min-height:0;height:100%}
-#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-more-options{flex-shrink:0;margin:0;padding:0 14px 4px}
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-more-options{flex-shrink:0;margin:0;padding:0 14px 4px;position:relative;z-index:12}
 #screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-more-options summary{padding:4px 0}
 /* BR / CA — mesmo fluxo vertical dos demais países, com espaços compactos */
 .map-stage.map-detail-dense.map-detail-open .map-detail{flex:0 0 clamp(330px,36%,360px);max-width:360px;padding:9px 12px 8px}

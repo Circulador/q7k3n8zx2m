@@ -1842,7 +1842,10 @@ function ensureOrbitaWorldMap(cb){
         if(isMapDetailOpen()){ mapDetailMissHint(); return false; }
         return true;
       },
-      onClearSelection:function(){ closeMapDetail(); },
+      onClearSelection:function(){
+        if(isMapDetailOpen()) return;
+        closeMapDetail();
+      },
       onFilterChange:function(){ renderCountryList(); }
     });
   }
@@ -2101,18 +2104,6 @@ function resetView(){
   updateMapCountryNav();
 }
 function focusIronChain(){ openBossChain(true); }
-function bindMapDetailClickGuard(){
-  var stage=$("mapStage"); if(!stage||stage._detailGuard) return;
-  stage._detailGuard=true;
-  stage.addEventListener("click",function(e){
-    if(!isMapDetailOpen()) return;
-    if(e.target.closest(".map-detail,.map-zoom-float,.map-country-nav,.map-detail-close,.vwm-legend-button")) return;
-    if(e.target.closest(".vwm-country.has-data")) return;
-    e.stopImmediatePropagation();
-    e.preventDefault();
-    mapDetailMissHint();
-  },true);
-}
 function bindMapPanZoom(){
   var wrap=$("mapStage"),svg=$("mapSvg");
   if(!wrap||!svg) return;
@@ -4063,7 +4054,7 @@ function init(){
   try{ updateHeroCaption(); }catch(e){ console.error(e); }
   document.querySelectorAll(".lang-card").forEach(function(x){ x.setAttribute("aria-pressed",x.getAttribute("data-lang")===S.lang?"true":"false"); });
   bind();
-  try{ bindMapDetailClickGuard(); bindMapPanZoom(); }catch(e){ console.error(e); }
+  try{ bindMapPanZoom(); }catch(e){ console.error(e); }
   ensureBossStats(); hydrateNorthernBoss(); checkMedals(); showOnboarding();
   if("speechSynthesis" in window){ try{ window.speechSynthesis.getVoices(); }catch(e){} }
   }catch(err){
