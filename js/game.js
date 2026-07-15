@@ -181,6 +181,7 @@ var UI = {
   "map.legPending":{pt:"Pendente",en:"Pending"},
   "map.legPartial":{pt:"Em progresso",en:"In progress"},
   "map.legDone":{pt:"Concluído",en:"Completed"},
+  "map.detailMore":{pt:"Mais detalhes",en:"More details"},
   "a11y.menuTitle":{pt:"Acessibilidade",en:"Accessibility"},
   "a11y.langLabel":{pt:"Idioma",en:"Language"},
   "a11y.prefsLabel":{pt:"Preferências",en:"Preferences"},
@@ -1641,19 +1642,25 @@ function renderAnimatedChainMap(){
 }
 var mapHitActive=null;
 var THREAT_RESILIENCE={phishing:2,password:2,bec:3,malware:5,ransomware:15,ot:20,sap:25,data:3,device:4,remote:3,port:5};
+function chipRowLimited(items,cls,max){
+  cls=cls||"presence-chip"; max=max||5;
+  if(!items.length) return "";
+  var vis=items.slice(0,max), rest=items.length-max;
+  var h=vis.map(function(x){ return '<span class="'+cls+'">'+x+'</span>'; }).join("");
+  if(rest>0) h+='<span class="presence-chip presence-more">+'+rest+'</span>';
+  return h;
+}
 function officialPresenceHTML(gameId){
   if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getCountry) return "";
   var off=OrbitaWorldMap.getCountry(gameId,L()); if(!off) return "";
   var h="";
   if(off.activities.length){
-    h+='<div class="md-presence"><b>'+t("map.activityTitle")+':</b><div class="presence-row">'
-      +off.activities.map(function(id){ return '<span class="presence-chip">'+OrbitaWorldMap.getActivityLabel(id,L())+'</span>'; }).join("")
-      +'</div></div>';
+    var acts=off.activities.map(function(id){ return OrbitaWorldMap.getActivityLabel(id,L()); });
+    h+='<div class="md-presence"><b>'+t("map.activityTitle")+':</b><div class="presence-row">'+chipRowLimited(acts,"presence-chip",5)+'</div></div>';
   }
   if(off.products.length){
-    h+='<div class="md-presence"><b>'+t("map.productsTitle")+':</b><div class="presence-row">'
-      +off.products.map(function(id){ return '<span class="presence-chip mineral-chip">'+OrbitaWorldMap.getProductLabel(id,L())+'</span>'; }).join("")
-      +'</div></div>';
+    var prods=off.products.map(function(id){ return OrbitaWorldMap.getProductLabel(id,L()); });
+    h+='<div class="md-presence"><b>'+t("map.productsTitle")+':</b><div class="presence-row">'+chipRowLimited(prods,"presence-chip mineral-chip",4)+'</div></div>';
   }
   return h;
 }
@@ -1845,7 +1852,7 @@ function finishWorldMapUI(){
   mapReady=true;
   updateMapCountryNav();
 }
-function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open"); updateMapCountryNav(); }
+function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open"); var ow=$("orbitaWorldMap"); if(ow) ow.classList.remove("map-has-detail"); updateMapCountryNav(); }
 function getPlayableCountryIds(){
   if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getCountries) return COUNTRIES.map(function(c){ return c.id; });
   var countries=OrbitaWorldMap.getCountries(L());
@@ -1876,33 +1883,34 @@ function updateMapCountryNav(){
   var onMap=$("screenMap")&&$("screenMap").classList.contains("active");
   var open=!!onMap&&mapReady&&!mapChainMode();
   nav.hidden=!open;
-  var legend=$("mapProgressLegend");
-  if(legend) legend.hidden=!open;
+  var chrome=$("mapMapChrome");
+  if(chrome) chrome.hidden=!open;
   renderCountryNavCounter();
 }
 function renderCountryNavCounter(){
   var el=$("mapCountryNavCounter"); if(!el) return;
-  var nav=$("mapCountryNav");
-  if(nav&&nav.hidden){ el.hidden=true; return; }
   var ids=getPlayableCountryIds();
+  var onMap=$("screenMap")&&$("screenMap").classList.contains("active");
   var idx=mapHitActive?ids.indexOf(mapHitActive):-1;
-  if(idx<0||!ids.length){ el.hidden=true; el.textContent=""; return; }
+  if(!onMap||idx<0||!ids.length){ el.hidden=true; el.textContent=""; return; }
   el.hidden=false;
   el.textContent=(idx+1)+" / "+ids.length;
 }
 function buildMapDetailHTML(c,official){
   var themes=c.themes.map(function(th){ return '<span class="tag md-risk-tag">'+tt(THEMES[th])+'</span>'; }).join("");
-  var prog=S.done[c.id]? ((L()==="pt"?"Melhor: ":"Best: ")+S.done[c.id]+"%") : (L()==="pt"?"Missão de treino disponível":"Training mission available");
+  var prog=S.done[c.id]? ((L()==="pt"?"Melhor: ":"Best: ")+S.done[c.id]+"%") : (L()==="pt"?"Missão disponível":"Training available");
   var name=official?official.name:tt(c.name);
-  return '<h3><span class="md-code">'+c.id.toUpperCase()+'</span> '+name+'</h3>'
+  return '<header class="md-head"><h3><span class="md-code">'+c.id.toUpperCase()+'</span> '+name+'</h3>'
     +(official?'<p class="md-tag md-tag-official">'+official.phrase+'</p>':'')
-    +'<p class="md-tag md-tag-train">'+t("map.trainingLabel")+'</p>'
-    +officialPresenceHTML(c.id)
+    +'<p class="md-tag md-tag-train">'+t("map.trainingLabel")+'</p></header>'
+    +'<div class="md-body">'+officialPresenceHTML(c.id)
+    +'<div class="md-risks"><b>'+t("map.riskTitle")+':</b><div class="chip-row md-risk-row">'+themes+'</div></div>'
+    +'<details class="md-fold"><summary>'+t("map.detailMore")+'</summary>'
     +'<p class="md-desc">'+tt(c.desc)+'</p>'
     +'<div class="md-chain"><b>'+t("map.chainImpact")+':</b> '+tt(c.chain)+'</div>'
-    +'<div class="md-risks"><b>'+t("map.riskTitle")+':</b><div class="chip-row md-risk-row">'+themes+'</div></div>'
-    +'<div class="md-progress">'+prog+'</div>'
-    +'<button class="btn btn-primary btn-lg map-detail-play" id="mapDetailPlay">'+t("region.start")+'</button>';
+    +'</details></div>'
+    +'<footer class="md-foot"><span class="md-progress">'+prog+'</span>'
+    +'<button class="btn btn-primary btn-lg map-detail-play" id="mapDetailPlay">'+t("region.start")+'</button></footer>';
 }
 function openMapDetailCountry(id){
   var c=COUNTRIES.filter(function(x){return x.id===id;})[0]; if(!c) return;
@@ -1911,6 +1919,7 @@ function openMapDetailCountry(id){
   setMapHitHighlight(id);
   var tip=$("mapTooltip"); if(tip) tip.hidden=true;
   var stage=$("mapStage"); if(stage) stage.classList.add("map-detail-open");
+  var ow=$("orbitaWorldMap"); if(ow) ow.classList.add("map-has-detail");
   var body=$("mapDetailBody"), panel=$("mapDetail"); if(!body||!panel) return;
   var official=(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.getCountry)?OrbitaWorldMap.getCountry(id,L()):null;
   body.innerHTML=buildMapDetailHTML(c,official);
