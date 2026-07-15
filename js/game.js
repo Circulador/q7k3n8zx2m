@@ -803,7 +803,7 @@ function show(id){
   if(id!=="screenMap" && typeof glStop==="function") glStop();
   document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
   var el=$(id); if(el) el.classList.add("active");
-  document.body.classList.toggle("screen-home-fit",id==="screenHome");
+  syncHomeFit();
   if(id==="screenHome"){ renderNextStep(); renderWeekCard(); renderFirstDayHint(); updateSetupBanner(); }
   if(id==="screenMap"){ showContextTip("map"); renderMapExplorerHint(); updateSetupBanner(); }
   if(id==="screenDaily"){ showContextTip("daily"); renderDaily(); renderWeekly(); }
@@ -3099,10 +3099,11 @@ function computeNextStep(){
 }
 function renderNextStep(){
   var card=$("nextStepCard"); if(!card) return;
-  var hero=$("homeHeroActions");
+  var hero=$("homeHeroActions"), heroCard=$("heroCard");
   applyHeroCompact();
-  if(!S.onboardingDone){ card.hidden=true; if(hero) hero.hidden=false; return; }
+  if(!S.onboardingDone){ card.hidden=true; if(hero) hero.hidden=false; if(heroCard) heroCard.hidden=false; syncHomeFit(); return; }
   if(hero) hero.hidden=true;
+  if(heroCard) heroCard.hidden=true;
   var ns=computeNextStep();
   var ico=$("nextStepIco"), ti=$("nextStepTitle"), sub=$("nextStepSub"), btn=$("nextStepBtn");
   if(ico) ico.textContent=ns.ico;
@@ -3112,6 +3113,11 @@ function renderNextStep(){
   renderWeekLine();
   renderFirstDayHint();
   card.hidden=false;
+  syncHomeFit();
+}
+function syncHomeFit(){
+  var onHome=$("screenHome")&&$("screenHome").classList.contains("active");
+  document.body.classList.toggle("screen-home-fit",!!onHome);
 }
 function applyHeroCompact(){
   var card=$("heroCard"), exp=$("heroExpandable"), btn=$("heroExpandBtn");
@@ -4000,6 +4006,7 @@ function init(){
   try{ renderWeekCard(); }catch(e){ console.error(e); }
   try{ renderDaily(); }catch(e){ console.error(e); }
   try{ renderNextStep(); }catch(e){ console.error(e); }
+  syncHomeFit();
   updateManagerNav();
   try{ updateHeroCaption(); }catch(e){ console.error(e); }
   document.querySelectorAll(".lang-card").forEach(function(x){ x.setAttribute("aria-pressed",x.getAttribute("data-lang")===S.lang?"true":"false"); });
