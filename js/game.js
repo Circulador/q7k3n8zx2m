@@ -584,6 +584,11 @@ var UI = {
   "profile.certDownload":{pt:"⬇️ Baixar PNG",en:"⬇️ Download PNG"},
   "profile.certPrint":{pt:"🖨️ Imprimir",en:"🖨️ Print"},
   "profile.certAch":{pt:"Conquistas",en:"Achievements"},
+  "profile.certViewCard":{pt:"🃏 Carta",en:"🃏 Card"},
+  "profile.certViewFull":{pt:"📜 Completo",en:"📜 Full"},
+  "profile.certFormat":{pt:"Formato da prévia",en:"Preview format"},
+  "profile.certCardType":{pt:"Guardião Cibernético",en:"Cyber Guardian"},
+  "profile.certCardFlavor":{pt:"\"Proteger operações críticas começa com cada decisão consciente.\"",en:"\"Protecting critical operations starts with every conscious choice.\""},
   "manager.title":{pt:"🧭 Painel do Gestor",en:"🧭 Manager Panel"},
   "manager.sub":{pt:"Visão agregada por equipe (anônima). Nenhum indivíduo é identificado.",en:"Aggregated team view (anonymous). No individual is identified."},
   "manager.export":{pt:"⬇️ Exportar CSV (equipes)",en:"⬇️ Export CSV (teams)"},
@@ -4394,7 +4399,145 @@ function certDrawResilienceSeal(ctx,W,startY,pt){
   ctx.fillText(certEllipsis(ctx,sealTxt,W-100), W/2, y+62);
   return y+72;
 }
-function renderCertificatePreview(){
+var certViewMode="card";
+function setCertView(mode){
+  certViewMode=mode==="full"?"full":"card";
+  var wrap=$("certPreviewWrap"), bc=$("certViewCardBtn"), bf=$("certViewFullBtn");
+  if(wrap) wrap.classList.toggle("cert-preview-wrap--card",certViewMode==="card");
+  if(bc) bc.classList.toggle("on",certViewMode==="card");
+  if(bf) bf.classList.toggle("on",certViewMode==="full");
+  if(bc) bc.setAttribute("aria-selected",certViewMode==="card"?"true":"false");
+  if(bf) bf.setAttribute("aria-selected",certViewMode==="full"?"true":"false");
+  renderCertificatePreview();
+}
+function certCardTier(avg){
+  if(avg>=75) return {outer:"#1a1208",inner:"#ECB11F",accent:"#007E7A",glow:"#fff4cc",label:"legendary"};
+  if(avg>=50) return {outer:"#0a1a22",inner:"#007E7A",accent:"#5ec4be",glow:"#e8f6f5",label:"rare"};
+  return {outer:"#1a1410",inner:"#b87333",accent:"#d4a574",glow:"#f5ebe0",label:"common"};
+}
+function certCardArt(ctx,x,y,w,h,teamId){
+  var sky=ctx.createLinearGradient(x,y,x,y+h);
+  sky.addColorStop(0,"#4a90b8"); sky.addColorStop(0.55,"#7eb8d4"); sky.addColorStop(1,"#c4dde8");
+  ctx.fillStyle=sky; ctx.fillRect(x,y,w,h);
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x,y,w,h); ctx.clip();
+  var gnd=y+h*0.62;
+  ctx.fillStyle="#3d5c3a"; ctx.fillRect(x,gnd,w,h-(gnd-y));
+  if(teamId==="mina"){
+    for(var i=0;i<4;i++){
+      var tx=x+18+i*88, th=h*0.22+i*6;
+      ctx.fillStyle=i%2?"#6b4f3a":"#5a4030";
+      ctx.beginPath(); ctx.moveTo(tx,gnd); ctx.lineTo(tx+70,gnd); ctx.lineTo(tx+50,gnd-th); ctx.lineTo(tx-10,gnd-th); ctx.closePath(); ctx.fill();
+    }
+    ctx.fillStyle="#2a2a2a"; certRoundRect(ctx,x+w*0.12,gnd-28,w*0.35,22,4); ctx.fill();
+    ctx.fillStyle="#ECB11F"; ctx.fillRect(x+w*0.14,gnd-24,w*0.08,10);
+  } else if(teamId==="ferrovia"){
+    ctx.strokeStyle="#444"; ctx.lineWidth=3;
+    for(var r=0;r<3;r++){ var ry=gnd-8-r*18; ctx.beginPath(); ctx.moveTo(x,ry); ctx.lineTo(x+w,ry); ctx.stroke(); }
+    ctx.fillStyle="#2a2a2a"; ctx.fillRect(x+w*0.55,gnd-42,48,34);
+    ctx.fillStyle="#007E7A"; ctx.fillRect(x+w*0.58,gnd-36,36,12);
+  } else if(teamId==="porto"){
+    ctx.fillStyle="#1e4a6e"; ctx.fillRect(x,gnd-6,w,10);
+    ctx.fillStyle="#5a6a78"; ctx.fillRect(x+w*0.62,gnd-52,10,46);
+    ctx.fillStyle="#3d4f55"; ctx.beginPath(); ctx.moveTo(x+w*0.08,gnd-4); ctx.lineTo(x+w*0.42,gnd-4); ctx.lineTo(x+w*0.38,gnd-22); ctx.lineTo(x+w*0.12,gnd-22); ctx.closePath(); ctx.fill();
+    ctx.fillStyle="#ECB11F"; ctx.fillRect(x+w*0.64,gnd-58,22,6);
+  } else if(teamId==="corporativo"){
+    ctx.fillStyle="#5c6a72";
+    [0.1,0.28,0.46,0.64].forEach(function(fx,i){
+      var bh=38+i*14; ctx.fillRect(x+w*fx,gnd-bh,w*0.14,bh);
+      ctx.fillStyle="#7a8a94"; ctx.fillRect(x+w*(fx+0.02),gnd-bh-18,w*0.04,6); ctx.fillStyle="#5c6a72";
+    });
+  } else if(teamId==="ot"){
+    ctx.fillStyle="#6a7078"; ctx.fillRect(x+w*0.08,gnd-48,w*0.55,48);
+    ctx.fillStyle="#8a9098"; for(var p=0;p<4;p++) ctx.fillRect(x+w*0.1+p*22,gnd-40,8,28);
+    ctx.strokeStyle="#ECB11F"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(x+w*0.7,gnd-30); ctx.lineTo(x+w*0.92,gnd-18); ctx.stroke();
+  } else if(teamId==="ti"){
+    ctx.fillStyle="rgba(0,126,122,0.25)";
+    for(var gx=0;gx<8;gx++) for(var gy=0;gy<5;gy++) ctx.fillRect(x+gx*(w/8),y+gy*(h*0.35/5),w/8-2,h*0.35/5-2);
+    ctx.font="48px Segoe UI Emoji,sans-serif"; ctx.textAlign="center"; ctx.fillText("🛡️",x+w/2,y+h*0.38);
+  } else if(teamId==="logistica"){
+    ctx.fillStyle="#8B6914"; certRoundRect(ctx,x+w*0.1,gnd-34,w*0.22,28,3); ctx.fill();
+    certRoundRect(ctx,x+w*0.36,gnd-28,w*0.18,22,3); ctx.fill();
+    ctx.fillStyle="#2a2a2a"; ctx.fillRect(x+w*0.12,gnd-12,w*0.5,8);
+  } else if(teamId==="energia"){
+    ctx.fillStyle="#6a7a88"; ctx.fillRect(x+w*0.68,gnd-56,8,56);
+    ctx.fillStyle="#e8e8e8"; for(var b=0;b<3;b++) ctx.fillRect(x+w*0.5+b*28,gnd-36,20,4);
+    ctx.font="36px Segoe UI Emoji,sans-serif"; ctx.textAlign="center"; ctx.fillText("⚡",x+w*0.32,y+h*0.42);
+  } else if(teamId==="projetos"){
+    ctx.strokeStyle="rgba(0,126,122,0.45)"; ctx.lineWidth=1;
+    for(var lx=0;lx<10;lx++){ ctx.beginPath(); ctx.moveTo(x+lx*(w/10),y); ctx.lineTo(x+lx*(w/10),gnd); ctx.stroke(); }
+    for(var ly=0;ly<8;ly++){ ctx.beginPath(); ctx.moveTo(x,y+ly*(h*0.55/8)); ctx.lineTo(x+w,y+ly*(h*0.55/8)); ctx.stroke(); }
+    ctx.strokeStyle="#ECB11F"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(x+w*0.2,y+h*0.45); ctx.lineTo(x+w*0.55,y+h*0.28); ctx.lineTo(x+w*0.82,y+h*0.4); ctx.stroke();
+  } else if(teamId==="esg"){
+    ctx.fillStyle="#2d6a3e"; ctx.beginPath(); ctx.arc(x+w*0.78,y+h*0.28,22,0,Math.PI*2); ctx.fill();
+    ctx.font="40px Segoe UI Emoji,sans-serif"; ctx.textAlign="center"; ctx.fillText("🌿",x+w*0.35,y+h*0.42);
+  } else {
+    ctx.fillStyle="#007E7A";
+    [[0.25,0.35],[0.55,0.28],[0.72,0.45],[0.4,0.55]].forEach(function(dot){
+      ctx.beginPath(); ctx.arc(x+w*dot[0],y+h*dot[1],5,0,Math.PI*2); ctx.fill();
+    });
+    ctx.strokeStyle="#ECB11F"; ctx.lineWidth=2; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(x+w*0.25,y+h*0.35); ctx.lineTo(x+w*0.55,y+h*0.28); ctx.lineTo(x+w*0.72,y+h*0.45); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  ctx.restore();
+  ctx.strokeStyle="rgba(0,0,0,0.35)"; ctx.lineWidth=1; ctx.strokeRect(x+0.5,y+0.5,w-1,h-1);
+}
+function renderCertificateCard(){
+  var cv=$("certCanvas"); if(!cv||!cv.getContext) return;
+  var W=400,H=560,pt=L()==="pt",ctx=cv.getContext("2d");
+  cv.width=W; cv.height=H;
+  var title=currentTitle(),tr=certTeamRole(),tier=certCardTier(bossAvgIndex());
+  var name=(S.name&&S.name.trim())?S.name.trim():(pt?"Guardião Cibernético":"Cyber Guardian");
+  var dateStr=new Date().toLocaleDateString(pt?"pt-BR":"en-US",{year:"numeric",month:"short",day:"numeric"});
+  var avgRes=bossAvgIndex(),resRank=bossGuardianRank(avgRes);
+  checkMedals();
+  var achEarned=MEDALS.filter(function(m){ return !!S.medals[m.id]; }).length;
+  ctx.fillStyle=tier.outer; ctx.fillRect(0,0,W,H);
+  certRoundRect(ctx,10,10,W-20,H-20,14); ctx.fillStyle="#0f1e26"; ctx.fill();
+  ctx.lineWidth=4; ctx.strokeStyle=tier.inner; ctx.stroke();
+  certRoundRect(ctx,16,16,W-32,H-32,10); ctx.lineWidth=2; ctx.strokeStyle=tier.accent; ctx.stroke();
+  var artX=24,artY=52,artW=W-48,artH=188;
+  certRoundRect(ctx,artX,artY,artW,artH,6); ctx.save(); ctx.clip();
+  certCardArt(ctx,artX,artY,artW,artH,S.team||"");
+  ctx.restore();
+  certRoundRect(ctx,artX,artY,artW,artH,6); ctx.lineWidth=2; ctx.strokeStyle=tier.inner; ctx.stroke();
+  ctx.textAlign="left";
+  ctx.fillStyle="#eaf2f6"; ctx.font="700 13px Segoe UI,sans-serif";
+  ctx.fillText(certEllipsis(ctx,name,W*0.55),24,38);
+  ctx.textAlign="right"; ctx.font="600 11px Segoe UI,sans-serif"; ctx.fillStyle=tier.glow;
+  ctx.fillText((pt?"Nv.":"Lv.")+" "+levelOf(),W-24,38);
+  var typeY=artY+artH+14;
+  ctx.fillStyle="#0a1a22"; certRoundRect(ctx,20,typeY,W-40,22,4); ctx.fill();
+  ctx.strokeStyle=tier.inner; ctx.lineWidth=1; ctx.stroke();
+  ctx.textAlign="center"; ctx.font="600 10px Segoe UI,sans-serif"; ctx.fillStyle="#eaf2f6";
+  var typeLine=t("profile.certCardType");
+  if(tr.team||tr.role) typeLine+=" — "+[tr.team,tr.role].filter(Boolean).join(" · ");
+  ctx.fillText(certEllipsis(ctx,typeLine,W-56),W/2,typeY+15);
+  var boxY=typeY+30,boxH=H-boxY-78;
+  ctx.fillStyle="#f8f6f0"; certRoundRect(ctx,22,boxY,W-44,boxH,6); ctx.fill();
+  ctx.strokeStyle="#d8d0c0"; ctx.lineWidth=1; ctx.stroke();
+  var ty=boxY+22;
+  ctx.textAlign="left"; ctx.font="600 11px Segoe UI,sans-serif"; ctx.fillStyle="#1a1a1a";
+  var lines=[
+    "⚔ "+(pt?"Nível":"Level")+" "+levelOf()+"  ·  XP "+S.xp,
+    "🐉 "+(pt?"Crises":"Crises")+" "+bossCompletedCount()+"/"+BOSSES.length+"  ·  "+(pt?"Cadeia":"Chain")+" "+chainStagesDone()+"/"+chainTotalStages(),
+    "🌍 "+(pt?"Países":"Countries")+" "+Object.keys(S.done).length+"/"+COUNTRIES.length+"  ·  🏅 "+achEarned+"/"+MEDALS.length,
+    "🛡 "+(pt?"Resiliência":"Resilience")+" "+avgRes+"%  ·  "+resRank.ico+" "+resRank[pt?"pt":"en"]
+  ];
+  lines.forEach(function(ln){ ctx.fillText(ln,34,ty); ty+=20; });
+  ctx.font="700 12px Segoe UI,sans-serif"; ctx.fillStyle="#005f5c";
+  ctx.fillText(title.ico+" "+title[pt?"pt":"en"],34,ty+6);
+  ty+=28;
+  ctx.font="italic 9.5px Segoe UI,Georgia,serif"; ctx.fillStyle="#4a5a60";
+  ctx.fillText(certEllipsis(ctx,t("profile.certCardFlavor"),W-68),34,ty);
+  ctx.textAlign="center"; ctx.font="700 9px Segoe UI,sans-serif"; ctx.fillStyle=tier.inner;
+  ctx.fillText("◆ ORBITA ◆",W/2,H-52);
+  ctx.font="500 8px Segoe UI,sans-serif"; ctx.fillStyle="#8a9aa0";
+  ctx.fillText(dateStr,W/2,H-38);
+  ctx.fillText(pt?"Ferramenta educativa interna":"Internal educational tool",W/2,H-24);
+}
+function renderCertificateFull(){
   var cv=$("certCanvas"); if(!cv||!cv.getContext) return;
   var W=800, pt=L()==="pt";
   var title=currentTitle(), tr=certTeamRole();
@@ -4448,14 +4591,19 @@ function renderCertificatePreview(){
   ctx.fillText(dateStr, W/2, y+18);
   ctx.fillText(pt?"Ferramenta educativa interna — não substitui certificações oficiais.":"Internal educational tool — not an official certification.", W/2, y+34);
 }
+function renderCertificatePreview(){
+  if(certViewMode==="card") renderCertificateCard();
+  else renderCertificateFull();
+}
 function downloadCertificate(){
   renderCertificatePreview();
   var cv=$("certCanvas"); if(!cv||!cv.toBlob) return;
+  var fname=certViewMode==="card"?"guardiao-orbita-carta.png":"guardiao-orbita-certificado.png";
   cv.toBlob(function(blob){
     if(!blob) return;
     var url=URL.createObjectURL(blob);
     var a=document.createElement("a");
-    a.href=url; a.download="guardiao-orbita-certificado.png";
+    a.href=url; a.download=fname;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function(){ URL.revokeObjectURL(url); },500);
   },"image/png");
@@ -4742,13 +4890,15 @@ function renderSessionFeedback(win,acc){
   host.innerHTML='<div class="session-feedback-inner"><div class="session-feedback-ico">'+(win?"🏆":"💪")+'</div><div><div class="session-feedback-title">'+t("session.title")+'</div><div class="session-feedback-acc">'+(L()==="pt"?"Precisão":"Accuracy")+': <b>'+acc+'%</b></div>'+(streakMsg?'<div class="session-feedback-streak">'+streakMsg+'</div>':'')+'<div class="session-feedback-xp">'+t("session.xpGain").replace("{n}",String(xpEst))+'</div></div></div>';
 }
 function shareCertificate(){
+  renderCertificatePreview();
   var c=$("certCanvas"); if(!c||!c.toBlob){ toast(L()==="pt"?"Gere a prévia primeiro":"Generate preview first"); return; }
+  var fname=certViewMode==="card"?"guardiao-carta.png":"guardiao-certificado.png";
   c.toBlob(function(blob){
     if(!blob) return;
-    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[new File([blob],"certificado.png",{type:"image/png"})]})){
-      navigator.share({files:[new File([blob],"certificado.png",{type:"image/png"})],title:t("profile.certTitle")}).catch(function(){});
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[new File([blob],fname,{type:"image/png"})]})){
+      navigator.share({files:[new File([blob],fname,{type:"image/png"})],title:t("profile.certTitle")}).catch(function(){});
     } else {
-      var a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="guardiao-certificado.png"; a.click(); URL.revokeObjectURL(a.href);
+      var a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=fname; a.click(); URL.revokeObjectURL(a.href);
       toast(L()==="pt"?"Imagem salva — compartilhe pelo seu app de fotos":"Image saved — share from your gallery");
     }
   });
@@ -5026,8 +5176,11 @@ function bind(){
   document.querySelectorAll(".ctx-tip-dismiss").forEach(function(b){ b.addEventListener("click",function(){ dismissContextTip(b.getAttribute("data-tip")); }); });
   on("profileResetBtn","click",resetProgress);
   on("certGenerateBtn","click",renderCertificatePreview);
+  on("certViewCardBtn","click",function(){ setCertView("card"); });
+  on("certViewFullBtn","click",function(){ setCertView("full"); });
   on("certDownloadBtn","click",downloadCertificate);
   on("certPrintBtn","click",printCertificate);
+  setCertView("card");
   on("mgrExportTeams","click",exportTeams);
   on("mgrExportThemes","click",exportThemes);
 

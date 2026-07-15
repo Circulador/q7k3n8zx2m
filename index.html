@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=134">
+<link rel="stylesheet" href="css/styles.css?v=135">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -842,8 +842,13 @@
       <div class="section-title" data-i18n="profile.certTitle">📜 Certificado</div>
       <div class="section-sub" data-i18n="profile.certSub">Gere seu certificado a qualquer momento com seu progresso atual.</div>
       <div class="cert-checklist" id="certChecklist"></div>
-      <div class="cert-preview-wrap">
-        <canvas id="certCanvas" width="800" height="920" role="img" data-i18n-attr="aria-label:profile.certAria"></canvas>
+      <div class="cert-format-label" data-i18n="profile.certFormat">Formato da prévia</div>
+      <div class="cert-view-toggle row-actions" role="tablist" aria-label="Formato do certificado">
+        <button type="button" class="btn btn-sm btn-ghost on" id="certViewCardBtn" role="tab" aria-selected="true" data-i18n="profile.certViewCard">🃏 Carta</button>
+        <button type="button" class="btn btn-sm btn-ghost" id="certViewFullBtn" role="tab" aria-selected="false" data-i18n="profile.certViewFull">📜 Completo</button>
+      </div>
+      <div class="cert-preview-wrap cert-preview-wrap--card" id="certPreviewWrap">
+        <canvas id="certCanvas" width="400" height="560" role="img" data-i18n-attr="aria-label:profile.certAria"></canvas>
       </div>
       <div class="row-actions cert-actions">
         <button class="btn btn-primary btn-sm" id="certGenerateBtn" type="button" data-i18n="profile.certGenerate">🔄 Atualizar prévia</button>
@@ -944,18 +949,18 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="134";</script>
-<script src="js/sign-lang.js?v=134"></script>
-<script src="js/orbita-world-map.js?v=134"></script>
-<script src="js/questions-data.js?v=134"></script>
-<script src="js/country-questions-data.js?v=134"></script>
-<script src="js/bosses-data.js?v=134"></script>
-<script src="js/boss-personal-tips.js?v=134"></script>
-<script src="js/chain-data.js?v=134"></script>
-<script src="js/boss-maps.js?v=134"></script>
-<script src="js/glossary-data.js?v=134"></script>
-<script src="js/game.js?v=134"></script>
-<script src="js/demo-menu.js?v=134"></script>
+<script>window.APP_VERSION="135";</script>
+<script src="js/sign-lang.js?v=135"></script>
+<script src="js/orbita-world-map.js?v=135"></script>
+<script src="js/questions-data.js?v=135"></script>
+<script src="js/country-questions-data.js?v=135"></script>
+<script src="js/bosses-data.js?v=135"></script>
+<script src="js/boss-personal-tips.js?v=135"></script>
+<script src="js/chain-data.js?v=135"></script>
+<script src="js/boss-maps.js?v=135"></script>
+<script src="js/glossary-data.js?v=135"></script>
+<script src="js/game.js?v=135"></script>
+<script src="js/demo-menu.js?v=135"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
