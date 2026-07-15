@@ -803,6 +803,7 @@ function show(id){
   if(id!=="screenMap" && typeof glStop==="function") glStop();
   document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
   var el=$(id); if(el) el.classList.add("active");
+  document.body.classList.toggle("screen-home-fit",id==="screenHome");
   if(id==="screenHome"){ renderNextStep(); renderWeekCard(); renderFirstDayHint(); updateSetupBanner(); }
   if(id==="screenMap"){ showContextTip("map"); renderMapExplorerHint(); updateSetupBanner(); }
   if(id==="screenDaily"){ showContextTip("daily"); renderDaily(); renderWeekly(); }
@@ -1845,7 +1846,7 @@ function finishWorldMapUI(){
   mapReady=true;
   updateMapCountryNav();
 }
-function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open"); updateMapCountryNav(); }
+function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open"); syncMapDetailFit(); updateMapCountryNav(); }
 function getPlayableCountryIds(){
   if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getCountries) return COUNTRIES.map(function(c){ return c.id; });
   var countries=OrbitaWorldMap.getCountries(L());
@@ -1918,6 +1919,7 @@ function openMapDetailCountry(id){
   zoomToCountry(id);
   scrollMapIntoView();
   $("mapDetailPlay").addEventListener("click",startCampaign);
+  syncMapDetailFit();
   updateMapCountryNav();
   speak((official?official.name:tt(c.name))+". "+(official?official.phrase:tt(c.desc)));
 }
@@ -3114,13 +3116,20 @@ function renderNextStep(){
 function applyHeroCompact(){
   var card=$("heroCard"), exp=$("heroExpandable"), btn=$("heroExpandBtn");
   if(!card) return;
-  var compact=!!S.onboardingDone&&!S.heroExpanded;
+  var viewTight=window.innerHeight<820||window.matchMedia("(max-width:640px)").matches;
+  var expanded=!!S.heroExpanded;
+  var compact=(S.onboardingDone&&!expanded)||(viewTight&&!expanded);
   card.classList.toggle("hero-compact",compact);
   if(exp) exp.hidden=compact;
   if(btn){
-    btn.hidden=!S.onboardingDone;
-    if(S.onboardingDone) btn.textContent=S.heroExpanded?t("home.collapse"):t("home.expand");
+    var showBtn=S.onboardingDone||viewTight;
+    btn.hidden=!showBtn;
+    if(showBtn) btn.textContent=expanded?t("home.collapse"):t("home.expand");
   }
+}
+function syncMapDetailFit(){
+  var sm=$("screenMap"), st=$("mapStage");
+  if(sm) sm.classList.toggle("map-detail-fit",!!(st&&st.classList.contains("map-detail-open")));
 }
 function updateSetupBanner(){
   var ban=$("setupBanner"); if(!ban) return;
@@ -3810,6 +3819,7 @@ function bind(){
   on("nextStepWeeklyBtn","click",openWeeklyScreen);
   on("setupBannerBtn","click",function(){ renderTeams(); renderRoles(); if($("playerName")) $("playerName").value=S.name||""; show("screenSetup"); });
   on("heroExpandBtn","click",function(){ S.heroExpanded=!S.heroExpanded; save(); applyHeroCompact(); });
+  window.addEventListener("resize",function(){ applyHeroCompact(); },{passive:true});
   on("fontDownBtn","click",function(){ S.a11y.fontScale=(S.a11y.fontScale||0)-1; save(); applyFontScale(); });
   on("fontUpBtn","click",function(){ S.a11y.fontScale=(S.a11y.fontScale||0)+1; save(); applyFontScale(); });
   on("hudStatsSummary","click",function(){ renderProfile(); show("screenProfile"); });
