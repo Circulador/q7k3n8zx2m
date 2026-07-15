@@ -803,7 +803,6 @@ function show(id){
   if(id!=="screenMap" && typeof glStop==="function") glStop();
   document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
   var el=$(id); if(el) el.classList.add("active");
-  syncHomeFit();
   if(id==="screenHome"){ renderNextStep(); renderWeekCard(); renderFirstDayHint(); updateSetupBanner(); }
   if(id==="screenMap"){ showContextTip("map"); renderMapExplorerHint(); updateSetupBanner(); }
   if(id==="screenDaily"){ showContextTip("daily"); renderDaily(); renderWeekly(); }
@@ -3098,11 +3097,10 @@ function computeNextStep(){
 }
 function renderNextStep(){
   var card=$("nextStepCard"); if(!card) return;
-  var hero=$("homeHeroActions"), heroCard=$("heroCard");
+  var hero=$("homeHeroActions");
   applyHeroCompact();
-  if(!S.onboardingDone){ card.hidden=true; if(hero) hero.hidden=false; if(heroCard) heroCard.hidden=false; syncHomeFit(); return; }
+  if(!S.onboardingDone){ card.hidden=true; if(hero) hero.hidden=false; return; }
   if(hero) hero.hidden=true;
-  if(heroCard) heroCard.hidden=true;
   var ns=computeNextStep();
   var ico=$("nextStepIco"), ti=$("nextStepTitle"), sub=$("nextStepSub"), btn=$("nextStepBtn");
   if(ico) ico.textContent=ns.ico;
@@ -3112,24 +3110,16 @@ function renderNextStep(){
   renderWeekLine();
   renderFirstDayHint();
   card.hidden=false;
-  syncHomeFit();
-}
-function syncHomeFit(){
-  var onHome=$("screenHome")&&$("screenHome").classList.contains("active");
-  document.body.classList.toggle("screen-home-fit",!!onHome);
 }
 function applyHeroCompact(){
   var card=$("heroCard"), exp=$("heroExpandable"), btn=$("heroExpandBtn");
   if(!card) return;
-  var viewTight=window.innerHeight<820||window.matchMedia("(max-width:640px)").matches;
-  var expanded=!!S.heroExpanded;
-  var compact=(S.onboardingDone&&!expanded)||(viewTight&&!expanded);
+  var compact=!!S.onboardingDone&&!S.heroExpanded;
   card.classList.toggle("hero-compact",compact);
   if(exp) exp.hidden=compact;
   if(btn){
-    var showBtn=S.onboardingDone||viewTight;
-    btn.hidden=!showBtn;
-    if(showBtn) btn.textContent=expanded?t("home.collapse"):t("home.expand");
+    btn.hidden=!S.onboardingDone;
+    if(S.onboardingDone) btn.textContent=S.heroExpanded?t("home.collapse"):t("home.expand");
   }
 }
 function updateSetupBanner(){
@@ -3820,7 +3810,6 @@ function bind(){
   on("nextStepWeeklyBtn","click",openWeeklyScreen);
   on("setupBannerBtn","click",function(){ renderTeams(); renderRoles(); if($("playerName")) $("playerName").value=S.name||""; show("screenSetup"); });
   on("heroExpandBtn","click",function(){ S.heroExpanded=!S.heroExpanded; save(); applyHeroCompact(); });
-  window.addEventListener("resize",function(){ applyHeroCompact(); },{passive:true});
   on("fontDownBtn","click",function(){ S.a11y.fontScale=(S.a11y.fontScale||0)-1; save(); applyFontScale(); });
   on("fontUpBtn","click",function(){ S.a11y.fontScale=(S.a11y.fontScale||0)+1; save(); applyFontScale(); });
   on("hudStatsSummary","click",function(){ renderProfile(); show("screenProfile"); });
@@ -4001,7 +3990,6 @@ function init(){
   try{ renderWeekCard(); }catch(e){ console.error(e); }
   try{ renderDaily(); }catch(e){ console.error(e); }
   try{ renderNextStep(); }catch(e){ console.error(e); }
-  syncHomeFit();
   updateManagerNav();
   try{ updateHeroCaption(); }catch(e){ console.error(e); }
   document.querySelectorAll(".lang-card").forEach(function(x){ x.setAttribute("aria-pressed",x.getAttribute("data-lang")===S.lang?"true":"false"); });
