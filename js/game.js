@@ -13,7 +13,7 @@ window.gdvStartBoss=function(id,e){
 
 /* -------------------- ESTADO / STATE -------------------- */
 var STORE_KEY = "guardiao_orbita_v7";
-var DEF = { lang:"pt", name:"", team:"mina", role:"admin",
+var DEF = { lang:"pt", name:"", team:"mina", role:"field",
   xp:0, coins:0, score:0, lives:3, avatar:"🛡️", resilience:100,
   a11y:{voice:false, contrast:false, large:false, motion:false, signs:false, fontScale:0, links:false, spacing:false, letterSpace:false, dyslexia:false, colorblind:"none", readingMode:false},
   done:{}, themeStats:{}, medals:{}, owned:{}, equipped:{avatar:"🛡️",frame:"default",skin:"default"},
@@ -139,7 +139,7 @@ var UI = {
   "settings.easyRead":{pt:"Leitura fácil",en:"Easy reading"},
   "settings.easyReadSub":{pt:"Liga ou desliga contraste, texto grande e espaçamento de uma vez.",en:"Turns contrast, large text and spacing on or off together."},
   "settings.easyReadOff":{pt:"Leitura fácil desativada",en:"Easy reading disabled"},
-  "settings.editProfile":{pt:"✏️ Minha operação (equipe e papel)",en:"✏️ My operation (team & role)"},
+  "settings.editProfile":{pt:"✏️ Mudar equipe ou papel",en:"✏️ Change team or role"},
   "settings.glossaryFavs":{pt:"⭐ Favoritos",en:"⭐ Favorites"},
   "quiz.context":{pt:"Contexto",en:"Context"},
   "quiz.glossaryTip":{pt:"O que é isso?",en:"What is this?"},
@@ -170,13 +170,20 @@ var UI = {
   "nav.badgeDaily":{pt:"Missão pendente",en:"Mission pending"},
   "offline.hint":{pt:"📶 Funciona offline após a primeira visita — seu progresso fica neste dispositivo.",en:"📶 Works offline after first visit — progress stays on this device."},
   "onboard.offlineNote":{pt:"📶 Após a primeira visita, funciona offline e seu progresso fica salvo neste dispositivo.",en:"📶 After the first visit, it works offline and your progress is saved on this device."},
-  "profile.editSetup":{pt:"✏️ Alterar equipe e papel",en:"✏️ Change team and role"},
+  "profile.editSetup":{pt:"✏️ Mudar equipe ou papel",en:"✏️ Change team or role"},
   "profile.weeklyGoals":{pt:"✅ Metas da semana",en:"✅ Weekly goals"},
   "cert.share":{pt:"📤 Compartilhar",en:"📤 Share"},
-  "onboard.langT":{pt:"1) Escolha o idioma",en:"1) Choose language"},
-  "onboard.langB":{pt:"Perguntas, respostas e narração seguem o idioma. Acessibilidade (♿) e configurações (⚙️) ficam no topo quando quiser.",en:"Questions, answers and narration follow the language. Accessibility (♿) and settings (⚙️) are in the top bar anytime."},
-  "onboard.a11yT":{pt:"2) Acessibilidade",en:"2) Accessibility"},
+  "onboard.langT":{pt:"Idioma",en:"Language"},
+  "onboard.langB":{pt:"Perguntas, respostas e narração seguem o idioma. Acessibilidade (♿) e configurações (⚙️) ficam no topo quando quiser.",en:"Questions, answers and narration follow the chosen language. Accessibility (♿) and settings (⚙️) are in the top bar anytime."},
+  "onboard.a11yT":{pt:"Acessibilidade",en:"Accessibility"},
   "onboard.a11yB":{pt:"Ative narração, contraste, Libras ou redução de animações agora — ou ajuste depois no menu ♿.",en:"Enable narration, contrast, sign language or reduced motion now — or adjust later in the ♿ menu."},
+  "onboard.profileT":{pt:"Personalize seu treino",en:"Personalize your training"},
+  "onboard.profileB":{pt:"Na próxima tela você escolhe sua equipe e seu dia a dia — os cenários ficam parecidos com sua rotina (mina, escritório, ferrovia, porto…). Leva cerca de 20 segundos.",en:"On the next screen you pick your team and day-to-day role — scenarios will match your routine (mine, office, railway, port…). Takes about 20 seconds."},
+  "onboard.playT":{pt:"Como funciona",en:"How it works"},
+  "onboard.playB":{pt:"📅 Atividade de hoje → 🗺️ Jornada no mapa → 🎯 Simulação de crise. Cada acerto fortalece a operação — erros mostram o que revisar.",en:"📅 Today's activity → 🗺️ Map journey → 🎯 Crisis simulation. Each correct answer strengthens operations — mistakes show what to review."},
+  "onboard.readyT":{pt:"Pronto para começar",en:"Ready to start"},
+  "onboard.readyB":{pt:"Primeiro personalize seu perfil (equipe e papel), depois faça sua primeira atividade — cerca de 5 minutos.",en:"First personalize your profile (team and role), then do your first activity — about 5 minutes."},
+  "onboard.startSetup":{pt:"Personalizar agora →",en:"Personalize now →"},
   "mgr.kpiAdoption":{pt:"Adoção",en:"Adoption"},
   "mgr.kpiWeak":{pt:"Tema mais fraco",en:"Weakest theme"},
   "mgr.kpiStreak":{pt:"Sequência média",en:"Avg streak"},
@@ -372,16 +379,23 @@ var UI = {
   "setup.nameTitle":{pt:"Seu nome",en:"Your name"},
   "setup.nameSub":{pt:"Opcional — aparece no certificado e no ranking da equipe.",en:"Optional — shown on your certificate and team ranking."},
   "setup.namePh":{pt:"Seu nome ou apelido",en:"Your name or nickname"},
-  "setup.badge":{pt:"🗺️ Expedição global",en:"🗺️ Global expedition"},
-  "setup.head":{pt:"Prepare sua missão de treino",en:"Prepare your training mission"},
-  "setup.intro":{pt:"Explore o mapa país a país — cada região traz situações de cyber security ligadas à operação da Orbita. Equipe e papel personalizam os cenários.",en:"Explore the map country by country — each region brings cyber security scenarios tied to Orbita's operations. Team and role personalize the scenarios."},
-  "setup.teamTitle":{pt:"Equipe",en:"Team"},
-  "setup.teamSub":{pt:"Ranking anônimo — celebramos a evolução do time, nunca expomos quem errou.",en:"Anonymous ranking — we celebrate team growth, never exposing who erred."},
-  "setup.roleTitle":{pt:"Papel no dia a dia",en:"Your day-to-day role"},
-  "setup.roleSub":{pt:"As situações do mapa se adaptam à sua rotina (escritório, campo, OT ou liderança).",en:"Map scenarios adapt to your routine (office, field, OT or leadership)."},
-  "setup.go":{pt:"▶️ Iniciar expedição no mapa",en:"▶️ Start expedition on map"},
-  "setup.banner":{pt:"⚙️ Complete equipe e papel para personalizar suas missões.",en:"⚙️ Complete team and role to personalize your missions."},
-  "setup.bannerGo":{pt:"Configurar agora",en:"Set up now"},
+  "setup.badge":{pt:"👤 Perfil rápido",en:"👤 Quick profile"},
+  "setup.head":{pt:"Personalize seu treino",en:"Personalize your training"},
+  "setup.intro":{pt:"Assim os cenários ficam parecidos com seu dia a dia — leva cerca de 20 segundos.",en:"This way scenarios match your daily work — takes about 20 seconds."},
+  "setup.why":{pt:"💡 Situações de phishing, senha e dados aparecem no contexto da sua operação.",en:"💡 Phishing, password and data scenarios appear in the context of your operation."},
+  "setup.editHead":{pt:"Alterar equipe ou papel",en:"Change team or role"},
+  "setup.editIntro":{pt:"Ajuste sua equipe ou rotina — os cenários do jogo se adaptam na hora.",en:"Adjust your team or routine — game scenarios adapt immediately."},
+  "setup.nameOptional":{pt:"Adicionar nome (opcional)",en:"Add name (optional)"},
+  "setup.goFirst":{pt:"▶️ Começar primeira atividade",en:"▶️ Start first activity"},
+  "setup.save":{pt:"💾 Salvar e voltar",en:"💾 Save and go back"},
+  "setup.saved":{pt:"Perfil atualizado.",en:"Profile updated."},
+  "setup.teamTitle":{pt:"Sua equipe",en:"Your team"},
+  "setup.teamSub":{pt:"Onde você trabalha na organização — usado no ranking anônimo do time.",en:"Where you work in the organization — used for anonymous team ranking."},
+  "setup.roleTitle":{pt:"Seu dia a dia",en:"Your day-to-day"},
+  "setup.roleSub":{pt:"Escritório, campo, automação (OT) ou liderança — define os exemplos das situações.",en:"Office, field, automation (OT) or leadership — shapes the scenario examples."},
+  "setup.go":{pt:"▶️ Começar primeira atividade",en:"▶️ Start first activity"},
+  "setup.banner":{pt:"👤 Personalize equipe e papel para cenários do seu dia a dia.",en:"👤 Set team and role for scenarios from your daily work."},
+  "setup.bannerGo":{pt:"Personalizar agora",en:"Personalize now"},
   "setup.teamRequired":{pt:"Escolha uma equipe para continuar.",en:"Choose a team to continue."},
   "setup.roleRequired":{pt:"Escolha um papel para continuar.",en:"Choose a role to continue."},
   "setup.managerTitle":{pt:"🧭 Modo gestor",en:"🧭 Manager mode"},
@@ -527,12 +541,6 @@ var UI = {
   "onboard.step":{pt:"Passo",en:"Step"},
   "onboard.reopen":{pt:"Guia",en:"Guide"},
   "onboard.reopenTip":{pt:"Reabrir guia de introdução ao jogo",en:"Reopen the game introduction guide"},
-  "onboard.setupT":{pt:"1) Idioma e acessibilidade",en:"1) Language & accessibility"},
-  "onboard.setupB":{pt:"Escolha o idioma e, se quiser, ative narração por voz, contraste ou Libras. Você pode mudar depois no menu ♿ do topo.",en:"Choose your language and optionally enable voice narration, contrast or sign language. You can change these later in the top ♿ menu."},
-  "onboard.playT":{pt:"3) Como funciona",en:"3) How it works"},
-  "onboard.playB":{pt:"Explore países no mapa, faça a missão diária e enfrente crises simuladas. Cada acerto fortalece a operação — erros mostram o que revisar.",en:"Explore countries on the map, play the daily mission and face simulated crises. Each correct answer strengthens operations — mistakes show what to review."},
-  "onboard.readyT":{pt:"4) Pronto para jogar",en:"4) Ready to play"},
-  "onboard.readyB":{pt:"Toque em Jogar agora na tela inicial. O jogo sugere sempre o melhor próximo passo para você.",en:"Tap Play now on the home screen. The game always suggests your best next step."},
   "quiz.personal":{pt:"💡 Na sua vida",en:"💡 In your life"},
   "progress.hub":{pt:"🔗 Como os modos se conectam",en:"🔗 How modes connect"},
   "progress.hubSub":{pt:"Tudo alimenta o mesmo progresso: XP, temas, conquistas, resiliência e certificado.",en:"Everything feeds the same progress: XP, themes, achievements, resilience and certificate."},
@@ -600,6 +608,9 @@ var UI = {
   "nav.tip.manager":{pt:"Painel do gestor",en:"Manager dashboard"},
   "footer.txt":{pt:"Da mina ao porto, a segurança passa por você. Um clique pode impactar a operação... o seu pode proteger a Orbita.",en:"From mine to port, security starts with you. One click can impact operations... yours can protect Orbita."},
   "settings.uxV122Off":{pt:"Nova interface ativa (v123).",en:"New interface active (v123)."},
+  "settings.demoTitle":{pt:"🧪 Menu demo (temporário)",en:"🧪 Demo menu (temporary)"},
+  "settings.demoSub":{pt:"Avance o progresso do curso e teste a jornada integrada 0→100%.",en:"Advance course progress and test the full 0→100% journey."},
+  "settings.demoOpen":{pt:"Abrir menu demo",en:"Open demo menu"},
   "nav.tip.missions":{pt:"Atividade de hoje e metas da semana",en:"Today's activity and weekly goals"}
 };
 /* Textos da interface v122 — ativados com S.uxV122 ou ?ux=122 na URL */
@@ -656,9 +667,11 @@ function initUxFromUrl(){
   var m=location.search.match(/[?&]ux=(122|v122|new|v2|123)(?:&|$)/i);
   if(m){
     var v=m[1].toLowerCase();
-    if(v==="122"||v==="v122"){ S.uxV122=true; save(); }
-    else{ S.uxV122=false; save(); }
+    S.uxV122=(v==="122"||v==="v122");
+  } else {
+    S.uxV122=false;
   }
+  save();
 }
 function applyUxMode(){
   ensureUxState();
@@ -765,7 +778,6 @@ function renderSettingsUi(){
   if(dl) renderGlossaryWordList();
   renderGlossaryFavs(); renderGlossaryMeta();
   var su=$("optSimpleUiSettings"); if(su) su.checked=S.simpleUi!==false;
-  var ux=$("optUxV122Settings"); if(ux) ux.checked=!!S.uxV122;
   syncEasyReadUi();
   requestAnimationFrame(syncBottomShellHeight);
 }
@@ -797,6 +809,7 @@ function setLang(lang){
   document.querySelectorAll(".lang-card").forEach(function(x){ x.setAttribute("aria-pressed",x.getAttribute("data-lang")===lang?"true":"false"); });
   applyI18n(); renderTeams(); renderRoles(); refreshHud(); applySignLanguage(); renderGlossaryWordList();
   renderNextStep(); renderDaily(); renderWeekly(); renderHomeHowStrip(); renderMissionsFocus(); renderUxBanner();
+  if($("screenSetup")&&$("screenSetup").classList.contains("active")) renderSetupUi();
   var ov=$("onboardOverlay"); if(ov&&!ov.hidden) renderOnboarding();
   if($("screenMap").classList.contains("active")){ drawMap(); renderMapExpedition(); }
 }
@@ -1022,6 +1035,7 @@ function show(id){
   document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
   var el=$(id); if(el) el.classList.add("active");
   if(id==="screenHome"){ renderNextStep(); renderWeekCard(); renderFirstDayHint(); updateSetupBanner(); renderHomeHowStrip(); renderUxBanner(); }
+  if(id==="screenSetup") updateSetupBanner();
   if(id==="screenMap"){ showContextTip("map"); renderMapExplorerHint(); updateSetupBanner(); syncMapDetailLayout(); }
   else{
     var sm=$("screenMap"); if(sm) sm.classList.remove("map-screen-fit");
@@ -1101,8 +1115,10 @@ function pumpToast(){
 }
 function celebrationToast(title,sub){ toastQueue.push({title:title,sub:sub}); if(!toastShowing) pumpToast(); }
 function applyProductionUi(){
-  var hideDemo=!(window.APP_SHOW_DEMO===true||/demo=1/.test(location.search));
-  ["demoMenuBtn","demoOpenSettingsBtn","toolbarMoreDemo","settingsOpenDemoBtn"].forEach(function(id){ var el=$(id); if(el) el.hidden=hideDemo; });
+  var hideToolbarDemo=!(window.APP_SHOW_DEMO===true||/demo=1/.test(location.search));
+  ["demoMenuBtn","demoOpenSettingsBtn","toolbarMoreDemo"].forEach(function(id){ var el=$(id); if(el) el.hidden=hideToolbarDemo; });
+  var demoSettings=$("settingsOpenDemoBtn");
+  if(demoSettings) demoSettings.hidden=false;
 }
 function updateHomeCtaLayout(){
   var onHome=$("screenHome")&&$("screenHome").classList.contains("active");
@@ -4103,7 +4119,8 @@ function applyHeroCompact(){
 }
 function updateSetupBanner(){
   var ban=$("setupBanner"); if(!ban) return;
-  var showBanner=S.onboardingDone&&!setupComplete();
+  var onSetup=$("screenSetup")&&$("screenSetup").classList.contains("active");
+  var showBanner=S.onboardingDone&&!setupComplete()&&!onSetup;
   ban.hidden=!showBanner;
 }
 function weeklyPendingCount(){
@@ -4452,8 +4469,45 @@ function exportThemes(){ var rows=[[L()==="pt"?"Tema":"Theme",L()==="pt"?"Acerto
 /* ==========================================================
    SETUP
    ========================================================== */
-function renderTeams(){ var g=$("teamsGrid"); g.innerHTML=""; TEAMS.forEach(function(tm){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.team===tm.id?"true":"false"); b.innerHTML='<div class="pi">'+tm.ico+'</div><div class="pn">'+tt(tm)+'</div>'; b.addEventListener("click",function(){ S.team=tm.id; save(); renderTeams(); }); g.appendChild(b); }); }
-function renderRoles(){ var g=$("rolesGrid"); g.innerHTML=""; ROLES.forEach(function(r){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.role===r.id?"true":"false"); b.innerHTML='<div class="pi">'+r.ico+'</div><div class="pn">'+r[L()]+'</div><div class="pd">'+r[L()+"d"]+'</div>'; b.addEventListener("click",function(){ S.role=r.id; save(); renderRoles(); }); g.appendChild(b); }); }
+function renderTeams(){ var g=$("teamsGrid"); if(!g) return; g.innerHTML=""; TEAMS.forEach(function(tm){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.team===tm.id?"true":"false"); b.innerHTML='<div class="pi">'+tm.ico+'</div><div class="pn">'+tt(tm)+'</div>'; b.addEventListener("click",function(){ S.team=tm.id; save(); renderTeams(); }); g.appendChild(b); }); }
+function renderRoles(){ var g=$("rolesGrid"); if(!g) return; g.innerHTML=""; ROLES.forEach(function(r){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.role===r.id?"true":"false"); b.innerHTML='<div class="pi">'+r.ico+'</div><div class="pn">'+r[L()]+'</div><div class="pd">'+r[L()+"d"]+'</div>'; b.addEventListener("click",function(){ S.role=r.id; save(); renderRoles(); }); g.appendChild(b); }); }
+var setupEditMode=false;
+function applySetupDefaults(){
+  if(!S.team) S.team="mina";
+  if(!S.role) S.role="field";
+  save();
+}
+function renderSetupUi(){
+  applySetupDefaults();
+  var badge=$("setupBadge"), head=$("setupHead"), intro=$("setupIntro"), why=$("setupWhy"), btn=$("setupGoBtn");
+  if(setupEditMode){
+    if(badge) badge.textContent="✏️ "+(L()==="pt"?"Editar perfil":"Edit profile");
+    if(head) head.textContent=t("setup.editHead");
+    if(intro) intro.textContent=t("setup.editIntro");
+    if(why) why.hidden=true;
+    if(btn) btn.textContent=t("setup.save");
+  } else {
+    if(badge) badge.textContent=t("setup.badge");
+    if(head) head.textContent=t("setup.head");
+    if(intro) intro.textContent=t("setup.intro");
+    if(why){ why.hidden=false; why.textContent=t("setup.why"); }
+    if(btn) btn.textContent=t("setup.goFirst");
+  }
+}
+function openFirstSetup(){
+  setupEditMode=false;
+  renderTeams(); renderRoles();
+  if($("playerName")) $("playerName").value=S.name||"";
+  renderSetupUi();
+  show("screenSetup");
+}
+function openEditSetup(){
+  setupEditMode=true;
+  renderTeams(); renderRoles();
+  if($("playerName")) $("playerName").value=S.name||"";
+  renderSetupUi();
+  show("screenSetup");
+}
 
 /* ==========================================================
    UX ENHANCEMENTS (v67)
@@ -4595,11 +4649,6 @@ function themePreview(th){
   if(th!=="default") document.body.classList.add("theme-"+th);
   setTimeout(function(){ applyTheme(); },1200);
 }
-function openEditSetup(){
-  renderTeams(); renderRoles();
-  if($("playerName")) $("playerName").value=S.name||"";
-  show("screenSetup");
-}
 function renderQuizContext(){
   var el=$("quizContextChip"); if(!el) return;
   var mode=cur.mode, label="", ico="🎯";
@@ -4677,7 +4726,8 @@ function getRecommendedBossId(){
 var ONBOARD_STEPS=[
   {ico:"🌐",type:"lang",titleKey:"onboard.langT",bodyKey:"onboard.langB"},
   {ico:"♿",type:"a11y",titleKey:"onboard.a11yT",bodyKey:"onboard.a11yB"},
-  {ico:"🛡️",type:"play",titleKey:"onboard.playT",bodyKey:"onboard.playB"},
+  {ico:"👤",type:"profile",titleKey:"onboard.profileT",bodyKey:"onboard.profileB"},
+  {ico:"📅",type:"play",titleKey:"onboard.playT",bodyKey:"onboard.playB"},
   {ico:"▶️",type:"ready",titleKey:"onboard.readyT",bodyKey:"onboard.readyB"}
 ];
 var onboardStep=0, onboardReplay=false;
@@ -4690,15 +4740,14 @@ function closeOnboarding(skipped){
   var ov=$("onboardOverlay"); if(ov) ov.hidden=true;
   document.body.classList.remove("onboard-open");
   if(skipped&&!setupComplete()){
-    renderTeams(); renderRoles();
-    if($("playerName")) $("playerName").value=S.name||"";
-    show("screenSetup");
+    openFirstSetup();
     return;
   }
   try{ renderNextStep(); }catch(e){}
 }
 function renderOnboarding(){
-  var step=ONBOARD_STEPS[onboardStep], isSetup=step.type==="setup", isLang=step.type==="lang", isA11y=step.type==="a11y", isPlay=step.type==="play"||step.type==="ready";
+  var step=ONBOARD_STEPS[onboardStep], isSetup=step.type==="setup", isLang=step.type==="lang", isA11y=step.type==="a11y";
+  var isFeature=step.type==="play"||step.type==="ready"||step.type==="profile";
   var langPanel=$("onboardLangPanel"), a11yPanel=$("onboardA11yPanel"), feat=$("onboardFeature"), body=$("onboardBody"), mission=$("onboardMission");
   if($("onboardTitle")) $("onboardTitle").textContent=t(step.titleKey||"onboard.step");
   if(feat) feat.hidden=isLang||isA11y;
@@ -4717,7 +4766,7 @@ function renderOnboarding(){
     if($("onboardOptContrast")) $("onboardOptContrast").checked=!!S.a11y.contrast;
     if($("onboardOptSigns")) $("onboardOptSigns").checked=!!S.a11y.signs;
     if($("onboardOptMotion")) $("onboardOptMotion").checked=!!S.a11y.motion;
-  } else if(isPlay) {
+  } else if(isFeature) {
     var ico=$("onboardIco"); if(ico) ico.textContent=step.ico;
   }
   if($("onboardStepLabel")) $("onboardStepLabel").textContent=t("onboard.step")+" "+(onboardStep+1)+"/"+ONBOARD_STEPS.length;
@@ -4735,7 +4784,10 @@ function renderOnboarding(){
       dots.appendChild(d);
     });
   }
-  if($("onboardNextBtn")) $("onboardNextBtn").textContent=onboardStep>=ONBOARD_STEPS.length-1?(onboardReplay?(L()==="pt"?"Fechar":"Close"):t("onboard.start")):t("onboard.next");
+  if($("onboardNextBtn")){
+    var last=onboardStep>=ONBOARD_STEPS.length-1;
+    $("onboardNextBtn").textContent=last?(onboardReplay?(L()==="pt"?"Fechar":"Close"):t("onboard.startSetup")):t("onboard.next");
+  }
 }
 function showOnboarding(force){
   if(!force){
@@ -4764,9 +4816,7 @@ function onboardNext(){
   if(firstTime&&!onboardReplay){
     if(S.simpleUi===undefined) S.simpleUi=true;
     save(); applyA11y(); applySimpleUi();
-    renderTeams(); renderRoles();
-    if($("playerName")) $("playerName").value=S.name||"";
-    show("screenSetup");
+    openFirstSetup();
   }
 }
 
@@ -4836,13 +4886,11 @@ function bind(){
 
   on("homeStartBtn","click",function(){
     if(setupComplete()){ playNow(); return; }
-    renderTeams(); renderRoles();
-    if($("playerName")) $("playerName").value=S.name||"";
-    show("screenSetup");
+    openFirstSetup();
   });
   on("nextStepBtn","click",playNow);
   on("nextStepWeeklyBtn","click",openWeeklyScreen);
-  on("setupBannerBtn","click",function(){ renderTeams(); renderRoles(); if($("playerName")) $("playerName").value=S.name||""; show("screenSetup"); });
+  on("setupBannerBtn","click",openFirstSetup);
   on("heroExpandBtn","click",function(){ S.heroExpanded=!S.heroExpanded; save(); applyHeroCompact(); });
   on("fontDownBtn","click",function(){ S.a11y.fontScale=(S.a11y.fontScale||0)-1; save(); applyFontScale(); });
   on("fontUpBtn","click",function(){ S.a11y.fontScale=(S.a11y.fontScale||0)+1; save(); applyFontScale(); });
@@ -4855,7 +4903,15 @@ function bind(){
     if($("playerName")) S.name=$("playerName").value.trim();
     if(!S.team){ toast(t("setup.teamRequired")); return; }
     if(!S.role){ toast(t("setup.roleRequired")); return; }
-    save(); openMap(null,true,true);
+    save();
+    if(setupEditMode){
+      toast(t("setup.saved"));
+      updateSetupBanner();
+      show("screenHome");
+      renderNextStep();
+      return;
+    }
+    playNow();
   });
   on("playerName","input",function(){ S.name=this.value; });
 
@@ -4906,7 +4962,6 @@ function bind(){
   on("settingsEditProfileBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); openEditSetup(); });
   on("optEasyReadSettings","change",function(e){ e.stopPropagation(); setEasyRead(this.checked); });
   on("optSimpleUiSettings","change",function(e){ e.stopPropagation(); setSimpleUi(this.checked); });
-  on("optUxV122Settings","change",function(e){ e.stopPropagation(); setUxV122(this.checked); });
   on("optSimpleUi","change",function(){ setSimpleUi(this.checked); });
   on("profileEditSetupBtn","click",openEditSetup);
   on("profileWeeklyBtn","click",openWeeklyScreen);
@@ -5096,7 +5151,7 @@ window.gdvDemoApi={
     boss:function(){ renderBossList(); show("screenBossList"); },
     profile:function(){ renderProfile(); show("screenProfile"); },
     shop:function(){ renderShop(); show("screenShop"); },
-    setup:function(){ renderTeams(); renderRoles(); if($("playerName")) $("playerName").value=S.name||""; show("screenSetup"); },
+    setup:function(){ openFirstSetup(); },
     manager:function(){ renderManager(); show("screenManager"); },
     review:function(){ show("screenReview"); if(typeof window.initReviewBank==="function") window.initReviewBank(); }
   }

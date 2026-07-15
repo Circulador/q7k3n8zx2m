@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=124">
+<link rel="stylesheet" href="css/styles.css?v=126">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -370,15 +370,15 @@
             <div class="dp-section dp-section-compact">
               <button type="button" class="dp-link-btn" id="settingsEditProfileBtn" data-i18n="settings.editProfile">✏️ Minha operação (equipe e papel)</button>
             </div>
+            <div class="dp-section dp-section-compact demo-settings-section">
+              <div class="dp-label" data-i18n="settings.demoTitle">🧪 Menu demo (temporário)</div>
+              <p class="dp-sub" data-i18n="settings.demoSub">Avance o progresso do curso e teste a jornada integrada 0→100%.</p>
+              <button type="button" class="dp-link-btn demo-settings-btn" id="settingsOpenDemoBtn" data-i18n="settings.demoOpen">Abrir menu demo</button>
+            </div>
             <div class="dp-section">
               <div class="dp-label" data-i18n="settings.simpleUi">Modo simples</div>
               <p class="dp-sub" data-i18n="settings.simpleUiSub">Esconde nível, XP e maturidade no topo — ideal para começar.</p>
               <label class="switch dp-switch"><input type="checkbox" id="optSimpleUiSettings" checked><span class="slider"></span></label>
-            </div>
-            <div class="dp-section">
-              <div class="dp-label" data-i18n="settings.uxV122">Interface clássica (v122)</div>
-              <p class="dp-sub" data-i18n="settings.uxV122Sub">Volta ao visual e textos da versão v122 (Início e Missões). Também use ?ux=122 na URL.</p>
-              <label class="switch dp-switch"><input type="checkbox" id="optUxV122Settings"><span class="slider"></span></label>
             </div>
             <div class="dp-section">
               <div class="dp-label" data-i18n="settings.easyRead">Leitura fácil</div>
@@ -400,7 +400,6 @@
               <div class="a11y-catalog" id="a11yCatalog"></div>
             </div>
             <div class="dp-section dp-section-compact">
-              <button type="button" class="dp-link-btn" id="settingsOpenDemoBtn">🧪 Menu demo (testes)</button>
               <button type="button" class="dp-link-btn" id="settingsOpenA11yBtn" data-i18n="settings.openA11y">♿ Acessibilidade</button>
             </div>
           </div>
@@ -555,27 +554,30 @@
   <!-- ============ SETUP ============ -->
   <section id="screenSetup" class="screen" aria-label="Configuração">
     <div class="card setup-card">
-      <span class="badge" data-i18n="setup.badge">🗺️ Expedição global</span>
-      <h1 data-i18n="setup.head">Prepare sua missão de treino</h1>
-      <p class="section-sub setup-intro" data-i18n="setup.intro">Explore o mapa país a país — cada região traz situações de cyber security ligadas à operação da Orbita. Equipe e papel personalizam os cenários.</p>
-      <div class="setup-block">
-        <div class="section-title" data-i18n="setup.nameTitle">Seu nome</div>
-        <div class="section-sub" data-i18n="setup.nameSub">Opcional — aparece no certificado e no ranking da equipe.</div>
-        <input id="playerName" maxlength="24" data-i18n-ph="setup.namePh" placeholder="Seu nome ou apelido">
-      </div>
-      <div class="setup-block">
-        <div class="section-title" data-i18n="setup.teamTitle">Equipe</div>
-        <div class="section-sub" data-i18n="setup.teamSub">Ranking anônimo — celebramos a evolução do time, nunca expomos quem errou.</div>
+      <span class="badge" id="setupBadge" data-i18n="setup.badge">👤 Perfil rápido</span>
+      <h1 id="setupHead" data-i18n="setup.head">Personalize seu treino</h1>
+      <p class="section-sub setup-intro" id="setupIntro" data-i18n="setup.intro">Assim os cenários ficam parecidos com seu dia a dia — leva cerca de 20 segundos.</p>
+      <p class="setup-why" id="setupWhy" data-i18n="setup.why">💡 Situações de phishing, senha e dados aparecem no contexto da sua operação.</p>
+      <div class="setup-block setup-block-primary">
+        <div class="section-title" data-i18n="setup.teamTitle">Sua equipe</div>
+        <div class="section-sub" data-i18n="setup.teamSub">Onde você trabalha na organização — usado no ranking anônimo do time.</div>
         <div class="teams-grid" id="teamsGrid" role="group" aria-label="Equipes"></div>
       </div>
-      <div class="setup-block">
-        <div class="section-title" data-i18n="setup.roleTitle">Papel no dia a dia</div>
-        <div class="section-sub" data-i18n="setup.roleSub">As situações do mapa se adaptam à sua rotina (escritório, campo, OT ou liderança).</div>
+      <div class="setup-block setup-block-primary">
+        <div class="section-title" data-i18n="setup.roleTitle">Seu dia a dia</div>
+        <div class="section-sub" data-i18n="setup.roleSub">Escritório, campo, automação (OT) ou liderança — define os exemplos das situações.</div>
         <div class="roles-grid" id="rolesGrid" role="group" aria-label="Papéis"></div>
       </div>
+      <details class="setup-name-details">
+        <summary data-i18n="setup.nameOptional">Adicionar nome (opcional)</summary>
+        <div class="setup-block setup-block-name">
+          <div class="section-sub" data-i18n="setup.nameSub">Opcional — aparece no certificado e no ranking da equipe.</div>
+          <input id="playerName" maxlength="24" data-i18n-ph="setup.namePh" placeholder="Seu nome ou apelido">
+        </div>
+      </details>
     </div>
     <div class="row-actions">
-      <button class="btn btn-primary btn-lg" id="setupGoBtn" data-i18n="setup.go">▶️ Iniciar expedição no mapa</button>
+      <button class="btn btn-primary btn-lg" id="setupGoBtn" data-i18n="setup.goFirst">▶️ Começar primeira atividade</button>
     </div>
   </section>
 
@@ -958,18 +960,18 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="124";</script>
-<script src="js/sign-lang.js?v=124"></script>
-<script src="js/orbita-world-map.js?v=124"></script>
-<script src="js/questions-data.js?v=124"></script>
-<script src="js/country-questions-data.js?v=124"></script>
-<script src="js/bosses-data.js?v=124"></script>
-<script src="js/boss-personal-tips.js?v=124"></script>
-<script src="js/chain-data.js?v=124"></script>
-<script src="js/boss-maps.js?v=124"></script>
-<script src="js/glossary-data.js?v=124"></script>
-<script src="js/game.js?v=124"></script>
-<script src="js/demo-menu.js?v=124"></script>
+<script>window.APP_VERSION="126";</script>
+<script src="js/sign-lang.js?v=126"></script>
+<script src="js/orbita-world-map.js?v=126"></script>
+<script src="js/questions-data.js?v=126"></script>
+<script src="js/country-questions-data.js?v=126"></script>
+<script src="js/bosses-data.js?v=126"></script>
+<script src="js/boss-personal-tips.js?v=126"></script>
+<script src="js/chain-data.js?v=126"></script>
+<script src="js/boss-maps.js?v=126"></script>
+<script src="js/glossary-data.js?v=126"></script>
+<script src="js/game.js?v=126"></script>
+<script src="js/demo-menu.js?v=126"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */

@@ -284,7 +284,14 @@ body.theme-light .hero-journey{color:#1a3a44;background:rgba(0,126,122,.08)}
 .setup-intro{margin-bottom:14px}
 .setup-block{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
 .setup-block:first-of-type{border-top:0;padding-top:0;margin-top:10px}
-.setup-block input{width:100%;margin-top:6px}
+.setup-why{margin:0 0 14px;padding:10px 12px;border-radius:8px;background:rgba(0,126,122,.12);border:1px solid rgba(0,126,122,.35);font-size:.86rem;line-height:1.45;color:#eaf2f6}
+.setup-block-primary{margin-top:12px}
+.setup-name-details{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+.setup-name-details summary{cursor:pointer;font-weight:700;font-size:.88rem;color:var(--steel);padding:6px 0;list-style:none}
+.setup-name-details summary::-webkit-details-marker{display:none}
+.setup-name-details[open] summary{margin-bottom:6px;color:#eaf2f6}
+.setup-block-name{border-top:0;padding-top:0;margin-top:0}
+.setup-block-name input{width:100%;margin-top:6px}
 .map-expedition{margin:12px 0;padding:14px;border:1px solid rgba(0,126,122,.45);border-radius:12px;background:linear-gradient(135deg,rgba(0,126,122,.12),rgba(237,177,17,.08))}
 .map-expedition-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-bottom:12px}
 .map-expedition-title{font-weight:800;font-size:.95rem;color:var(--gold)}
@@ -1450,7 +1457,8 @@ body.ux-v122 .home-how-strip,body.ux-v122 .ux-v122-banner,body.ux-v122 .missions
 body.ux-v122 .next-step-card .next-step-weekly-btn,body.ux-v122 #nextStepWeeklyBtn{display:inline-flex!important}
 body.ux-v2 #nextStepWeeklyBtn{display:none!important}
 body.ux-v2 .hero-lead-short{display:none}
-body.ux-v2:not(.ux-v122) .hero-card-first .hero-lead-short{display:block}
+.demo-settings-section{border:1px dashed rgba(237,177,17,.45);border-radius:10px;padding:10px 12px!important;background:rgba(237,177,17,.08)}
+.demo-settings-btn{width:100%;margin-top:6px;font-weight:700}
 @media(prefers-reduced-motion:reduce){
   .hero-svg .hero-train,.hero-svg .hero-flow,.hero-svg .hero-crane,.hero-svg .hero-smoke,.hero-svg .hero-belt,.hero-svg .hero-net{animation:none!important}
 }
