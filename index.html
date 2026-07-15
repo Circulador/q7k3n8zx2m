@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=122">
+<link rel="stylesheet" href="css/styles.css?v=123">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -373,6 +373,11 @@
               <label class="switch dp-switch"><input type="checkbox" id="optSimpleUiSettings" checked><span class="slider"></span></label>
             </div>
             <div class="dp-section">
+              <div class="dp-label" data-i18n="settings.uxV122">Interface clássica (v122)</div>
+              <p class="dp-sub" data-i18n="settings.uxV122Sub">Volta ao visual e textos da versão v122 (Início e Missões). Também use ?ux=122 na URL.</p>
+              <label class="switch dp-switch"><input type="checkbox" id="optUxV122Settings"><span class="slider"></span></label>
+            </div>
+            <div class="dp-section">
               <div class="dp-label" data-i18n="settings.easyRead">Leitura fácil</div>
               <p class="dp-sub" data-i18n="settings.easyReadSub">Liga ou desliga contraste, texto grande e espaçamento de uma vez.</p>
               <label class="switch dp-switch"><input type="checkbox" id="optEasyReadSettings"><span class="slider"></span></label>
@@ -480,9 +485,10 @@
           <g class="hero-lock" transform="translate(450, 78)"><circle r="14" fill="none" stroke="#EDB111" stroke-width="1" opacity=".45"/><rect x="-5" y="-2" width="10" height="8" rx="1" fill="#007E7A"/><path d="M-4 -2 V-5 Q0 -9 4 -5 V-2" fill="none" stroke="#EDB111" stroke-width="1.5"/></g>
         </svg>
       </button>
-      <span class="badge" data-i18n="home.badge">Operações globais • Cyber Security</span>
+      <span class="badge" data-i18n="home.badge">Treinamento de Segurança Digital · ~5 min/dia</span>
       <h1 data-i18n="home.title">Você é o <span class="accent">Guardião Digital</span></h1>
-      <p class="hero-lead" data-i18n="home.desc">Sua missão é proteger as operações da organização em todo o mundo por meio de decisões seguras no ambiente digital.</p>
+      <p class="hero-lead hero-lead-short" id="heroLeadShort" hidden data-i18n="home.shortDesc">Treinamento rápido de segurança digital — situações do seu dia a dia, em poucos minutos.</p>
+      <p class="hero-lead" id="heroLeadLong" data-i18n="home.desc">Sua missão é proteger as operações da organização em todo o mundo por meio de decisões seguras no ambiente digital.</p>
       <div class="hero-expandable" id="heroExpandable">
       <p class="hero-body" data-i18n="home.explore">Explore minas, usinas, portos, ferrovias e escritórios, identifique ameaças cibernéticas, responda a incidentes simulados e fortaleça a resiliência das operações.</p>
       <p class="hero-body" data-i18n="home.impact">Cada decisão que você toma pode proteger pessoas, informações e processos essenciais para o negócio.</p>
@@ -497,6 +503,19 @@
       </div>
       <p class="muted handtalk-status" id="handTalkStatus" hidden></p>
       <p class="muted asl-hint" id="aslHint" hidden data-i18n="a11y.signsHint">Sem token Hand Talk: VLibras (PT) ou dicionário ASL (EN) como alternativa.</p>
+    </div>
+
+    <p class="ux-v122-banner" id="uxV122Banner" hidden role="status" aria-live="polite"></p>
+
+    <div class="card home-how-strip" id="homeHowStrip" hidden>
+      <div class="home-how-title" data-i18n="home.howTitle">Como funciona</div>
+      <div class="home-how-steps">
+        <div class="home-how-step"><span class="home-how-ico" aria-hidden="true">📅</span><span data-i18n="home.howDaily">Atividade de hoje</span></div>
+        <span class="home-how-arrow" aria-hidden="true">→</span>
+        <div class="home-how-step"><span class="home-how-ico" aria-hidden="true">🗺️</span><span data-i18n="home.howMap">Jornada no mapa</span></div>
+        <span class="home-how-arrow" aria-hidden="true">→</span>
+        <div class="home-how-step"><span class="home-how-ico" aria-hidden="true">🎯</span><span data-i18n="home.howCrisis">Simulação de crise</span></div>
+      </div>
     </div>
 
     <div class="card next-step-card" id="nextStepCard" hidden>
@@ -526,6 +545,7 @@
         </div>
       </div>
       <p class="next-step-week-line" id="nextStepWeek" aria-live="polite"></p>
+      <p class="next-step-preview" id="nextStepPreview" hidden aria-live="polite"></p>
       <button type="button" class="btn btn-primary btn-lg" id="nextStepBtn" data-i18n="home.playNow">▶️ Jogar agora</button>
       <button type="button" class="btn btn-ghost btn-sm" id="nextStepWeeklyBtn" data-i18n="home.weekBarGo">Ver metas da semana →</button>
     </div>
@@ -743,17 +763,26 @@
 
   <!-- ============ MISSÕES (diária + semanal) ============ -->
   <section id="screenDaily" class="screen" aria-label="Missões">
-    <div class="ctx-tip" id="ctxTip_daily" hidden><span data-i18n="tip.daily">5 situações rápidas — 2 revisam erros anteriores. Mantém sua ofensiva!</span><button type="button" class="ctx-tip-dismiss" data-tip="daily" data-i18n="tip.dismiss">Entendi</button></div>
-    <div class="card"><div class="section-title" data-i18n="daily.title">📅 Missões Diárias</div><div class="section-sub" id="dailyDate"></div>
+    <div class="ctx-tip" id="ctxTip_daily" hidden><span data-i18n="tip.daily">5 situações rápidas — 2 revisam erros anteriores. Mantém sua sequência diária!</span><button type="button" class="ctx-tip-dismiss" data-tip="daily" data-i18n="tip.dismiss">Entendi</button></div>
+    <div class="missions-focus-banner card" id="missionsFocusBanner" hidden>
+      <div class="missions-focus-k" data-i18n="missions.focusTitle">Seu foco agora</div>
+      <p class="missions-focus-txt" id="missionsFocusText"></p>
+      <p class="missions-focus-order muted" data-i18n="missions.focusOrder">3º — Simulações de crise (quando tiver tempo)</p>
+    </div>
+    <div class="card"><div class="section-title" data-i18n="daily.title">📅 Atividade de hoje</div><div class="section-sub" id="dailyDate"></div>
       <div class="daily-meta" id="dailyMeta"></div>
       <p class="daily-srs-note" id="dailySrsNote" hidden></p><div id="dailyList"></div></div>
-    <div class="row-actions"><button class="btn btn-primary btn-lg" id="dailyStartBtn" data-i18n="daily.play">▶️ Jogar missão do dia</button></div>
+    <div class="row-actions"><button class="btn btn-primary btn-lg" id="dailyStartBtn" data-i18n="daily.play">▶️ Começar atividade de hoje</button></div>
     <div class="card missions-weekly-card" id="missionsWeeklyCard">
-      <div class="section-title" data-i18n="weekly.title">🏆 Desafios Semanais</div>
+      <div class="section-title" data-i18n="weekly.title">🏆 Metas da semana</div>
       <div class="section-sub" id="weeklyWeek"></div>
-      <p class="muted" data-i18n="weekly.intro">Metas maiores que renovam toda semana. Progridem enquanto você joga campanhas, diárias e bosses.</p>
+      <p class="muted" data-i18n="weekly.intro">Objetivos que renovam toda semana. Progridem enquanto você faz a atividade diária, jornadas no mapa e simulações de crise.</p>
       <div id="weeklyList"></div>
-      <div class="row-actions week-card-actions"><button class="btn btn-primary" id="weeklyMapBtn" data-i18n="weekly.play">🗺️ Jogar campanha</button></div>
+      <div class="row-actions week-card-actions"><button class="btn btn-primary" id="weeklyMapBtn" data-i18n="weekly.play">🗺️ Jornada no mapa</button></div>
+    </div>
+    <div class="card missions-also-card" id="missionsAlsoCard" hidden>
+      <div class="section-title" data-i18n="missions.alsoTitle">Também conta para suas metas</div>
+      <p class="muted" data-i18n="missions.alsoCrisis">Simulações de crise avançadas → aba Desafios / Crises</p>
     </div>
   </section>
 
@@ -929,18 +958,18 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="122";</script>
-<script src="js/sign-lang.js?v=122"></script>
-<script src="js/orbita-world-map.js?v=122"></script>
-<script src="js/questions-data.js?v=122"></script>
-<script src="js/country-questions-data.js?v=122"></script>
-<script src="js/bosses-data.js?v=122"></script>
-<script src="js/boss-personal-tips.js?v=122"></script>
-<script src="js/chain-data.js?v=122"></script>
-<script src="js/boss-maps.js?v=122"></script>
-<script src="js/glossary-data.js?v=122"></script>
-<script src="js/game.js?v=122"></script>
-<script src="js/demo-menu.js?v=122"></script>
+<script>window.APP_VERSION="123";</script>
+<script src="js/sign-lang.js?v=123"></script>
+<script src="js/orbita-world-map.js?v=123"></script>
+<script src="js/questions-data.js?v=123"></script>
+<script src="js/country-questions-data.js?v=123"></script>
+<script src="js/bosses-data.js?v=123"></script>
+<script src="js/boss-personal-tips.js?v=123"></script>
+<script src="js/chain-data.js?v=123"></script>
+<script src="js/boss-maps.js?v=123"></script>
+<script src="js/glossary-data.js?v=123"></script>
+<script src="js/game.js?v=123"></script>
+<script src="js/demo-menu.js?v=123"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */

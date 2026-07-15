@@ -18,7 +18,7 @@ var DEF = { lang:"pt", name:"", team:"mina", role:"admin",
   a11y:{voice:false, contrast:false, large:false, motion:false, signs:false, fontScale:0, links:false, spacing:false, letterSpace:false, dyslexia:false, colorblind:"none", readingMode:false},
   done:{}, themeStats:{}, medals:{}, owned:{}, equipped:{avatar:"🛡️",frame:"default",skin:"default"},
   bossDone:{}, bossStats:{}, onboardingDone:false, daily:{date:"",done:{}}, weekly:{week:"",prog:{}}, teamScores:{},
-  chainDone:{}, streak:{count:0,lastDate:"",best:0}, missed:{}, reports:0, managerMode:false, focusLearn:false, simpleUi:true, theme:"default", tipsSeen:{map:false,daily:false,boss:false}, glossaryFavs:[], glossaryLearned:{}, glossaryReview:[], glossaryReviewMeta:{}, glossaryLearnedXp:{}, glossaryQuizDone:0, offlineHintSeen:false, heroExpanded:false };
+  chainDone:{}, streak:{count:0,lastDate:"",best:0}, missed:{}, reports:0, managerMode:false, focusLearn:false, simpleUi:true, theme:"default", tipsSeen:{map:false,daily:false,boss:false}, glossaryFavs:[], glossaryLearned:{}, glossaryReview:[], glossaryReviewMeta:{}, glossaryLearnedXp:{}, glossaryQuizDone:0, offlineHintSeen:false, heroExpanded:false, uxV122:false };
 var S = merge(load(), DEF);
 
 function merge(a,b){ a=a||{}; for(var k in b){ if(a[k]===undefined) a[k]=b[k]; else if(b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])) a[k]=merge(a[k],b[k]); } return a; }
@@ -33,7 +33,31 @@ function tt(o){ return o? (o[L()]!==undefined?o[L()]:o.pt) : ""; }
 var UI = {
   "brand.main":{pt:"Guardião Cibernético",en:"Cyber Guardian"},
   "brand.sub":{pt:"Segurança digital",en:"Digital security"},
-  "home.badge":{pt:"Operações globais • Cyber Security",en:"Global operations • Cyber Security"},
+  "home.badge":{pt:"Treinamento de Segurança Digital · ~5 min/dia",en:"Digital Security Training · ~5 min/day"},
+  "home.shortDesc":{pt:"Treinamento rápido de segurança digital — situações do seu dia a dia, em poucos minutos.",en:"Quick digital security training — everyday scenarios in just a few minutes."},
+  "home.howTitle":{pt:"Como funciona",en:"How it works"},
+  "home.howDaily":{pt:"Atividade de hoje",en:"Today's activity"},
+  "home.howMap":{pt:"Jornada no mapa",en:"Map journey"},
+  "home.howCrisis":{pt:"Simulação de crise",en:"Crisis simulation"},
+  "home.nextPreview":{pt:"Depois disso: {next}",en:"Up next: {next}"},
+  "home.weekRemPrefix":{pt:"Para fechar a semana: ",en:"To finish the week: "},
+  "home.weekRemCorrect":{pt:"faltam {n} acertos",en:"{n} more correct answers"},
+  "home.weekRemCampaign":{pt:"faltam {n} jornadas no mapa",en:"{n} more map journeys"},
+  "home.weekRemBoss":{pt:"falta {n} simulação de crise",en:"{n} crisis simulation left"},
+  "home.weekRemTheme":{pt:"faltam {n} do tema da semana",en:"{n} more on the week theme"},
+  "home.weekRemDone":{pt:"✅ Metas da semana concluídas — continue evoluindo!",en:"✅ Weekly goals done — keep improving!"},
+  "home.nextDaily":{pt:"Sua atividade de hoje está esperando",en:"Today's activity is waiting"},
+  "home.nextDailySub":{pt:"5 situações rápidas mantêm sua sequência e priorizam o que você errou.",en:"5 quick scenarios keep your streak and prioritize what you missed."},
+  "home.nextReviewSub":{pt:"Você tem {n} revisões do que errou prontas para hoje.",en:"You have {n} mistake reviews ready for today."},
+  "missions.focusTitle":{pt:"Seu foco agora",en:"Your focus now"},
+  "missions.focusDaily":{pt:"1º — Atividade de hoje (~5 min)",en:"1st — Today's activity (~5 min)"},
+  "missions.focusMap":{pt:"2º — Jornada no mapa",en:"2nd — Map journey"},
+  "missions.focusOrder":{pt:"3º — Simulações de crise (quando tiver tempo)",en:"3rd — Crisis simulations (when you have time)"},
+  "missions.alsoTitle":{pt:"Também conta para suas metas",en:"Also counts toward your goals"},
+  "missions.alsoCrisis":{pt:"Simulações de crise avançadas → aba Desafios / Crises",en:"Advanced crisis simulations → Challenges / Crises tab"},
+  "settings.uxV122":{pt:"Interface clássica (v122)",en:"Classic interface (v122)"},
+  "settings.uxV122Sub":{pt:"Volta ao visual e textos da versão v122 (Início e Missões). Também use ?ux=122 na URL.",en:"Restores v122 look and copy (Home & Missions). You can also use ?ux=122 in the URL."},
+  "settings.uxV122On":{pt:"Interface v122 ativa — desative em Configurações para ver a nova UX.",en:"v122 interface active — turn off in Settings to see the new UX."},
   "home.title":{pt:'Você é o <span class="accent">Guardião Digital</span>',en:'You are the <span class="accent">Digital Guardian</span>'},
   "home.desc":{pt:"Sua missão é proteger as operações da organização em todo o mundo por meio de decisões seguras no ambiente digital.",en:"Your mission is to protect the organization's operations worldwide through secure decisions in the digital environment."},
   "home.explore":{pt:"Explore minas, usinas, portos, ferrovias e escritórios, identifique ameaças cibernéticas, responda a incidentes simulados e fortaleça a resiliência das operações.",en:"Explore mines, plants, ports, railways and offices — identify cyber threats, respond to simulated incidents and strengthen operational resilience."},
@@ -92,9 +116,9 @@ var UI = {
   "quiz.nextHint":{pt:"Responda para continuar →",en:"Answer to continue →"},
   "quiz.returnGlossary":{pt:"← Voltar à pergunta",en:"← Back to question"},
   "quiz.speak":{pt:"Ouvir cenário",en:"Listen to scenario"},
-  "daily.doneTitle":{pt:"🎉 Missão diária concluída!",en:"🎉 Daily mission complete!"},
-  "daily.doneSub":{pt:"Volte amanhã para manter sua ofensiva e revisar novos cenários.",en:"Come back tomorrow to keep your streak and review new scenarios."},
-  "home.previewLoop":{pt:"Seu loop de treino: 📅 Missão diária → 🗺️ Mapa global → 🎯 Desafios / Crises",en:"Your training loop: 📅 Daily mission → 🗺️ World map → 🎯 Challenges / Crises"},
+  "daily.doneTitle":{pt:"🎉 Atividade de hoje concluída!",en:"🎉 Today's activity complete!"},
+  "daily.doneSub":{pt:"Volte amanhã para manter sua sequência e revisar novos cenários.",en:"Come back tomorrow to keep your streak and review new scenarios."},
+  "home.previewLoop":{pt:"Seu treino: 📅 Atividade de hoje → 🗺️ Jornada no mapa → 🎯 Simulação de crise",en:"Your training: 📅 Today's activity → 🗺️ Map journey → 🎯 Crisis simulation"},
   "weekly.emptyStart":{pt:"Semana nova — jogue a diária ou explore o mapa para começar as metas.",en:"New week — play daily or explore the map to start your goals."},
   "map.legendSummary":{pt:"{done} concluídos · {partial} em progresso · {pending} pendentes",en:"{done} complete · {partial} in progress · {pending} pending"},
   "toolbar.more":{pt:"Mais ferramentas",en:"More tools"},
@@ -122,19 +146,19 @@ var UI = {
   "quiz.repeatQ":{pt:"Repetir pergunta",en:"Repeat question"},
   "report.skipVisible":{pt:"Pular por agora",en:"Skip for now"},
   "tip.map":{pt:"Toque no país destacado para iniciar sua expedição. Use +/− para zoom.",en:"Tap the highlighted country to start your expedition. Use +/− to zoom."},
-  "tip.daily":{pt:"5 situações rápidas — 2 revisam erros anteriores. Mantém sua ofensiva!",en:"5 quick scenarios — 2 review past mistakes. Keeps your streak!"},
+  "tip.daily":{pt:"5 situações rápidas — 2 revisam erros anteriores. Mantém sua sequência diária!",en:"5 quick scenarios — 2 review past mistakes. Keeps your daily streak!"},
   "tip.boss":{pt:"Crises estilo mesa — leia o cenário e tome decisões como na operação real.",en:"Tabletop crises — read the scenario and decide as in real operations."},
   "tip.dismiss":{pt:"Entendi",en:"Got it"},
   "home.weekBar":{pt:"Meta da semana",en:"Weekly goal"},
   "home.weekBarGo":{pt:"Ver metas da semana →",en:"View weekly goals →"},
-  "home.firstDay":{pt:"Dia 1 da sua ofensiva — 5 minutos de treino bastam para começar.",en:"Day 1 of your streak — 5 minutes of training is enough to start."},
+  "home.firstDay":{pt:"Dia 1 da sua sequência — 5 minutos de treino bastam para começar.",en:"Day 1 of your streak — 5 minutes of training is enough to start."},
   "session.title":{pt:"Resumo da sessão",en:"Session summary"},
-  "session.streakKept":{pt:"🔥 Ofensiva mantida hoje!",en:"🔥 Streak kept today!"},
-  "session.streakStart":{pt:"🔥 Ofensiva iniciada — volte amanhã!",en:"🔥 Streak started — come back tomorrow!"},
+  "session.streakKept":{pt:"🔥 Sequência mantida hoje!",en:"🔥 Streak kept today!"},
+  "session.streakStart":{pt:"🔥 Sequência iniciada — volte amanhã!",en:"🔥 Streak started — come back tomorrow!"},
   "session.xpGain":{pt:"+{n} XP nesta sessão",en:"+{n} XP this session"},
   "weekly.checklist":{pt:"Metas da semana",en:"Weekly goals"},
-  "weekly.checkDaily":{pt:"Jogar 5 dias (ofensiva)",en:"Play 5 days (streak)"},
-  "weekly.checkCampaign":{pt:"3 campanhas no mapa",en:"3 map campaigns"},
+  "weekly.checkDaily":{pt:"Jogar 5 dias (sequência)",en:"Play 5 days (streak)"},
+  "weekly.checkCampaign":{pt:"3 jornadas no mapa",en:"3 map journeys"},
   "weekly.checkBoss":{pt:"1 crise vencida",en:"1 crisis beaten"},
   "boss.estTime":{pt:"~{n} min",en:"~{n} min"},
   "boss.recommended":{pt:"Recomendado",en:"Recommended"},
@@ -155,7 +179,7 @@ var UI = {
   "onboard.a11yB":{pt:"Ative narração, contraste, Libras ou redução de animações agora — ou ajuste depois no menu ♿.",en:"Enable narration, contrast, sign language or reduced motion now — or adjust later in the ♿ menu."},
   "mgr.kpiAdoption":{pt:"Adoção",en:"Adoption"},
   "mgr.kpiWeak":{pt:"Tema mais fraco",en:"Weakest theme"},
-  "mgr.kpiStreak":{pt:"Ofensiva média",en:"Avg streak"},
+  "mgr.kpiStreak":{pt:"Sequência média",en:"Avg streak"},
   "hud.tip.settings":{pt:"Configurações — tema, perfil e preferências",en:"Settings — theme, profile and preferences"},
   "hud.tip.glossary":{pt:"Glossário — siglas e termos de cyber security",en:"Glossary — cyber security acronyms and terms"},
   "a11y.shortLabel":{pt:"Acessibilidade",en:"Accessibility"},
@@ -176,14 +200,11 @@ var UI = {
   "home.weekPlay":{pt:"Jogar agora →",en:"Play now →"},
   "home.nextStart":{pt:"Comece por aqui",en:"Start here"},
   "home.nextContinue":{pt:"Continue de onde parou",en:"Continue where you left off"},
-  "home.nextDaily":{pt:"Sua missão diária está esperando",en:"Your daily mission is waiting"},
-  "home.nextDailySub":{pt:"5 situações rápidas mantêm sua ofensiva e priorizam o que você errou.",en:"5 quick scenarios keep your streak and prioritize what you missed."},
-  "home.nextCampaignSub":{pt:"Sua expedição continua — proteja o próximo país no mapa e avance na meta semanal.",en:"Your expedition continues — protect the next country on the map and advance your weekly goal."},
+  "home.nextCampaignSub":{pt:"Sua jornada no mapa continua — proteja o próximo país e avance na meta semanal.",en:"Your map journey continues — protect the next country and advance your weekly goal."},
   "home.nextBoss":{pt:"Enfrente uma crise",en:"Face a crisis"},
   "home.nextBossSub":{pt:"Desafios / Crises estilo mesa elevam sua maturidade operacional.",en:"Tabletop Challenges / Crises raise your operational maturity."},
   "home.nextReview":{pt:"Revise seus erros",en:"Review your mistakes"},
-  "home.nextReviewSub":{pt:"Você tem {n} itens em revisão espaçada prontos para hoje.",en:"You have {n} items in spaced review ready for today."},
-  "home.nextGoDaily":{pt:"▶️ Jogar diária",en:"▶️ Play daily"},
+  "home.nextGoDaily":{pt:"▶️ Começar agora",en:"▶️ Start now"},
   "home.nextGoMap":{pt:"🗺️ Abrir mapa",en:"🗺️ Open map"},
   "home.nextGoBoss":{pt:"🎯 Ver Desafios / Crises",en:"🎯 See Challenges / Crises"},
   "home.nextGoReview":{pt:"📚 Revisar agora",en:"📚 Review now"},
@@ -195,10 +216,13 @@ var UI = {
   "mode.mapchain.h":{pt:"Cadeia em Desafios / Crises",en:"Chain in Challenges / Crises"},
   "mode.mapchain.t":{pt:"Aventura Carajás → China em etapas — proteja cada elo da logística de ferro.",en:"Carajás → China adventure in stages — protect each iron logistics link."},
   "daily.whyToday":{pt:"Por que jogar hoje?",en:"Why play today?"},
-  "daily.streakRisk":{pt:"Sua ofensiva está em risco — jogue para manter a sequência.",en:"Your streak is at risk — play to keep it going."},
-  "daily.streakOk":{pt:"Ofensiva mantida hoje — continue evoluindo.",en:"Streak kept today — keep improving."},
+  "daily.streakRisk":{pt:"Sua sequência está em risco — jogue hoje para mantê-la.",en:"Your streak is at risk — play today to keep it."},
+  "daily.streakOk":{pt:"Sequência mantida hoje — continue evoluindo.",en:"Streak kept today — keep improving."},
   "daily.themeLine":{pt:"Temas do dia incluem revisão dos seus erros anteriores.",en:"Today's scenarios include review of your past mistakes."},
-  "daily.rewardLine":{pt:"+50 XP · mantém ofensiva 🔥",en:"+50 XP · keeps streak 🔥"},
+  "daily.rewardLine":{pt:"+50 pontos · mantém sequência 🔥",en:"+50 points · keeps streak 🔥"},
+  "daily.reviewLabel":{pt:"Revisões do que você errou",en:"Reviews of your mistakes"},
+  "daily.itemName":{pt:"Atividade de hoje — 5 situações",en:"Today's activity — 5 scenarios"},
+  "daily.doneNext":{pt:"✅ Feito — próximo: Jornada no mapa",en:"✅ Done — next: Map journey"},
   "nav.badgeWeekly":{pt:"metas semanais pendentes",en:"pending weekly goals"},
   "result.next":{pt:"Próximo passo",en:"Next step"},
   "result.home":{pt:"🏠 Início",en:"🏠 Home"},
@@ -244,23 +268,23 @@ var UI = {
   "mode.boss.t":{pt:"Crises simuladas estilo mesa: storytelling encadeado com mapas vetoriais animados.",en:"Tabletop simulated crises: chained storytelling with animated vector maps."},
   "mode.dw.h":{pt:"📅 Diárias & 🏆 Semanais",en:"📅 Dailies & 🏆 Weeklies"},
   "mode.dw.t":{pt:"Desafios que renovam e rendem XP.",en:"Challenges that refresh and grant XP."},
-  "streak.title":{pt:"🔥 Ofensiva",en:"🔥 Streak"},
+  "streak.title":{pt:"🔥 Sequência diária",en:"🔥 Daily streak"},
   "streak.sub":{pt:"Jogue todo dia para manter sua sequência e ganhar bônus.",en:"Play every day to keep your streak and earn bonuses."},
   "streak.days":{pt:"dias seguidos",en:"day streak"},
   "streak.best":{pt:"Recorde",en:"Best"},
-  "streak.today":{pt:"✅ Ofensiva mantida hoje!",en:"✅ Streak kept today!"},
-  "streak.risk":{pt:"⚠️ Jogue hoje para não perder sua ofensiva!",en:"⚠️ Play today to keep your streak!"},
-  "streak.neutral":{pt:"Jogue hoje para iniciar sua ofensiva!",en:"Play today to start your streak!"},
-  "streak.new":{pt:"🔥 Ofensiva iniciada! Dia 1.",en:"🔥 Streak started! Day 1."},
-  "streak.up":{pt:"🔥 Ofensiva: ",en:"🔥 Streak: "},
-  "streak.lost":{pt:"Ofensiva reiniciada.",en:"Streak reset."},
+  "streak.today":{pt:"✅ Sequência mantida hoje!",en:"✅ Streak kept today!"},
+  "streak.risk":{pt:"Jogue hoje para não perder sua sequência de {n} dias.",en:"Play today to keep your {n}-day streak."},
+  "streak.neutral":{pt:"Jogue hoje para iniciar sua sequência!",en:"Play today to start your streak!"},
+  "streak.new":{pt:"🔥 Sequência iniciada! Dia 1.",en:"🔥 Streak started! Day 1."},
+  "streak.up":{pt:"🔥 Sequência: ",en:"🔥 Streak: "},
+  "streak.lost":{pt:"Sequência reiniciada.",en:"Streak reset."},
   "hud.tip.lang":{pt:"Idioma do jogo — toque na bandeira PT ou EN.",en:"Game language — tap the PT or EN flag."},
   "hud.tip.langPt":{pt:"Jogar em Português",en:"Play in Portuguese"},
   "hud.tip.langEn":{pt:"Jogar em Inglês",en:"Play in English"},
   "lang.switchLabel":{pt:"Idioma do jogo",en:"Game language"},
   "hud.tip.title":{pt:"Seu título na carreira — evolui conforme você acumula XP nas missões.",en:"Your career title — grows as you earn XP from missions."},
   "hud.tip.lives":{pt:"Vidas restantes — você perde uma ao errar em situações críticas; recupere jogando bem.",en:"Lives remaining — you lose one on critical mistakes; recover by playing well."},
-  "hud.tip.streak":{pt:"Ofensiva — dias seguidos jogando; mantenha a sequência para bônus de moedas.",en:"Streak — consecutive days played; keep it going for coin bonuses."},
+  "hud.tip.streak":{pt:"Sequência — dias seguidos jogando; mantenha para ganhar bônus.",en:"Streak — consecutive days played; keep it for bonuses."},
   "hud.tip.level":{pt:"Nível do guardião — sobe a cada 50 XP; desbloqueia conquistas.",en:"Guardian level — increases every 50 XP; unlocks achievements."},
   "hud.tip.xp":{pt:"Pontos de experiência (XP) — ganhos em campanhas, diárias, semanais e Desafios / Crises.",en:"Experience points (XP) — earned in campaigns, dailies, weeklies and Challenges / Crises."},
   "hud.tip.coins":{pt:"Moedas — moeda do jogo para comprar avatares, molduras e temas na loja.",en:"Coins — in-game currency to buy avatars, frames and themes in the shop."},
@@ -272,8 +296,8 @@ var UI = {
   "hud.tip.contrast":{pt:"Alto contraste — alterna cores fortes para facilitar a leitura.",en:"High contrast — toggles strong colors for easier reading."},
   "hud.tip.a11y":{pt:"Acessibilidade — voz, contraste, Libras e fonte",en:"Accessibility — voice, contrast, sign language and font"},
   "hud.tip.voice":{pt:"Narração por voz — lê em voz alta cenários e opções do quiz.",en:"Voice narration — reads scenarios and quiz options aloud."},
-  "streak.bonus":{pt:"Bônus de ofensiva!",en:"Streak bonus!"},
-  "streak.bonusXp":{pt:"Bônus de ofensiva! +{n} XP",en:"Streak bonus! +{n} XP"},
+  "streak.bonus":{pt:"Bônus de sequência!",en:"Streak bonus!"},
+  "streak.bonusXp":{pt:"Bônus de sequência! +{n} pontos",en:"Streak bonus! +{n} points"},
   "manager.demo":{pt:"ℹ️ Piloto local — métricas reais deste dispositivo para sua equipe. Integração corporativa agregada requer backend/LMS.",en:"ℹ️ Local pilot — real metrics from this device for your team. Corporate aggregation requires backend/LMS."},
   "manager.yourTeam":{pt:"Sua equipe (dados reais)",en:"Your team (real data)"},
   "manager.pending":{pt:"Outras equipes — aguardando dados agregados corporativos",en:"Other teams — awaiting corporate aggregated data"},
@@ -302,7 +326,6 @@ var UI = {
   "profile.reset":{pt:"🗑️ Resetar progresso",en:"🗑️ Reset progress"},
   "profile.resetConfirm":{pt:"Apagar todo o progresso salvo neste navegador?",en:"Delete all progress saved in this browser?"},
   "profile.resetDone":{pt:"Progresso resetado.",en:"Progress reset."},
-  "profile.streakStat":{pt:"Ofensiva",en:"Streak"},
   "mode.mgr.h":{pt:"🧭 Painel do gestor",en:"🧭 Manager panel"},
   "mode.mgr.t":{pt:"Visão agregada por equipe (anônima) e exportação CSV.",en:"Aggregated team view (anonymous) and CSV export."},
   "a11y.voice":{pt:"Narração por voz",en:"Voice narration"},
@@ -369,7 +392,8 @@ var UI = {
   "setup.focusLabel":{pt:"🎯 Foco em aprender",en:"🎯 Focus on learning"},
   "setup.focusDesc":{pt:"Reduz ênfase em moedas e recompensas cosméticas para focar no conteúdo.",en:"Reduces emphasis on coins and cosmetic rewards to focus on content."},
   "footer.brand":{pt:"Guardião Cibernético",en:"Cyber Guardian"},
-  "daily.srsDue":{pt:"{n} revisões espaçadas priorizadas na missão de hoje",en:"{n} spaced reviews prioritized in today's mission"},
+  "daily.srsDue":{pt:"{n} revisões do que você errou priorizadas na atividade de hoje",en:"{n} mistake reviews prioritized in today's activity"},
+  "profile.streakStat":{pt:"Sequência",en:"Streak"},
   "map.vwmTitle":{pt:"A Orbita no mundo",en:"Orbita in the world"},
   "map.vwmHelper":{pt:"Toque num país para iniciar a expedição",en:"Tap a country to start the expedition"},
   "map.zoomToggle":{pt:"🔍 Ajustar zoom",en:"🔍 Adjust zoom"},
@@ -516,16 +540,16 @@ var UI = {
   "progress.map":{pt:"Mapa",en:"Map"},
   "progress.mapD":{pt:"Campanhas por país no mapa mundial.",en:"Country campaigns on the world map."},
   "progress.daily":{pt:"Diária",en:"Daily"},
-  "progress.dailyD":{pt:"5 situações (2 revisões de erros + temas fracos). Mantém ofensiva.",en:"5 scenarios (2 error reviews + weak themes). Keeps streak."},
+  "progress.dailyD":{pt:"5 situações (2 revisões de erros + temas fracos). Mantém sequência.",en:"5 scenarios (2 error reviews + weak themes). Keeps streak."},
   "progress.boss":{pt:"Desafios / Crises",en:"Challenges / Crises"},
   "progress.bossD":{pt:"Cadeia Norte + crises simuladas estilo mesa. Alimenta maturidade, conquistas e selo do certificado.",en:"Northern Chain + tabletop simulated crises. Feeds maturity, achievements and certificate seal."},
   "progress.weekly":{pt:"Semanal",en:"Weekly"},
   "progress.weeklyD":{pt:"Metas que somam automaticamente enquanto você joga qualquer modo acima.",en:"Goals that add up automatically as you play any mode above."},
-  "daily.title":{pt:"📅 Missões Diárias",en:"📅 Daily Missions"},
-  "daily.play":{pt:"▶️ Jogar missão do dia",en:"▶️ Play today's mission"},
-  "weekly.title":{pt:"🏆 Desafios Semanais",en:"🏆 Weekly Challenges"},
-  "weekly.intro":{pt:"Metas maiores que renovam toda semana. Progridem enquanto você joga campanhas, diárias e Desafios / Crises.",en:"Bigger goals that refresh every week. They progress as you play campaigns, dailies and Challenges / Crises."},
-  "weekly.play":{pt:"🗺️ Jogar campanha",en:"🗺️ Play a campaign"},
+  "daily.title":{pt:"📅 Atividade de hoje",en:"📅 Today's activity"},
+  "daily.play":{pt:"▶️ Começar atividade de hoje",en:"▶️ Start today's activity"},
+  "weekly.title":{pt:"🏆 Metas da semana",en:"🏆 Weekly goals"},
+  "weekly.intro":{pt:"Objetivos que renovam toda semana. Progridem enquanto você faz a atividade diária, jornadas no mapa e simulações de crise.",en:"Goals that refresh every week. They progress as you do today's activity, map journeys and crisis simulations."},
+  "weekly.play":{pt:"🗺️ Jornada no mapa",en:"🗺️ Map journey"},
   "shop.title":{pt:"🛒 Loja de Recompensas",en:"🛒 Rewards Shop"},
   "shop.sub":{pt:"Use suas moedas para desbloquear avatares e itens cosméticos.",en:"Use your coins to unlock avatars and cosmetic items."},
   "shop.avatars":{pt:"🎭 Avatares",en:"🎭 Avatars"},
@@ -568,17 +592,144 @@ var UI = {
   "nav.manager":{pt:"Gestor",en:"Manager"},
   "nav.tip.home":{pt:"Início — idioma, acessibilidade e começar",en:"Home — language, accessibility and start"},
   "nav.tip.map":{pt:"Mapa — campanhas por país",en:"Map — country campaigns"},
-  "nav.tip.daily":{pt:"Missões diárias",en:"Daily missions"},
-  "nav.tip.missions":{pt:"Missões diárias e desafios semanais",en:"Daily missions and weekly challenges"},
   "nav.tip.more":{pt:"Mais opções — início e gestor",en:"More options — home and manager"},
   "nav.tip.boss":{pt:"Desafios / Crises — crises simuladas estilo mesa com storytelling",en:"Challenges / Crises — tabletop simulated crises with storytelling"},
   "nav.tip.weekly":{pt:"Desafios semanais",en:"Weekly challenges"},
   "nav.tip.shop":{pt:"Loja de recompensas",en:"Rewards shop"},
   "nav.tip.stats":{pt:"Seu progresso e medalhas",en:"Your progress and medals"},
   "nav.tip.manager":{pt:"Painel do gestor",en:"Manager dashboard"},
-  "footer.txt":{pt:"Da mina ao porto, a segurança passa por você. Um clique pode impactar a operação... o seu pode proteger a Orbita.",en:"From mine to port, security starts with you. One click can impact operations... yours can protect Orbita."}
+  "footer.txt":{pt:"Da mina ao porto, a segurança passa por você. Um clique pode impactar a operação... o seu pode proteger a Orbita.",en:"From mine to port, security starts with you. One click can impact operations... yours can protect Orbita."},
+  "settings.uxV122Off":{pt:"Nova interface ativa (v123).",en:"New interface active (v123)."},
+  "nav.tip.missions":{pt:"Atividade de hoje e metas da semana",en:"Today's activity and weekly goals"}
 };
-function t(key){ var e=UI[key]; return e? (e[L()]||e.pt) : key; }
+/* Textos da interface v122 — ativados com S.uxV122 ou ?ux=122 na URL */
+var UI_V122 = {
+  "home.badge":{pt:"Operações globais • Cyber Security",en:"Global operations • Cyber Security"},
+  "home.desc":{pt:"Sua missão é proteger as operações da organização em todo o mundo por meio de decisões seguras no ambiente digital.",en:"Your mission is to protect the organization's operations worldwide through secure decisions in the digital environment."},
+  "home.previewLoop":{pt:"Seu loop de treino: 📅 Missão diária → 🗺️ Mapa global → 🎯 Desafios / Crises",en:"Your training loop: 📅 Daily mission → 🗺️ World map → 🎯 Challenges / Crises"},
+  "home.firstDay":{pt:"Dia 1 da sua ofensiva — 5 minutos de treino bastam para começar.",en:"Day 1 of your streak — 5 minutes of training is enough to start."},
+  "home.nextDaily":{pt:"Sua missão diária está esperando",en:"Your daily mission is waiting"},
+  "home.nextDailySub":{pt:"5 situações rápidas mantêm sua ofensiva e priorizam o que você errou.",en:"5 quick scenarios keep your streak and prioritize what you missed."},
+  "home.nextReviewSub":{pt:"Você tem {n} itens em revisão espaçada prontos para hoje.",en:"You have {n} items in spaced review ready for today."},
+  "home.nextCampaignSub":{pt:"Sua expedição continua — proteja o próximo país no mapa e avance na meta semanal.",en:"Your expedition continues — protect the next country on the map and advance your weekly goal."},
+  "home.nextGoDaily":{pt:"▶️ Jogar diária",en:"▶️ Play daily"},
+  "tip.daily":{pt:"5 situações rápidas — 2 revisam erros anteriores. Mantém sua ofensiva!",en:"5 quick scenarios — 2 review past mistakes. Keeps your streak!"},
+  "session.streakKept":{pt:"🔥 Ofensiva mantida hoje!",en:"🔥 Streak kept today!"},
+  "session.streakStart":{pt:"🔥 Ofensiva iniciada — volte amanhã!",en:"🔥 Streak started — come back tomorrow!"},
+  "weekly.checkDaily":{pt:"Jogar 5 dias (ofensiva)",en:"Play 5 days (streak)"},
+  "weekly.checkCampaign":{pt:"3 campanhas no mapa",en:"3 map campaigns"},
+  "mgr.kpiStreak":{pt:"Ofensiva média",en:"Avg streak"},
+  "streak.title":{pt:"🔥 Ofensiva",en:"🔥 Streak"},
+  "streak.today":{pt:"✅ Ofensiva mantida hoje!",en:"✅ Streak kept today!"},
+  "streak.risk":{pt:"⚠️ Jogue hoje para não perder sua ofensiva!",en:"⚠️ Play today to keep your streak!"},
+  "streak.neutral":{pt:"Jogue hoje para iniciar sua ofensiva!",en:"Play today to start your streak!"},
+  "streak.new":{pt:"🔥 Ofensiva iniciada! Dia 1.",en:"🔥 Streak started! Day 1."},
+  "streak.up":{pt:"🔥 Ofensiva: ",en:"🔥 Streak: "},
+  "streak.lost":{pt:"Ofensiva reiniciada.",en:"Streak reset."},
+  "streak.bonus":{pt:"Bônus de ofensiva!",en:"Streak bonus!"},
+  "streak.bonusXp":{pt:"Bônus de ofensiva! +{n} XP",en:"Streak bonus! +{n} XP"},
+  "hud.tip.streak":{pt:"Ofensiva — dias seguidos jogando; mantenha a sequência para bônus de moedas.",en:"Streak — consecutive days played; keep it going for coin bonuses."},
+  "daily.doneTitle":{pt:"🎉 Missão diária concluída!",en:"🎉 Daily mission complete!"},
+  "daily.doneSub":{pt:"Volte amanhã para manter sua ofensiva e revisar novos cenários.",en:"Come back tomorrow to keep your streak and review new scenarios."},
+  "daily.streakRisk":{pt:"Sua ofensiva está em risco — jogue para manter a sequência.",en:"Your streak is at risk — play to keep it going."},
+  "daily.streakOk":{pt:"Ofensiva mantida hoje — continue evoluindo.",en:"Streak kept today — keep improving."},
+  "daily.rewardLine":{pt:"+50 XP · mantém ofensiva 🔥",en:"+50 XP · keeps streak 🔥"},
+  "daily.srsDue":{pt:"{n} revisões espaçadas priorizadas na missão de hoje",en:"{n} spaced reviews prioritized in today's mission"},
+  "daily.title":{pt:"📅 Missões Diárias",en:"📅 Daily Missions"},
+  "daily.play":{pt:"▶️ Jogar missão do dia",en:"▶️ Play today's mission"},
+  "weekly.title":{pt:"🏆 Desafios Semanais",en:"🏆 Weekly Challenges"},
+  "weekly.intro":{pt:"Metas maiores que renovam toda semana. Progridem enquanto você joga campanhas, diárias e Desafios / Crises.",en:"Bigger goals that refresh every week. They progress as you play campaigns, dailies and Challenges / Crises."},
+  "weekly.play":{pt:"🗺️ Jogar campanha",en:"🗺️ Play a campaign"},
+  "progress.dailyD":{pt:"5 situações (2 revisões de erros + temas fracos). Mantém ofensiva.",en:"5 scenarios (2 error reviews + weak themes). Keeps streak."},
+  "profile.streakStat":{pt:"Ofensiva",en:"Streak"},
+  "nav.tip.missions":{pt:"Missões diárias e desafios semanais",en:"Daily missions and weekly challenges"},
+  "home.weekLine":{pt:"Semana: {theme} · Acertos {correct}/20 · Campanhas {campaign}/3 · Missão {daily}",en:"Week: {theme} · Correct {correct}/20 · Campaigns {campaign}/3 · Mission {daily}"}
+};
+function ensureUxState(){ if(S.uxV122===undefined) S.uxV122=false; }
+function uxLegacy(){ ensureUxState(); return !!S.uxV122; }
+function t(key){
+  if(uxLegacy() && UI_V122[key]){ var lv=UI_V122[key]; return lv[L()]||lv.pt; }
+  var e=UI[key]; return e? (e[L()]||e.pt) : key;
+}
+function initUxFromUrl(){
+  ensureUxState();
+  var m=location.search.match(/[?&]ux=(122|v122|new|v2|123)(?:&|$)/i);
+  if(m){
+    var v=m[1].toLowerCase();
+    if(v==="122"||v==="v122"){ S.uxV122=true; save(); }
+    else{ S.uxV122=false; save(); }
+  }
+}
+function applyUxMode(){
+  ensureUxState();
+  document.body.classList.toggle("ux-v122",uxLegacy());
+  document.body.classList.toggle("ux-v2",!uxLegacy());
+}
+function setUxV122(on){
+  S.uxV122=!!on; save(); applyUxMode();
+  applyI18n(); renderNextStep(); renderDaily(); renderWeekly();
+  renderHomeHowStrip(); renderMissionsFocus(); renderUxBanner();
+  var cb=$("optUxV122Settings"); if(cb) cb.checked=S.uxV122;
+  toast(on?t("settings.uxV122On"):t("settings.uxV122Off"));
+}
+function streakRiskMsg(){
+  ensureStreak();
+  var n=S.streak.count||0, msg=t("streak.risk");
+  return msg.indexOf("{n}")>=0?msg.replace("{n}",String(n)):msg;
+}
+function roleBasedNextSub(){
+  var r=ROLES.filter(function(x){ return x.id===S.role; })[0];
+  if(!r) return "";
+  return (L()==="pt"?"Situações do seu dia a dia: ":"Scenarios from your work: ")+(L()==="pt"?r.ptd:r.end);
+}
+function nextStepPreviewText(ns){
+  if(!ns||uxLegacy()) return "";
+  ensureDaily(); ensureWeekly();
+  if(!S.daily.done.mission) return "";
+  if((S.weekly.prog.campaign||0)<3) return t("home.howMap");
+  return t("home.howCrisis");
+}
+function renderHomeHowStrip(){
+  var el=$("homeHowStrip"); if(!el) return;
+  if(uxLegacy()||!S.onboardingDone){ el.hidden=true; return; }
+  el.hidden=false;
+}
+function renderMissionsFocus(){
+  var ban=$("missionsFocusBanner"), also=$("missionsAlsoCard");
+  if(ban){
+    if(uxLegacy()) ban.hidden=true;
+    else{
+      ban.hidden=false;
+      var focus=$("missionsFocusText");
+      if(focus){
+        ensureDaily();
+        focus.textContent=!S.daily.done.mission?t("missions.focusDaily"):t("missions.focusMap");
+      }
+    }
+  }
+  if(also) also.hidden=uxLegacy();
+}
+function renderUxBanner(){
+  var el=$("uxV122Banner"); if(!el) return;
+  el.hidden=!uxLegacy();
+  if(!el.hidden) el.textContent=t("settings.uxV122On");
+}
+function renderHeroUxState(){
+  var hb=$("heroIronBtn"), card=$("heroCard");
+  var shortEl=$("heroLeadShort"), longEl=$("heroLeadLong");
+  if(hb){
+    var lock=!uxLegacy()&&!S.onboardingDone;
+    hb.disabled=lock;
+    hb.classList.toggle("hero-locked",lock);
+  }
+  if(card) card.classList.toggle("hero-ux-v2",!uxLegacy());
+  if(shortEl&&longEl){
+    if(uxLegacy()){ shortEl.hidden=true; longEl.hidden=false; }
+    else if(!S.onboardingDone){ shortEl.hidden=false; longEl.hidden=true; }
+    else if(S.onboardingDone&&!S.heroExpanded){ shortEl.hidden=true; longEl.hidden=true; }
+    else { shortEl.hidden=true; longEl.hidden=false; }
+  }
+}
 function langFlagSvg(lang){
   if(lang==="pt") return '<svg viewBox="0 0 36 24" class="flag-chip" aria-hidden="true"><rect width="36" height="24" fill="#009b3a"/><polygon points="18,2 34,12 18,22 2,12" fill="#fedf00"/><circle cx="18" cy="12" r="5.5" fill="#002776"/></svg>';
   return '<svg viewBox="0 0 36 24" class="flag-chip" aria-hidden="true"><rect width="36" height="24" fill="#B22234"/><rect y="2.3" width="36" height="2.3" fill="#fff"/><rect y="6.9" width="36" height="2.3" fill="#fff"/><rect y="11.5" width="36" height="2.3" fill="#fff"/><rect y="16.1" width="36" height="2.3" fill="#fff"/><rect y="20.7" width="36" height="2.3" fill="#fff"/><rect width="14.4" height="13.8" fill="#3C3B6E"/><circle cx="3.2" cy="2.8" r=".9" fill="#fff"/><circle cx="7.2" cy="2.8" r=".9" fill="#fff"/><circle cx="11.2" cy="2.8" r=".9" fill="#fff"/><circle cx="5.2" cy="5.8" r=".9" fill="#fff"/><circle cx="9.2" cy="5.8" r=".9" fill="#fff"/><circle cx="3.2" cy="8.8" r=".9" fill="#fff"/><circle cx="7.2" cy="8.8" r=".9" fill="#fff"/><circle cx="11.2" cy="8.8" r=".9" fill="#fff"/></svg>';
@@ -614,6 +765,7 @@ function renderSettingsUi(){
   if(dl) renderGlossaryWordList();
   renderGlossaryFavs(); renderGlossaryMeta();
   var su=$("optSimpleUiSettings"); if(su) su.checked=S.simpleUi!==false;
+  var ux=$("optUxV122Settings"); if(ux) ux.checked=!!S.uxV122;
   syncEasyReadUi();
   requestAnimationFrame(syncBottomShellHeight);
 }
@@ -644,6 +796,7 @@ function setLang(lang){
   S.lang=lang; save();
   document.querySelectorAll(".lang-card").forEach(function(x){ x.setAttribute("aria-pressed",x.getAttribute("data-lang")===lang?"true":"false"); });
   applyI18n(); renderTeams(); renderRoles(); refreshHud(); applySignLanguage(); renderGlossaryWordList();
+  renderNextStep(); renderDaily(); renderWeekly(); renderHomeHowStrip(); renderMissionsFocus(); renderUxBanner();
   var ov=$("onboardOverlay"); if(ov&&!ov.hidden) renderOnboarding();
   if($("screenMap").classList.contains("active")){ drawMap(); renderMapExpedition(); }
 }
@@ -832,8 +985,8 @@ var MEDALS = [
   {id:"bossLegend", ico:"👑", name:{pt:"Resiliência Lendária",en:"Legendary Resilience"}, test:function(){ return bossHasTier("legendary"); }},
   {id:"bossResil", ico:"💎", name:{pt:"Guardião Resiliente",en:"Resilient Guardian"}, test:function(){ return bossAvgIndex()>=75||bossGoldCount()>=3; }},
   {id:"rich", ico:"⭐", name:{pt:"Veterano",en:"Veteran"}, test:function(){ return S.xp>=250 || medalsEarned()>=5; }},
-  {id:"streak7", ico:"🔥", name:{pt:"Ofensiva 7 dias",en:"7-day streak"}, test:function(){ return (S.streak&&S.streak.best>=7)||(S.streak&&S.streak.count>=7); }},
-  {id:"streak30", ico:"💥", name:{pt:"Ofensiva 30 dias",en:"30-day streak"}, test:function(){ return S.streak&&S.streak.best>=30; }},
+  {id:"streak7", ico:"🔥", name:{pt:"Sequência 7 dias",en:"7-day streak"}, test:function(){ return (S.streak&&S.streak.best>=7)||(S.streak&&S.streak.count>=7); }},
+  {id:"streak30", ico:"💥", name:{pt:"Sequência 30 dias",en:"30-day streak"}, test:function(){ return S.streak&&S.streak.best>=30; }},
   {id:"master", ico:"👑", name:{pt:"Mestre da Segurança",en:"Security Master"}, test:function(){ return S.xp>=500; }},
   {id:"gloss5", ico:"📖", name:{pt:"Aprendiz do glossário",en:"Glossary apprentice"}, test:function(){ return glossaryLearnedCount()>=5; }},
   {id:"glossThreat5", ico:"🛡️", name:{pt:"5 termos de Ameaças",en:"5 Threat terms"}, test:function(){ return glossaryCatLearnedCount("threat")>=5; }},
@@ -868,14 +1021,14 @@ function show(id){
   if(id!=="screenMap" && typeof glStop==="function") glStop();
   document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
   var el=$(id); if(el) el.classList.add("active");
-  if(id==="screenHome"){ renderNextStep(); renderWeekCard(); renderFirstDayHint(); updateSetupBanner(); }
+  if(id==="screenHome"){ renderNextStep(); renderWeekCard(); renderFirstDayHint(); updateSetupBanner(); renderHomeHowStrip(); renderUxBanner(); }
   if(id==="screenMap"){ showContextTip("map"); renderMapExplorerHint(); updateSetupBanner(); syncMapDetailLayout(); }
   else{
     var sm=$("screenMap"); if(sm) sm.classList.remove("map-screen-fit");
     document.body.classList.remove("map-viewport-lock");
     document.documentElement.style.removeProperty("--map-viewport-h");
   }
-  if(id==="screenDaily"){ showContextTip("daily"); renderDaily(); renderWeekly(); }
+  if(id==="screenDaily"){ showContextTip("daily"); renderDaily(); renderWeekly(); renderMissionsFocus(); }
   if(id==="screenBossList") showContextTip("boss");
   if(id==="screenReview"&&typeof window.initReviewBank==="function") window.initReviewBank();
   updateNavBadges();
@@ -1766,7 +1919,7 @@ function renderHudStreak(){
   if(countEl) countEl.textContent=n;
   if(bestEl) bestEl.textContent=best;
   if(statusEl){
-    statusEl.textContent=today?t("streak.today"):(n>0?t("streak.risk"):t("streak.neutral"));
+    statusEl.textContent=today?t("streak.today"):(n>0?streakRiskMsg():t("streak.neutral"));
     statusEl.className="streak-pop-status"+(today?" streak-pop-ok":(n>0?" streak-pop-risk":" streak-pop-neutral"));
   }
 }
@@ -3697,7 +3850,7 @@ function renderStreakCard(){
   var n=S.streak.count||0, best=S.streak.best||0, today=streakPlayedToday();
   $("streakCount").textContent=n;
   $("streakBest").textContent=best;
-  $("streakStatus").textContent=today?t("streak.today"):t("streak.risk");
+  $("streakStatus").textContent=today?t("streak.today"):(n>0?streakRiskMsg():t("streak.neutral"));
   card.classList.toggle("streak-active",today);
   card.classList.toggle("streak-risk",!today&&n>0);
   renderHudStreak();
@@ -3720,7 +3873,7 @@ function markDailyDone(won){
   save();
 }
 function renderDaily(){
-  ensureDaily(); renderStreakCard();
+  ensureDaily(); renderStreakCard(); renderMissionsFocus();
   $("dailyDate").textContent=(L()==="pt"?"Hoje: ":"Today: ")+new Date().toLocaleDateString(L()==="pt"?"pt-BR":"en-US");
   var due=srsDueCount(), srs=$("dailySrsNote");
   if(srs){
@@ -3731,28 +3884,37 @@ function renderDaily(){
   if(meta){
     ensureStreak();
     var streakMsg=streakPlayedToday()?t("daily.streakOk"):t("daily.streakRisk");
+    var reviewVal=uxLegacy()?(due>0?due+" SRS":"—"):(due>0?String(due):"—");
+    var reviewLab=uxLegacy()?"SRS":t("daily.reviewLabel");
     meta.innerHTML='<div class="daily-meta-grid">'
-      +'<div class="daily-meta-item"><span class="daily-meta-k">🔥</span><span class="daily-meta-v">'+(S.streak.count||0)+' '+t("streak.days")+'</span></div>'
-      +'<div class="daily-meta-item"><span class="daily-meta-k">📚</span><span class="daily-meta-v">'+(due>0?due+" SRS":"—")+'</span></div>'
-      +'<div class="daily-meta-item"><span class="daily-meta-k">🎯</span><span class="daily-meta-v">5</span></div>'
+      +'<div class="daily-meta-item" aria-label="'+t("streak.days")+'"><span class="daily-meta-k" aria-hidden="true">🔥</span><span class="daily-meta-v">'+(S.streak.count||0)+' '+t("streak.days")+'</span></div>'
+      +'<div class="daily-meta-item" aria-label="'+reviewLab+'"><span class="daily-meta-k" aria-hidden="true">📚</span><span class="daily-meta-v">'+reviewVal+'</span><span class="daily-meta-lab">'+reviewLab+'</span></div>'
+      +'<div class="daily-meta-item" aria-label="'+(L()==="pt"?"5 situações":"5 scenarios")+'"><span class="daily-meta-k" aria-hidden="true">🎯</span><span class="daily-meta-v">5</span><span class="daily-meta-lab">'+(L()==="pt"?"situações":"scenarios")+'</span></div>'
       +'</div><p class="daily-why">'+t("daily.whyToday")+' — '+streakMsg+'</p><p class="muted daily-theme-line">'+t("daily.themeLine")+'</p>';
-  }
-  var navDaily=$("navDailyBtn");
-  if(navDaily){
-    var lbl=navDaily.querySelector("span:last-child");
-    if(lbl) lbl.textContent=due>0?(t("nav.daily")+" · "+due):t("nav.daily");
   }
   var host=$("dailyList"); host.innerHTML="";
   var done=!!S.daily.done.mission;
+  var itemName=uxLegacy()?(L()==="pt"?"Missão do dia — 5 situações":"Daily mission — 5 scenarios"):t("daily.itemName");
   var item=document.createElement("div"); item.className="mission-item"+(done?" done":"");
-  item.innerHTML='<span class="mem">'+(done?"✅":"📅")+'</span><div class="mtxt"><div class="mname">'+(L()==="pt"?"Missão do dia — 5 situações":"Daily mission — 5 scenarios")+'</div><div class="mrew">'+t("daily.rewardLine")+'</div></div>';
+  item.innerHTML='<span class="mem">'+(done?"✅":"📅")+'</span><div class="mtxt"><div class="mname">'+itemName+'</div><div class="mrew">'+t("daily.rewardLine")+'</div></div>';
   host.appendChild(item);
-  $("dailyStartBtn").disabled=done; $("dailyStartBtn").textContent=done?(L()==="pt"?"✅ Concluída hoje":"✅ Done today"):t("daily.play");
+  var startBtn=$("dailyStartBtn");
+  if(startBtn){
+    if(done&&!uxLegacy()){
+      startBtn.disabled=false;
+      startBtn.textContent=t("daily.doneNext");
+      startBtn.onclick=function(){ openMap(null,true); };
+    } else {
+      startBtn.disabled=done;
+      startBtn.onclick=startDaily;
+      startBtn.textContent=done?(L()==="pt"?"✅ Concluída hoje":"✅ Done today"):t("daily.play");
+    }
+  }
 }
 var WEEKLY=[
   {id:"correct", goal:20, ico:"🎯", name:{pt:"Acerte 20 situações",en:"Get 20 scenarios right"}},
-  {id:"campaign", goal:3, ico:"🗺️", name:{pt:"Complete 3 campanhas",en:"Complete 3 campaigns"}},
-  {id:"boss", goal:1, ico:"🎯", name:{pt:"Vença 1 crise",en:"Beat 1 crisis"}},
+  {id:"campaign", goal:3, ico:"🗺️", name:{pt:"Complete 3 jornadas no mapa",en:"Complete 3 map journeys"}},
+  {id:"boss", goal:1, ico:"🎯", name:{pt:"Vença 1 simulação de crise",en:"Beat 1 crisis simulation"}},
   {id:"theme", goal:8, ico:"📚", themed:true, name:{pt:"Acerte 8 do tema da semana",en:"Get 8 on the week theme"}}
 ];
 function ensureWeekly(){ if(S.weekly.week!==weekKey()){ S.weekly={week:weekKey(),prog:{}}; save(); } }
@@ -3764,7 +3926,7 @@ function renderWeekly(){
   var host=$("weeklyList"); host.innerHTML="";
   var wp=S.weekly.prog||{};
   var hasProg=WEEKLY.some(function(w){ return (wp[w.id]||0)>0; });
-  if(!hasProg){
+  if(uxLegacy()&&!hasProg){
     host.innerHTML='<p class="weekly-empty muted">'+t("weekly.emptyStart")+'</p>';
     return;
   }
@@ -3772,8 +3934,11 @@ function renderWeekly(){
     var p=Math.min(w.goal,S.weekly.prog[w.id]||0),pct=Math.round(p/w.goal*100),done=p>=w.goal;
     var label=tt(w.name);
     if(w.themed) label=(L()==="pt"?"Acerte 8 em ":"Get 8 on ")+tt(THEMES[wt]);
+    if(uxLegacy()&&w.id==="campaign") label=(L()==="pt"?"Complete 3 campanhas":"Complete 3 campaigns");
+    if(uxLegacy()&&w.id==="boss") label=(L()==="pt"?"Vença 1 crise":"Beat 1 crisis");
     var d=document.createElement("div"); d.className="mission-item"+(done?" done":"");
-    d.innerHTML='<span class="mem">'+(done?"✅":w.ico)+'</span><div class="mtxt"><div class="mname">'+label+'</div><div class="mrew">'+p+"/"+w.goal+' • +40 XP</div><div class="mini-bar"><span class="mf" style="width:'+pct+'%"></span></div></div>';
+    var pts=uxLegacy()?"+40 XP":"+40 "+(L()==="pt"?"pontos":"points");
+    d.innerHTML='<span class="mem">'+(done?"✅":w.ico)+'</span><div class="mtxt"><div class="mname">'+label+'</div><div class="mrew">'+p+"/"+w.goal+' • '+pts+'</div><div class="mini-bar" role="progressbar" aria-valuemin="0" aria-valuemax="'+w.goal+'" aria-valuenow="'+p+'"><span class="mf" style="width:'+pct+'%"></span></div></div>';
     host.appendChild(d);
   });
 }
@@ -3864,7 +4029,7 @@ function nextMilestoneText(){
   if(chainStagesDone()<3) return (L()==="pt"?"Proteja 3 etapas da Cadeia Norte":"Protect 3 Northern Chain stages");
   if(bossAvgIndex()<70) return (L()==="pt"?"Alcance 70% de maturidade em uma crise":"Reach 70% maturity in a crisis");
   if(medalsEarned()<6) return (L()==="pt"?"Desbloqueie mais conquistas":"Unlock more achievements");
-  return (L()==="pt"?"Mantenha a ofensiva e revise temas fracos":"Keep your streak and review weak themes");
+  return (L()==="pt"?"Mantenha a sequência e revise temas fracos":"Keep your streak and review weak themes");
 }
 function weekPlayAction(){
   ensureDaily(); ensureWeekly();
@@ -3879,9 +4044,10 @@ function applyFocusLearn(){
 }
 function computeNextStep(){
   ensureDaily(); ensureWeekly();
-  var due=srsDueCount();
+  var due=srsDueCount(), subExtra="";
+  if(!uxLegacy()&&S.role) subExtra=roleBasedNextSub();
   if(!S.daily.done.mission){
-    return {ico:"📅",title:t("home.nextDaily"),sub:t("home.nextDailySub"),btn:t("home.nextGoDaily"),act:function(){ renderDaily(); show("screenDaily"); }};
+    return {ico:"📅",title:t("home.nextDaily"),sub:t("home.nextDailySub")+(subExtra?(" — "+subExtra):""),btn:t("home.nextGoDaily"),act:function(){ renderDaily(); show("screenDaily"); }};
   }
   if(due>0){
     return {ico:"📚",title:t("home.nextReview"),sub:t("home.nextReviewSub").replace("{n}",String(due)),btn:t("home.nextGoReview"),act:startReviewErrors};
@@ -3896,15 +4062,26 @@ function renderNextStep(){
   var hero=$("homeHeroActions");
   applyHeroCompact();
   renderHomeLoopPreview();
+  renderHomeHowStrip();
+  renderHeroUxState();
+  renderUxBanner();
   updateHomeCtaLayout();
   if(!S.onboardingDone){ card.hidden=true; if(hero) hero.hidden=false; return; }
   if(hero) hero.hidden=true;
   var ns=computeNextStep();
   var ico=$("nextStepIco"), ti=$("nextStepTitle"), sub=$("nextStepSub"), btn=$("nextStepBtn");
+  var wkBtn=$("nextStepWeeklyBtn"), preview=$("nextStepPreview");
   if(ico) ico.textContent=ns.ico;
   if(ti) ti.textContent=ns.title;
   if(sub) sub.textContent=ns.sub;
   if(btn){ btn.textContent=ns.btn||t("home.playNow"); btn.onclick=playNow; }
+  if(wkBtn) wkBtn.hidden=!uxLegacy();
+  if(preview){
+    var pv=nextStepPreviewText(ns);
+    if(pv&&!uxLegacy()){ preview.hidden=false; preview.textContent=t("home.nextPreview").replace("{next}",pv); }
+    else preview.hidden=true;
+  }
+  card.classList.toggle("next-step-ux-v2",!uxLegacy());
   renderWeekLine();
   renderFirstDayHint();
   card.hidden=false;
@@ -3914,11 +4091,15 @@ function applyHeroCompact(){
   if(!card) return;
   var compact=!!S.onboardingDone&&!S.heroExpanded;
   card.classList.toggle("hero-compact",compact);
-  if(exp) exp.hidden=compact;
-  if(btn){
-    btn.hidden=!S.onboardingDone;
-    if(S.onboardingDone) btn.textContent=S.heroExpanded?t("home.collapse"):t("home.expand");
+  if(exp){
+    if(!uxLegacy()&&!S.onboardingDone) exp.hidden=!S.heroExpanded;
+    else exp.hidden=compact;
   }
+  if(btn){
+    btn.hidden=uxLegacy()?!S.onboardingDone:false;
+    if(!btn.hidden) btn.textContent=S.heroExpanded?t("home.collapse"):t("home.expand");
+  }
+  renderHeroUxState();
 }
 function updateSetupBanner(){
   var ban=$("setupBanner"); if(!ban) return;
@@ -3958,12 +4139,23 @@ function renderWeekLine(){
   var host=$("nextStepWeek"); if(!host) return;
   ensureWeekly(); ensureDaily();
   var wp=S.weekly.prog||{}, wt=getWeekTheme();
-  var daily=S.daily.done.mission?(L()==="pt"?"✅ Feita":"✅ Done"):(L()==="pt"?"Pendente":"Pending");
-  host.textContent=t("home.weekLine")
-    .replace("{theme}",THEMES[wt].ico+" "+tt(THEMES[wt]))
-    .replace("{correct}",String(wp.correct||0))
-    .replace("{campaign}",String(wp.campaign||0))
-    .replace("{daily}",daily);
+  if(uxLegacy()){
+    var daily=S.daily.done.mission?(L()==="pt"?"✅ Feita":"✅ Done"):(L()==="pt"?"Pendente":"Pending");
+    host.textContent=t("home.weekLine")
+      .replace("{theme}",THEMES[wt].ico+" "+tt(THEMES[wt]))
+      .replace("{correct}",String(wp.correct||0))
+      .replace("{campaign}",String(wp.campaign||0))
+      .replace("{daily}",daily);
+  } else {
+    var parts=[];
+    var remC=Math.max(0,20-(wp.correct||0)), remM=Math.max(0,3-(wp.campaign||0));
+    var remB=Math.max(0,1-(wp.boss||0)), remT=Math.max(0,8-(wp.theme||0));
+    if(remC>0) parts.push(t("home.weekRemCorrect").replace("{n}",String(remC)));
+    if(remM>0) parts.push(t("home.weekRemCampaign").replace("{n}",String(remM)));
+    if(remB>0) parts.push(t("home.weekRemBoss").replace("{n}",String(remB)));
+    if(remT>0) parts.push(t("home.weekRemTheme").replace("{n}",String(remT)));
+    host.textContent=parts.length?t("home.weekRemPrefix")+parts.join(", "):t("home.weekRemDone");
+  }
   renderWeekProgressBar();
 }
 function setFocusLearn(on){
@@ -4658,7 +4850,7 @@ function bind(){
   on("hudStatsSummary","keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); renderProfile(); show("screenProfile"); } });
   if($("optManager")){ $("optManager").checked=!!S.managerMode; on("optManager","change",function(){ setManagerMode(this.checked); }); }
   if($("optFocusLearn")){ $("optFocusLearn").checked=!!S.focusLearn; on("optFocusLearn","change",function(){ setFocusLearn(this.checked); }); }
-  on("heroIronBtn","click",function(){ openBossChain(true); });
+  on("heroIronBtn","click",function(){ if(this.disabled) return; openBossChain(true); });
   on("setupGoBtn","click",function(){
     if($("playerName")) S.name=$("playerName").value.trim();
     if(!S.team){ toast(t("setup.teamRequired")); return; }
@@ -4714,6 +4906,7 @@ function bind(){
   on("settingsEditProfileBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); openEditSetup(); });
   on("optEasyReadSettings","change",function(e){ e.stopPropagation(); setEasyRead(this.checked); });
   on("optSimpleUiSettings","change",function(e){ e.stopPropagation(); setSimpleUi(this.checked); });
+  on("optUxV122Settings","change",function(e){ e.stopPropagation(); setUxV122(this.checked); });
   on("optSimpleUi","change",function(){ setSimpleUi(this.checked); });
   on("profileEditSetupBtn","click",openEditSetup);
   on("profileWeeklyBtn","click",openWeeklyScreen);
@@ -4825,6 +5018,7 @@ function wireBottomNav(){
 function init(){
   try{
   sanitizeA11y(); ensureManagerMode(); ensureUxState();
+  initUxFromUrl(); applyUxMode();
   dismissBlockingUI();
   applyI18n(); applyA11y(); applyTheme(); applySimpleUi(); applyCosmetics(); applyFocusLearn(); applyProductionUi(); ensureDaily(); ensureWeekly(); ensureTeamScores(); ensureStreak(); refreshHud();
   requestAnimationFrame(syncBottomShellHeight);
@@ -4834,6 +5028,7 @@ function init(){
   try{ renderWeekCard(); }catch(e){ console.error(e); }
   try{ renderDaily(); }catch(e){ console.error(e); }
   try{ renderNextStep(); }catch(e){ console.error(e); }
+  renderHomeHowStrip(); renderMissionsFocus(); renderUxBanner();
   renderHomeLoopPreview(); updateHomeCtaLayout();
   updateManagerNav();
   try{ updateHeroCaption(); }catch(e){ console.error(e); }
@@ -4888,6 +5083,7 @@ window.gdvDemoApi={
   refreshAll:function(){
     refreshHud(); applyCosmetics(); renderNextStep(); renderWeekCard(); renderDaily(); renderWeekly();
     renderWeekProgressBar(); renderFirstDayHint(); updateSetupBanner(); updateNavBadges(); updateManagerNav();
+    renderHomeHowStrip(); renderMissionsFocus(); renderUxBanner(); applyUxMode();
     checkMedals(); renderBossList();
     if($("screenMap")&&$("screenMap").classList.contains("active")){ try{ drawMap(); renderMapExpedition(); }catch(e){} }
     if($("screenProfile")&&$("screenProfile").classList.contains("active")) renderProfile();
