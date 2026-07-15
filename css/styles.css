@@ -1112,11 +1112,11 @@ body.contrast .quit-btn-leave{background:#1a1a1a;border-color:#ff7b72;color:#ffb
 
 /* Configurações, glossário e temas */
 .glossary-menu-wrap{position:relative;display:inline-flex;flex:none}
-.glossary-menu{position:fixed;top:auto;bottom:calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px) + 8px);right:8px;left:8px;width:auto;max-width:min(400px,calc(100vw - 16px));margin-left:auto;margin-right:0;z-index:10150;max-height:min(75dvh,560px);overflow:auto;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto}
+.glossary-menu{position:fixed;top:auto;bottom:calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px) + 8px);right:8px;left:auto;width:min(400px,calc(100vw - 16px));z-index:10150;max-height:min(75dvh,560px);overflow:auto;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto}
 .glossary-menu[hidden]{display:none!important}
 .glossary-menu-body{max-height:none}
 .settings-menu-wrap{position:relative;display:inline-flex;flex:none}
-.settings-menu{position:fixed;top:auto;bottom:calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px) + 8px);right:8px;left:8px;width:auto;max-width:min(400px,calc(100vw - 16px));margin-left:auto;margin-right:0;z-index:10150;max-height:min(75dvh,560px);overflow:auto;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto}
+.settings-menu{position:fixed;top:auto;bottom:calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px) + 8px);right:8px;left:auto;width:min(400px,calc(100vw - 16px));z-index:10150;max-height:min(75dvh,560px);overflow:auto;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto}
 .dropdown-panel{position:absolute;top:calc(100% + 8px);right:0;z-index:10150;width:min(340px,calc(100vw - 28px));max-height:min(78vh,560px);overflow:auto;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto}
 .settings-menu[hidden]{display:none!important}
 .dp-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 14px 10px;background:linear-gradient(180deg,#f0faf9 0%,#fff 100%);border-bottom:1px solid #dce8ec;position:sticky;top:0;z-index:1}
