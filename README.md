@@ -2,7 +2,7 @@
 
 Jogo web **bilíngue (Português 🇧🇷 / Inglês 🇬🇧)** de conscientização em **Cyber Security e Segurança da Informação**, ambientado nas operações reais da Orbita ao redor do mundo. Funciona 100% no navegador, sem login, com suporte **PWA** (instalável e offline após a primeira visita).
 
-**Versão atual:** `v129` · **Demo ao vivo:** [circulador.github.io/q7k3n8zx2m](https://circulador.github.io/q7k3n8zx2m/?v=129)
+**Versão atual:** `v130` · **Demo ao vivo:** [circulador.github.io/q7k3n8zx2m](https://circulador.github.io/q7k3n8zx2m/?v=130)
 
 ---
 
@@ -10,16 +10,25 @@ Jogo web **bilíngue (Português 🇧🇷 / Inglês 🇬🇧)** de conscientiza�
 
 ### Perfil unificado (onboarding + edição)
 
-Uma **única tela de perfil** (`#screenSetup`) cobre nome, equipe e papel — sem duplicar fluxos:
+Uma **única tela de perfil** (`#screenSetup`) cobre nome, equipe e papel:
 
 | Momento | Badge | Título |
 |---------|-------|--------|
 | **Primeira vez** (após onboarding) | 👤 Perfil rápido | Personalize seu perfil |
 | **Edição** (Configurações ou aba Eu) | ✏️ Editar perfil | Editar perfil |
 
-- **Nome (opcional)** no topo — aparece no certificado e no ranking da equipe (placeholder: `Exemplo: Rodolfo Conte` / `Example: Rodolfo Conte`)
-- **Equipe** e **papel** personalizam cenários de phishing, senha, dados etc.
-- Onboarding em **5 passos**: idioma → acessibilidade → perfil (texto) → como funciona → pronto → Setup
+**Equipes (10):** Mina · Ferrovia · Porto · Corporativo · TI & Segurança · Automação (OT) · Logística · Energia · Projetos & Engenharia · Sustentabilidade
+
+**Papéis (8):** Administrativo · Operação/Campo · Automação (OT) · Liderança · Analista · Técnico · Terceiros · Em formação
+
+- **Nome (opcional)** no topo — certificado e ranking (`Exemplo: Rodolfo Conte`)
+- Onboarding em **5 passos** → Setup → primeira atividade
+
+### Conquistas e certificado
+
+**16 conquistas** ligadas às mecânicas do jogo: perfil, mapa, diária, metas semanais, cadeia Norte, crises, sequência e glossário.
+
+Certificado com **layout revisado** — estatísticas em grade (rótulo + valor) e conquistas em 3 colunas sem sobreposição.
 
 ### Navegação e UX (mobile-first)
 
@@ -66,7 +75,7 @@ Inclui atalhos de estado e **ir para tela** (mapa, missões, crises, loja, etc.)
 .
 ├── index.html              # Telas, topbar, taskbar inferior, PWA
 ├── manifest.webmanifest
-├── sw.js                   # Service Worker (cache v129)
+├── sw.js                   # Service Worker (cache v130)
 ├── README.md
 ├── RACIONAL-PEDAGOGICO.md
 ├── review.html             # Banco de revisão (legado; revisão também in-app)
@@ -95,7 +104,7 @@ Inclui atalhos de estado e **ir para tela** (mapa, missões, crises, loja, etc.)
     └── demo-menu.js        # Menu demo temporário (QA)
 ```
 
-> Lógica principal: **`js/game.js`**. Versão de cache: `window.APP_VERSION` em `index.html` e `CACHE_VERSION` em `sw.js` (atualmente **129**). Ao publicar, altere ambos e use `?v=129` na URL para forçar atualização.
+> Lógica principal: **`js/game.js`**. Versão de cache: `window.APP_VERSION` em `index.html` e `CACHE_VERSION` em `sw.js` (atualmente **130**). Ao publicar, altere ambos e use `?v=130` na URL para forçar atualização.
 
 ---
 
@@ -108,11 +117,11 @@ cd GuardiaoDigitalVale
 python -m http.server 8093
 ```
 
-Abra **http://localhost:8093** ou **http://localhost:8093/?v=129** após mudanças em CSS/JS.
+Abra **http://localhost:8093** ou **http://localhost:8093/?v=130** após mudanças em CSS/JS.
 
 ### Opção 2 — GitHub Pages
 
-Deploy automático na branch `main`. URL: [circulador.github.io/q7k3n8zx2m](https://circulador.github.io/q7k3n8zx2m/?v=129)
+Deploy automático na branch `main`. URL: [circulador.github.io/q7k3n8zx2m](https://circulador.github.io/q7k3n8zx2m/?v=130)
 
 ### Fluxo do jogador
 

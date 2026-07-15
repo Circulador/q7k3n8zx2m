@@ -14,6 +14,7 @@ window.gdvStartBoss=function(id,e){
 /* -------------------- ESTADO / STATE -------------------- */
 var STORE_KEY = "guardiao_orbita_v7";
 var DEF = { lang:"pt", name:"", team:"mina", role:"field",
+  dailyTotal:0,
   xp:0, coins:0, score:0, lives:3, avatar:"🛡️", resilience:100,
   a11y:{voice:false, contrast:false, large:false, motion:false, signs:false, fontScale:0, links:false, spacing:false, letterSpace:false, dyslexia:false, colorblind:"none", readingMode:false},
   done:{}, themeStats:{}, medals:{}, owned:{}, equipped:{avatar:"🛡️",frame:"default",skin:"default"},
@@ -391,9 +392,9 @@ var UI = {
   "setup.save":{pt:"💾 Salvar e voltar",en:"💾 Save and go back"},
   "setup.saved":{pt:"Perfil atualizado.",en:"Profile updated."},
   "setup.teamTitle":{pt:"Sua equipe",en:"Your team"},
-  "setup.teamSub":{pt:"Onde você trabalha na organização — usado no ranking anônimo do time.",en:"Where you work in the organization — used for anonymous team ranking."},
+  "setup.teamSub":{pt:"Onde você trabalha — mina, ferrovia, porto, corporativo, TI, logística, energia…",en:"Where you work — mine, railway, port, corporate, IT, logistics, energy…"},
   "setup.roleTitle":{pt:"Seu dia a dia",en:"Your day-to-day"},
-  "setup.roleSub":{pt:"Escritório, campo, automação (OT) ou liderança — define os exemplos das situações.",en:"Office, field, automation (OT) or leadership — shapes the scenario examples."},
+  "setup.roleSub":{pt:"Administrativo, campo, OT, liderança, técnico, analista, terceiros ou em formação.",en:"Office, field, OT, leadership, technician, analyst, contractor or in training."},
   "setup.go":{pt:"▶️ Começar primeira atividade",en:"▶️ Start first activity"},
   "setup.banner":{pt:"👤 Personalize seu perfil (nome, equipe e papel) para cenários do seu dia a dia.",en:"👤 Set up your profile (name, team and role) for scenarios from your daily work."},
   "setup.bannerGo":{pt:"Personalizar agora",en:"Personalize now"},
@@ -822,15 +823,23 @@ var TEAMS = [
   {id:"porto", ico:"🚢", pt:"Porto", en:"Port"},
   {id:"corporativo", ico:"🏢", pt:"Corporativo", en:"Corporate"},
   {id:"ti", ico:"💻", pt:"TI & Segurança", en:"IT & Security"},
-  {id:"ot", ico:"🏭", pt:"Automação (OT)", en:"Automation (OT)"}
+  {id:"ot", ico:"🏭", pt:"Automação (OT)", en:"Automation (OT)"},
+  {id:"logistica", ico:"📦", pt:"Logística", en:"Logistics"},
+  {id:"energia", ico:"⚡", pt:"Energia", en:"Energy"},
+  {id:"projetos", ico:"📐", pt:"Projetos & Engenharia", en:"Projects & Engineering"},
+  {id:"esg", ico:"🌿", pt:"Sustentabilidade", en:"Sustainability"}
 ];
 
-var ROLE_THEMES={admin:["phishing","password","data","bec","device"],field:["port","ot","device","phishing","data"],ot:["ot","device","password","phishing","port"],leader:["bec","data","phishing","remote","ot"]};
+var ROLE_THEMES={admin:["phishing","password","data","bec","device"],field:["port","ot","device","phishing","data"],ot:["ot","device","password","phishing","port"],leader:["bec","data","phishing","remote","ot"],analyst:["data","password","phishing","bec","remote"],tech:["ot","device","port","password","phishing"],contractor:["phishing","remote","device","password","data"],trainee:["phishing","password","device","data","remote"]};
 var ROLES = [
   {id:"admin", ico:"🏢", pt:"Administrativo", en:"Office", ptd:"E-mails, planilhas, sistemas", end:"Emails, spreadsheets, systems"},
   {id:"field", ico:"⛏️", pt:"Operação/Campo", en:"Field/Operations", ptd:"Mina, ferrovia, porto", end:"Mine, railway, port"},
   {id:"ot",    ico:"🏭", pt:"Automação (OT)", en:"Automation (OT)", ptd:"Sistemas industriais/ICS", end:"Industrial systems/ICS"},
-  {id:"leader",ico:"🧭", pt:"Liderança", en:"Leadership", ptd:"Gestão e decisões", end:"Management & decisions"}
+  {id:"leader",ico:"🧭", pt:"Liderança", en:"Leadership", ptd:"Gestão e decisões", end:"Management & decisions"},
+  {id:"analyst",ico:"📊", pt:"Analista", en:"Analyst", ptd:"Dados, relatórios, indicadores", end:"Data, reports, metrics"},
+  {id:"tech", ico:"🔧", pt:"Técnico", en:"Technician", ptd:"Manutenção, inspeção, campo", end:"Maintenance, inspection, field"},
+  {id:"contractor",ico:"🤝", pt:"Terceiros", en:"Contractors", ptd:"Prestadores e parceiros externos", end:"External providers & partners"},
+  {id:"trainee",ico:"🎓", pt:"Em formação", en:"In training", ptd:"Estágio, trainee, capacitação", end:"Internship, trainee, learning"}
 ];
 
 /* -------------------- PROGRESSÃO / TITLES -------------------- */
@@ -990,21 +999,22 @@ var SKINS = [
 
 /* -------------------- MEDALHAS / ACHIEVEMENTS -------------------- */
 var MEDALS = [
-  {id:"first", ico:"🎖️", name:{pt:"Primeira Campanha",en:"First Campaign"}, test:function(){ return Object.keys(S.done).length>=1; }},
-  {id:"perfect", ico:"💯", name:{pt:"Campanha Perfeita",en:"Perfect Campaign"}, test:function(){ for(var k in S.done) if(S.done[k]>=100) return true; return false; }},
-  {id:"explorer", ico:"🧭", name:{pt:"Explorador Global",en:"Global Explorer"}, test:function(){ return Object.keys(S.done).length>=5; }},
-  {id:"worldwide", ico:"🌎", name:{pt:"Guardião Mundial",en:"Worldwide Guardian"}, test:function(){ return Object.keys(S.done).length>=COUNTRIES.length; }},
-  {id:"boss", ico:"🐉", name:{pt:"Caçador de Crises",en:"Crisis Hunter"}, test:function(){ return bossCompletedCount()>=1; }},
-  {id:"bossAll", ico:"🛡️", name:{pt:"Cadeia Protegida",en:"Chain Protected"}, test:function(){ return bossCompletedCount()>=BOSSES.length; }},
-  {id:"bossLegend", ico:"👑", name:{pt:"Resiliência Lendária",en:"Legendary Resilience"}, test:function(){ return bossHasTier("legendary"); }},
-  {id:"bossResil", ico:"💎", name:{pt:"Guardião Resiliente",en:"Resilient Guardian"}, test:function(){ return bossAvgIndex()>=75||bossGoldCount()>=3; }},
-  {id:"rich", ico:"⭐", name:{pt:"Veterano",en:"Veteran"}, test:function(){ return S.xp>=250 || medalsEarned()>=5; }},
+  {id:"profile", ico:"👤", name:{pt:"Perfil definido",en:"Profile set"}, test:function(){ return setupComplete(); }},
+  {id:"first", ico:"🗺️", name:{pt:"Primeira jornada",en:"First journey"}, test:function(){ return Object.keys(S.done).length>=1; }},
+  {id:"explorer", ico:"🧭", name:{pt:"Explorador (5 países)",en:"Explorer (5 countries)"}, test:function(){ return Object.keys(S.done).length>=5; }},
+  {id:"worldwide", ico:"🌎", name:{pt:"Guardião mundial",en:"Worldwide guardian"}, test:function(){ return Object.keys(S.done).length>=COUNTRIES.length; }},
+  {id:"daily", ico:"📅", name:{pt:"Missão diária",en:"Daily mission"}, test:function(){ return (S.dailyTotal||0)>=1; }},
+  {id:"weekly", ico:"🏆", name:{pt:"Meta semanal",en:"Weekly goal"}, test:function(){ ensureWeekly(); var wp=S.weekly.prog||{}; return WEEKLY.some(function(w){ return (wp[w.id]||0)>=w.goal; }); }},
+  {id:"perfect", ico:"💯", name:{pt:"Jornada perfeita",en:"Perfect journey"}, test:function(){ for(var k in S.done) if(S.done[k]>=100) return true; return false; }},
+  {id:"chain", ico:"⛓️", name:{pt:"Cadeia Norte",en:"Northern chain"}, test:function(){ return chainStagesDone()>=1; }},
+  {id:"boss", ico:"🎯", name:{pt:"Primeira crise",en:"First crisis"}, test:function(){ return bossCompletedCount()>=1; }},
+  {id:"bossAll", ico:"🛡️", name:{pt:"Todas as crises",en:"All crises"}, test:function(){ return bossCompletedCount()>=BOSSES.length; }},
+  {id:"bossResil", ico:"💎", name:{pt:"Guardião resiliente",en:"Resilient guardian"}, test:function(){ return bossAvgIndex()>=75||bossGoldCount()>=3; }},
+  {id:"bossLegend", ico:"👑", name:{pt:"Resiliência lendária",en:"Legendary resilience"}, test:function(){ return bossHasTier("legendary"); }},
   {id:"streak7", ico:"🔥", name:{pt:"Sequência 7 dias",en:"7-day streak"}, test:function(){ return (S.streak&&S.streak.best>=7)||(S.streak&&S.streak.count>=7); }},
   {id:"streak30", ico:"💥", name:{pt:"Sequência 30 dias",en:"30-day streak"}, test:function(){ return S.streak&&S.streak.best>=30; }},
-  {id:"master", ico:"👑", name:{pt:"Mestre da Segurança",en:"Security Master"}, test:function(){ return S.xp>=500; }},
-  {id:"gloss5", ico:"📖", name:{pt:"Aprendiz do glossário",en:"Glossary apprentice"}, test:function(){ return glossaryLearnedCount()>=5; }},
-  {id:"glossThreat5", ico:"🛡️", name:{pt:"5 termos de Ameaças",en:"5 Threat terms"}, test:function(){ return glossaryCatLearnedCount("threat")>=5; }},
-  {id:"glossQuiz3", ico:"❓", name:{pt:"3 quizzes do glossário",en:"3 glossary quizzes"}, test:function(){ return (S.glossaryQuizDone||0)>=3; }}
+  {id:"gloss5", ico:"📖", name:{pt:"5 termos no glossário",en:"5 glossary terms"}, test:function(){ return glossaryLearnedCount()>=5; }},
+  {id:"glossQuiz3", ico:"❓", name:{pt:"3 quizzes glossário",en:"3 glossary quizzes"}, test:function(){ return (S.glossaryQuizDone||0)>=3; }}
 ];
 
 /* -------------------- ÁUDIO / NARRAÇÃO -------------------- */
@@ -1064,7 +1074,7 @@ var focusTrapState=null, toastQueue=[], toastShowing=false, glossaryFromQuiz=fal
 var GLOSSARY_SUGGESTIONS=["mfa","phishing","dlp","ransomware"];
 var GLOSSARY_CAT_EMOJI={access:"🔐",threat:"⚠️",network:"🌐",data:"📁",ops:"🛠️",ot:"🏭",compliance:"📜",remote:"🏠",control:"🛡️",device:"📱",physical:"🔒"};
 var GLOSSARY_NEW_IDS=["typosquat","baiting","fakeportal","credtheft","imperson","supplierfraud","deepfake","macros","juicejack","lateral","backdoor","pwdmanager","screenlock","defaultpwd","homolog","permissions","exfiltr","firmware","remoteacc","rdp","itotbridge","recon","tabletop","playbook","phishreport"];
-var GLOSSARY_ROLE_PICKS={admin:["phishing","mfa","lgpd","bec"],field:["homolog","screenlock","badusb","permissions"],ot:["scada","plc","hmi","itotbridge"],leader:["bec","supplierfraud","classification","dlp"],default:["phishing","mfa","ransomware","vpn"]};
+var GLOSSARY_ROLE_PICKS={admin:["phishing","mfa","lgpd","bec"],field:["homolog","screenlock","badusb","permissions"],ot:["scada","plc","hmi","itotbridge"],leader:["bec","supplierfraud","classification","dlp"],analyst:["dlp","classification","mfa","phishing"],tech:["homolog","scada","permissions","badusb"],contractor:["phishing","vpn","screenlock","mfa"],trainee:["phishing","mfa","ransomware","vpn"],default:["phishing","mfa","ransomware","vpn"]};
 var GLOSSARY_CAT_THEME={threat:"phishing",access:"password",data:"data",ot:"ot",network:"port",remote:"remote",device:"device",control:"device",compliance:"data",ops:"port",physical:"port"};
 var GLOSSARY_TERM_THEME={phishing:"phishing",mfa:"password",password:"password","2fa":"password",dlp:"data",vpn:"remote",scada:"ot",ics:"ot",hmi:"ot",plc:"ot",ot:"ot",bec:"bec",ransomware:"phishing",malware:"phishing",homolog:"device",badusb:"device",typosquat:"phishing",recon:"port"};
 var GLOSSARY_RELATED={
@@ -3883,9 +3893,12 @@ function markDailyDone(won){
   ensureDaily();
   var first=!S.daily.done.mission;
   S.daily.done.mission=true;
-  if(first&&won){
-    addReward(50);
-    celebrationToast(t("daily.doneTitle"), t("daily.doneSub")+(L()==="pt"?" (+50 XP)":" (+50 XP)"));
+  if(first){
+    S.dailyTotal=(S.dailyTotal||0)+1;
+    if(won){
+      addReward(50);
+      celebrationToast(t("daily.doneTitle"), t("daily.doneSub")+(L()==="pt"?" (+50 XP)":" (+50 XP)"));
+    }
   }
   save();
 }
@@ -4280,49 +4293,54 @@ function certRoundRect(ctx,x,y,w,h,r){
   ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
   ctx.closePath();
 }
-function certDrawAchievements(ctx,W,startY,pt){
+function certDrawAchievements(ctx,W,startY){
   checkMedals();
   var earned=MEDALS.filter(function(m){ return !!S.medals[m.id]; }).length;
-  var cols=4, cellW=168, cellH=50, padX=(W-cols*cellW)/2;
+  var cols=3, padX=56, usableW=W-padX*2, cellW=usableW/cols, cellH=56;
   ctx.textAlign="center";
   ctx.fillStyle="#005f5c"; ctx.font="700 13px Segoe UI,sans-serif";
   ctx.fillText("🏅 "+t("profile.certAch")+" ("+earned+"/"+MEDALS.length+")", W/2, startY);
   ctx.strokeStyle="#e8e8e8"; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(100,startY+6); ctx.lineTo(W-100,startY+6); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(100,startY+8); ctx.lineTo(W-100,startY+8); ctx.stroke();
   MEDALS.forEach(function(m,i){
     var col=i%cols, row=Math.floor(i/cols);
     var cx=padX+col*cellW+cellW/2;
-    var cardX=padX+col*cellW+6, cardY=startY+14+row*cellH;
-    var cardW=cellW-12, cardH=cellH-8;
+    var cardX=padX+col*cellW+8, cardY=startY+18+row*cellH;
+    var cardW=cellW-16, cardH=cellH-10;
     var got=!!S.medals[m.id];
     ctx.save();
-    ctx.globalAlpha=got?1:0.42;
+    ctx.globalAlpha=got?1:0.45;
     if(got){ ctx.fillStyle="#f4faf9"; ctx.strokeStyle="#007E7A"; }
     else { ctx.fillStyle="#f5f5f5"; ctx.strokeStyle="#c8d4d8"; }
     ctx.lineWidth=got?1.5:1;
     certRoundRect(ctx,cardX,cardY,cardW,cardH,6);
     ctx.fill(); ctx.stroke();
     ctx.textAlign="center";
-    ctx.font=(got?"700":"600")+" 18px Segoe UI Emoji,Segoe UI,sans-serif";
+    ctx.font=(got?"700":"600")+" 20px Segoe UI Emoji,Segoe UI,sans-serif";
     ctx.fillStyle=got?"#1a1a1a":"#8a9aa0";
-    ctx.fillText(m.ico, cx, cardY+22);
-    ctx.font=(got?"700":"500")+" 9px Segoe UI,sans-serif";
-    var label=certEllipsis(ctx, tt(m.name), cardW-8);
-    ctx.fillText(label, cx, cardY+38);
+    ctx.fillText(m.ico, cx, cardY+24);
+    ctx.font=(got?"700":"500")+" 8.5px Segoe UI,sans-serif";
+    var label=certEllipsis(ctx, tt(m.name), cardW-10);
+    ctx.fillText(label, cx, cardY+40);
     ctx.restore();
   });
-  return startY+14+Math.ceil(MEDALS.length/cols)*cellH+6;
+  return startY+18+Math.ceil(MEDALS.length/cols)*cellH+10;
 }
 function certDrawStats(ctx,W,startY,stats){
-  var cols=3, colW=(W-160)/cols, sx=80, rowH=20;
-  ctx.textAlign="left"; ctx.font="600 11px Segoe UI,sans-serif";
+  var cols=3, padX=70, usableW=W-padX*2, colW=usableW/cols, rowH=38;
+  ctx.textAlign="center";
   stats.forEach(function(row,i){
     var col=i%cols, r=Math.floor(i/cols);
-    var x=sx+col*colW, y=startY+r*rowH;
-    ctx.fillStyle="#3d4f55"; ctx.fillText(row[0]+":", x, y);
-    ctx.fillStyle="#1a1a1a"; ctx.fillText(row[1], x+72, y);
+    var cx=padX+col*colW+colW/2;
+    var y=startY+r*rowH;
+    ctx.font="600 10px Segoe UI,sans-serif";
+    ctx.fillStyle="#5c706e";
+    ctx.fillText(row[0], cx, y);
+    ctx.font="700 15px Segoe UI,sans-serif";
+    ctx.fillStyle="#1a1a1a";
+    ctx.fillText(row[1], cx, y+18);
   });
-  return startY+Math.ceil(stats.length/cols)*rowH+4;
+  return startY+Math.ceil(stats.length/cols)*rowH+10;
 }
 function certDrawResilienceSeal(ctx,W,startY,pt){
   var earned=!!(S.medals.bossResil||S.medals.bossLegend);
@@ -4355,12 +4373,13 @@ function renderCertificatePreview(){
     [pt?"Nível":"Level", String(levelOf())],
     [pt?"XP":"XP", String(S.xp)],
     [pt?"Países":"Countries", Object.keys(S.done).length+"/"+COUNTRIES.length],
-    [L()==="pt"?"Desafios / Crises":"Challenges / Crises", bossCompletedCount()+"/"+BOSSES.length],
-    [pt?"Resiliência":"Resilience", resRank.ico+" "+avgRes+"%"],
-    [pt?"Ofensiva":"Streak", String(S.streak.count||0)+(pt?" dias":" days")]
+    [pt?"Crises":"Crises", bossCompletedCount()+"/"+BOSSES.length],
+    [pt?"Cadeia":"Chain", chainStagesDone()+"/"+chainTotalStages()],
+    [pt?"Resiliência":"Resilience", avgRes+"%"],
+    [pt?"Sequência":"Streak", String(S.streak.count||0)+(pt?" d":" d")]
   ];
-  var achRows=Math.ceil(MEDALS.length/4);
-  var H=Math.max(820, 500+achRows*50+120);
+  var achRows=Math.ceil(MEDALS.length/3);
+  var H=Math.max(920, 500+achRows*56+150);
   cv.width=W; cv.height=H;
   var ctx=cv.getContext("2d");
   ctx.fillStyle="#ffffff"; ctx.fillRect(0,0,W,H);
@@ -4386,8 +4405,8 @@ function renderCertificatePreview(){
   ctx.strokeStyle="#e8e8e8"; ctx.beginPath(); ctx.moveTo(120,y); ctx.lineTo(W-120,y); ctx.stroke();
   y+=16;
   y=certDrawStats(ctx,W,y,stats);
-  y+=14;
-  y=certDrawAchievements(ctx,W,y,pt);
+  y+=18;
+  y=certDrawAchievements(ctx,W,y);
   y+=10;
   y=certDrawResilienceSeal(ctx,W,y,pt);
   y+=28;
@@ -5111,7 +5130,7 @@ function progressPct(){
   WEEKLY.forEach(function(w){ week+=Math.min(1,(wp[w.id]||0)/w.goal); });
   week=week/Math.max(1,WEEKLY.length)*20;
   var daily=S.daily.done.mission?12:0;
-  var onboard=(S.onboardingDone?8:0)+(setupComplete()?8:0);
+  var onboard=(S.onboardingDone?1:0)+(setupComplete()?1:0);
   var streak=Math.min(10,(S.streak&&S.streak.best||0)/3);
   return Math.min(100,Math.round(map+boss+week+daily+onboard+streak));
 }

@@ -44,6 +44,7 @@ function renderDemoStatus(){
   var pct=api.progressPct();
   host.innerHTML=
     '<div class="demo-status-pct">'+pct+'% '+pt("complete","concluído")+'</div>'+
+    '<p class="demo-status-note">'+pt("Onboarding + profile ≈ 2% — real progress comes from map, missions and crises.","Onboarding + perfil ≈ 2% — progresso real vem do mapa, missões e crises.")+'</p>'+
     '<ul class="demo-status-list">'+
     '<li>'+(S.onboardingDone?"✅":"⬜")+' '+pt("Onboarding","Onboarding")+'</li>'+
     '<li>'+(setup?"✅":"⬜")+' '+pt("Team & role","Equipe e papel")+'</li>'+
