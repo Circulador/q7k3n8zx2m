@@ -587,6 +587,12 @@ var UI = {
   "profile.certViewCard":{pt:"🃏 Carta",en:"🃏 Card"},
   "profile.certViewFull":{pt:"📜 Completo",en:"📜 Full"},
   "profile.certFormat":{pt:"Formato da prévia",en:"Preview format"},
+  "profile.albumTitle":{pt:"📒 Álbum de Conquistas",en:"📒 Achievement Album"},
+  "profile.albumSub":{pt:"Cole figurinhas conforme avança — não precisa concluir o jogo inteiro.",en:"Paste stickers as you progress — no need to finish the whole game."},
+  "profile.albumSpreadTitle":{pt:"GUARDIÃO CIBERNÉTICO",en:"CYBER GUARDIAN"},
+  "profile.albumPasted":{pt:"figurinhas coladas",en:"stickers pasted"},
+  "profile.albumLocked":{pt:"Figurinha faltando",en:"Missing sticker"},
+  "profile.albumDone":{pt:"Colada",en:"Pasted"},
   "profile.certCardType":{pt:"Guardião Cibernético",en:"Cyber Guardian"},
   "profile.certCardFlavor":{pt:"\"Proteger operações críticas começa com cada decisão consciente.\"",en:"\"Protecting critical operations starts with every conscious choice.\""},
   "manager.title":{pt:"🧭 Painel do Gestor",en:"🧭 Manager Panel"},
@@ -1022,6 +1028,25 @@ var MEDALS = [
   {id:"gloss5", ico:"📖", name:{pt:"5 termos no glossário",en:"5 glossary terms"}, test:function(){ return glossaryLearnedCount()>=5; }},
   {id:"glossQuiz3", ico:"❓", name:{pt:"3 quizzes glossário",en:"3 glossary quizzes"}, test:function(){ return (S.glossaryQuizDone||0)>=3; }}
 ];
+
+var MEDAL_HINTS={
+  profile:{pt:"Personalize perfil: nome, equipe e papel.",en:"Set up profile: name, team and role."},
+  first:{pt:"Conclua sua primeira jornada no mapa.",en:"Complete your first map journey."},
+  explorer:{pt:"Conclua campanhas em 5 países.",en:"Complete campaigns in 5 countries."},
+  worldwide:{pt:"Conclua todos os países do mapa.",en:"Complete every country on the map."},
+  daily:{pt:"Finalize pelo menos 1 atividade diária.",en:"Finish at least 1 daily activity."},
+  weekly:{pt:"Atinja uma meta semanal completa.",en:"Reach one full weekly goal."},
+  perfect:{pt:"Acerte 100% em alguma jornada de país.",en:"Score 100% on any country journey."},
+  chain:{pt:"Avance na cadeia Carajás (1+ etapa).",en:"Progress on the Carajás chain (1+ stage)."},
+  boss:{pt:"Vença sua primeira crise em Desafios.",en:"Win your first crisis in Challenges."},
+  bossAll:{pt:"Vença as 7 crises simuladas.",en:"Win all 7 simulated crises."},
+  bossResil:{pt:"Maturidade média ≥75% ou 3 crises ouro.",en:"Average maturity ≥75% or 3 gold crises."},
+  bossLegend:{pt:"Alcance patente lendária em alguma crise.",en:"Reach legendary rank on a crisis."},
+  streak7:{pt:"Mantenha sequência de 7 dias jogando.",en:"Keep a 7-day play streak."},
+  streak30:{pt:"Mantenha sequência de 30 dias.",en:"Keep a 30-day streak."},
+  gloss5:{pt:"Aprenda 5 termos no glossário.",en:"Learn 5 glossary terms."},
+  glossQuiz3:{pt:"Complete 3 quizzes do glossário.",en:"Complete 3 glossary quizzes."}
+};
 
 /* -------------------- ÁUDIO / NARRAÇÃO -------------------- */
 var EMOJI_RE = /[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2190}-\u{21FF}\u{2B00}-\u{2BFF}\u{FE0F}\u{200D}]/gu;
@@ -4058,6 +4083,37 @@ function buyOrEquipCosmetic(prefix,equipKey,a,owned){
    ========================================================== */
 function checkMedals(){ MEDALS.forEach(function(m){ if(!S.medals[m.id] && m.test()){ S.medals[m.id]=true; toast((L()==="pt"?"🏅 Conquista: ":"🏅 Achievement: ")+tt(m.name)); } }); save(); }
 function renderMedals(host){ host.innerHTML=""; MEDALS.forEach(function(m){ var got=!!S.medals[m.id]; var d=document.createElement("div"); d.className="medal"+(got?"":" locked"); d.innerHTML='<span class="mi">'+m.ico+'</span><span class="mn">'+tt(m.name)+'</span>'; host.appendChild(d); }); }
+function medalHint(id){ var h=MEDAL_HINTS[id]; return h?tt(h):id; }
+function albumSlotTap(id){
+  var m=MEDALS.filter(function(x){ return x.id===id; })[0]; if(!m) return;
+  if(S.medals[m.id]) toast("🏅 "+t("profile.albumDone")+": "+tt(m.name));
+  else toast("🔒 "+t("profile.albumLocked")+" — "+medalHint(id));
+}
+function renderAchievementAlbum(){
+  var grid=$("albumSpread"), prog=$("albumProgress"); if(!grid) return;
+  checkMedals();
+  var earned=medalsEarned(), total=MEDALS.length, pct=Math.round(earned/Math.max(1,total)*100);
+  if(prog){
+    prog.innerHTML='<div class="album-progress-track" aria-hidden="true"><div class="album-progress-fill" style="width:'+pct+'%"></div></div>'+
+      '<div class="album-progress-label"><strong>'+earned+'/'+total+'</strong> '+t("profile.albumPasted")+'</div>';
+  }
+  grid.innerHTML="";
+  MEDALS.forEach(function(m,i){
+    var got=!!S.medals[m.id], num=String(i+1).padStart(2,"0");
+    var btn=document.createElement("button");
+    btn.type="button";
+    btn.className="album-slot"+(got?" is-earned":" is-missing");
+    btn.setAttribute("data-medal",m.id);
+    btn.setAttribute("aria-label",(got?t("profile.albumDone"):t("profile.albumLocked"))+": "+tt(m.name));
+    if(got){
+      btn.innerHTML='<span class="album-slot-num">'+num+'</span><div class="album-sticker"><span class="album-sticker-ico" aria-hidden="true">'+m.ico+'</span><span class="album-sticker-name">'+tt(m.name)+'</span></div>';
+    } else {
+      btn.innerHTML='<span class="album-slot-num">'+num+'</span><div class="album-placeholder"><span class="album-placeholder-mark" aria-hidden="true">'+num+'</span><span class="album-placeholder-ico" aria-hidden="true">'+m.ico+'</span><span class="album-placeholder-name">'+tt(m.name)+'</span></div>';
+    }
+    btn.addEventListener("click",function(){ albumSlotTap(m.id); });
+    grid.appendChild(btn);
+  });
+}
 
 /* ==========================================================
    DASHBOARD + RADAR
@@ -4308,7 +4364,7 @@ function renderProfile(){
   var avg=bossAvgIndex(), br=bossGuardianRank(avg);
   $("profileStats").innerHTML='<div class="stat"><div class="v">'+levelOf()+'</div><div class="l">'+lab.a+'</div></div><div class="stat"><div class="v">'+S.xp+'</div><div class="l">'+lab.b+'</div></div><div class="stat"><div class="v">'+Object.keys(S.done).length+"/"+COUNTRIES.length+'</div><div class="l">'+lab.c+'</div></div><div class="stat"><div class="v">'+bossCompletedCount()+"/"+BOSSES.length+'</div><div class="l">'+lab.d+'</div></div><div class="stat"><div class="v">'+br.ico+' '+avg+'%</div><div class="l">'+lab.f+'</div></div><div class="stat"><div class="v">🔥 '+(S.streak.count||0)+'</div><div class="l">'+lab.e+'</div></div><div class="stat"><div class="v">📢 '+(S.reports||0)+'</div><div class="l">'+lab.g+'</div></div>';
   renderCompletionCard(); renderWeeklyGoalsChecklist(); renderReviewSection(); renderCertChecklist();
-  renderBossProgress(); renderProgressHub(); renderPedagogyRec("pedagogyRec"); drawRadar(); renderRadarTable(); renderThemeErrors($("profileThemes")); renderRank($("profileRank")); renderMedals($("profileMedals")); renderCertificatePreview();
+  renderBossProgress(); renderProgressHub(); renderPedagogyRec("pedagogyRec"); drawRadar(); renderRadarTable(); renderThemeErrors($("profileThemes")); renderRank($("profileRank")); renderMedals($("profileMedals")); renderAchievementAlbum(); renderCertificatePreview();
 }
 function certTeamRole(){
   var team="", role="";
