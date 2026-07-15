@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=145">
+<link rel="stylesheet" href="css/styles.css?v=146">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -832,7 +832,6 @@
     <div class="card" id="completionCard">
       <div class="section-title" data-i18n="profile.completionTitle">🎯 Sua jornada</div>
       <div id="completionBody"></div>
-      <div class="weekly-goals-checklist" id="weeklyGoalsChecklist"></div>
       <div class="row-actions" style="margin-top:10px">
         <button type="button" class="btn btn-ghost btn-sm" id="profileEditSetupBtn" data-i18n="profile.editSetup">✏️ Editar perfil</button>
         <button type="button" class="btn btn-ghost btn-sm" id="profileWeeklyBtn" data-i18n="weekly.title">🏆 Desafios Semanais</button>
@@ -858,14 +857,9 @@
         <button class="btn btn-ghost btn-sm" id="certPrintBtn" type="button" data-i18n="profile.certPrint">🖨️ Imprimir</button>
       </div>
     </div>
-    <div class="card" id="profileMedalsCard">
-      <div class="section-title" data-i18n="profile.ach">🏅 Conquistas</div>
-      <div class="section-sub" data-i18n="profile.achSub">Medalhas desbloqueadas na sua jornada — cada uma também vira figurinha no álbum.</div>
-      <div class="medals medals-profile" id="profileMedals"></div>
-    </div>
     <div class="card" id="profileAlbumCard">
       <div class="section-title" data-i18n="profile.albumTitle">📒 Álbum de Conquistas</div>
-      <div class="section-sub" data-i18n="profile.albumSub">Cole figurinhas conforme avança — não precisa concluir o jogo inteiro.</div>
+      <div class="section-sub" data-i18n="profile.albumSub">Cada figurinha é uma conquista — toque para ver o que falta desbloquear.</div>
       <div class="album-progress-wrap" id="albumProgress"></div>
       <div class="album-spread" role="region" aria-labelledby="albumSpreadTitle">
         <div class="album-spread-banner">
@@ -881,26 +875,18 @@
         <div class="section-title" data-i18n="profile.title">📊 Seu desempenho</div>
         <div class="section-sub" data-i18n="profile.sub">Sua evolução acumulada (salva neste navegador).</div>
         <div class="stats-grid" id="profileStats"></div>
-        <div class="section-title" id="reviewCardTitle" data-i18n="profile.reviewTitle">📚 Revisão</div>
-        <div class="section-sub" data-i18n="profile.reviewSub">Treine seus erros ou consulte o banco de perguntas para autores.</div>
+        <div class="section-title" data-i18n="profile.reviewTitle">📚 Revisão e reforço</div>
+        <div class="section-sub" data-i18n="profile.reviewSub">Treine erros sem penalidade — acertos passam a contar no % de cada tema e no radar.</div>
         <div class="review-actions" id="reviewActions"></div>
         <div id="pedagogyRec"></div>
-        <div class="section-title" data-i18n="profile.themesWeak">📉 Temas para reforçar</div>
-        <div class="section-sub" data-i18n="profile.themesWeakSub">Conectado ao plano de estudo — abaixo de 70% de acerto.</div>
-        <div class="theme-errors" id="profileThemes"></div>
         <div class="section-title" data-i18n="profile.bossRes">🏭 Maturidade em Desafios / Crises</div>
         <div class="section-sub" data-i18n="profile.bossResSub">Sua maturidade operacional nas crises simuladas — repita para subir de patente.</div>
         <div class="boss-prog-head" id="bossProgressHead"></div>
         <div id="bossProgressList" class="boss-prog-list"></div>
-        <div id="progressHubCard">
-          <div class="section-title" data-i18n="progress.hub">🔗 Como os modos se conectam</div>
-          <div class="section-sub" data-i18n="progress.hubSub">Tudo alimenta o mesmo progresso: XP, temas, conquistas, maturidade e certificado.</div>
-          <div id="progressHub"></div>
-        </div>
         <div class="section-title" data-i18n="profile.radar">🎯 Radar de Competências</div>
-        <div class="section-sub" data-i18n="profile.radarSub">Seus pontos fortes e fracos por área de segurança.</div>
+        <div class="section-sub" data-i18n="profile.radarSub">Visão geral dos temas — o plano acima prioriza os abaixo de 70%.</div>
         <div class="radar-wrap"><canvas id="radarCanvas" width="420" height="360" role="img" aria-label="Gráfico radar de competências por tema"></canvas></div>
-        <div id="radarTable" class="radar-table-wrap"></div>
+        <p class="profile-connect-note muted" data-i18n="profile.connectNote">Mapa, missões e crises alimentam o mesmo XP, conquistas (álbum), maturidade e certificado.</p>
         <div class="section-title" data-i18n="result.rank">📈 Sua equipe</div>
         <div class="rank-list" id="profileRank"></div>
       </div>
@@ -967,18 +953,18 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="145";</script>
-<script src="js/sign-lang.js?v=145"></script>
-<script src="js/orbita-world-map.js?v=145"></script>
-<script src="js/questions-data.js?v=145"></script>
-<script src="js/country-questions-data.js?v=145"></script>
-<script src="js/bosses-data.js?v=145"></script>
-<script src="js/boss-personal-tips.js?v=145"></script>
-<script src="js/chain-data.js?v=145"></script>
-<script src="js/boss-maps.js?v=145"></script>
-<script src="js/glossary-data.js?v=145"></script>
-<script src="js/game.js?v=145"></script>
-<script src="js/demo-menu.js?v=145"></script>
+<script>window.APP_VERSION="146";</script>
+<script src="js/sign-lang.js?v=146"></script>
+<script src="js/orbita-world-map.js?v=146"></script>
+<script src="js/questions-data.js?v=146"></script>
+<script src="js/country-questions-data.js?v=146"></script>
+<script src="js/bosses-data.js?v=146"></script>
+<script src="js/boss-personal-tips.js?v=146"></script>
+<script src="js/chain-data.js?v=146"></script>
+<script src="js/boss-maps.js?v=146"></script>
+<script src="js/glossary-data.js?v=146"></script>
+<script src="js/game.js?v=146"></script>
+<script src="js/demo-menu.js?v=146"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */

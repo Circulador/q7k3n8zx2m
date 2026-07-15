@@ -896,8 +896,7 @@ body.contrast .chain-map-wrap{background:#04141b}
 
 /* Medals / ranking */
 .medals{display:flex;flex-wrap:wrap;gap:10px}
-.medals-profile{margin-top:4px}
-#profileMedalsCard .medal{flex:1 1 calc(50% - 10px);min-width:140px}
+.profile-connect-note{margin:8px 0 0;font-size:.78rem;line-height:1.4}
 .medal{display:flex;flex-direction:column;align-items:center;gap:4px;width:96px;padding:12px 6px;border:1px solid var(--line);border-radius:12px;background:var(--card);text-align:center}
 .medal.locked{opacity:.4;filter:grayscale(1)}
 .medal .mi{font-size:1.8rem}

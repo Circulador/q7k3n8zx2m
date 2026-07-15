@@ -535,8 +535,11 @@ var UI = {
   "profile.completionTitle":{pt:"🎯 Sua jornada",en:"🎯 Your journey"},
   "profile.completionPct":{pt:"da jornada concluída",en:"of journey complete"},
   "profile.nextMilestone":{pt:"Próximo marco",en:"Next milestone"},
-  "profile.reviewTitle":{pt:"📚 Revisão",en:"📚 Review"},
-  "profile.reviewSub":{pt:"Treine erros sem penalidade — acertos passam a contar no % de cada tema e no radar.",en:"Train mistakes with no penalty — correct answers count toward each theme % and the radar."},
+  "profile.reviewTitle":{pt:"📚 Revisão e reforço",en:"📚 Review and reinforcement"},
+  "profile.reviewSub":{pt:"Treine erros sem penalidade — acertos contam no % do tema e no radar. Use o plano para focar o que está fraco.",en:"Train mistakes with no penalty — correct answers count toward theme % and the radar. Use the plan to focus weak areas."},
+  "profile.connectNote":{pt:"Mapa, missões e crises alimentam o mesmo XP, conquistas (álbum), maturidade e certificado.",en:"Map, missions and crises feed the same XP, achievements (album), maturity and certificate."},
+  "profile.albumSub":{pt:"Cada figurinha é uma conquista — toque para ver o que falta desbloquear.",en:"Each sticker is an achievement — tap to see what's left to unlock."},
+  "profile.radarSub":{pt:"Visão geral dos temas — o plano acima prioriza os abaixo de 70%.",en:"Theme overview — the plan above prioritizes those below 70%."},
   "profile.reviewTrain":{pt:"📚 Treinar meus erros",en:"📚 Train my mistakes"},
   "profile.reviewTrainDue":{pt:"📚 Treinar meus erros ({n} pendentes)",en:"📚 Train my mistakes ({n} pending)"},
   "profile.themesWeak":{pt:"📉 Temas para reforçar",en:"📉 Themes to strengthen"},
@@ -589,7 +592,6 @@ var UI = {
   "profile.title":{pt:"📊 Dashboard do Guardião",en:"📊 Guardian Dashboard"},
   "profile.sub":{pt:"Sua evolução acumulada (salva neste navegador).",en:"Your accumulated progress (saved in this browser)."},
   "profile.radar":{pt:"🎯 Radar de Competências",en:"🎯 Competency Radar"},
-  "profile.radarSub":{pt:"Seus pontos fortes e fracos por área de segurança.",en:"Your strengths and weaknesses by security area."},
   "profile.ach":{pt:"🏅 Conquistas",en:"🏅 Achievements"},
   "profile.achSub":{pt:"Medalhas desbloqueadas na sua jornada — cada uma também vira figurinha no álbum.",en:"Medals unlocked on your journey — each one also becomes a sticker in the album."},
   "profile.certTitle":{pt:"📜 Certificado",en:"📜 Certificate"},
@@ -603,7 +605,6 @@ var UI = {
   "profile.certViewFull":{pt:"📜 Completo",en:"📜 Full"},
   "profile.certFormat":{pt:"Formato da prévia",en:"Preview format"},
   "profile.albumTitle":{pt:"📒 Álbum de Conquistas",en:"📒 Achievement Album"},
-  "profile.albumSub":{pt:"Cole figurinhas conforme avança — não precisa concluir o jogo inteiro.",en:"Paste stickers as you progress — no need to finish the whole game."},
   "profile.albumSpreadTitle":{pt:"GUARDIÃO CIBERNÉTICO",en:"CYBER GUARDIAN"},
   "profile.albumPasted":{pt:"figurinhas coladas",en:"stickers pasted"},
   "profile.albumLocked":{pt:"Figurinha faltando",en:"Missing sticker"},
@@ -2119,16 +2120,14 @@ function themesNeedingWork(threshold){
   return list;
 }
 function pedagogicalRecommendations(){
-  var recs=[], weakList=themesNeedingWork(70), due=srsDueCount(), wt, wtAcc;
+  var recs=[], weakList=themesNeedingWork(70), wt, wtAcc;
   weakList.slice(0,3).forEach(function(w){
     recs.push({ico:THEMES[w.k].ico,txt:t("pedagogy.recWeak")+" "+tt(THEMES[w.k])+" · "+w.a+"%",action:"theme",theme:w.k,acc:w.a});
   });
-  if(due>0) recs.push({ico:"📚",txt:t("pedagogy.reviewErrors")+" · "+due,action:"review",count:due});
-  else if(Object.keys(S.missed||{}).length) recs.push({ico:"📚",txt:t("pedagogy.reviewErrors"),action:"review"});
   wt=getWeekTheme(); wtAcc=themeAcc(wt);
   if(wtAcc===null||wtAcc<80) recs.push({ico:THEMES[wt].ico,txt:(L()==="pt"?"Semana: ":"Week: ")+tt(THEMES[wt])+(wtAcc!==null?" · "+wtAcc+"%":""),action:"weekly",theme:wt});
   if((bossCompletedCount()||0)<1) recs.push({ico:"🎯",txt:L()==="pt"?"Pratique transferência: jogue uma crise":"Practice transfer: play a crisis",action:"boss"});
-  return recs.slice(0,5);
+  return recs.slice(0,4);
 }
 function renderPedagogyRec(hostId){
   var host=$(hostId); if(!host) return;
@@ -4516,13 +4515,13 @@ function renderProgressHub(){
     '</div>';
 }
 function renderProfile(){
-  var lab=L()==="pt"?{a:"Nível",b:"XP",c:"Países",d:"Desafios / Crises",e:"Ofensiva",f:"Maturidade",g:"Reportes"}:{a:"Level",b:"XP",c:"Countries",d:"Challenges / Crises",e:"Streak",f:"Maturity",g:"Reports"};
+  var lab=L()==="pt"?{a:"Nível",b:"XP",c:"Ofensiva",d:"Maturidade",e:"Reportes"}:{a:"Level",b:"XP",c:"Streak",d:"Maturity",e:"Reports"};
   ensureStreak(); ensureBossStats();
   var avg=bossAvgIndex(), br=bossGuardianRank(avg);
   var lp=levelProgress();
-  $("profileStats").innerHTML='<div class="stat"><div class="v">'+levelOf()+'/'+MAX_LEVEL+'</div><div class="l">'+lab.a+(lp.max?"":(" · "+lp.pct+"%"))+'</div></div><div class="stat"><div class="v">'+S.xp+'/'+xpForMaxLevel()+'</div><div class="l">'+lab.b+'</div></div><div class="stat"><div class="v">'+Object.keys(S.done).length+"/"+COUNTRIES.length+'</div><div class="l">'+lab.c+'</div></div><div class="stat"><div class="v">'+bossCompletedCount()+"/"+BOSSES.length+'</div><div class="l">'+lab.d+'</div></div><div class="stat"><div class="v">'+br.ico+' '+avg+'%</div><div class="l">'+lab.f+'</div></div><div class="stat"><div class="v">🔥 '+(S.streak.count||0)+'</div><div class="l">'+lab.e+'</div></div><div class="stat"><div class="v">📢 '+(S.reports||0)+'</div><div class="l">'+lab.g+'</div></div>';
-  renderCompletionCard(); renderWeeklyGoalsChecklist(); renderReviewSection(); renderCertChecklist();
-  renderBossProgress(); renderProgressHub(); renderPedagogyRec("pedagogyRec"); drawRadar(); renderRadarTable(); renderThemeErrors($("profileThemes")); renderRank($("profileRank")); renderMedals($("profileMedals")); renderAchievementAlbum(); renderCertificatePreview();
+  $("profileStats").innerHTML='<div class="stat"><div class="v">'+levelOf()+'/'+MAX_LEVEL+'</div><div class="l">'+lab.a+(lp.max?"":(" · "+lp.pct+"%"))+'</div></div><div class="stat"><div class="v">'+S.xp+'/'+xpForMaxLevel()+'</div><div class="l">'+lab.b+'</div></div><div class="stat"><div class="v">🔥 '+(S.streak.count||0)+'</div><div class="l">'+lab.c+'</div></div><div class="stat"><div class="v">'+br.ico+' '+avg+'%</div><div class="l">'+lab.d+'</div></div><div class="stat"><div class="v">📢 '+(S.reports||0)+'</div><div class="l">'+lab.e+'</div></div>';
+  renderCompletionCard(); renderReviewSection(); renderCertChecklist();
+  renderBossProgress(); renderPedagogyRec("pedagogyRec"); drawRadar(); renderRank($("profileRank")); renderAchievementAlbum(); renderCertificatePreview();
 }
 function certTeamRole(){
   var team="", role="";
