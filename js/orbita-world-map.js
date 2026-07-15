@@ -166,7 +166,8 @@ var OrbitaWorldMap = (function () {
     notifyFilterChange();
   }
 
-  function clearSelection() {
+  function clearSelection(force) {
+    if (!force && onBeforeClearSelection && onBeforeClearSelection() === false) return;
     state.filterType = null;
     state.filterId = null;
     state.selectedIso = null;
@@ -325,7 +326,13 @@ var OrbitaWorldMap = (function () {
       .attr("aria-label", function (f) { var d = getData(f); return d ? countryName(d) : (f.properties && f.properties.name) || ""; })
       .attr("aria-disabled", function (f) { return getData(f) ? "false" : "true"; })
       .on("click", function (event, feature) {
-        if (!getData(feature)) return;
+        if (!getData(feature)) {
+          if (onBeforeClearSelection && onBeforeClearSelection() === false) {
+            event.stopPropagation();
+            return;
+          }
+          return;
+        }
         event.stopPropagation();
         var iso = getIso(feature);
         selectCountry(feature);
@@ -342,10 +349,7 @@ var OrbitaWorldMap = (function () {
         }
       });
     routesLayer = svg.append("g").attr("class", "vwm-routes");
-    svg.on("click", function () {
-      if (onBeforeClearSelection && onBeforeClearSelection() === false) return;
-      clearSelection();
-    });
+    svg.on("click", function () { clearSelection(false); });
     ready = true;
     updateState();
   }
@@ -371,7 +375,7 @@ var OrbitaWorldMap = (function () {
     activityItems.concat(productItems).forEach(function (it) { itemById[it.id] = it; });
     buildLegend(opts.activityLegend, activityItems, "activity");
     buildLegend(opts.productLegend, productItems, "product");
-    if (clearBtn) clearBtn.addEventListener("click", clearSelection);
+    if (clearBtn) clearBtn.addEventListener("click", function () { clearSelection(true); });
     if (loadingNode) { loadingNode.hidden = false; loadingNode.classList.remove("is-error"); loadingNode.textContent = langFn() === "en" ? "Loading map..." : "Carregando mapa..."; }
     return Promise.all([
       loadScript(assetUrl("assets/d3.min.js"), "d3"),
