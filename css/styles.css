@@ -166,7 +166,9 @@ body.contrast .glossary-menu{background:#000;border-color:#fff;color:#fff}
 body.contrast .glossary-card{background:#111;border-color:#333}
 body.contrast .glossary-action-btn,body.contrast .glossary-cat-chip,body.contrast .glossary-related-chip{background:#111;color:#fff;border-color:#555}
 body.contrast .glossary-progress{background:#333}
-body.contrast .glossary-more{background:#111;border-color:#333}
+body.contrast .glossary-quiz-panel{background:#000;border-color:#fff;color:#fff}
+body.contrast .glossary-quiz-opt{background:#111;color:#fff;border-color:#555}
+body.contrast .glossary-mobile-bar{background:#111;border-color:#333}
 body.contrast .am-header{background:#111;border-color:#333}
 body.contrast .am-title{color:#00ffe1}
 body.contrast .a11y-menu .am-toggle,body.contrast .a11y-menu .am-lang{background:#111;color:#fff;border-color:#555}
@@ -1128,7 +1130,7 @@ body.contrast .quit-btn-leave{background:#1a1a1a;border-color:#ff7b72;color:#ffb
 
 /* Configurações, glossário e temas */
 .glossary-menu-wrap{position:relative;display:inline-flex;flex:none}
-.glossary-menu{position:fixed;z-index:10200;width:min(720px,calc(100vw - 28px));max-height:min(88vh,680px);overflow:hidden;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto}
+.glossary-menu{position:fixed;z-index:10200;width:min(720px,calc(100vw - 28px));max-height:min(88vh,680px);overflow:hidden;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:0;box-shadow:0 16px 48px rgba(0,0,0,.45);display:flex;flex-direction:column;color:#0a1a24;pointer-events:auto;isolation:isolate}
 .glossary-menu[hidden]{display:none!important}
 #glossaryBtn[aria-expanded="true"]{background:#e6f5f4;border-color:var(--green);color:var(--green-d);box-shadow:0 0 0 2px rgba(0,126,122,.25)}
 .glossary-sticky-head{padding:10px 14px 8px;border-bottom:1px solid #eef3f5;background:#fff;flex:none}
@@ -1186,13 +1188,48 @@ body.contrast .quit-btn-leave{background:#1a1a1a;border-color:#ff7b72;color:#ffb
 .glossary-suggest{display:flex;flex-wrap:wrap;gap:6px}
 .glossary-suggest-chip{padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:inherit;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer}
 .glossary-suggest-chip:hover{border-color:var(--green);background:rgba(0,126,122,.12)}
+.glossary-head-actions{display:flex;gap:8px;margin-bottom:8px}
+.glossary-explore-btn,.glossary-explore-start{padding:7px 12px;border:1px solid rgba(0,126,122,.35);border-radius:999px;background:rgba(0,126,122,.1);color:var(--green-d);font:inherit;font-size:.76rem;font-weight:700;cursor:pointer}
+.glossary-explore-btn:hover,.glossary-explore-start:hover{background:rgba(0,126,122,.18)}
+.glossary-explore-start{margin-top:10px;width:100%}
+.glossary-review-block{padding:8px 0 4px;border-top:1px solid #eef3f5;margin-top:4px}
+.glossary-review-chip{border-color:rgba(237,177,17,.45)!important}
+.glossary-new-badge{display:inline-block;padding:2px 7px;border-radius:999px;background:rgba(237,177,17,.2);color:var(--gold-d);font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-left:6px;vertical-align:middle}
+.glossary-term-row2{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.glossary-word-review{font-size:.72rem}
+.glossary-fullname{margin:0 0 8px;font-size:.84rem;line-height:1.45;color:#2a4550}
+.glossary-quiz-panel{position:absolute;inset:12px;z-index:5;background:#fff;border:1px solid #b8c9d0;border-radius:12px;padding:14px;box-shadow:0 12px 40px rgba(0,0,0,.35);overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.glossary-quiz-panel[hidden]{display:none!important}
+.glossary-quiz-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.glossary-quiz-title{margin:0;font-size:.92rem;font-weight:800;color:var(--green-d)}
+.glossary-quiz-q{margin:0;font-size:.9rem;line-height:1.45}
+.glossary-quiz-opts{display:grid;gap:8px}
+.glossary-quiz-opt{padding:12px 14px;border:1px solid #d4e2e8;border-radius:10px;background:#f8fbfc;color:inherit;font:inherit;font-size:.86rem;font-weight:600;text-align:left;cursor:pointer;line-height:1.35}
+.glossary-quiz-opt:hover:not(:disabled){border-color:var(--green);background:rgba(0,126,122,.1)}
+.glossary-quiz-opt.correct{border-color:#2e9b5a;background:rgba(46,155,90,.15)}
+.glossary-quiz-opt.wrong{border-color:#c44;background:rgba(204,68,68,.12)}
+.glossary-quiz-opt:disabled{cursor:default;opacity:.95}
+.glossary-quiz-why{margin:0;padding:10px 12px;border-radius:8px;background:rgba(237,177,17,.12);border-left:3px solid var(--gold);font-size:.84rem;line-height:1.45}
+.glossary-mobile-bar{position:sticky;bottom:0;z-index:4;background:#fff;border-top:1px solid #eef3f5;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));flex:none}
+.glossary-mobile-bar[hidden]{display:none!important}
+.glossary-nav-mobile{margin-bottom:8px}
+.glossary-mobile-actions{display:flex;justify-content:center;gap:8px}
+.glossary-mob-btn{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 12px;border:1px solid #d4e2e8;border-radius:12px;background:#fff;font:inherit;font-size:1rem;font-weight:700;cursor:pointer}
+.glossary-mob-btn.on{border-color:var(--green);background:rgba(0,126,122,.14)}
 @media(min-width:641px){
   .glossary-layout{display:grid;grid-template-columns:minmax(200px,.95fr) minmax(260px,1.05fr);flex:1;min-height:0}
   .glossary-panel-list{border-bottom:0;border-right:1px solid #eef3f5;padding:10px 12px 12px;overflow-y:auto;min-height:0;-webkit-overflow-scrolling:touch}
   .glossary-panel-detail{padding:10px 14px 14px}
   .glossary-list-sum{display:none}
   .glossary-word-list{max-height:min(280px,42vh)}
-  .glossary-favs-block{border-top:1px solid #eef3f5;margin-top:8px;padding-top:8px}
+  .glossary-favs-block,.glossary-review-block{border-top:1px solid #eef3f5;margin-top:8px;padding-top:8px}
+  .glossary-mobile-bar{display:none!important}
+  .glossary-nav-inline{display:flex!important}
+}
+@media(max-width:640px){
+  .glossary-nav-inline{display:none!important}
+  .glossary-panel-detail{padding-bottom:4px}
+  .glossary-body{padding-bottom:0}
 }
 .home-loop-preview{margin:10px 0 0;padding:10px 12px;border-radius:10px;background:rgba(0,126,122,.12);border:1px solid rgba(0,126,122,.28);font-size:.84rem;line-height:1.45;color:var(--steel)}
 .quiz-next-hint{margin:0 0 8px;font-size:.82rem;font-weight:700;color:var(--gold);text-align:right}
