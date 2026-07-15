@@ -56,7 +56,22 @@ var UI = {
   "settings.glossarySearch":{pt:"Buscar termo",en:"Search term"},
   "settings.glossaryPh":{pt:"Ex.: MFA, DLP, phishing…",en:"e.g. MFA, DLP, phishing…"},
   "settings.glossaryPick":{pt:"Escolha um termo",en:"Choose a term"},
+  "settings.glossaryBrowse":{pt:"Ver lista completa",en:"Browse full list"},
+  "settings.glossaryDef":{pt:"O que significa",en:"What it means"},
+  "settings.glossaryAcr":{pt:"Sigla letra a letra",en:"Acronym spelled out"},
   "settings.glossaryFun":{pt:"No seu dia a dia",en:"In your daily life"},
+  "settings.glossaryEmpty":{pt:"Digite uma sigla ou escolha um termo na lista.",en:"Type an acronym or pick a term from the list."},
+  "settings.glossaryFavsEmpty":{pt:"Toque ☆ em um termo para favoritar.",en:"Tap ☆ on a term to favorite it."},
+  "glossary.cat.access":{pt:"Acesso",en:"Access"},
+  "glossary.cat.threat":{pt:"Ameaças",en:"Threats"},
+  "glossary.cat.network":{pt:"Rede",en:"Network"},
+  "glossary.cat.data":{pt:"Dados",en:"Data"},
+  "glossary.cat.ops":{pt:"Operações",en:"Operations"},
+  "glossary.cat.ot":{pt:"OT / Industrial",en:"OT / Industrial"},
+  "glossary.cat.compliance":{pt:"Compliance",en:"Compliance"},
+  "glossary.cat.remote":{pt:"Remoto",en:"Remote"},
+  "glossary.cat.control":{pt:"Controles",en:"Controls"},
+  "glossary.cat.physical":{pt:"Física",en:"Physical"},
   "settings.openA11y":{pt:"♿ Acessibilidade",en:"♿ Accessibility"},
   "settings.simpleUi":{pt:"Modo simples",en:"Simple mode"},
   "settings.simpleUiSub":{pt:"Esconde nível, XP e maturidade no topo — ideal para começar.",en:"Hides level, XP and maturity in the header — ideal for beginners."},
@@ -565,7 +580,7 @@ function renderSettingsUi(){
     dl.innerHTML="";
     GLOSSARY.forEach(function(g){ var op=document.createElement("option"); op.value=g.term+" — "+tt(g.name); dl.appendChild(op); });
   }
-  renderGlossarySelect(); renderGlossaryFavs(); renderFlashcard();
+  renderGlossarySelect(); renderGlossaryFavs(); renderGlossaryMeta(); renderFlashcard();
   var su=$("optSimpleUiSettings"); if(su) su.checked=S.simpleUi!==false;
   syncEasyReadUi();
   requestAnimationFrame(syncBottomShellHeight);
@@ -1020,6 +1035,17 @@ function setTheme(th){
   if(["default","light","dark"].indexOf(th)<0) return;
   S.theme=th; save(); applyTheme();
 }
+function glossaryCatLabel(cat){
+  return cat?t("glossary.cat."+cat)||cat:"";
+}
+function renderGlossaryMeta(q){
+  var el=$("glossaryCount"); if(!el||typeof GLOSSARY==="undefined") return;
+  var list=glossaryFilter(q||""), total=GLOSSARY.length;
+  var msg=list.length<total&&(q||"").trim()
+    ?(L()==="pt"?list.length+" de "+total+" termos encontrados":list.length+" of "+total+" terms found")
+    :(L()==="pt"?total+" termos · siglas e conceitos de cyber security":total+" terms · cyber security acronyms and concepts");
+  el.textContent=msg;
+}
 function glossaryMatchFromSearch(q){
   q=(q||"").trim(); if(!q) return null;
   var low=q.toLowerCase();
@@ -1044,7 +1070,9 @@ function glossaryFilter(q){
   return GLOSSARY.filter(function(g){
     return g.term.toLowerCase().indexOf(q)>=0 || g.id.indexOf(q)>=0
       || (tt(g.name)||"").toLowerCase().indexOf(q)>=0
-      || (tt(g.def)||"").toLowerCase().indexOf(q)>=0;
+      || (tt(g.def)||"").toLowerCase().indexOf(q)>=0
+      || (g.acr&&(tt(g.acr)||"").toLowerCase().indexOf(q)>=0)
+      || (g.cat&&(glossaryCatLabel(g.cat)||"").toLowerCase().indexOf(q)>=0);
   });
 }
 function renderGlossarySelect(filter){
@@ -1061,14 +1089,18 @@ function renderGlossarySelect(filter){
   if(cur&&list.some(function(g){ return g.id===cur; })) sel.value=cur;
   else if(list.length===1){ sel.value=list[0].id; showGlossaryTerm(list[0].id); }
   else showGlossaryTerm(sel.value||null);
+  renderGlossaryMeta(q);
 }
 function showGlossaryTerm(id){
   var host=$("glossaryCard"); if(!host) return;
   ensureUxState();
-  if(!id){ host.innerHTML='<p class="glossary-empty muted">'+(L()==="pt"?"Escolha ou busque um termo acima.":"Pick or search a term above.")+'</p>'; return; }
+  if(!id){ host.innerHTML='<p class="glossary-empty muted">'+t("settings.glossaryEmpty")+'</p>'; return; }
   var g=GLOSSARY.filter(function(x){ return x.id===id; })[0];
   if(!g){ host.innerHTML=""; return; }
-  host.innerHTML='<div class="glossary-term">'+g.term+' <button type="button" class="glossary-fav-toggle" data-gid="'+g.id+'" aria-label="Favorito">'+(S.glossaryFavs&&S.glossaryFavs.indexOf(g.id)>=0?"⭐":"☆")+'</button></div><div class="glossary-name">'+tt(g.name)+'</div><p class="glossary-def">'+tt(g.def)+'</p><div class="glossary-fun-k">'+t("settings.glossaryFun")+'</div><p class="glossary-fun">'+tt(g.fun)+'</p>';
+  var cat=g.cat?'<span class="glossary-cat">'+glossaryCatLabel(g.cat)+'</span>':"";
+  var acr=g.acr?'<p class="glossary-acr"><span class="glossary-acr-k">'+t("settings.glossaryAcr")+'</span>'+tt(g.acr)+'</p>':"";
+  var fav=S.glossaryFavs&&S.glossaryFavs.indexOf(g.id)>=0?"⭐":"☆";
+  host.innerHTML='<div class="glossary-term-row">'+cat+'<div class="glossary-term">'+g.term+'</div><button type="button" class="glossary-fav-toggle" data-gid="'+g.id+'" aria-label="'+(L()==="pt"?"Favorito":"Favorite")+'">'+fav+'</button></div><div class="glossary-name">'+tt(g.name)+'</div>'+acr+'<div class="glossary-def-k">'+t("settings.glossaryDef")+'</div><p class="glossary-def">'+tt(g.def)+'</p><div class="glossary-fun-k">'+t("settings.glossaryFun")+'</div><p class="glossary-fun">'+tt(g.fun)+'</p>';
   var fb=host.querySelector(".glossary-fav-toggle");
   if(fb) fb.addEventListener("click",function(e){ e.stopPropagation(); toggleGlossaryFav(g.id); showGlossaryTerm(g.id); });
 }
@@ -1081,7 +1113,7 @@ function toggleGlossaryMenu(force){
   if(btn) btn.setAttribute("aria-expanded",open?"true":"false");
   if(bd){ bd.hidden=!open; bd.setAttribute("aria-hidden",open?"false":"true"); }
   document.body.classList.toggle("glossary-menu-open",open);
-  if(open){ renderGlossarySelect(); renderGlossaryFavs(); }
+  if(open){ renderGlossarySelect(); renderGlossaryFavs(); var gs=$("glossarySearch"); if(gs){ gs.focus(); try{ gs.select(); }catch(e){} } }
 }
 function toggleSettingsMenu(force){
   var menu=$("settingsMenu"),btn=$("settingsBtn"),bd=$("a11yBackdrop");
@@ -3748,7 +3780,7 @@ function toggleGlossaryFav(id){
 function renderGlossaryFavs(){
   var host=$("glossaryFavsList"); if(!host) return;
   ensureUxState();
-  if(!S.glossaryFavs.length){ host.innerHTML='<p class="muted">'+t("settings.glossaryPick")+'</p>'; return; }
+  if(!S.glossaryFavs.length){ host.innerHTML='<p class="muted glossary-favs-empty">'+t("settings.glossaryFavsEmpty")+'</p>'; return; }
   host.innerHTML="";
   S.glossaryFavs.forEach(function(id){
     var g=GLOSSARY.filter(function(x){return x.id===id;})[0]; if(!g) return;
@@ -3767,7 +3799,7 @@ function renderFlashcard(){
   if(!pool.length) return;
   if(flashcardIdx>=pool.length) flashcardIdx=0;
   var g=pool[flashcardIdx];
-  host.innerHTML='<div class="glossary-term">'+g.term+'</div><p class="glossary-def">'+tt(g.def)+'</p><p class="glossary-fun">'+tt(g.fun)+'</p>';
+  host.innerHTML='<div class="glossary-term">'+g.term+'</div><div class="glossary-name">'+tt(g.name)+'</div><p class="glossary-def">'+tt(g.def)+'</p><p class="glossary-fun">'+tt(g.fun)+'</p>';
 }
 function nextFlashcard(){ flashcardIdx++; renderFlashcard(); }
 function themePreview(th){
