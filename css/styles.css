@@ -888,9 +888,16 @@ body.contrast .chain-map-wrap{background:#04141b}
 .theme-errors{margin-top:12px;display:grid;gap:6px}
 .theme-err{display:flex;justify-content:space-between;font-size:.85rem;padding:8px 12px;background:var(--card);border:1px solid var(--line);border-radius:10px}
 .theme-err-weak{border-color:rgba(255,107,107,.45);background:rgba(255,107,107,.08)}
+.theme-err-right{display:inline-flex;align-items:center;gap:8px}
+.theme-err-pct{font-weight:700;min-width:2.5rem;text-align:right}
+.theme-err-btn{padding:2px 8px!important;font-size:.72rem!important}
+.theme-weak-note{margin:0 0 8px;font-size:.78rem}
+.ped-rec-item--weak{border-color:rgba(255,107,107,.25);background:rgba(255,107,107,.05)}
 
 /* Medals / ranking */
 .medals{display:flex;flex-wrap:wrap;gap:10px}
+.medals-profile{margin-top:4px}
+#profileMedalsCard .medal{flex:1 1 calc(50% - 10px);min-width:140px}
 .medal{display:flex;flex-direction:column;align-items:center;gap:4px;width:96px;padding:12px 6px;border:1px solid var(--line);border-radius:12px;background:var(--card);text-align:center}
 .medal.locked{opacity:.4;filter:grayscale(1)}
 .medal .mi{font-size:1.8rem}

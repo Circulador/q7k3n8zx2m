@@ -322,6 +322,8 @@ var UI = {
   "pedagogy.recTitle":{pt:"🎯 Plano de estudo sugerido",en:"🎯 Suggested study plan"},
   "pedagogy.recWeak":{pt:"Reforce o tema",en:"Strengthen theme"},
   "pedagogy.recPlay":{pt:"Jogar agora",en:"Play now"},
+  "pedagogy.drillMode":{pt:"Reforço de tema — sem penalidade",en:"Theme drill — no penalty"},
+  "pedagogy.drillDone":{pt:"📈 Reforço concluído — veja seu radar atualizado",en:"📈 Drill complete — check your updated radar"},
   "pedagogy.reviewErrors":{pt:"📚 Revisar meus erros",en:"📚 Review my mistakes"},
   "pedagogy.reviewEmpty":{pt:"Nenhum erro registrado para revisão. Continue jogando!",en:"No errors recorded for review. Keep playing!"},
   "pedagogy.reviewMode":{pt:"Revisão guiada — sem penalidade",en:"Guided review — no penalty"},
@@ -536,6 +538,9 @@ var UI = {
   "profile.reviewTitle":{pt:"📚 Revisão",en:"📚 Review"},
   "profile.reviewSub":{pt:"Treine seus erros ou consulte o banco de perguntas para autores.",en:"Train your mistakes or open the question bank for authors."},
   "profile.reviewTrain":{pt:"📚 Treinar meus erros",en:"📚 Train my mistakes"},
+  "profile.reviewTrainDue":{pt:"📚 Treinar meus erros ({n} pendentes)",en:"📚 Train my mistakes ({n} pending)"},
+  "profile.themesWeak":{pt:"📉 Temas para reforçar",en:"📉 Themes to strengthen"},
+  "profile.themesWeakSub":{pt:"Conectado ao plano de estudo — abaixo de 70% de acerto.",en:"Linked to the study plan — below 70% accuracy."},
   "profile.reviewBank":{pt:"📝 Banco de perguntas (autores)",en:"📝 Question bank (authors)"},
   "profile.backupTitle":{pt:"💾 Backup local",en:"💾 Local backup"},
   "profile.backupSub":{pt:"Exporte ou importe seu progresso neste navegador (JSON).",en:"Export or import your progress in this browser (JSON)."},
@@ -586,6 +591,7 @@ var UI = {
   "profile.radar":{pt:"🎯 Radar de Competências",en:"🎯 Competency Radar"},
   "profile.radarSub":{pt:"Seus pontos fortes e fracos por área de segurança.",en:"Your strengths and weaknesses by security area."},
   "profile.ach":{pt:"🏅 Conquistas",en:"🏅 Achievements"},
+  "profile.achSub":{pt:"Medalhas desbloqueadas na sua jornada — cada uma também vira figurinha no álbum.",en:"Medals unlocked on your journey — each one also becomes a sticker in the album."},
   "profile.certTitle":{pt:"📜 Certificado",en:"📜 Certificate"},
   "profile.certSub":{pt:"Gere seu certificado a qualquer momento com seu progresso atual — não é necessário concluir o jogo.",en:"Generate your certificate anytime with your current progress — no need to finish the game."},
   "profile.certAria":{pt:"Prévia do certificado de participação",en:"Participation certificate preview"},
@@ -2101,14 +2107,28 @@ function bossPhaseTheme(b,ph){ if(ph.theme) return ph.theme; var t=(ph.q&&ph.q.p
 }
 function getWeekTheme(){ var wk=weekKey(), n=parseInt((wk.split("-W")[1]||"1"),10); return WEEK_THEME_ROTATION[(n-1)%WEEK_THEME_ROTATION.length]; }
 function overallAcc(){ var c=0,t=0,k; for(k in S.themeStats){ c+=(S.themeStats[k].c||0); t+=(S.themeStats[k].t||0); } return t?Math.round(c/t*100):null; }
-function weakestThemeKey(){ var list=[],k; for(k in THEMES){ var a=themeAcc(k); list.push({k:k,acc:a===null?50:a}); } list.sort(function(a,b){ return a.acc-b.acc; }); return list[0]?list[0].k:null; }
+function weakestThemeKey(){ var list=themesNeedingWork(70); return list.length?list[0].k:null; }
+function themesNeedingWork(threshold){
+  threshold=threshold||70;
+  var list=[], k, a;
+  for(k in THEMES){
+    a=themeAcc(k);
+    if(a!==null&&a<threshold) list.push({k:k,a:a});
+  }
+  list.sort(function(x,y){ return x.a-y.a; });
+  return list;
+}
 function pedagogicalRecommendations(){
-  var recs=[], weak=weakestThemeKey();
-  if(weak) recs.push({ico:THEMES[weak].ico,txt:t("pedagogy.recWeak")+" "+tt(THEMES[weak]),action:"theme",theme:weak});
-  if(Object.keys(S.missed||{}).length) recs.push({ico:"📚",txt:t("pedagogy.reviewErrors"),action:"review"});
-  var wt=getWeekTheme(); recs.push({ico:THEMES[wt].ico,txt:(L()==="pt"?"Semana: ":"Week: ")+tt(THEMES[wt]),action:"weekly"});
+  var recs=[], weakList=themesNeedingWork(70), due=srsDueCount(), wt, wtAcc;
+  weakList.slice(0,3).forEach(function(w){
+    recs.push({ico:THEMES[w.k].ico,txt:t("pedagogy.recWeak")+" "+tt(THEMES[w.k])+" · "+w.a+"%",action:"theme",theme:w.k,acc:w.a});
+  });
+  if(due>0) recs.push({ico:"📚",txt:t("pedagogy.reviewErrors")+" · "+due,action:"review",count:due});
+  else if(Object.keys(S.missed||{}).length) recs.push({ico:"📚",txt:t("pedagogy.reviewErrors"),action:"review"});
+  wt=getWeekTheme(); wtAcc=themeAcc(wt);
+  if(wtAcc===null||wtAcc<80) recs.push({ico:THEMES[wt].ico,txt:(L()==="pt"?"Semana: ":"Week: ")+tt(THEMES[wt])+(wtAcc!==null?" · "+wtAcc+"%":""),action:"weekly",theme:wt});
   if((bossCompletedCount()||0)<1) recs.push({ico:"🎯",txt:L()==="pt"?"Pratique transferência: jogue uma crise":"Practice transfer: play a crisis",action:"boss"});
-  return recs.slice(0,4);
+  return recs.slice(0,5);
 }
 function renderPedagogyRec(hostId){
   var host=$(hostId); if(!host) return;
@@ -2116,13 +2136,14 @@ function renderPedagogyRec(hostId){
   if(!recs.length){ host.innerHTML='<p class="muted">'+t("manager.recEmpty")+'</p>'; return; }
   host.innerHTML='<div class="ped-rec-title">'+t("pedagogy.recTitle")+'</div>';
   recs.forEach(function(r){
-    var row=document.createElement("div"); row.className="ped-rec-item";
+    var row=document.createElement("div"); row.className="ped-rec-item"+(r.acc!==undefined&&r.acc<70?" ped-rec-item--weak":"");
     row.innerHTML='<span class="ped-rec-ico">'+r.ico+'</span><span class="ped-rec-txt">'+r.txt+'</span>';
     var play=document.createElement("button"); play.className="btn btn-ghost btn-sm"; play.textContent=t("pedagogy.recPlay");
     play.addEventListener("click",function(){
       if(r.action==="review") startReviewErrors();
       else if(r.action==="boss"){ renderBossList(); show("screenBossList"); }
-      else if(r.action==="weekly") show("screenWeekly");
+      else if(r.action==="weekly"&&r.theme) startThemeDrill(r.theme);
+      else if(r.action==="theme"&&r.theme) startThemeDrill(r.theme);
       else openMap(null,true);
     });
     row.appendChild(play); host.appendChild(row);
@@ -2229,10 +2250,20 @@ function renderCampaignDebrief(){
   host.innerHTML=html;
 }
 function startReviewErrors(){
-  var qs=allMissedQuestions();
+  var qs=srsDueItems().length?srsDueItems():allMissedQuestions();
   if(!qs.length){ toast(t("pedagogy.reviewEmpty")); return; }
   cur.mode="review"; cur.country={id:"review",name:{pt:"Revisão dos erros",en:"Mistake review"},flag:"📚"};
   cur.questions=shuffleQuestions(qs.slice()); cur.i=0; cur.correct=0; cur.integrity=100; S.lives=99; initQuizSession();
+  show("screenQuiz"); renderQuestion();
+}
+function startThemeDrill(theme){
+  if(!theme||!THEMES[theme]){ openMap(null,true); return; }
+  var pool=fullBank().filter(function(q){ return q.theme===theme; });
+  if(pool.length<3) pool=fullBank().filter(function(q){ return q.theme===theme||!q.countries; });
+  if(!pool.length){ toast(L()==="pt"?"Sem perguntas deste tema — abrindo mapa.":"No questions for this theme — opening map."); openMap(null,true); return; }
+  cur.mode="themeDrill";
+  cur.country={id:"theme_"+theme,name:{pt:"Reforço: "+tt(THEMES[theme]),en:"Drill: "+tt(THEMES[theme])},flag:THEMES[theme].ico};
+  cur.questions=shuffleQuestions(pool.slice(0,Math.min(6,pool.length))); cur.i=0; cur.correct=0; cur.integrity=100; S.lives=99; initQuizSession();
   show("screenQuiz"); renderQuestion();
 }
 
@@ -3211,10 +3242,7 @@ var cur={country:null,questions:[],i:0,correct:0,integrity:100,mode:"campaign"};
 function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)),t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
 function shuffleQuestions(qs){ return shuffle(qs.map(function(q,i){ return q; })); }
 function weakThemes(n){
-  var list=[], th;
-  for(th in THEMES){ var a=themeAcc(th); list.push({th:th,acc:a===null?50:a}); }
-  list.sort(function(a,b){ return a.acc-b.acc; });
-  return list.slice(0,n||3).map(function(x){ return x.th; });
+  return themesNeedingWork(70).slice(0,n||3).map(function(x){ return x.k; });
 }
 function buildCampaign(c){
   var roleThemes=ROLE_THEMES[S.role]||[];
@@ -3300,26 +3328,27 @@ function setIntegrity(){
 function answer(idx,btn,q){
   if(cur.qStates&&cur.qStates[cur.i]) return;
   $("options").querySelectorAll(".opt").forEach(function(b){ b.disabled=true; });
-  var ok=idx===q.correct,fb=$("feedback"),review=cur.mode==="review";
-  if(!review){ recordTheme(q.theme,ok); recordMiss(q,ok); }
-  else { recordMiss(q,ok); if(ok) addReward(5,2,0); }
-  if(ok){ btn.classList.add("correct"); if(!review) addReward(10,5,q.diff*10); fb.className="feedback show good"; fb.innerHTML="✅ <b>"+(L()==="pt"?"Correto!":"Correct!")+"</b> "+tt(q.why); }
-  else if(review){ btn.classList.add("wrong"); $("options").querySelectorAll(".opt").forEach(function(b){ if(b.getAttribute("data-correct")==="1") b.classList.add("correct"); }); fb.className="feedback show err"; fb.innerHTML="❌ <b>"+(L()==="pt"?"Revise:":"Review:")+"</b> "+tt(q.why); }
+  var ok=idx===q.correct,fb=$("feedback"),review=cur.mode==="review",drill=cur.mode==="themeDrill";
+  if(drill){ recordTheme(q.theme,ok); recordMiss(q,ok); if(ok) addReward(5,2,0); }
+  else if(review){ recordMiss(q,ok); if(ok) addReward(5,2,0); }
+  else { recordTheme(q.theme,ok); recordMiss(q,ok); }
+  if(ok){ btn.classList.add("correct"); if(!review&&!drill) addReward(10,5,q.diff*10); fb.className="feedback show good"; fb.innerHTML="✅ <b>"+(L()==="pt"?"Correto!":"Correct!")+"</b> "+tt(q.why); }
+  else if(review||drill){ btn.classList.add("wrong"); $("options").querySelectorAll(".opt").forEach(function(b){ if(b.getAttribute("data-correct")==="1") b.classList.add("correct"); }); fb.className="feedback show err"; fb.innerHTML="❌ <b>"+(L()==="pt"?"Revise:":"Review:")+"</b> "+tt(q.why); }
   else{ btn.classList.add("wrong"); $("options").querySelectorAll(".opt").forEach(function(b){ if(b.getAttribute("data-correct")==="1") b.classList.add("correct"); }); cur.integrity=Math.max(0,cur.integrity-20); S.lives=Math.max(0,(S.lives||3)-1); renderLives(); applyResilienceHit(q.theme); fb.className="feedback show err"; fb.innerHTML="❌ <b>"+(L()==="pt"?"Cuidado!":"Careful!")+"</b> "+tt(q.why)+(THREAT_RESILIENCE[q.theme]?" <span class='res-hit'>−"+THREAT_RESILIENCE[q.theme]+"% "+(L()==="pt"?"resiliência":"resilience")+"</span>":""); save(); }
   if(!cur.qStates) cur.qStates={};
   cur.qStates[cur.i]={selectedIdx:idx,ok:ok,feedbackClass:fb.className,feedbackHtml:fb.innerHTML,reportDone:false};
   cur.correct=countQuizCorrect();
   speak((ok?(L()==="pt"?"Correto. ":"Correct. "):(L()==="pt"?"Cuidado. ":"Careful. "))+tt(q.why));
   setIntegrity(); renderQuizResilience(); updateQuizResilienceVisibility();
-  if(!review){ bumpWeekly("correct",ok?1:0); if(ok&&q.theme===getWeekTheme()) bumpWeekly("theme",1); }
-  if(!ok&&!review&&REPORT_THEMES[q.theme]) showReportPrompt(q);
+  if(!review&&!drill){ bumpWeekly("correct",ok?1:0); if(ok&&q.theme===getWeekTheme()) bumpWeekly("theme",1); }
+  if(!ok&&!review&&!drill&&REPORT_THEMES[q.theme]) showReportPrompt(q);
   else { cur.reportPending=false; updateQuizNav(); $("nextBtn").focus(); }
 }
 function nextQuestion(){
   if(cur.reportPending) return;
   if(cur.i>=cur.questions.length-1&&cur.qStates&&cur.qStates[cur.i]){ finishCampaign(); return; }
   cur.i++;
-  if(cur.i>=cur.questions.length||(cur.mode!=="review"&&(S.lives||0)<=0)){ finishCampaign(); return; }
+  if(cur.i>=cur.questions.length||(cur.mode!=="review"&&cur.mode!=="themeDrill"&&(S.lives||0)<=0)){ finishCampaign(); return; }
   renderQuestion();
 }
 function finishCampaign(){
@@ -3327,6 +3356,7 @@ function finishCampaign(){
   cur.correct=countQuizCorrect();
   var c=cur.country,total=cur.questions.length,acc=Math.round(cur.correct/total*100),win=cur.integrity>0&&acc>=60;
   if(cur.mode==="review"){ show("screenProfile"); renderProfile(); toast(L()==="pt"?"📚 Revisão concluída":"📚 Review complete"); return; }
+  if(cur.mode==="themeDrill"){ save(); checkMedals(); show("screenProfile"); renderProfile(); toast(t("pedagogy.drillDone")); return; }
   if(cur.mode==="campaign"){ S.done[c.id]=Math.max(S.done[c.id]||0,acc); bumpWeekly("campaign",1); syncMapProgress(); }
   if(cur.mode==="chain"){ S.chainDone[cur.chainKey]=Math.max(S.chainDone[cur.chainKey]||0,acc); }
   if(cur.mode==="daily"){ markDailyDone(win); recordStreak(); }
@@ -3351,10 +3381,32 @@ function renderThemeErrors(host){
   host.innerHTML="";
   var arr=Object.keys(S.themeStats||{}).map(function(th){ return {th:th,a:themeAcc(th)}; }).filter(function(x){ return x.a!==null; }).sort(function(a,b){ return a.a-b.a; });
   if(!arr.length){ host.innerHTML='<div class="muted">'+(L()==="pt"?"Jogue para ver suas estatísticas por tema.":"Play to see your stats by theme.")+'</div>'; return; }
+  var weakN=arr.filter(function(x){ return x.a<70; }).length;
+  if(weakN){
+    var note=document.createElement("p");
+    note.className="theme-weak-note muted";
+    note.textContent=t("profile.themesWeakSub");
+    host.appendChild(note);
+  }
   arr.forEach(function(x){
     var d=document.createElement("div");
     d.className="theme-err"+(x.a<70?" theme-err-weak":"");
-    d.innerHTML='<span>'+THEMES[x.th].ico+' '+tt(THEMES[x.th])+'</span><span>'+x.a+'%</span>';
+    var right='<span class="theme-err-pct">'+x.a+'%</span>';
+    if(x.a<70){
+      var btn=document.createElement("button");
+      btn.type="button";
+      btn.className="btn btn-ghost btn-sm theme-err-btn";
+      btn.textContent=t("pedagogy.recPlay");
+      btn.addEventListener("click",function(e){ e.stopPropagation(); startThemeDrill(x.th); });
+      d.innerHTML='<span>'+THEMES[x.th].ico+' '+tt(THEMES[x.th])+'</span>';
+      var wrap=document.createElement("span");
+      wrap.className="theme-err-right";
+      wrap.innerHTML=right;
+      wrap.appendChild(btn);
+      d.appendChild(wrap);
+    } else {
+      d.innerHTML='<span>'+THEMES[x.th].ico+' '+tt(THEMES[x.th])+'</span><span>'+x.a+'%</span>';
+    }
     host.appendChild(d);
   });
 }
@@ -4407,8 +4459,12 @@ function renderCompletionCard(){
 function renderReviewSection(){
   var host=$("reviewActions"); if(!host) return;
   host.innerHTML='';
-  var tr=document.createElement("button"); tr.className="btn btn-primary btn-sm"; tr.textContent=t("profile.reviewTrain");
-  tr.onclick=startReviewErrors; host.appendChild(tr);
+  var due=srsDueCount();
+  var tr=document.createElement("button");
+  tr.className="btn btn-primary btn-sm";
+  tr.textContent=due?t("profile.reviewTrainDue").replace("{n}",String(due)):t("profile.reviewTrain");
+  tr.onclick=startReviewErrors;
+  host.appendChild(tr);
   var lk=document.createElement("button"); lk.className="btn btn-ghost btn-sm"; lk.textContent=t("profile.reviewBank");
   lk.onclick=function(){ if(typeof window.initReviewBank==="function") window.initReviewBank(); show("screenReview"); };
   host.appendChild(lk);
@@ -5117,6 +5173,7 @@ function renderQuizContext(){
   var mode=cur.mode, label="", ico="🎯";
   if(mode==="daily"){ ico="📅"; label=(L()==="pt"?"Missão diária":"Daily mission")+" · "+(cur.i+1)+"/"+cur.questions.length; }
   else if(mode==="review"){ ico="📚"; label=t("pedagogy.reviewMode")+" · "+(cur.i+1)+"/"+cur.questions.length; }
+  else if(mode==="themeDrill"){ ico=cur.country?cur.country.flag:"🎯"; label=t("pedagogy.drillMode")+" · "+(cur.i+1)+"/"+cur.questions.length; }
   else if(mode==="campaign"){ ico="🗺️"; label=(L()==="pt"?"Campanha":"Campaign")+" · "+(cur.country?cur.country.flag+" "+tt(cur.country.name):"")+" · "+(cur.i+1)+"/"+cur.questions.length; }
   else { label=(cur.i+1)+"/"+cur.questions.length; }
   el.innerHTML='<span aria-hidden="true">'+ico+'</span> '+label;
