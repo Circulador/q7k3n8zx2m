@@ -1641,21 +1641,29 @@ function renderAnimatedChainMap(){
 }
 var mapHitActive=null;
 var THREAT_RESILIENCE={phishing:2,password:2,bec:3,malware:5,ransomware:15,ot:20,sap:25,data:3,device:4,remote:3,port:5};
+function isDenseMapCountry(gameId){
+  if(gameId==="br"||gameId==="ca") return true;
+  if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getCountry) return false;
+  var off=OrbitaWorldMap.getCountry(gameId,L());
+  if(!off) return false;
+  return off.activities.length+off.products.length>=8;
+}
 function officialPresenceHTML(gameId){
   if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getCountry) return "";
   var off=OrbitaWorldMap.getCountry(gameId,L()); if(!off) return "";
-  var h="";
-  if(off.activities.length){
-    h+='<div class="md-presence"><b>'+t("map.activityTitle")+':</b><div class="presence-row">'
+  function actBlock(){
+    if(!off.activities.length) return "";
+    return '<div class="md-presence"><b>'+t("map.activityTitle")+':</b><div class="presence-row">'
       +off.activities.map(function(id){ return '<span class="presence-chip">'+OrbitaWorldMap.getActivityLabel(id,L())+'</span>'; }).join("")
       +'</div></div>';
   }
-  if(off.products.length){
-    h+='<div class="md-presence"><b>'+t("map.productsTitle")+':</b><div class="presence-row">'
+  function prodBlock(){
+    if(!off.products.length) return "";
+    return '<div class="md-presence"><b>'+t("map.productsTitle")+':</b><div class="presence-row">'
       +off.products.map(function(id){ return '<span class="presence-chip mineral-chip">'+OrbitaWorldMap.getProductLabel(id,L())+'</span>'; }).join("")
       +'</div></div>';
   }
-  return h;
+  return actBlock()+prodBlock();
 }
 function renderMapAbout(){
   var el=$("mapAbout"); if(!el||typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getActivityItems) return;
@@ -1845,7 +1853,7 @@ function finishWorldMapUI(){
   mapReady=true;
   updateMapCountryNav();
 }
-function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open","map-detail-br"); syncMapDetailLayout(); updateMapCountryNav(); }
+function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open","map-detail-dense"); syncMapDetailLayout(); updateMapCountryNav(); }
 function getPlayableCountryIds(){
   if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getCountries) return COUNTRIES.map(function(c){ return c.id; });
   var countries=OrbitaWorldMap.getCountries(L());
@@ -1910,7 +1918,7 @@ function openMapDetailCountry(id){
   mapHitActive=id;
   setMapHitHighlight(id);
   var tip=$("mapTooltip"); if(tip) tip.hidden=true;
-  var stage=$("mapStage"); if(stage){ stage.classList.add("map-detail-open"); stage.classList.toggle("map-detail-br",id==="br"); }
+  var stage=$("mapStage"); if(stage){ stage.classList.add("map-detail-open"); stage.classList.toggle("map-detail-dense",isDenseMapCountry(id)); }
   var body=$("mapDetailBody"), panel=$("mapDetail"); if(!body||!panel) return;
   var official=(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.getCountry)?OrbitaWorldMap.getCountry(id,L()):null;
   body.innerHTML=buildMapDetailHTML(c,official);
@@ -2043,12 +2051,13 @@ function scrollMapIntoView(){
   });
 }
 function measureMapViewport(){
-  var ow=$("orbitaWorldMap"), sm=$("screenMap");
-  if(!ow||!sm||!sm.classList.contains("map-screen-fit")) return;
-  var top=ow.getBoundingClientRect().top;
+  var sm=$("screenMap");
+  if(!sm||!sm.classList.contains("map-screen-fit")) return;
+  var anchor=sm.querySelector(".card")||sm;
+  var top=anchor.getBoundingClientRect().top;
   var shell=document.querySelector(".bottom-shell");
   var bottomH=shell?shell.getBoundingClientRect().height:112;
-  var h=Math.max(300,Math.floor(window.innerHeight-top-bottomH-2));
+  var h=Math.max(320,Math.floor(window.innerHeight-top-bottomH-2));
   document.documentElement.style.setProperty("--map-viewport-h",h+"px");
 }
 function syncMapDetailLayout(){

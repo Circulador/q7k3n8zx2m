@@ -450,43 +450,31 @@ body.map-viewport-lock{overflow:hidden}
 #screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-expedition{display:none}
 #screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-controls-sticky{padding:2px 14px 4px;flex-shrink:0}
 #screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-context{margin-bottom:4px;min-height:0}
-#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-zoom-toggle{margin:2px 0}
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-zoom-toggle{display:none}
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-toolbar-row{display:none}
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-controls-sticky{padding:2px 14px 2px}
 #screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-stage{flex:1;min-height:0;overflow:hidden}
 #screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-stage.map-detail-open{min-height:0;height:100%;max-height:100%;overflow:hidden}
 #screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-stage.map-detail-open .vwm-map-stage-inner,
 #screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-stage.map-detail-open .vwm-svg{min-height:0;height:100%}
 #screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-more-options{flex-shrink:0;margin:0;padding:0 14px 4px}
 #screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-more-options summary{padding:4px 0}
-/* Brasil — painel largo, chips em grade (fontes iguais, conteúdo completo) */
-.map-stage.map-detail-br.map-detail-open .map-detail{flex:0 0 clamp(300px,42%,420px);max-width:420px;padding:10px 12px 8px;overflow:visible}
-.map-stage.map-detail-br .map-detail h3{margin:0 0 4px;padding-right:28px}
-.map-stage.map-detail-br .map-detail .md-tag-official{margin:0 0 4px}
-.map-stage.map-detail-br .map-detail .md-tag-train{margin:0 0 6px}
-.map-stage.map-detail-br .map-detail .md-presence{margin:0 0 5px}
-.map-stage.map-detail-br .map-detail .md-desc{margin:0 0 5px}
-.map-stage.map-detail-br .map-detail .md-chain{margin:0 0 5px;padding:6px 8px}
-.map-stage.map-detail-br .map-detail .md-risks{margin:0 0 5px}
-.map-stage.map-detail-br .map-detail .md-progress{margin:0 0 6px}
-.map-stage.map-detail-br .md-presence .presence-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 5px}
-.map-stage.map-detail-br .md-presence .presence-chip{white-space:normal;line-height:1.15;text-align:center;padding:2px 6px}
-.map-stage.map-detail-br .md-risk-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 5px}
-.map-stage.map-detail-br .md-risk-tag{white-space:normal;line-height:1.15;text-align:center;padding:2px 6px}
-@media(min-width:1000px){
-  .map-stage.map-detail-br.map-detail-open .map-detail{flex:0 0 clamp(340px,44%,460px);max-width:460px}
-  .map-stage.map-detail-br .md-presence .presence-row{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .map-stage.map-detail-br .md-risk-row{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
-@media(min-width:1200px){
-  .map-stage.map-detail-br .md-presence .presence-row{grid-template-columns:repeat(4,minmax(0,1fr))}
-}
-@media(max-width:900px){
-  .map-stage.map-detail-open{flex-direction:column}
-  .map-stage.map-detail-open .vwm-map-stage-inner{flex:0 0 auto;order:1;width:100%;border-radius:8px 8px 0 0}
-  .map-stage.map-detail-open .map-detail{order:2;flex:0 0 auto;position:relative;top:auto;right:auto;left:auto;bottom:auto;width:100%;max-width:none;overflow:visible;margin:0;border-radius:0 0 8px 8px;border-width:0 2px 2px 2px;box-shadow:none}
-  .map-stage.map-detail-open .map-detail::before{display:none}
-  .map-stage.map-detail-br.map-detail-open .vwm-map-stage-inner{max-height:min(28dvh,220px);min-height:min(28dvh,220px)}
-  .map-stage.map-detail-br .md-presence .presence-row{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
+/* BR / CA — mesmo fluxo vertical dos demais países, com espaços compactos */
+.map-stage.map-detail-dense.map-detail-open .map-detail{flex:0 0 clamp(330px,36%,360px);max-width:360px;padding:9px 12px 8px}
+.map-stage.map-detail-dense .map-detail h3{margin:0 0 4px}
+.map-stage.map-detail-dense .map-detail .md-tag-official{margin:0 0 4px;line-height:1.3}
+.map-stage.map-detail-dense .map-detail .md-tag-train{margin:0 0 5px;padding-top:3px;padding-bottom:3px}
+.map-stage.map-detail-dense .map-detail .md-presence{margin:0 0 5px;line-height:1.3}
+.map-stage.map-detail-dense .map-detail .md-presence b{margin-bottom:3px}
+.map-stage.map-detail-dense .map-detail .presence-row{gap:3px 4px}
+.map-stage.map-detail-dense .map-detail .presence-chip{padding-top:2px;padding-bottom:2px}
+.map-stage.map-detail-dense .map-detail .md-desc{margin:0 0 5px;line-height:1.3}
+.map-stage.map-detail-dense .map-detail .md-chain{margin:0 0 5px;padding:5px 8px;line-height:1.3}
+.map-stage.map-detail-dense .map-detail .md-risks{margin:0 0 5px}
+.map-stage.map-detail-dense .map-detail .md-risks b{margin-bottom:3px}
+.map-stage.map-detail-dense .map-detail .md-risk-row{gap:3px 4px}
+.map-stage.map-detail-dense .map-detail .md-progress{margin:0 0 6px}
+.map-stage.map-detail-dense .map-detail-play{margin-top:0}
 @media(max-width:640px){
   .map-detail{position:relative;top:auto;right:auto;left:auto;bottom:auto;width:100%;max-height:none;overflow:visible;border-radius:0 0 8px 8px;border-width:0 2px 2px 2px;box-shadow:none;animation:none}
   .map-detail::before{display:none}
