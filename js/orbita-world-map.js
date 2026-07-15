@@ -60,7 +60,7 @@ var OrbitaWorldMap = (function () {
 
   var state = { filterId: null, filterType: null, selectedIso: null };
   var projection, pathFn, countrySel, svgNode, tooltipNode, clearBtn, loadingNode;
-  var itemById, onCountryClick, onFilterChange, onClearSelection, langFn, ready = false, routesLayer, countryFeatures;
+  var itemById, onCountryClick, onFilterChange, onClearSelection, onBeforeClearSelection, langFn, ready = false, routesLayer, countryFeatures;
   var progressByGame = {};
 
   function notifyFilterChange() {
@@ -342,7 +342,10 @@ var OrbitaWorldMap = (function () {
         }
       });
     routesLayer = svg.append("g").attr("class", "vwm-routes");
-    svg.on("click", function () { clearSelection(); });
+    svg.on("click", function () {
+      if (onBeforeClearSelection && onBeforeClearSelection() === false) return;
+      clearSelection();
+    });
     ready = true;
     updateState();
   }
@@ -362,6 +365,7 @@ var OrbitaWorldMap = (function () {
     onCountryClick = opts.onCountryClick;
     onFilterChange = opts.onFilterChange;
     onClearSelection = opts.onClearSelection;
+    onBeforeClearSelection = opts.onBeforeClearSelection;
     langFn = opts.lang || function () { return "pt"; };
     itemById = {};
     activityItems.concat(productItems).forEach(function (it) { itemById[it.id] = it; });

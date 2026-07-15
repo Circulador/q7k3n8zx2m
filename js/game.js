@@ -179,6 +179,7 @@ var UI = {
   "map.riskTitle":{pt:"Risco",en:"Risk"},
   "map.countryPrev":{pt:"País anterior",en:"Previous country"},
   "map.countryNext":{pt:"Próximo país",en:"Next country"},
+  "map.navMissHint":{pt:"Use as setas ‹ › para trocar de país, ou × para fechar.",en:"Use ‹ › arrows to switch countries, or × to close."},
   "map.legPending":{pt:"Pendente",en:"Pending"},
   "map.legPartial":{pt:"Em progresso",en:"In progress"},
   "map.legDone":{pt:"Concluído",en:"Completed"},
@@ -1645,7 +1646,7 @@ function renderAnimatedChainMap(){
     g.addEventListener("focus",function(){ setChainStageHighlight(sid); });
   });
 }
-var mapHitActive=null;
+var mapBgClickHintShown=false;
 var THREAT_RESILIENCE={phishing:2,password:2,bec:3,malware:5,ransomware:15,ot:20,sap:25,data:3,device:4,remote:3,port:5};
 function isDenseMapCountry(gameId){
   if(gameId==="br"||gameId==="ca") return true;
@@ -1828,6 +1829,14 @@ function ensureOrbitaWorldMap(cb){
       onCountryClick:function(gameId){
         if(!gameId) return;
         openMapDetailCountry(gameId);
+      },
+      onBeforeClearSelection:function(){
+        var stage=$("mapStage");
+        if(stage&&stage.classList.contains("map-detail-open")){
+          if(!mapBgClickHintShown){ mapBgClickHintShown=true; toast(t("map.navMissHint")); }
+          return false;
+        }
+        return true;
       },
       onClearSelection:function(){ closeMapDetail(); },
       onFilterChange:function(){ renderCountryList(); }
