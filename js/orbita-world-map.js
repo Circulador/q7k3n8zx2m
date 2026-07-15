@@ -352,7 +352,10 @@ var OrbitaWorldMap = (function () {
         }
       });
     routesLayer = svg.append("g").attr("class", "vwm-routes");
-    svg.on("click", function () { clearSelection(false); });
+    svg.on("click", function (event) {
+      if (typeof window !== "undefined" && window.__mapDragMoved) return;
+      clearSelection(false);
+    });
     ready = true;
     updateState();
   }

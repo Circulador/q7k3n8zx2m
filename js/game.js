@@ -1664,6 +1664,10 @@ var mapBgClickHintShown=false;
 var _mapResetDepth=0;
 var mapDragMoved=false;
 var MAP_DRAG_THRESH=8;
+function setMapDragMoved(v){
+  mapDragMoved=!!v;
+  try{ window.__mapDragMoved=mapDragMoved; }catch(_e){}
+}
 function isMapWorldView(){ return !mapHitActive&&!isMapDetailOpen(); }
 function isMapDetailOpen(){
   var stage=$("mapStage"), panel=$("mapDetail");
@@ -1853,16 +1857,18 @@ function ensureOrbitaWorldMap(cb){
       activityLegend:$("mapActivityLegend"), productLegend:$("mapProductLegend"),
       lang:L,
       onCountryClick:function(gameId){
-        if(mapDragMoved){ mapDragMoved=false; return; }
+        if(mapDragMoved){ setMapDragMoved(false); return; }
         if(!gameId) return;
         openMapDetailCountry(gameId);
       },
       onBeforeClearSelection:function(){
+        if(mapDragMoved){ setMapDragMoved(false); return false; }
         if(isMapDetailOpen()){ mapDetailMissHint(); return false; }
         return true;
       },
       onClearSelection:function(){
         if(_mapResetDepth>0) return;
+        if(mapDragMoved){ setMapDragMoved(false); return; }
         resetMapView();
       },
       onFilterChange:function(){ renderCountryList(); }
@@ -2211,6 +2217,7 @@ function bindMapPanZoom(){
   wrap.addEventListener("pointerdown",function(e){
     if(mapChainMode()) return;
     if(mapPanBlocker(e.target)) return;
+    try{ wrap.setPointerCapture(e.pointerId); }catch(_e){}
     pointers[e.pointerId]={x:e.clientX,y:e.clientY};
     if(ptCount()===2){
       cancelViewAnim();
@@ -2220,12 +2227,13 @@ function bindMapPanZoom(){
       pinch={dist:Math.hypot(a.x-b.x,a.y-b.y)||1,cx:mid.x,cy:mid.y,w:view.w};
       return;
     }
-    drag=true; dragMoved=false; mapDragMoved=false;
+    drag=true; dragMoved=false; setMapDragMoved(false);
     wrap.classList.add("dragging"); sx=e.clientX; sy=e.clientY; ox=view.x; oy=view.y;
   });
   window.addEventListener("pointermove",function(e){
     if(pointers[e.pointerId]) pointers[e.pointerId]={x:e.clientX,y:e.clientY};
     if(pinch&&ptCount()>=2){
+      setMapDragMoved(true);
       var ks=Object.keys(pointers),a=pointers[ks[0]],b=pointers[ks[1]];
       var dist=Math.hypot(a.x-b.x,a.y-b.y)||1;
       var nw=Math.max(120,Math.min(VW,pinch.w*(pinch.dist/dist))),nh=nw*(VH/VW);
@@ -2236,14 +2244,18 @@ function bindMapPanZoom(){
       return;
     }
     if(!drag) return;
-    if(Math.abs(e.clientX-sx)>MAP_DRAG_THRESH||Math.abs(e.clientY-sy)>MAP_DRAG_THRESH) dragMoved=true;
+    if(Math.abs(e.clientX-sx)>MAP_DRAG_THRESH||Math.abs(e.clientY-sy)>MAP_DRAG_THRESH){
+      dragMoved=true;
+      setMapDragMoved(true);
+    }
     var r=svg.getBoundingClientRect(),kx=view.w/r.width,ky=view.h/r.height;
     view.x=Math.max(0,Math.min(VW-view.w,ox-(e.clientX-sx)*kx));
     view.y=Math.max(0,Math.min(VH-view.h,oy-(e.clientY-sy)*ky));
     updateViewBox();
   });
   function endPointer(e){
-    if(!mapChainMode()&&e.pointerType!=="mouse"&&ptCount()===1&&!pinch){
+    var wasDrag=dragMoved||mapDragMoved;
+    if(!mapChainMode()&&!wasDrag&&e.pointerType!=="mouse"&&ptCount()===1&&!pinch){
       var isCountry=e.target.closest&&e.target.closest(".vwm-country,.cmap-pin,.map-detail,.map-zoom-float,.map-country-nav,.vwm-legend-button");
       var now=Date.now();
       if(!isCountry&&now-lastTap<300&&Math.abs(e.clientX-lastTapX)<30&&Math.abs(e.clientY-lastTapY)<30){
@@ -2253,13 +2265,19 @@ function bindMapPanZoom(){
     if(pointers[e.pointerId]) delete pointers[e.pointerId];
     if(ptCount()<2) pinch=null;
     if(ptCount()===0){
-      if(drag&&dragMoved) mapDragMoved=true;
+      if(drag&&dragMoved) setMapDragMoved(true);
       drag=false; dragMoved=false;
       if(wrap) wrap.classList.remove("dragging");
+      if(mapDragMoved){
+        setTimeout(function(){ setMapDragMoved(false); },120);
+      }
     }
   }
   window.addEventListener("pointerup",endPointer);
   window.addEventListener("pointercancel",endPointer);
+  wrap.addEventListener("click",function(e){
+    if(mapDragMoved){ e.stopPropagation(); e.preventDefault(); }
+  },true);
   wrap.addEventListener("wheel",function(e){ if(mapChainMode()) return; e.preventDefault(); var p=toView(e.clientX,e.clientY); zoomTo(p.x,p.y,e.deltaY>0?1.2:.83); },{passive:false});
 }
 function countriesExploredCount(){ return Object.keys(S.done||{}).length; }
