@@ -139,7 +139,7 @@ var UI = {
   "settings.easyRead":{pt:"Leitura fácil",en:"Easy reading"},
   "settings.easyReadSub":{pt:"Liga ou desliga contraste, texto grande e espaçamento de uma vez.",en:"Turns contrast, large text and spacing on or off together."},
   "settings.easyReadOff":{pt:"Leitura fácil desativada",en:"Easy reading disabled"},
-  "settings.editProfile":{pt:"✏️ Mudar equipe ou papel",en:"✏️ Change team or role"},
+  "settings.editProfile":{pt:"✏️ Editar perfil",en:"✏️ Edit profile"},
   "settings.glossaryFavs":{pt:"⭐ Favoritos",en:"⭐ Favorites"},
   "quiz.context":{pt:"Contexto",en:"Context"},
   "quiz.glossaryTip":{pt:"O que é isso?",en:"What is this?"},
@@ -170,19 +170,19 @@ var UI = {
   "nav.badgeDaily":{pt:"Missão pendente",en:"Mission pending"},
   "offline.hint":{pt:"📶 Funciona offline após a primeira visita — seu progresso fica neste dispositivo.",en:"📶 Works offline after first visit — progress stays on this device."},
   "onboard.offlineNote":{pt:"📶 Após a primeira visita, funciona offline e seu progresso fica salvo neste dispositivo.",en:"📶 After the first visit, it works offline and your progress is saved on this device."},
-  "profile.editSetup":{pt:"✏️ Mudar equipe ou papel",en:"✏️ Change team or role"},
+  "profile.editSetup":{pt:"✏️ Editar perfil",en:"✏️ Edit profile"},
   "profile.weeklyGoals":{pt:"✅ Metas da semana",en:"✅ Weekly goals"},
   "cert.share":{pt:"📤 Compartilhar",en:"📤 Share"},
   "onboard.langT":{pt:"Idioma",en:"Language"},
   "onboard.langB":{pt:"Perguntas, respostas e narração seguem o idioma. Acessibilidade (♿) e configurações (⚙️) ficam no topo quando quiser.",en:"Questions, answers and narration follow the chosen language. Accessibility (♿) and settings (⚙️) are in the top bar anytime."},
   "onboard.a11yT":{pt:"Acessibilidade",en:"Accessibility"},
   "onboard.a11yB":{pt:"Ative narração, contraste, Libras ou redução de animações agora — ou ajuste depois no menu ♿.",en:"Enable narration, contrast, sign language or reduced motion now — or adjust later in the ♿ menu."},
-  "onboard.profileT":{pt:"Personalize seu treino",en:"Personalize your training"},
-  "onboard.profileB":{pt:"Na próxima tela você escolhe sua equipe e seu dia a dia — os cenários ficam parecidos com sua rotina (mina, escritório, ferrovia, porto…). Leva cerca de 20 segundos.",en:"On the next screen you pick your team and day-to-day role — scenarios will match your routine (mine, office, railway, port…). Takes about 20 seconds."},
+  "onboard.profileT":{pt:"Personalize seu perfil",en:"Personalize your profile"},
+  "onboard.profileB":{pt:"Na próxima tela você pode adicionar seu nome (opcional), escolher equipe e dia a dia — os cenários ficam parecidos com sua rotina. Leva cerca de 20 segundos.",en:"On the next screen you can add your name (optional), pick your team and day-to-day role — scenarios will match your routine. Takes about 20 seconds."},
   "onboard.playT":{pt:"Como funciona",en:"How it works"},
   "onboard.playB":{pt:"📅 Atividade de hoje → 🗺️ Jornada no mapa → 🎯 Simulação de crise. Cada acerto fortalece a operação — erros mostram o que revisar.",en:"📅 Today's activity → 🗺️ Map journey → 🎯 Crisis simulation. Each correct answer strengthens operations — mistakes show what to review."},
   "onboard.readyT":{pt:"Pronto para começar",en:"Ready to start"},
-  "onboard.readyB":{pt:"Primeiro personalize seu perfil (equipe e papel), depois faça sua primeira atividade — cerca de 5 minutos.",en:"First personalize your profile (team and role), then do your first activity — about 5 minutes."},
+  "onboard.readyB":{pt:"Primeiro personalize seu perfil (nome, equipe e papel), depois faça sua primeira atividade — cerca de 5 minutos.",en:"First personalize your profile (name, team and role), then do your first activity — about 5 minutes."},
   "onboard.startSetup":{pt:"Personalizar agora →",en:"Personalize now →"},
   "mgr.kpiAdoption":{pt:"Adoção",en:"Adoption"},
   "mgr.kpiWeak":{pt:"Tema mais fraco",en:"Weakest theme"},
@@ -380,11 +380,12 @@ var UI = {
   "setup.nameSub":{pt:"Opcional — aparece no certificado e no ranking da equipe.",en:"Optional — shown on your certificate and team ranking."},
   "setup.namePh":{pt:"Exemplo: Rodolfo Conte",en:"Example: Rodolfo Conte"},
   "setup.badge":{pt:"👤 Perfil rápido",en:"👤 Quick profile"},
-  "setup.head":{pt:"Personalize seu treino",en:"Personalize your training"},
-  "setup.intro":{pt:"Assim os cenários ficam parecidos com seu dia a dia — leva cerca de 20 segundos.",en:"This way scenarios match your daily work — takes about 20 seconds."},
+  "setup.editBadge":{pt:"✏️ Editar perfil",en:"✏️ Edit profile"},
+  "setup.head":{pt:"Personalize seu perfil",en:"Personalize your profile"},
+  "setup.intro":{pt:"Nome (opcional), equipe e papel — os cenários ficam parecidos com seu dia a dia. Leva cerca de 20 segundos.",en:"Name (optional), team and role — scenarios match your daily work. Takes about 20 seconds."},
   "setup.why":{pt:"💡 Situações de phishing, senha e dados aparecem no contexto da sua operação.",en:"💡 Phishing, password and data scenarios appear in the context of your operation."},
-  "setup.editHead":{pt:"Alterar equipe ou papel",en:"Change team or role"},
-  "setup.editIntro":{pt:"Ajuste sua equipe ou rotina — os cenários do jogo se adaptam na hora.",en:"Adjust your team or routine — game scenarios adapt immediately."},
+  "setup.editHead":{pt:"Editar perfil",en:"Edit profile"},
+  "setup.editIntro":{pt:"Ajuste nome, equipe ou rotina — os cenários do jogo se adaptam na hora.",en:"Adjust name, team or routine — game scenarios adapt immediately."},
   "setup.nameOptional":{pt:"Adicionar nome (opcional)",en:"Add name (optional)"},
   "setup.goFirst":{pt:"▶️ Começar primeira atividade",en:"▶️ Start first activity"},
   "setup.save":{pt:"💾 Salvar e voltar",en:"💾 Save and go back"},
@@ -394,7 +395,7 @@ var UI = {
   "setup.roleTitle":{pt:"Seu dia a dia",en:"Your day-to-day"},
   "setup.roleSub":{pt:"Escritório, campo, automação (OT) ou liderança — define os exemplos das situações.",en:"Office, field, automation (OT) or leadership — shapes the scenario examples."},
   "setup.go":{pt:"▶️ Começar primeira atividade",en:"▶️ Start first activity"},
-  "setup.banner":{pt:"👤 Personalize equipe e papel para cenários do seu dia a dia.",en:"👤 Set team and role for scenarios from your daily work."},
+  "setup.banner":{pt:"👤 Personalize seu perfil (nome, equipe e papel) para cenários do seu dia a dia.",en:"👤 Set up your profile (name, team and role) for scenarios from your daily work."},
   "setup.bannerGo":{pt:"Personalizar agora",en:"Personalize now"},
   "setup.teamRequired":{pt:"Escolha uma equipe para continuar.",en:"Choose a team to continue."},
   "setup.roleRequired":{pt:"Escolha um papel para continuar.",en:"Choose a role to continue."},
@@ -4479,9 +4480,14 @@ function applySetupDefaults(){
 }
 function renderSetupUi(){
   applySetupDefaults();
-  var badge=$("setupBadge"), head=$("setupHead"), intro=$("setupIntro"), why=$("setupWhy"), btn=$("setupGoBtn");
+  var badge=$("setupBadge"), head=$("setupHead"), intro=$("setupIntro"), why=$("setupWhy"), btn=$("setupGoBtn"), nameBlock=$("setupNameBlock"), nameInput=$("playerName");
+  if(nameBlock) nameBlock.hidden=false;
+  if(nameInput){
+    nameInput.value=S.name||"";
+    nameInput.setAttribute("placeholder", t("setup.namePh"));
+  }
   if(setupEditMode){
-    if(badge) badge.textContent="✏️ "+(L()==="pt"?"Editar perfil":"Edit profile");
+    if(badge) badge.textContent=t("setup.editBadge");
     if(head) head.textContent=t("setup.editHead");
     if(intro) intro.textContent=t("setup.editIntro");
     if(why) why.hidden=true;
