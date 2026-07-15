@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=153">
+<link rel="stylesheet" href="css/styles.css?v=154">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -507,8 +507,8 @@
 
     <p class="ux-v122-banner" id="uxV122Banner" hidden role="status" aria-live="polite"></p>
 
-    <div class="card home-how-strip" id="homeHowStrip" hidden>
-      <div class="home-how-title" data-i18n="home.howTitle">Como funciona</div>
+    <details class="card home-how-strip" id="homeHowStrip" hidden>
+      <summary class="home-how-title" data-i18n="home.howTitle">Como funciona</summary>
       <div class="home-how-steps">
         <div class="home-how-step"><span class="home-how-ico" aria-hidden="true">📅</span><span data-i18n="home.howDaily">Atividade de hoje</span></div>
         <span class="home-how-arrow" aria-hidden="true">→</span>
@@ -516,7 +516,7 @@
         <span class="home-how-arrow" aria-hidden="true">→</span>
         <div class="home-how-step"><span class="home-how-ico" aria-hidden="true">🎯</span><span data-i18n="home.howCrisis">Simulação de crise</span></div>
       </div>
-    </div>
+    </details>
 
     <div class="card next-step-card" id="nextStepCard" hidden>
       <div class="week-streak-row streak-card" id="streakCard">
@@ -528,16 +528,8 @@
           <span class="streak-inline-best-lab" data-i18n="streak.best">Recorde</span>
           <span class="streak-inline-num" id="streakBest">0</span>
         </div>
-        <p class="streak-status streak-status-inline" id="streakStatus" data-i18n="streak.risk">⚠️ Jogue hoje para não perder sua ofensiva!</p>
-        </div>
-      <p class="first-day-hint" id="firstDayHint" hidden data-i18n="home.firstDay">Dia 1 da sua ofensiva — 5 minutos de treino bastam para começar.</p>
-      <button type="button" class="week-progress-wrap" id="weekProgressBar" data-i18n-attr="aria-label:home.weekBarAria" aria-label="Metas da semana — ver resumo" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <span class="week-progress-k" data-i18n="home.weekBar">Meta da semana</span>
-        <span class="week-progress-track"><span class="week-progress-fill" id="weekProgressFill"></span></span>
-        <span class="week-progress-lab" id="weekProgressLabel"></span>
-        <span class="week-progress-go" data-i18n="home.weekBarGo">Ver resumo das metas →</span>
-      </button>
-      <p class="week-bar-hint muted" id="weekBarHint" data-i18n="home.weekBarHint">Toque para ver o resumo das metas — não inicia o jogo.</p>
+        <p class="streak-status streak-status-inline" id="streakStatus" data-i18n="streak.neutral">Jogue hoje para iniciar sua sequência!</p>
+      </div>
       <p class="next-step-k" id="nextStepK" data-i18n="home.nextStepK">Próximo passo recomendado</p>
       <div class="next-step-main">
         <span class="next-step-ico" id="nextStepIco" aria-hidden="true">▶️</span>
@@ -546,10 +538,29 @@
           <div class="next-step-sub" id="nextStepSub"></div>
         </div>
       </div>
-      <p class="next-step-week-line" id="nextStepWeek" aria-live="polite"></p>
-      <p class="next-step-preview" id="nextStepPreview" hidden aria-live="polite"></p>
+      <div class="home-profile-badges" id="homeProfileBadges" hidden aria-label="Seu perfil"></div>
+      <p class="next-step-cta-hint" id="nextStepCtaHint" aria-hidden="true"></p>
       <button type="button" class="btn btn-primary btn-lg" id="nextStepBtn" data-i18n="home.playNow">▶️ Jogar agora</button>
-      <button type="button" class="btn btn-ghost btn-sm" id="nextStepWeeklyBtn" data-i18n="home.weekBarGo" hidden>Ver resumo das metas →</button>
+      <button type="button" class="week-progress-wrap" id="weekProgressBar" data-i18n-attr="aria-label:home.weekBarAria" aria-label="Metas da semana — ver resumo" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <span class="week-progress-k" data-i18n="home.weekBar">Meta da semana</span>
+        <span class="week-progress-track"><span class="week-progress-fill" id="weekProgressFill"></span></span>
+        <span class="week-progress-lab" id="weekProgressLabel"></span>
+        <span class="week-progress-unlock" id="weekProgressUnlock"></span>
+        <span class="week-progress-go" data-i18n="home.weekBarGo">Ver detalhes →</span>
+      </button>
+      <p class="week-next-goal" id="weekNextGoal" aria-live="polite"></p>
+      <div class="week-chips" id="weekChips" role="list" hidden></div>
+      <p class="week-bar-hint sr-only" id="weekBarHint" data-i18n="home.weekBarHint">Toque para ver o resumo das metas — não inicia o jogo.</p>
+      <div class="home-next-ach" id="homeNextAchievement" hidden></div>
+      <p class="home-team-social" id="homeTeamSocial" hidden></p>
+      <p class="first-day-hint" id="firstDayHint" hidden aria-hidden="true"></p>
+      <p class="next-step-week-line" id="nextStepWeek" hidden aria-hidden="true"></p>
+      <p class="next-step-preview" id="nextStepPreview" hidden aria-live="polite"></p>
+      <button type="button" class="btn btn-ghost btn-sm" id="nextStepWeeklyBtn" data-i18n="home.weekBarGo" hidden>Ver detalhes →</button>
+    </div>
+
+    <div class="home-sticky-cta" id="homeStickyCta" hidden>
+      <button type="button" class="btn btn-primary btn-lg" id="homeStickyBtn"></button>
     </div>
 
   </section>
@@ -957,18 +968,18 @@
 </div>
 
 <script>window.APP_VERSION="153";</script>
-<script src="js/sign-lang.js?v=153"></script>
-<script src="js/orbita-world-map.js?v=153"></script>
-<script src="js/questions-data.js?v=153"></script>
-<script src="js/country-questions-data.js?v=153"></script>
-<script src="js/bosses-data.js?v=153"></script>
-<script src="js/boss-personal-tips.js?v=153"></script>
-<script src="js/chain-data.js?v=153"></script>
-<script src="js/boss-maps.js?v=153"></script>
-<script src="js/glossary-data.js?v=153"></script>
-<script src="js/profile-data.js?v=153"></script>
-<script src="js/game.js?v=153"></script>
-<script src="js/demo-menu.js?v=153"></script>
+<script src="js/sign-lang.js?v=154"></script>
+<script src="js/orbita-world-map.js?v=154"></script>
+<script src="js/questions-data.js?v=154"></script>
+<script src="js/country-questions-data.js?v=154"></script>
+<script src="js/bosses-data.js?v=154"></script>
+<script src="js/boss-personal-tips.js?v=154"></script>
+<script src="js/chain-data.js?v=154"></script>
+<script src="js/boss-maps.js?v=154"></script>
+<script src="js/glossary-data.js?v=154"></script>
+<script src="js/profile-data.js?v=154"></script>
+<script src="js/game.js?v=154"></script>
+<script src="js/demo-menu.js?v=154"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */

@@ -1627,31 +1627,61 @@ body.demo-menu-open{overflow:hidden}
 
 /* ========== UX v123 — Início + Missões (rollback: body.ux-v122) ========== */
 .ux-v122-banner{margin:0 0 10px;padding:8px 12px;border-radius:8px;background:rgba(237,177,17,.15);border:1px solid rgba(237,177,17,.45);font-size:.78rem;color:#eaf2f6;text-align:center}
-.home-how-strip{padding:12px 14px;margin-bottom:10px}
-.home-how-title{font-weight:800;font-size:.88rem;color:var(--steel);margin-bottom:8px}
-.home-how-steps{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.home-how-strip{padding:10px 14px;margin-bottom:10px}
+.home-how-strip summary.home-how-title{font-weight:800;font-size:.88rem;color:var(--steel);margin:0;cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px}
+.home-how-strip summary.home-how-title::-webkit-details-marker{display:none}
+.home-how-strip summary.home-how-title::before{content:"▸";font-size:.75rem;color:var(--gold);transition:transform .15s ease}
+.home-how-strip[open] summary.home-how-title::before{transform:rotate(90deg)}
+.home-how-strip .home-how-steps{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:10px;padding-top:8px;border-top:1px solid rgba(0,126,122,.25)}
 .home-how-step{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;color:#eaf2f6}
 .home-how-ico{font-size:1.1rem}
 .home-how-arrow{color:var(--steel);font-size:.9rem;font-weight:700}
+.home-profile-badges{display:flex;flex-wrap:wrap;gap:6px;width:100%;margin:0 0 8px}
+.home-profile-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;border:1px solid rgba(0,126,122,.4);background:rgba(0,126,122,.12);font-size:.74rem;font-weight:700;color:#eaf2f6;line-height:1.2}
+.next-step-cta-hint{width:100%;margin:0 0 8px;font-size:.78rem;font-weight:600;color:var(--gold);text-align:center;line-height:1.35}
+.week-next-goal{width:100%;margin:0 0 8px;font-size:.8rem;color:var(--steel);line-height:1.4}
+.week-chips{display:flex;flex-wrap:wrap;gap:6px;width:100%;margin:0 0 10px}
+.week-chip{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);font:inherit;font-size:.72rem;font-weight:700;color:#eaf2f6;cursor:pointer;line-height:1.2}
+.week-chip.done{border-color:rgba(47,191,113,.5);background:rgba(47,191,113,.12);color:var(--ok)}
+.week-chip-pct{opacity:.75;font-weight:600}
+.week-progress-unlock{font-size:.76rem;color:var(--gold);font-weight:600;line-height:1.35}
+.home-next-ach{width:100%;margin:4px 0 8px;padding:10px 12px;border-radius:10px;border:1px solid rgba(237,177,17,.35);background:rgba(237,177,17,.08)}
+.home-next-ach-k{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--gold);margin:0 0 4px}
+.home-next-ach-t{margin:0;font-size:.84rem;font-weight:700;color:#eaf2f6;line-height:1.35}
+.home-next-ach-d{margin:4px 0 0;font-size:.76rem;color:var(--steel);line-height:1.35}
+.home-team-social{width:100%;margin:0 0 4px;font-size:.78rem;color:var(--steel);line-height:1.4;text-align:center}
+.home-sticky-cta{position:fixed;left:0;right:0;bottom:calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px));z-index:10090;padding:8px 14px 10px;background:linear-gradient(180deg,transparent,rgba(6,32,40,.94) 28%,rgba(6,32,40,.98));pointer-events:none}
+.home-sticky-cta[hidden]{display:none!important}
+.home-sticky-cta .btn{width:100%;max-width:480px;margin:0 auto;display:flex;pointer-events:auto;box-shadow:0 6px 24px rgba(0,126,122,.45)}
+body.home-sticky-visible .app{padding-bottom:calc(var(--bottom-shell-h) + 64px + env(safe-area-inset-bottom,0px))}
+body.home-sticky-visible #aslAccess{bottom:calc(var(--bottom-shell-h) + 72px + env(safe-area-inset-bottom,0px))}
 .hero-lead-short{font-size:.95rem;line-height:1.45}
 .hero-ux-v2 .hero-scene{opacity:.92}
 .hero-scene-btn.hero-locked{cursor:not-allowed;opacity:.55}
 .hero-scene-btn.hero-locked .hero-svg{filter:grayscale(.35)}
-.next-step-ux-v2 .week-progress-wrap{order:1;width:100%;margin-bottom:4px}
-.next-step-ux-v2 .week-bar-hint{order:1;width:100%;margin:-2px 0 8px}
-.next-step-ux-v2 .next-step-k{order:2;width:100%}
-.next-step-ux-v2 .next-step-main{order:3;width:100%}
-.next-step-ux-v2 .next-step-week-line{order:4;width:100%;font-size:.84rem}
-.next-step-ux-v2 .next-step-preview{order:5;width:100%;margin:0;font-size:.82rem;color:var(--steel)}
-.next-step-ux-v2 #nextStepBtn{order:6;width:100%;margin-top:4px}
-.next-step-ux-v2 .week-streak-row{order:0;width:100%}
+.next-step-ux-v2{display:flex;flex-direction:column;gap:0}
+.next-step-ux-v2 .week-streak-row{order:0;width:100%;margin-bottom:8px}
+.next-step-ux-v2 .next-step-k{order:1;width:100%}
+.next-step-ux-v2 .next-step-main{order:2;width:100%}
+.next-step-ux-v2 .home-profile-badges{order:3}
+.next-step-ux-v2 .next-step-cta-hint{order:4}
+.next-step-ux-v2 #nextStepBtn{order:5;width:100%;margin:4px 0 10px;min-height:52px;font-size:1.02rem}
+.next-step-ux-v2 .week-progress-wrap{order:6;width:100%;margin:0 0 6px}
+.next-step-ux-v2 .week-next-goal{order:7}
+.next-step-ux-v2 .week-chips{order:8}
+.next-step-ux-v2 .home-next-ach{order:9}
+.next-step-ux-v2 .home-team-social{order:10}
+.next-step-ux-v2 .week-bar-hint{order:99;height:1px;overflow:hidden;clip:rect(0,0,0,0);margin:0;padding:0}
+.next-step-ux-v2 .first-day-hint{display:none!important}
+.next-step-ux-v2 .next-step-week-line{display:none!important}
+.next-step-ux-v2 .next-step-preview{order:11;width:100%;margin:0;font-size:.82rem;color:var(--steel)}
 .missions-focus-banner{padding:12px 14px;margin-bottom:10px;border:1px solid rgba(0,126,122,.45);background:linear-gradient(135deg,rgba(0,126,122,.12),rgba(15,59,87,.2))}
 .missions-focus-k{font-weight:800;font-size:.95rem;color:#eaf2f6}
 .missions-focus-txt{margin:4px 0 0;font-size:.88rem;color:var(--steel)}
 .missions-focus-order{margin:6px 0 0;font-size:.78rem}
 .missions-also-card{padding:12px 14px;margin-top:10px;opacity:.92}
 .daily-meta-lab{display:block;font-size:.65rem;font-weight:700;color:var(--steel);margin-top:2px;line-height:1.2}
-body.ux-v122 .home-how-strip,body.ux-v122 .ux-v122-banner,body.ux-v122 .missions-focus-banner,body.ux-v122 .missions-also-card,body.ux-v122 .next-step-preview{display:none!important}
+body.ux-v122 .home-how-strip,body.ux-v122 .ux-v122-banner,body.ux-v122 .missions-focus-banner,body.ux-v122 .missions-also-card,body.ux-v122 .next-step-preview,body.ux-v122 .home-profile-badges,body.ux-v122 .next-step-cta-hint,body.ux-v122 .week-next-goal,body.ux-v122 .week-chips,body.ux-v122 .week-progress-unlock,body.ux-v122 .home-next-ach,body.ux-v122 .home-team-social,body.ux-v122 .home-sticky-cta{display:none!important}
 body.ux-v122 .next-step-card .next-step-weekly-btn,body.ux-v122 #nextStepWeeklyBtn{display:inline-flex!important}
 body.ux-v2 #nextStepWeeklyBtn{display:none!important}
 body.ux-v2 .hero-lead-short{display:none}
@@ -1661,12 +1691,19 @@ body.ux-v2 .hero-lead-short{display:none}
   .hero-svg .hero-train,.hero-svg .hero-flow,.hero-svg .hero-crane,.hero-svg .hero-smoke,.hero-svg .hero-belt,.hero-svg .hero-net{animation:none!important}
 }
 @media(min-width:768px){
-  .next-step-ux-v2{display:grid;grid-template-columns:1fr auto;grid-template-areas:"streak streak" "week week" "main main" "line line" "preview preview" "cta cta";align-items:center}
+  .next-step-ux-v2{display:grid;grid-template-columns:1fr auto;grid-template-areas:"streak streak" "label label" "main main" "badges badges" "hint hint" "cta cta" "week week" "wgoal wgoal" "chips chips" "ach ach" "social social" "preview preview";align-items:center;gap:4px 12px}
   .next-step-ux-v2 .week-streak-row{grid-area:streak}
-  .next-step-ux-v2 .week-progress-wrap{grid-area:week}
+  .next-step-ux-v2 .next-step-k{grid-area:label}
   .next-step-ux-v2 .next-step-main{grid-area:main}
-  .next-step-ux-v2 .next-step-week-line{grid-area:line}
+  .next-step-ux-v2 .home-profile-badges{grid-area:badges}
+  .next-step-ux-v2 .next-step-cta-hint{grid-area:hint}
+  .next-step-ux-v2 #nextStepBtn{grid-area:cta;max-width:360px;justify-self:start;margin-bottom:12px}
+  .next-step-ux-v2 .week-progress-wrap{grid-area:week}
+  .next-step-ux-v2 .week-next-goal{grid-area:wgoal}
+  .next-step-ux-v2 .week-chips{grid-area:chips}
+  .next-step-ux-v2 .home-next-ach{grid-area:ach}
+  .next-step-ux-v2 .home-team-social{grid-area:social}
   .next-step-ux-v2 .next-step-preview{grid-area:preview}
-  .next-step-ux-v2 #nextStepBtn{grid-area:cta;max-width:320px;justify-self:start}
   .home-how-steps{justify-content:center}
+  .home-sticky-cta{display:none!important}
 }

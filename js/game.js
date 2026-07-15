@@ -49,8 +49,27 @@ var UI = {
   "home.weekRemBoss":{pt:"falta {n} simulação de crise",en:"{n} crisis simulation left"},
   "home.weekRemTheme":{pt:"faltam {n} do tema da semana",en:"{n} more on the week theme"},
   "home.weekRemDone":{pt:"✅ Metas da semana concluídas — continue evoluindo!",en:"✅ Weekly goals done — keep improving!"},
+  "home.weekGoalsCount":{pt:"Semana: {done}/{total} metas",en:"Week: {done}/{total} goals"},
+  "home.weekNextUnlock":{pt:"Próximo: {goal} → +40 XP",en:"Next: {goal} → +40 XP"},
+  "home.weekNextDaily":{pt:"complete a atividade de hoje",en:"complete today's activity"},
+  "home.weekNextMap":{pt:"{n} jornada(s) no mapa",en:"{n} map journey(s)"},
+  "home.weekNextBoss":{pt:"1 simulação de crise",en:"1 crisis simulation"},
+  "home.weekNextTheme":{pt:"{n} do tema da semana",en:"{n} on the week theme"},
+  "home.weekNextCorrect":{pt:"{n} acertos",en:"{n} correct answers"},
+  "home.weekMicroPrefix":{pt:"Próxima meta:",en:"Next goal:"},
+  "home.ctaHintDaily":{pt:"+50 XP · ~5 min · mantém sequência",en:"+50 XP · ~5 min · keeps streak"},
+  "home.ctaHintMap":{pt:"+XP · avança na meta semanal",en:"+XP · advances weekly goal"},
+  "home.ctaHintBoss":{pt:"+XP · eleva maturidade",en:"+XP · raises maturity"},
+  "home.ctaHintReview":{pt:"~3 min · reforça aprendizado",en:"~3 min · reinforces learning"},
+  "home.nextAchK":{pt:"Próxima conquista",en:"Next achievement"},
+  "home.nextAchLeft":{pt:"Faltam {n}",en:"{n} to go"},
+  "home.teamSocial":{pt:"🛡️ Sua área ({team}): {n} guardiões treinaram hoje",en:"🛡️ Your area ({team}): {n} guardians trained today"},
+  "home.firstSessionTitle":{pt:"🎉 Primeira atividade concluída!",en:"🎉 First activity complete!"},
+  "home.firstSessionSub":{pt:"Sequência iniciada · +50 XP · medalha “Missão diária” a caminho",en:"Streak started · +50 XP · “Daily mission” medal on the way"},
+  "streak.start":{pt:"🔥 Comece sua sequência hoje — 5 min bastam",en:"🔥 Start your streak today — 5 min is enough"},
+  "streak.dayOne":{pt:"🔥 Dia 1 — 5 minutos bastam para começar sua sequência",en:"🔥 Day 1 — 5 minutes to start your streak"},
   "home.nextDaily":{pt:"Sua atividade de hoje está esperando",en:"Today's activity is waiting"},
-  "home.nextDailySub":{pt:"5 situações rápidas mantêm sua sequência e priorizam o que você errou.",en:"5 quick scenarios keep your streak and prioritize what you missed."},
+  "home.nextDailySub":{pt:"5 situações rápidas · ~5 min · prioriza seus erros",en:"5 quick scenarios · ~5 min · prioritizes mistakes"},
   "home.nextReviewSub":{pt:"Você tem {n} revisões do que errou prontas para hoje.",en:"You have {n} mistake reviews ready for today."},
   "missions.focusTitle":{pt:"Seu foco agora",en:"Your focus now"},
   "missions.focusDaily":{pt:"1º — Atividade de hoje (~5 min)",en:"1st — Today's activity (~5 min)"},
@@ -157,7 +176,7 @@ var UI = {
   "tip.boss":{pt:"Crises estilo mesa — leia o cenário e tome decisões como na operação real.",en:"Tabletop crises — read the scenario and decide as in real operations."},
   "tip.dismiss":{pt:"Entendi",en:"Got it"},
   "home.weekBar":{pt:"Meta da semana",en:"Weekly goal"},
-  "home.weekBarGo":{pt:"Ver resumo das metas →",en:"View goal summary →"},
+  "home.weekBarGo":{pt:"Ver detalhes →",en:"View details →"},
   "home.firstDay":{pt:"Dia 1 da sua sequência — 5 minutos de treino bastam para começar.",en:"Day 1 of your streak — 5 minutes of training is enough to start."},
   "session.title":{pt:"Resumo da sessão",en:"Session summary"},
   "session.streakKept":{pt:"🔥 Sequência mantida hoje!",en:"🔥 Streak kept today!"},
@@ -195,7 +214,7 @@ var UI = {
   "onboard.profileT":{pt:"Personalize seu perfil",en:"Personalize your profile"},
   "onboard.profileB":{pt:"Na próxima tela: nome (opcional), onde você atua e como é seu trabalho. O jogo usa essa combinação para priorizar situações. Cerca de 20 segundos.",en:"On the next screen: name (optional), where you work and your routine. The game uses this combination to prioritize scenarios. About 20 seconds."},
   "onboard.playT":{pt:"Como jogar",en:"How to play"},
-  "onboard.playB":{pt:"Fluxo do treino: 📅 Atividade de hoje → 🗺️ Jornada no mapa → 🎯 Desafios / Crises.\n\nNa tela Início, o botão principal (▶️ Jogar agora) sempre indica o próximo passo. A barra de metas da semana só mostra o resumo — não inicia o jogo.",en:"Training flow: 📅 Today's activity → 🗺️ Map journey → 🎯 Challenges / Crises.\n\nOn Home, the main button (▶️ Play now) always shows your next step. The weekly goals bar is for progress summary only — it does not start a session."},
+  "onboard.playB":{pt:"Fluxo do treino: 📅 Atividade de hoje → 🗺️ Jornada no mapa → 🎯 Desafios / Crises.\n\nNa tela Início, o botão principal sempre indica o próximo passo (ex.: ▶️ Atividade de hoje · 5 min). A barra de metas da semana só mostra o resumo — não inicia o jogo.",en:"Training flow: 📅 Today's activity → 🗺️ Map journey → 🎯 Challenges / Crises.\n\nOn Home, the main button always shows your next step (e.g. ▶️ Today's activity · 5 min). The weekly goals bar is for progress summary only — it does not start a session."},
   "onboard.readyT":{pt:"Pronto para começar",en:"Ready to start"},
   "onboard.readyB":{pt:"1) Defina onde você atua e como trabalha.\n2) Na Início, toque ▶️ Jogar agora — comece pela atividade de hoje.\n3) Use o menu inferior para Mapa, Desafios / Crises, Missões e Eu.",en:"1) Set where you work and your routine.\n2) On Home, tap ▶️ Play now — start with today's activity.\n3) Use the bottom menu for Map, Challenges / Crises, Missions and Me."},
   "onboard.startSetup":{pt:"Personalizar agora →",en:"Personalize now →"},
@@ -226,10 +245,10 @@ var UI = {
   "home.nextBoss":{pt:"Enfrente uma crise",en:"Face a crisis"},
   "home.nextBossSub":{pt:"Desafios / Crises estilo mesa elevam sua maturidade operacional.",en:"Tabletop Challenges / Crises raise your operational maturity."},
   "home.nextReview":{pt:"Revise seus erros",en:"Review your mistakes"},
-  "home.nextGoDaily":{pt:"▶️ Começar agora",en:"▶️ Start now"},
-  "home.nextGoMap":{pt:"🗺️ Abrir mapa",en:"🗺️ Open map"},
-  "home.nextGoBoss":{pt:"🎯 Ver Desafios / Crises",en:"🎯 See Challenges / Crises"},
-  "home.nextGoReview":{pt:"📚 Revisar agora",en:"📚 Review now"},
+  "home.nextGoDaily":{pt:"▶️ Atividade de hoje · 5 min",en:"▶️ Today's activity · 5 min"},
+  "home.nextGoMap":{pt:"🗺️ Continuar jornada",en:"🗺️ Continue journey"},
+  "home.nextGoBoss":{pt:"🎯 Simular crise",en:"🎯 Simulate crisis"},
+  "home.nextGoReview":{pt:"📚 Revisar agora · ~3 min",en:"📚 Review now · ~3 min"},
   "home.weekTheme":{pt:"Tema da semana",en:"Week theme"},
   "home.weekCorrect":{pt:"Acertos semanais",en:"Weekly correct"},
   "home.weekCampaign":{pt:"Campanhas",en:"Campaigns"},
@@ -751,6 +770,101 @@ function roleBasedNextSub(){
   var teamStr=tm?tt(tm)+(L()==="pt"?" · ":" · "):"";
   return (L()==="pt"?"Cenários da sua operação: ":"Scenarios from your operation: ")+teamStr+(L()==="pt"?r.ptd:r.end);
 }
+function weeklyGoalsDoneCount(){
+  ensureWeekly();
+  var wp=S.weekly.prog||{}, n=0;
+  WEEKLY.forEach(function(w){ if((wp[w.id]||0)>=w.goal) n++; });
+  return n;
+}
+function getWeekMicroGoal(){
+  ensureWeekly(); ensureDaily();
+  var wp=S.weekly.prog||{};
+  if(!S.daily.done.mission) return {key:"daily", text:t("home.weekNextDaily")};
+  var remM=Math.max(0,3-(wp.campaign||0));
+  if(remM>0) return {key:"campaign", text:t("home.weekNextMap").replace("{n}",String(remM))};
+  var remB=Math.max(0,1-(wp.boss||0));
+  if(remB>0) return {key:"boss", text:t("home.weekNextBoss")};
+  var remC=Math.max(0,20-(wp.correct||0));
+  if(remC>0) return {key:"correct", text:t("home.weekNextCorrect").replace("{n}",String(remC))};
+  var remT=Math.max(0,8-(wp.theme||0));
+  if(remT>0) return {key:"theme", text:t("home.weekNextTheme").replace("{n}",String(remT))};
+  return {key:"done", text:t("home.weekRemDone")};
+}
+function computeCtaHint(ns){
+  if(!ns) return "";
+  if(ns.ico==="📅") return t("home.ctaHintDaily");
+  if(ns.ico==="🗺️") return t("home.ctaHintMap");
+  if(ns.ico==="🎯") return t("home.ctaHintBoss");
+  if(ns.ico==="📚") return t("home.ctaHintReview");
+  return "";
+}
+function getNextAchievement(){
+  ensureStreak();
+  var list=[], i, m, left;
+  for(i=0;i<MEDALS.length;i++){
+    m=MEDALS[i];
+    if(S.medals[m.id]) continue;
+    left=0;
+    if(m.id==="daily") left=Math.max(0,1-(S.dailyTotal||0));
+    else if(m.id==="streak7") left=Math.max(0,7-(S.streak.count||0));
+    else if(m.id==="streak30") left=Math.max(0,30-(S.streak.best||0));
+    else if(m.id==="first") left=Object.keys(S.done||{}).length>=1?0:1;
+    else if(m.id==="boss") left=bossCompletedCount()>=1?0:1;
+    else left=99;
+    list.push({medal:m, left:left});
+  }
+  list.sort(function(a,b){ return a.left-b.left; });
+  return list[0]||null;
+}
+function teamSocialTodayCount(){
+  if(!S.team) return 0;
+  var bases={mina:12,ferrovia:9,porto:11,corporativo:15,ti:8,pelotizacao:10,energia:9,logistica:11};
+  var base=bases[S.team]||10;
+  return base+(new Date().getDay()%5);
+}
+function renderHomeProfileBadges(){
+  var host=$("homeProfileBadges"); if(!host) return;
+  if(uxLegacy()||!setupComplete()){ host.hidden=true; host.innerHTML=""; return; }
+  var tm=TEAMS.filter(function(x){ return x.id===S.team; })[0];
+  var r=ROLES.filter(function(x){ return x.id===S.role; })[0];
+  host.innerHTML="";
+  if(tm){ host.innerHTML+='<span class="home-profile-badge"><span aria-hidden="true">'+tm.ico+'</span> '+tt(tm)+'</span>'; }
+  if(r){ host.innerHTML+='<span class="home-profile-badge"><span aria-hidden="true">👤</span> '+(L()==="pt"?r.ptd:r.end)+'</span>'; }
+  host.hidden=!host.innerHTML;
+}
+function renderHomeNextAchievement(){
+  var host=$("homeNextAchievement"); if(!host) return;
+  if(uxLegacy()||!S.onboardingDone){ host.hidden=true; return; }
+  var next=getNextAchievement();
+  if(!next||next.left>50){ host.hidden=true; return; }
+  var m=next.medal, hint=medalHint(m.id)||"";
+  host.hidden=false;
+  host.innerHTML='<div class="home-next-ach-k">'+t("home.nextAchK")+'</div>'
+    +'<p class="home-next-ach-t">'+m.ico+' '+tt(m.name)+'</p>'
+    +(next.left>0&&next.left<99?'<p class="home-next-ach-d">'+t("home.nextAchLeft").replace("{n}",String(next.left))+' · '+hint+'</p>':'<p class="home-next-ach-d">'+hint+'</p>');
+}
+function renderHomeTeamSocial(){
+  var el=$("homeTeamSocial"); if(!el) return;
+  if(uxLegacy()||!S.onboardingDone||!S.team){ el.hidden=true; return; }
+  var tm=TEAMS.filter(function(x){ return x.id===S.team; })[0];
+  if(!tm){ el.hidden=true; return; }
+  el.hidden=false;
+  el.textContent=t("home.teamSocial").replace("{team}",tt(tm)).replace("{n}",String(teamSocialTodayCount()));
+}
+function renderHomeStickyCta(){
+  var wrap=$("homeStickyCta"), btn=$("homeStickyBtn");
+  if(!wrap||!btn) return;
+  ensureDaily();
+  var onHome=$("screenHome")&&$("screenHome").classList.contains("active");
+  var show=onHome&&S.onboardingDone&&!uxLegacy()&&!S.daily.done.mission;
+  wrap.hidden=!show;
+  document.body.classList.toggle("home-sticky-visible",show);
+  if(show){
+    var ns=computeNextStep();
+    btn.textContent=ns.btn||t("home.playNow");
+    btn.onclick=playNow;
+  }
+}
 function profileThemeList(){
   var role=ROLE_THEMES[S.role]||[], team=TEAM_THEMES[S.team]||[], out=[], seen={}, i;
   for(i=0;i<role.length;i++){ if(!seen[role[i]]){ seen[role[i]]=1; out.push(role[i]); } }
@@ -826,6 +940,7 @@ function renderHomeHowStrip(){
   var el=$("homeHowStrip"); if(!el) return;
   if(uxLegacy()||!S.onboardingDone){ el.hidden=true; return; }
   el.hidden=false;
+  if(el.tagName==="DETAILS") el.open=(S.dailyTotal||0)<3;
 }
 function renderMissionsFocus(){
   var ban=$("missionsFocusBanner"), also=$("missionsAlsoCard");
@@ -1264,6 +1379,7 @@ function updateHomeCtaLayout(){
   var onHome=$("screenHome")&&$("screenHome").classList.contains("active");
   var hero=$("homeHeroActions");
   document.body.classList.toggle("home-cta-visible",!!(onHome&&hero&&!hero.hidden));
+  renderHomeStickyCta();
 }
 function renderHomeLoopPreview(){
   var el=$("homeLoopPreview"); if(!el) return;
@@ -2081,7 +2197,13 @@ function renderHudStreak(){
   if(countEl) countEl.textContent=n;
   if(bestEl) bestEl.textContent=best;
   if(statusEl){
-    statusEl.textContent=today?t("streak.today"):(n>0?streakRiskMsg():t("streak.neutral"));
+    var status;
+    if(today) status=t("streak.today");
+    else if(n===0) status=t("streak.start");
+    else if(n<=1&&!today) status=t("streak.dayOne");
+    else if(n>0) status=streakRiskMsg();
+    else status=t("streak.neutral");
+    statusEl.textContent=status;
     statusEl.className="streak-pop-status"+(today?" streak-pop-ok":(n>0?" streak-pop-risk":" streak-pop-neutral"));
   }
 }
@@ -4144,7 +4266,13 @@ function renderStreakCard(){
   var n=S.streak.count||0, best=S.streak.best||0, today=streakPlayedToday();
   $("streakCount").textContent=n;
   $("streakBest").textContent=best;
-  $("streakStatus").textContent=today?t("streak.today"):(n>0?streakRiskMsg():t("streak.neutral"));
+  var status;
+  if(today) status=t("streak.today");
+  else if(n===0) status=t("streak.start");
+  else if(n<=1&&!today) status=t("streak.dayOne");
+  else if(n>0) status=streakRiskMsg();
+  else status=t("streak.neutral");
+  $("streakStatus").textContent=status;
   card.classList.toggle("streak-active",today);
   card.classList.toggle("streak-risk",!today&&n>0);
   renderHudStreak();
@@ -4164,7 +4292,8 @@ function markDailyDone(won){
     S.dailyTotal=(S.dailyTotal||0)+1;
     if(won){
       addReward(50);
-      celebrationToast(t("daily.doneTitle"), t("daily.doneSub")+(L()==="pt"?" (+50 XP)":" (+50 XP)"));
+      if(S.dailyTotal===1) celebrationToast(t("home.firstSessionTitle"), t("home.firstSessionSub"));
+      else celebrationToast(t("daily.doneTitle"), t("daily.doneSub")+(L()==="pt"?" (+50 XP)":" (+50 XP)"));
     }
   }
   save();
@@ -4376,10 +4505,9 @@ function applyFocusLearn(){
 }
 function computeNextStep(){
   ensureDaily(); ensureWeekly();
-  var due=srsDueCount(), subExtra="";
-  if(!uxLegacy()&&S.role) subExtra=roleBasedNextSub();
+  var due=srsDueCount();
   if(!S.daily.done.mission){
-    return {ico:"📅",title:t("home.nextDaily"),sub:t("home.nextDailySub")+(subExtra?(" — "+subExtra):""),btn:t("home.nextGoDaily"),act:function(){ renderDaily(); show("screenDaily"); }};
+    return {ico:"📅",title:t("home.nextDaily"),sub:t("home.nextDailySub"),btn:t("home.nextGoDaily"),act:function(){ renderDaily(); show("screenDaily"); }};
   }
   if(due>0){
     return {ico:"📚",title:t("home.nextReview"),sub:t("home.nextReviewSub").replace("{n}",String(due)),btn:t("home.nextGoReview"),act:startReviewErrors};
@@ -4398,29 +4526,38 @@ function renderNextStep(){
   renderHeroUxState();
   renderUxBanner();
   updateHomeCtaLayout();
-  if(!S.onboardingDone){ card.hidden=true; if(hero) hero.hidden=false; return; }
+  if(!S.onboardingDone){ card.hidden=true; if(hero) hero.hidden=false; renderHomeStickyCta(); return; }
   if(hero) hero.hidden=true;
   var ns=computeNextStep();
   var ico=$("nextStepIco"), ti=$("nextStepTitle"), sub=$("nextStepSub"), btn=$("nextStepBtn");
-  var wkBtn=$("nextStepWeeklyBtn"), preview=$("nextStepPreview");
+  var wkBtn=$("nextStepWeeklyBtn"), preview=$("nextStepPreview"), ctaHint=$("nextStepCtaHint");
   if(ico) ico.textContent=ns.ico;
   if(ti) ti.textContent=ns.title;
   if(sub) sub.textContent=ns.sub;
   if(btn){ btn.textContent=ns.btn||t("home.playNow"); btn.onclick=playNow; }
+  if(ctaHint){
+    var hint=uxLegacy()?"":computeCtaHint(ns);
+    ctaHint.textContent=hint;
+    ctaHint.hidden=!hint;
+    ctaHint.setAttribute("aria-hidden",hint?"false":"true");
+  }
   if(wkBtn) wkBtn.hidden=true;
   var stepK=$("nextStepK");
   if(stepK) stepK.textContent=t("home.nextStepK");
-  var weekHint=$("weekBarHint");
-  if(weekHint) weekHint.textContent=t("home.weekBarHint");
   if(preview){
     var pv=nextStepPreviewText(ns);
     if(pv&&!uxLegacy()){ preview.hidden=false; preview.textContent=t("home.nextPreview").replace("{next}",pv); }
     else preview.hidden=true;
   }
   card.classList.toggle("next-step-ux-v2",!uxLegacy());
+  renderStreakCard();
+  renderHomeProfileBadges();
   renderWeekLine();
+  renderHomeNextAchievement();
+  renderHomeTeamSocial();
   renderFirstDayHint();
   card.hidden=false;
+  renderHomeStickyCta();
 }
 function applyHeroCompact(){
   var card=$("heroCard"), exp=$("heroExpandable"), btn=$("heroExpandBtn");
@@ -4473,25 +4610,46 @@ function renderPostSessionActions(hostId,withWeekly){
   host.appendChild(home);
 }
 function renderWeekLine(){
-  var host=$("nextStepWeek"); if(!host) return;
+  var host=$("nextStepWeek"), goalEl=$("weekNextGoal"), chips=$("weekChips");
   ensureWeekly(); ensureDaily();
   var wp=S.weekly.prog||{}, wt=getWeekTheme();
   if(uxLegacy()){
-    var daily=S.daily.done.mission?(L()==="pt"?"✅ Feita":"✅ Done"):(L()==="pt"?"Pendente":"Pending");
-    host.textContent=t("home.weekLine")
-      .replace("{theme}",THEMES[wt].ico+" "+tt(THEMES[wt]))
-      .replace("{correct}",String(wp.correct||0))
-      .replace("{campaign}",String(wp.campaign||0))
-      .replace("{daily}",daily);
+    if(host){
+      host.hidden=false;
+      var daily=S.daily.done.mission?(L()==="pt"?"✅ Feita":"✅ Done"):(L()==="pt"?"Pendente":"Pending");
+      host.textContent=t("home.weekLine")
+        .replace("{theme}",THEMES[wt].ico+" "+tt(THEMES[wt]))
+        .replace("{correct}",String(wp.correct||0))
+        .replace("{campaign}",String(wp.campaign||0))
+        .replace("{daily}",daily);
+    }
+    if(goalEl) goalEl.textContent="";
+    if(chips){ chips.hidden=true; chips.innerHTML=""; }
   } else {
-    var parts=[];
-    var remC=Math.max(0,20-(wp.correct||0)), remM=Math.max(0,3-(wp.campaign||0));
-    var remB=Math.max(0,1-(wp.boss||0)), remT=Math.max(0,8-(wp.theme||0));
-    if(remC>0) parts.push(t("home.weekRemCorrect").replace("{n}",String(remC)));
-    if(remM>0) parts.push(t("home.weekRemCampaign").replace("{n}",String(remM)));
-    if(remB>0) parts.push(t("home.weekRemBoss").replace("{n}",String(remB)));
-    if(remT>0) parts.push(t("home.weekRemTheme").replace("{n}",String(remT)));
-    host.textContent=parts.length?t("home.weekRemPrefix")+parts.join(", "):t("home.weekRemDone");
+    if(host){ host.hidden=true; host.textContent=""; }
+    var micro=getWeekMicroGoal();
+    if(goalEl){
+      goalEl.textContent=micro.key==="done"?micro.text:(t("home.weekMicroPrefix")+" "+micro.text);
+    }
+    if(chips){
+      var chipData=[
+        {id:"correct",ico:"🎯",cur:wp.correct||0,goal:20},
+        {id:"campaign",ico:"🗺️",cur:wp.campaign||0,goal:3},
+        {id:"boss",ico:"🎯",cur:wp.boss||0,goal:1}
+      ];
+      chips.innerHTML="";
+      chipData.forEach(function(c){
+        var done=c.cur>=c.goal;
+        var b=document.createElement("button");
+        b.type="button";
+        b.className="week-chip"+(done?" done":"");
+        b.setAttribute("role","listitem");
+        b.textContent=c.ico+" "+c.cur+"/"+c.goal;
+        b.onclick=openWeeklyScreen;
+        chips.appendChild(b);
+      });
+      chips.hidden=false;
+    }
   }
   renderWeekProgressBar();
 }
@@ -5189,12 +5347,23 @@ function dismissContextTip(key){
 }
 function renderWeekProgressBar(){
   ensureWeekly(); ensureDaily();
-  var host=$("weekProgressBar"), fill=$("weekProgressFill"), lab=$("weekProgressLabel");
+  var host=$("weekProgressBar"), fill=$("weekProgressFill"), lab=$("weekProgressLabel"), unlock=$("weekProgressUnlock");
   if(!host) return;
-  var wp=S.weekly.prog||{}, correct=wp.correct||0, campaign=wp.campaign||0, boss=wp.boss||0;
-  var score=Math.min(100,Math.round((correct/20*40)+(campaign/3*35)+(boss/1*25)));
+  var wp=S.weekly.prog||{}, done=weeklyGoalsDoneCount(), total=WEEKLY.length;
+  var correct=wp.correct||0, campaign=wp.campaign||0, boss=wp.boss||0;
+  var score=Math.min(100,Math.round((correct/20*25)+(campaign/3*25)+(boss/1*25)+((wp.theme||0)/8*25)));
   if(fill) fill.style.width=score+"%";
-  if(lab) lab.textContent=correct+"/20 · "+campaign+"/3 · "+(S.daily.done.mission?(L()==="pt"?"missão ✅":"mission ✅"):(L()==="pt"?"missão pendente":"mission pending"));
+  if(lab){
+    if(uxLegacy()) lab.textContent=correct+"/20 · "+campaign+"/3 · "+(S.daily.done.mission?(L()==="pt"?"missão ✅":"mission ✅"):(L()==="pt"?"missão pendente":"mission pending"));
+    else lab.textContent=t("home.weekGoalsCount").replace("{done}",String(done)).replace("{total}",String(total));
+  }
+  if(unlock){
+    if(uxLegacy()) unlock.textContent="";
+    else{
+      var micro=getWeekMicroGoal();
+      unlock.textContent=micro.key==="done"?"":t("home.weekNextUnlock").replace("{goal}",micro.text);
+    }
+  }
   host.setAttribute("aria-label",t("home.weekBarAria"));
   host.setAttribute("aria-valuenow",String(score));
 }
@@ -5214,10 +5383,7 @@ function renderWeeklyGoalsChecklist(){
   });
 }
 function renderFirstDayHint(){
-  var el=$("firstDayHint"); if(!el) return;
-  ensureStreak();
-  var showHint=(S.streak.count||0)<=1&&!streakPlayedToday();
-  el.hidden=!showHint;
+  var el=$("firstDayHint"); if(el){ el.hidden=true; el.textContent=""; }
 }
 function openGlossaryForTerm(id, fromQuiz, theme){
   if(fromQuiz===undefined) fromQuiz=!!($("screenQuiz")&&$("screenQuiz").classList.contains("active"));
@@ -5504,6 +5670,7 @@ function bind(){
     openFirstSetup();
   });
   on("nextStepBtn","click",playNow);
+  on("homeStickyBtn","click",playNow);
   on("nextStepWeeklyBtn","click",openWeeklyScreen);
   on("setupBannerBtn","click",openFirstSetup);
   on("heroExpandBtn","click",function(){ S.heroExpanded=!S.heroExpanded; save(); applyHeroCompact(); });
