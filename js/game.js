@@ -536,7 +536,7 @@ var UI = {
   "profile.completionPct":{pt:"da jornada concluída",en:"of journey complete"},
   "profile.nextMilestone":{pt:"Próximo marco",en:"Next milestone"},
   "profile.reviewTitle":{pt:"📚 Revisão",en:"📚 Review"},
-  "profile.reviewSub":{pt:"Treine seus erros ou consulte o banco de perguntas para autores.",en:"Train your mistakes or open the question bank for authors."},
+  "profile.reviewSub":{pt:"Treine erros sem penalidade — acertos passam a contar no % de cada tema e no radar.",en:"Train mistakes with no penalty — correct answers count toward each theme % and the radar."},
   "profile.reviewTrain":{pt:"📚 Treinar meus erros",en:"📚 Train my mistakes"},
   "profile.reviewTrainDue":{pt:"📚 Treinar meus erros ({n} pendentes)",en:"📚 Train my mistakes ({n} pending)"},
   "profile.themesWeak":{pt:"📉 Temas para reforçar",en:"📉 Themes to strengthen"},
@@ -3330,7 +3330,7 @@ function answer(idx,btn,q){
   $("options").querySelectorAll(".opt").forEach(function(b){ b.disabled=true; });
   var ok=idx===q.correct,fb=$("feedback"),review=cur.mode==="review",drill=cur.mode==="themeDrill";
   if(drill){ recordTheme(q.theme,ok); recordMiss(q,ok); if(ok) addReward(5,2,0); }
-  else if(review){ recordMiss(q,ok); if(ok) addReward(5,2,0); }
+  else if(review){ recordTheme(q.theme,ok); recordMiss(q,ok); if(ok) addReward(5,2,0); else save(); }
   else { recordTheme(q.theme,ok); recordMiss(q,ok); }
   if(ok){ btn.classList.add("correct"); if(!review&&!drill) addReward(10,5,q.diff*10); fb.className="feedback show good"; fb.innerHTML="✅ <b>"+(L()==="pt"?"Correto!":"Correct!")+"</b> "+tt(q.why); }
   else if(review||drill){ btn.classList.add("wrong"); $("options").querySelectorAll(".opt").forEach(function(b){ if(b.getAttribute("data-correct")==="1") b.classList.add("correct"); }); fb.className="feedback show err"; fb.innerHTML="❌ <b>"+(L()==="pt"?"Revise:":"Review:")+"</b> "+tt(q.why); }
@@ -3355,7 +3355,7 @@ function finishCampaign(){
   rebuildSessionLog();
   cur.correct=countQuizCorrect();
   var c=cur.country,total=cur.questions.length,acc=Math.round(cur.correct/total*100),win=cur.integrity>0&&acc>=60;
-  if(cur.mode==="review"){ show("screenProfile"); renderProfile(); toast(L()==="pt"?"📚 Revisão concluída":"📚 Review complete"); return; }
+  if(cur.mode==="review"){ save(); show("screenProfile"); renderProfile(); toast(L()==="pt"?"📚 Revisão concluída — temas atualizados":"📚 Review complete — themes updated"); return; }
   if(cur.mode==="themeDrill"){ save(); checkMedals(); show("screenProfile"); renderProfile(); toast(t("pedagogy.drillDone")); return; }
   if(cur.mode==="campaign"){ S.done[c.id]=Math.max(S.done[c.id]||0,acc); bumpWeekly("campaign",1); syncMapProgress(); }
   if(cur.mode==="chain"){ S.chainDone[cur.chainKey]=Math.max(S.chainDone[cur.chainKey]||0,acc); }
