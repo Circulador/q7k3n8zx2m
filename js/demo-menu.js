@@ -52,7 +52,7 @@ function renderDemoStatus(){
     '<li>📅 '+pt("Weekly","Semanal")+': '+(wp.correct||0)+'/20 · '+(wp.campaign||0)+'/3 · '+(wp.boss||0)+'/1</li>'+
     '<li>🗺️ '+done+'/'+countries+' '+pt("countries","países")+'</li>'+
     '<li>🎯 '+bosses+'/'+bossTot+' '+pt("crises","crises")+'</li>'+
-    '<li>🔥 '+(S.streak&&S.streak.count||0)+' · ⭐ '+(S.xp||0)+' XP · 🪙 '+(S.coins||0)+'</li>'+
+    '<li>🔥 '+(S.streak&&S.streak.count||0)+' · ⭐ '+(S.xp||0)+' XP · 🪙 '+(S.coins||0)+' · 🏅 '+(api.medalsEarned?api.medalsEarned():0)+'/16</li>'+
     '<li>▶️ '+pt("Next step","Próximo passo")+': <strong>'+(ns.title||"—")+'</strong></li>'+
     '</ul>';
 }
@@ -64,13 +64,16 @@ function setCountries(n, score){
   for(i=0;i<Math.min(n,ids.length);i++) S.done[ids[i]]=score;
 }
 
-function setBosses(n, index){
+function setBosses(n, index, opts){
   var S=api.getState();
   var ids=api.bossIds(), i, m;
+  opts=opts||{};
+  var uniform=!!opts.uniform;
   S.bossStats={};
   S.bossDone={};
   for(i=0;i<Math.min(n,ids.length);i++){
-    m=api.bossMetrics(Math.min(95,index+(i*3)));
+    var idx=uniform?index:Math.min(100,index+(i*3));
+    m=api.bossMetrics(idx);
     api.bossSaveRun(ids[i],m);
   }
 }
@@ -109,26 +112,32 @@ function applyPreset(pct){
     S.daily.done={};
     S.weekly.prog={};
   } else if(pct===25){
-    S.xp=55; S.coins=20;
+    S.xp=api.xpForLevel?api.xpForLevel(3):200; S.coins=20;
     setCountries(Math.max(2,Math.round(nCountries*0.15)),100);
     S.streak={count:1,lastDate:"",best:1};
     S.daily.done={};
     S.weekly.prog={correct:5,campaign:0,boss:0,theme:2};
+    api.fillThemeStats&&api.fillThemeStats(40);
   } else if(pct===50){
-    S.xp=220; S.coins=90;
+    S.xp=api.xpForLevel?api.xpForLevel(5):560; S.coins=90;
     setCountries(Math.round(nCountries*0.5),100);
     setBosses(1,62);
     S.streak={count:5,lastDate:api.todayKey(),best:5};
     S.daily.done.mission=true;
+    S.dailyTotal=2;
     S.weekly.prog={correct:12,campaign:1,boss:0,theme:4};
+    api.fillThemeStats&&api.fillThemeStats(60);
   } else if(pct===75){
-    S.xp=420; S.coins=220;
+    S.xp=api.xpForLevel?api.xpForLevel(8):1400; S.coins=220;
     setCountries(Math.round(nCountries*0.78),100);
-    setBosses(Math.min(4,nBosses),72);
+    setBosses(Math.min(4,nBosses),78);
     S.streak={count:14,lastDate:api.todayKey(),best:14};
     S.daily.done.mission=true;
+    S.dailyTotal=8;
     S.weekly.prog={correct:18,campaign:3,boss:0,theme:6};
     S.managerMode=true;
+    api.fillThemeStats&&api.fillThemeStats(80);
+    api.seedGlossary&&api.seedGlossary(["2fa","accessctrl","antivirus","apt","backup"],2);
     var ch=api.chainById&&api.chainById("carajas");
     if(ch&&ch.stages){
       var si;
@@ -136,14 +145,17 @@ function applyPreset(pct){
         S.chainDone["carajas__"+ch.stages[si].id]=100;
     }
   } else if(pct===100){
-    S.xp=650; S.coins=500; S.score=1200;
+    S.xp=api.xpForMaxLevel?api.xpForMaxLevel():2600; S.coins=500; S.score=1200;
     setCountries(nCountries,100);
-    setBosses(nBosses,88);
+    setBosses(nBosses,100,{uniform:true});
     S.streak={count:30,lastDate:api.todayKey(),best:30};
     S.daily.done.mission=true;
+    S.dailyTotal=15;
     S.weekly.prog={correct:20,campaign:3,boss:1,theme:8};
     S.managerMode=true;
     S.reports=5;
+    api.fillThemeStats&&api.fillThemeStats(100);
+    api.seedGlossary&&api.seedGlossary(["2fa","accessctrl","antivirus","apt","backup"],3);
     if(api.chainById){
       var ch2=api.chainById("carajas");
       if(ch2&&ch2.stages){
@@ -152,6 +164,7 @@ function applyPreset(pct){
           S.chainDone["carajas__"+ch2.stages[sj].id]=100;
       }
     }
+    S.medals={};
     api.checkMedals();
   }
 

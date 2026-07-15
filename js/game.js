@@ -293,7 +293,7 @@ var UI = {
   "hud.tip.title":{pt:"Seu título na carreira — evolui conforme você acumula XP nas missões.",en:"Your career title — grows as you earn XP from missions."},
   "hud.tip.lives":{pt:"Vidas restantes — você perde uma ao errar em situações críticas; recupere jogando bem.",en:"Lives remaining — you lose one on critical mistakes; recover by playing well."},
   "hud.tip.streak":{pt:"Sequência — dias seguidos jogando; mantenha para ganhar bônus.",en:"Streak — consecutive days played; keep it for bonuses."},
-  "hud.tip.level":{pt:"Nível do guardião — sobe a cada 50 XP; desbloqueia conquistas.",en:"Guardian level — increases every 50 XP; unlocks achievements."},
+  "hud.tip.level":{pt:"Nível do guardião (1–10) — XP vem do mapa, missões e crises.",en:"Guardian level (1–10) — XP from map, missions and crises."},
   "hud.tip.xp":{pt:"Pontos de experiência (XP) — ganhos em campanhas, diárias, semanais e Desafios / Crises.",en:"Experience points (XP) — earned in campaigns, dailies, weeklies and Challenges / Crises."},
   "hud.tip.coins":{pt:"Moedas — moeda do jogo para comprar avatares, molduras e temas na loja.",en:"Coins — in-game currency to buy avatars, frames and themes in the shop."},
   "hud.tip.score":{pt:"Pontuação geral — soma do seu desempenho em acertos e missões concluídas.",en:"Overall score — sum of your performance in correct answers and completed missions."},
@@ -553,7 +553,8 @@ var UI = {
   "progress.dailyD":{pt:"5 situações (2 revisões de erros + temas fracos). Mantém sequência.",en:"5 scenarios (2 error reviews + weak themes). Keeps streak."},
   "progress.boss":{pt:"Desafios / Crises",en:"Challenges / Crises"},
   "progress.bossD":{pt:"Simulações estilo mesa (10 cenas cada). Contam para maturidade, conquistas e selo do certificado.",en:"Tabletop simulations (10 scenes each). Count toward maturity, achievements and certificate seal."},
-  "progress.bossM":{pt:"Crises vencidas: {crises} · Cenas Carajás: {chain} · Maturidade: {mat}",en:"Crises beaten: {crises} · Carajás scenes: {chain} · Maturity: {mat}"},
+  "progress.bossM":{pt:"Crises vencidas: {crises} · Cenas Carajás: {chain} · Maturidade média: {mat}",en:"Crises beaten: {crises} · Carajás scenes: {chain} · Avg maturity: {mat}"},
+  "progress.bossNote":{pt:"Métricas independentes: crises (7 simulações), cenas da cadeia (8 etapas) e média de índice nas crises já jogadas.",en:"Independent metrics: crises (7 simulations), chain scenes (8 stages) and average index in crises you've played."},
   "progress.weekly":{pt:"Semanal",en:"Weekly"},
   "progress.weeklyD":{pt:"Metas que somam automaticamente enquanto você joga qualquer modo acima.",en:"Goals that add up automatically as you play any mode above."},
   "daily.title":{pt:"📅 Atividade de hoje",en:"📅 Today's activity"},
@@ -867,7 +868,10 @@ var ROLES = [
   {id:"trainee",ico:"🎓", pt:"Em formação", en:"In training", ptd:"Estágio, trainee, capacitação", end:"Internship, trainee, learning"}
 ];
 
-/* -------------------- PROGRESSÃO / TITLES -------------------- */
+/* -------------------- PROGRESSÃO / TITLES (níveis 1–10) -------------------- */
+var MAX_LEVEL = 10;
+/* XP acumulado para entrar em cada nível; ~2600 XP no nível 10 (mapa + missões + crises). */
+var LEVEL_XP = [0, 80, 200, 360, 560, 800, 1080, 1400, 1760, 2160, 2600];
 var TITLES = [
   {xp:0,   ico:"🌱", pt:"Estagiário", en:"Intern"},
   {xp:60,  ico:"🛡️", pt:"Guardião Jr.", en:"Junior Guardian"},
@@ -875,8 +879,27 @@ var TITLES = [
   {xp:300, ico:"🎖️", pt:"Guardião Sênior", en:"Senior Guardian"},
   {xp:500, ico:"👑", pt:"Mestre da Segurança", en:"Security Master"}
 ];
-function currentTitle(){ var tI=TITLES[0]; for(var i=0;i<TITLES.length;i++) if(S.xp>=TITLES[i].xp) tI=TITLES[i]; return tI; }
-function levelOf(){ return Math.floor(S.xp/50)+1; }
+function levelOf(){
+  var xp=S.xp||0, lv=1, i;
+  for(i=1;i<LEVEL_XP.length;i++){ if(xp>=LEVEL_XP[i]) lv=i+1; else break; }
+  return Math.min(MAX_LEVEL, lv);
+}
+function levelProgress(){
+  var lv=levelOf();
+  if(lv>=MAX_LEVEL) return {pct:100, cur:0, need:0, max:true};
+  var floor=LEVEL_XP[lv-1], ceil=LEVEL_XP[lv], cur=(S.xp||0)-floor, need=ceil-floor;
+  return {pct:need?Math.round(cur/need*100):100, cur:cur, need:need, max:false};
+}
+function xpForLevel(lv){ return LEVEL_XP[Math.max(0, Math.min(MAX_LEVEL, lv|0)-1)]||0; }
+function xpForMaxLevel(){ return LEVEL_XP[MAX_LEVEL]; }
+function currentTitle(){
+  var lv=levelOf();
+  if(lv>=10) return TITLES[4];
+  if(lv>=8) return TITLES[3];
+  if(lv>=6) return TITLES[2];
+  if(lv>=4) return TITLES[1];
+  return TITLES[0];
+}
 
 /* -------------------- TEMAS / THEMES -------------------- */
 var THEMES = {
@@ -2005,7 +2028,7 @@ function refreshHud(){
   var avg=bossAvgIndex(), chip=$("hudMaturityChip");
   if(chip) chip.textContent="🛡️ "+avg+"%";
   var sum=$("hudStatsSummary");
-  if(sum) sum.textContent="📊 Nv "+levelOf()+" · ⭐ "+S.xp+(S.simpleUi===false?" · 🛡️ "+avg+"%":"");
+  if(sum) sum.textContent="📊 Nv "+levelOf()+"/"+MAX_LEVEL+" · ⭐ "+S.xp+(S.simpleUi===false?" · 🛡️ "+avg+"%":"");
   applyCosmetics();
   renderLives();
 }
@@ -3630,7 +3653,13 @@ function ensureBossStats(){
   var k;
   for(k in S.bossDone){ if(S.bossDone[k]===true&&!S.bossStats[k]) S.bossStats[k]={plays:1,best:bossDefaultMetrics(55),last:bossDefaultMetrics(55)}; }
 }
-function bossDefaultMetrics(idx){ return {availability:idx,resilience:idx,exposure:100-idx,preparation:idx,maturity:idx,index:idx,tier:"bronze",rankId:"training"}; }
+function bossDefaultMetrics(idx){
+  idx=Math.max(0,Math.min(100,idx|0));
+  var m={availability:idx,resilience:idx,exposure:100-idx,preparation:idx,maturity:idx,index:idx,tier:"bronze",rankId:"training"};
+  m.tier=bossComputeTier(m);
+  m.rankId=bossGuardianRank(idx).id;
+  return m;
+}
 function bossCompletedCount(){ ensureBossStats(); var n=0,i; for(i=0;i<BOSSES.length;i++) if(S.bossStats[BOSSES[i].id]) n++; return n; }
 function bossCompletedIds(){ ensureBossStats(); var ids={},i,b; for(i=0;i<BOSSES.length;i++){ b=BOSSES[i].id; if(S.bossStats[b]||S.bossDone[b]) ids[b]=true; } return Object.keys(ids); }
 function bossAvgIndex(){
@@ -4371,7 +4400,7 @@ function renderProgressHub(){
     '<div class="prog-hub-grid">'+
       '<div class="prog-hub-item"><span class="prog-hub-ico">🗺️</span><div><div class="prog-hub-t">'+t("progress.map")+'</div><div class="prog-hub-d">'+t("progress.mapD")+'</div><div class="prog-hub-m">'+Object.keys(S.done).length+'/'+COUNTRIES.length+' · '+(wp.campaign||0)+'/3</div></div></div>'+
       '<div class="prog-hub-item"><span class="prog-hub-ico">📅</span><div><div class="prog-hub-t">'+t("progress.daily")+'</div><div class="prog-hub-d">'+t("progress.dailyD")+'</div><div class="prog-hub-m">🔥 '+(S.streak.count||0)+' · '+(wp.correct||0)+'/20</div></div></div>'+
-      '<div class="prog-hub-item"><span class="prog-hub-ico">🐉</span><div><div class="prog-hub-t">'+t("progress.boss")+'</div><div class="prog-hub-d">'+t("progress.bossD")+'</div><div class="prog-hub-m">'+progressBossMetrics()+'</div></div></div>'+
+      '<div class="prog-hub-item"><span class="prog-hub-ico">🐉</span><div><div class="prog-hub-t">'+t("progress.boss")+'</div><div class="prog-hub-d">'+t("progress.bossD")+'</div><div class="prog-hub-m">'+progressBossMetrics()+'</div><div class="prog-hub-note muted">'+t("progress.bossNote")+'</div></div></div>'+
       '<div class="prog-hub-item"><span class="prog-hub-ico">🏆</span><div><div class="prog-hub-t">'+t("progress.weekly")+'</div><div class="prog-hub-d">'+t("progress.weeklyD")+'</div><div class="prog-hub-m">'+(wp.theme||0)+'/8 '+tt(THEMES[getWeekTheme()])+'</div></div></div>'+
     '</div>';
 }
@@ -4379,7 +4408,8 @@ function renderProfile(){
   var lab=L()==="pt"?{a:"Nível",b:"XP",c:"Países",d:"Desafios / Crises",e:"Ofensiva",f:"Maturidade",g:"Reportes"}:{a:"Level",b:"XP",c:"Countries",d:"Challenges / Crises",e:"Streak",f:"Maturity",g:"Reports"};
   ensureStreak(); ensureBossStats();
   var avg=bossAvgIndex(), br=bossGuardianRank(avg);
-  $("profileStats").innerHTML='<div class="stat"><div class="v">'+levelOf()+'</div><div class="l">'+lab.a+'</div></div><div class="stat"><div class="v">'+S.xp+'</div><div class="l">'+lab.b+'</div></div><div class="stat"><div class="v">'+Object.keys(S.done).length+"/"+COUNTRIES.length+'</div><div class="l">'+lab.c+'</div></div><div class="stat"><div class="v">'+bossCompletedCount()+"/"+BOSSES.length+'</div><div class="l">'+lab.d+'</div></div><div class="stat"><div class="v">'+br.ico+' '+avg+'%</div><div class="l">'+lab.f+'</div></div><div class="stat"><div class="v">🔥 '+(S.streak.count||0)+'</div><div class="l">'+lab.e+'</div></div><div class="stat"><div class="v">📢 '+(S.reports||0)+'</div><div class="l">'+lab.g+'</div></div>';
+  var lp=levelProgress();
+  $("profileStats").innerHTML='<div class="stat"><div class="v">'+levelOf()+'/'+MAX_LEVEL+'</div><div class="l">'+lab.a+(lp.max?"":(" · "+lp.pct+"%"))+'</div></div><div class="stat"><div class="v">'+S.xp+'/'+xpForMaxLevel()+'</div><div class="l">'+lab.b+'</div></div><div class="stat"><div class="v">'+Object.keys(S.done).length+"/"+COUNTRIES.length+'</div><div class="l">'+lab.c+'</div></div><div class="stat"><div class="v">'+bossCompletedCount()+"/"+BOSSES.length+'</div><div class="l">'+lab.d+'</div></div><div class="stat"><div class="v">'+br.ico+' '+avg+'%</div><div class="l">'+lab.f+'</div></div><div class="stat"><div class="v">🔥 '+(S.streak.count||0)+'</div><div class="l">'+lab.e+'</div></div><div class="stat"><div class="v">📢 '+(S.reports||0)+'</div><div class="l">'+lab.g+'</div></div>';
   renderCompletionCard(); renderWeeklyGoalsChecklist(); renderReviewSection(); renderCertChecklist();
   renderBossProgress(); renderProgressHub(); renderPedagogyRec("pedagogyRec"); drawRadar(); renderRadarTable(); renderThemeErrors($("profileThemes")); renderRank($("profileRank")); renderMedals($("profileMedals")); renderAchievementAlbum(); renderCertificatePreview();
 }
@@ -5507,6 +5537,18 @@ window.gdvDemoApi={
   bossCompletedCount:bossCompletedCount,
   bossMetrics:bossDefaultMetrics,
   bossSaveRun:bossSaveRun,
+  xpForLevel:xpForLevel,
+  xpForMaxLevel:xpForMaxLevel,
+  fillThemeStats:function(pct){
+    var acc=Math.max(0,Math.min(100,pct|0)), c=Math.round(acc/5), t=20;
+    S.themeStats={};
+    Object.keys(THEMES).forEach(function(k){ S.themeStats[k]={c:c,t:t}; });
+  },
+  seedGlossary:function(termIds, quizzes){
+    S.glossaryLearned=S.glossaryLearned||{};
+    (termIds||[]).forEach(function(id){ S.glossaryLearned[id]=true; });
+    if(quizzes) S.glossaryQuizDone=quizzes;
+  },
   computeNextStep:computeNextStep,
   progressPct:progressPct,
   ensureDaily:ensureDaily,
@@ -5515,6 +5557,7 @@ window.gdvDemoApi={
   todayKey:todayKey,
   weekKey:weekKey,
   checkMedals:checkMedals,
+  medalsEarned:medalsEarned,
   chainById:chainById,
   toggleSettingsMenu:toggleSettingsMenu,
   toggleGlossaryMenu:toggleGlossaryMenu,

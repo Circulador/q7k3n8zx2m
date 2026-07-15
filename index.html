@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=139">
+<link rel="stylesheet" href="css/styles.css?v=140">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -201,9 +201,9 @@
   </div>
   <header class="topbar" role="banner">
     <div class="topbar-brand">
-      <div class="brand">
+    <div class="brand">
         <img class="orbita-logo" src="assets/orbita-logo.svg" width="72" height="28" alt="Orbita">
-        <span class="logo-badge" id="hudAvatar">🛡️</span>
+      <span class="logo-badge" id="hudAvatar">🛡️</span>
         <div class="gd"><span data-i18n="brand.main">Guardião Cibernético</span><small data-i18n="brand.sub">Cyber Security</small></div>
       </div>
     </div>
@@ -217,8 +217,8 @@
           <svg viewBox="0 0 36 24" class="flag-chip" aria-hidden="true"><rect width="36" height="24" fill="#B22234"/><rect y="2.3" width="36" height="2.3" fill="#fff"/><rect y="6.9" width="36" height="2.3" fill="#fff"/><rect y="11.5" width="36" height="2.3" fill="#fff"/><rect y="16.1" width="36" height="2.3" fill="#fff"/><rect y="20.7" width="36" height="2.3" fill="#fff"/><rect width="14.4" height="13.8" fill="#3C3B6E"/><circle cx="3.2" cy="2.8" r=".9" fill="#fff"/><circle cx="7.2" cy="2.8" r=".9" fill="#fff"/><circle cx="11.2" cy="2.8" r=".9" fill="#fff"/><circle cx="5.2" cy="5.8" r=".9" fill="#fff"/><circle cx="9.2" cy="5.8" r=".9" fill="#fff"/><circle cx="3.2" cy="8.8" r=".9" fill="#fff"/><circle cx="7.2" cy="8.8" r=".9" fill="#fff"/><circle cx="11.2" cy="8.8" r=".9" fill="#fff"/></svg>
           <span>EN</span>
         </button>
-      </div>
-      <div class="hud" role="status" aria-label="Indicadores">
+    </div>
+    <div class="hud" role="status" aria-label="Indicadores">
         <span class="chip hud-tip" id="hudTitle">🌱</span>
         <div class="streak-hud-wrap">
           <button type="button" class="chip chip-btn hud-tip streak-hud-btn streak-hud-neutral" id="hudStreakBtn" data-i18n-attr="aria-label:hud.tip.streak;title:hud.tip.streak" aria-label="Ofensiva" aria-haspopup="dialog" aria-expanded="false" aria-controls="streakPopover">
@@ -528,7 +528,7 @@
           <span class="streak-inline-num" id="streakBest">0</span>
         </div>
         <p class="streak-status streak-status-inline" id="streakStatus" data-i18n="streak.risk">⚠️ Jogue hoje para não perder sua ofensiva!</p>
-      </div>
+        </div>
       <p class="first-day-hint" id="firstDayHint" hidden data-i18n="home.firstDay">Dia 1 da sua ofensiva — 5 minutos de treino bastam para começar.</p>
       <button type="button" class="week-progress-wrap" id="weekProgressBar" aria-label="Meta da semana" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <span class="week-progress-k" data-i18n="home.weekBar">Meta da semana</span>
@@ -560,18 +560,18 @@
         <div class="section-title" data-i18n="setup.nameOptional">Adicionar nome (opcional)</div>
         <div class="section-sub" data-i18n="setup.nameSub">Opcional — aparece no certificado e no ranking da equipe.</div>
         <input id="playerName" maxlength="24" data-i18n-ph="setup.namePh" placeholder="Exemplo: Rodolfo Conte">
-      </div>
+    </div>
       <p class="section-sub setup-intro" id="setupIntro" data-i18n="setup.intro">Nome (opcional), equipe e papel — os cenários ficam parecidos com seu dia a dia. Leva cerca de 20 segundos.</p>
       <p class="setup-why" id="setupWhy" data-i18n="setup.why">💡 Situações de phishing, senha e dados aparecem no contexto da sua operação.</p>
       <div class="setup-block setup-block-primary">
         <div class="section-title" data-i18n="setup.teamTitle">Sua equipe</div>
         <div class="section-sub" data-i18n="setup.teamSub">Onde você trabalha — mina, ferrovia, porto, corporativo, TI, logística, energia…</div>
-        <div class="teams-grid" id="teamsGrid" role="group" aria-label="Equipes"></div>
-      </div>
+      <div class="teams-grid" id="teamsGrid" role="group" aria-label="Equipes"></div>
+    </div>
       <div class="setup-block setup-block-primary">
         <div class="section-title" data-i18n="setup.roleTitle">Seu dia a dia</div>
         <div class="section-sub" data-i18n="setup.roleSub">Administrativo, campo, OT, liderança, técnico, analista, terceiros ou em formação.</div>
-        <div class="roles-grid" id="rolesGrid" role="group" aria-label="Papéis"></div>
+      <div class="roles-grid" id="rolesGrid" role="group" aria-label="Papéis"></div>
       </div>
     </div>
     <div class="row-actions">
@@ -674,8 +674,8 @@
         <div class="section-sub" id="mapChainSub" data-i18n="office.chainSub">Storytelling conectado: cada cena no escritório leva à próxima. Clique numa etapa para proteger.</div>
         <div id="mapChainImpactNote" class="chain-impact-note"></div>
         <div id="mapChainFlow" class="chain-flow"></div>
-      </div>
-      </div>
+    </div>
+    </div>
       <div class="sr-only" id="mapFilterLive" aria-live="polite" aria-atomic="true"></div>
       <div class="sr-only" id="mapLegendLive" aria-live="polite" aria-atomic="true"></div>
     </div>
@@ -933,7 +933,7 @@
   <button type="button" id="navShopBtn" onclick="gdvNavClick('navShopBtn',event)" data-i18n-attr="title:nav.tip.shop;aria-label:nav.tip.shop"><span class="ni" aria-hidden="true">🛒</span><span data-i18n="nav.shop">Loja</span></button>
   <button type="button" id="navManagerBtn" hidden onclick="gdvNavClick('navManagerBtn',event)" data-i18n-attr="title:nav.tip.manager;aria-label:nav.tip.manager"><span class="ni" aria-hidden="true">🧭</span><span data-i18n="nav.manager">Gestor</span></button>
   </div>
-</nav>
+  </nav>
 
 <!-- VLibras (PT) — widget oficial -->
 <div id="vlibrasRoot" hidden>
@@ -961,18 +961,18 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="139";</script>
-<script src="js/sign-lang.js?v=139"></script>
-<script src="js/orbita-world-map.js?v=139"></script>
-<script src="js/questions-data.js?v=139"></script>
-<script src="js/country-questions-data.js?v=139"></script>
-<script src="js/bosses-data.js?v=139"></script>
-<script src="js/boss-personal-tips.js?v=139"></script>
-<script src="js/chain-data.js?v=139"></script>
-<script src="js/boss-maps.js?v=139"></script>
-<script src="js/glossary-data.js?v=139"></script>
-<script src="js/game.js?v=139"></script>
-<script src="js/demo-menu.js?v=139"></script>
+<script>window.APP_VERSION="140";</script>
+<script src="js/sign-lang.js?v=140"></script>
+<script src="js/orbita-world-map.js?v=140"></script>
+<script src="js/questions-data.js?v=140"></script>
+<script src="js/country-questions-data.js?v=140"></script>
+<script src="js/bosses-data.js?v=140"></script>
+<script src="js/boss-personal-tips.js?v=140"></script>
+<script src="js/chain-data.js?v=140"></script>
+<script src="js/boss-maps.js?v=140"></script>
+<script src="js/glossary-data.js?v=140"></script>
+<script src="js/game.js?v=140"></script>
+<script src="js/demo-menu.js?v=140"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
