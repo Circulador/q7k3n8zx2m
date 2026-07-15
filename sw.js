@@ -1,7 +1,7 @@
 /* Service Worker — Guardião Cibernético (Orbita)
    Estratégia: cache-first com fallback de rede; navegações caem para index.html offline.
    Ao publicar nova versão, altere CACHE_VERSION (idealmente = APP_VERSION do index.html). */
-var CACHE_VERSION = "v135";
+var CACHE_VERSION = "v136";
 var CACHE_NAME = "gdv-cache-" + CACHE_VERSION;
 
 /* App shell — caminhos relativos para funcionar em subpasta do GitHub Pages */
@@ -9,22 +9,22 @@ var PRECACHE = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./icons/icon-192.png?v=118",
-  "./icons/icon-512.png?v=118",
-  "./css/styles.css?v=118",
-  "./js/sign-lang.js?v=118",
-  "./js/orbita-world-map.js?v=118",
-  "./js/questions-data.js?v=118",
-  "./js/country-questions-data.js?v=118",
-  "./js/bosses-data.js?v=118",
-  "./js/boss-personal-tips.js?v=118",
-  "./js/chain-data.js?v=118",
-  "./js/boss-maps.js?v=118",
-  "./js/glossary-data.js?v=118",
-  "./js/game.js?v=118",
-  "./js/demo-menu.js?v=118",
-  "./js/review-bank.js?v=118",
-  "./js/access-gate.js?v=118",
+  "./icons/icon-192.png?v=135",
+  "./icons/icon-512.png?v=135",
+  "./css/styles.css?v=135",
+  "./js/sign-lang.js?v=135",
+  "./js/orbita-world-map.js?v=135",
+  "./js/questions-data.js?v=135",
+  "./js/country-questions-data.js?v=135",
+  "./js/bosses-data.js?v=135",
+  "./js/boss-personal-tips.js?v=135",
+  "./js/chain-data.js?v=135",
+  "./js/boss-maps.js?v=135",
+  "./js/glossary-data.js?v=135",
+  "./js/game.js?v=135",
+  "./js/demo-menu.js?v=135",
+  "./js/review-bank.js?v=135",
+  "./js/access-gate.js?v=135",
   "./assets/d3.min.js",
   "./assets/topojson-client.min.js",
   "./assets/countries-110m.json",
@@ -53,6 +53,29 @@ self.addEventListener("fetch", function (e) {
   if (e.request.method !== "GET") return;
   var url = new URL(e.request.url);
   if (url.origin !== self.location.origin) return;
+
+  var freshFirst = e.request.mode === "navigate" ||
+    url.pathname.endsWith("/game.js") ||
+    url.pathname.endsWith("/styles.css") ||
+    url.pathname.endsWith("/index.html");
+
+  if (freshFirst) {
+    e.respondWith(
+      fetch(e.request).then(function (res) {
+        if (res && res.status === 200 && res.type !== "opaque") {
+          var clone = res.clone();
+          caches.open(CACHE_NAME).then(function (cache) { cache.put(e.request, clone); });
+        }
+        return res;
+      }).catch(function () {
+        return caches.match(e.request).then(function (cached) {
+          if (cached) return cached;
+          if (e.request.mode === "navigate") return caches.match("./index.html");
+        });
+      })
+    );
+    return;
+  }
 
   e.respondWith(
     caches.match(e.request).then(function (cached) {
