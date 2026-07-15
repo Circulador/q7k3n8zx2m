@@ -804,7 +804,7 @@ function show(id){
   document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
   var el=$(id); if(el) el.classList.add("active");
   if(id==="screenHome"){ renderNextStep(); renderWeekCard(); renderFirstDayHint(); updateSetupBanner(); }
-  if(id==="screenMap"){ showContextTip("map"); renderMapExplorerHint(); updateSetupBanner(); }
+  if(id==="screenMap"){ showContextTip("map"); renderMapExplorerHint(); updateSetupBanner(); syncMapDetailLayout(); }
   if(id==="screenDaily"){ showContextTip("daily"); renderDaily(); renderWeekly(); }
   if(id==="screenBossList") showContextTip("boss");
   if(id==="screenReview"&&typeof window.initReviewBank==="function") window.initReviewBank();
@@ -2013,7 +2013,8 @@ function animateView(target){
     view.w=start.w+(target.w-start.w)*e;
     view.h=start.h+(target.h-start.h)*e;
     updateViewBox();
-    if(k<1) viewAnimRaf=requestAnimationFrame(step); else viewAnimRaf=null;
+    if(k<1) viewAnimRaf=requestAnimationFrame(step);
+    else{ viewAnimRaf=null; measureMapViewport(); }
   }
   viewAnimRaf=requestAnimationFrame(step);
 }
@@ -2041,11 +2042,30 @@ function scrollMapIntoView(){
     stage.scrollIntoView({behavior:"smooth",block:"start"});
   });
 }
+function measureMapViewport(){
+  var ow=$("orbitaWorldMap"), sm=$("screenMap");
+  if(!ow||!sm||!sm.classList.contains("map-screen-fit")) return;
+  var top=ow.getBoundingClientRect().top;
+  var shell=document.querySelector(".bottom-shell");
+  var bottomH=shell?shell.getBoundingClientRect().height:112;
+  var h=Math.max(300,Math.floor(window.innerHeight-top-bottomH-2));
+  document.documentElement.style.setProperty("--map-viewport-h",h+"px");
+}
 function syncMapDetailLayout(){
   var stage=$("mapStage"), ow=$("orbitaWorldMap"), sm=$("screenMap");
   var open=!!(stage&&stage.classList.contains("map-detail-open"));
   if(ow) ow.classList.toggle("map-detail-active",open);
   if(sm) sm.classList.toggle("map-screen-fit",open);
+  document.body.classList.toggle("map-viewport-lock",open);
+  if(open){
+    requestAnimationFrame(function(){
+      requestAnimationFrame(measureMapViewport);
+      setTimeout(measureMapViewport,400);
+    });
+  } else {
+    document.documentElement.style.removeProperty("--map-viewport-h");
+    document.body.classList.remove("map-viewport-lock");
+  }
 }
 function zoomTo(cx,cy,f){ cancelViewAnim(); var nw=Math.max(140,Math.min(VW,view.w*f)),nh=nw*(VH/VW); view.x=Math.max(0,Math.min(VW-nw,cx-nw/2)); view.y=Math.max(0,Math.min(VH-nh,cy-nh/2)); view.w=nw; view.h=nh; updateViewBox(); }
 function resetView(){
@@ -3985,6 +4005,9 @@ function wireBottomNav(){
     el.addEventListener("click",function(ev){ runNav(nid,ev); });
     el.addEventListener("touchend",function(ev){ runNav(nid,ev); },{passive:false});
   });
+  window.addEventListener("resize",function(){
+    if($("screenMap")&&$("screenMap").classList.contains("map-screen-fit")) measureMapViewport();
+  },{passive:true});
 }
 function init(){
   try{
