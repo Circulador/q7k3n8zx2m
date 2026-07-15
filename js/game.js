@@ -593,8 +593,20 @@ var UI = {
   "profile.albumPasted":{pt:"figurinhas coladas",en:"stickers pasted"},
   "profile.albumLocked":{pt:"Figurinha faltando",en:"Missing sticker"},
   "profile.albumDone":{pt:"Colada",en:"Pasted"},
+  "profile.albumComplete":{pt:"ÁLBUM DE CONQUISTAS COMPLETO",en:"ACHIEVEMENT ALBUM COMPLETE"},
+  "profile.albumCollected":{pt:"CONQUISTAS COLETADAS",en:"ACHIEVEMENTS COLLECTED"},
   "profile.certCardType":{pt:"Guardião Cibernético",en:"Cyber Guardian"},
   "profile.certCardFlavor":{pt:"\"Proteger operações críticas começa com cada decisão consciente.\"",en:"\"Protecting critical operations starts with every conscious choice.\""},
+  "profile.certCardLvShort":{pt:"Nv.",en:"Lv."},
+  "profile.certCardLevel":{pt:"Nível",en:"Level"},
+  "profile.certCardXp":{pt:"XP",en:"XP"},
+  "profile.certCardCrises":{pt:"Crises",en:"Crises"},
+  "profile.certCardChain":{pt:"Cadeia",en:"Chain"},
+  "profile.certCardCountries":{pt:"Países",en:"Countries"},
+  "profile.certCardAch":{pt:"Conquistas",en:"Achievements"},
+  "profile.certCardRes":{pt:"Resiliência",en:"Resilience"},
+  "profile.certCardStreak":{pt:"Sequência",en:"Streak"},
+  "profile.certCardFooter":{pt:"Ferramenta educativa interna",en:"Internal educational tool"},
   "manager.title":{pt:"🧭 Painel do Gestor",en:"🧭 Manager Panel"},
   "manager.sub":{pt:"Visão agregada por equipe (anônima). Nenhum indivíduo é identificado.",en:"Aggregated team view (anonymous). No individual is identified."},
   "manager.export":{pt:"⬇️ Exportar CSV (equipes)",en:"⬇️ Export CSV (teams)"},
@@ -825,6 +837,7 @@ function setLang(lang){
   renderNextStep(); renderDaily(); renderWeekly(); renderHomeHowStrip(); renderMissionsFocus(); renderUxBanner();
   if($("screenSetup")&&$("screenSetup").classList.contains("active")) renderSetupUi();
   var ov=$("onboardOverlay"); if(ov&&!ov.hidden) renderOnboarding();
+  if($("screenProfile")&&$("screenProfile").classList.contains("active")) renderProfile();
   if($("screenMap").classList.contains("active")){ drawMap(); renderMapExpedition(); }
 }
 
@@ -4094,8 +4107,11 @@ function renderAchievementAlbum(){
   checkMedals();
   var earned=medalsEarned(), total=MEDALS.length, pct=Math.round(earned/Math.max(1,total)*100);
   if(prog){
+    var complete=earned>=total;
     prog.innerHTML='<div class="album-progress-track" aria-hidden="true"><div class="album-progress-fill" style="width:'+pct+'%"></div></div>'+
-      '<div class="album-progress-label"><strong>'+earned+'/'+total+'</strong> '+t("profile.albumPasted")+'</div>';
+      '<div class="album-progress-label"><strong>'+earned+'/'+total+'</strong> '+t("profile.albumCollected")+'</div>';
+    var titleEl=$("albumSpreadTitle");
+    if(titleEl) titleEl.textContent=complete?t("profile.albumComplete"):t("profile.albumSpreadTitle");
   }
   grid.innerHTML="";
   MEDALS.forEach(function(m,i){
@@ -4107,9 +4123,9 @@ function renderAchievementAlbum(){
     btn.setAttribute("data-medal",m.id);
     btn.setAttribute("aria-label",(got?t("profile.albumDone"):t("profile.albumLocked"))+": "+tt(m.name));
     if(got){
-      btn.innerHTML='<span class="album-slot-tag">'+num+'</span><div class="album-sticker"><span class="album-sticker-shine" aria-hidden="true"></span><span class="album-sticker-corner" aria-hidden="true"></span><span class="album-sticker-ico" aria-hidden="true">'+m.ico+'</span><span class="album-sticker-name">'+tt(m.name)+'</span></div>';
+      btn.innerHTML='<div class="album-sticker"><span class="album-sticker-shine" aria-hidden="true"></span><span class="album-sticker-corner" aria-hidden="true"></span><div class="album-sticker-art"><span class="album-sticker-ico" aria-hidden="true">'+m.ico+'</span></div><div class="album-sticker-footer"><span class="album-sticker-num">'+num+'</span><span class="album-sticker-sep">-</span><span class="album-sticker-name">'+tt(m.name)+'</span></div></div>';
     } else {
-      btn.innerHTML='<span class="album-slot-tag">'+num+'</span><div class="album-placeholder"><span class="album-placeholder-mark" aria-hidden="true">'+num+'</span><span class="album-placeholder-lock" aria-hidden="true">🔒</span><span class="album-placeholder-ico" aria-hidden="true">'+m.ico+'</span><span class="album-placeholder-name">'+tt(m.name)+'</span></div>';
+      btn.innerHTML='<div class="album-placeholder"><span class="album-placeholder-mark" aria-hidden="true">'+num+'</span><div class="album-placeholder-art"><span class="album-placeholder-lock" aria-hidden="true">🔒</span><span class="album-placeholder-ico" aria-hidden="true">'+m.ico+'</span></div><div class="album-placeholder-footer"><span class="album-placeholder-num">'+num+'</span><span class="album-placeholder-sep">-</span><span class="album-placeholder-name">'+tt(m.name)+'</span></div></div>';
     }
     btn.addEventListener("click",function(){ albumSlotTap(m.id); });
     grid.appendChild(btn);
@@ -4502,6 +4518,21 @@ function certDrawChip(ctx,x,y,w,h,ico,value,label,accent){
   ctx.font="600 7.4px Segoe UI,sans-serif"; ctx.fillStyle="#5c706e";
   ctx.fillText(certEllipsis(ctx,label,w-38),x+35,y+h*0.78);
 }
+function certCardTypeLine(tr){
+  var parts=[t("profile.certCardType")];
+  if(tr.role) parts.push(tr.role);
+  if(tr.team) parts.push(tr.team);
+  return parts.join(" — ");
+}
+function certDrawCreamStatLine(ctx,x,y,w,line,accent){
+  ctx.textAlign="left"; ctx.textBaseline="middle";
+  var cx=x+12, cy=y+10;
+  ctx.beginPath(); ctx.arc(cx,cy,9,0,Math.PI*2); ctx.fillStyle=accent; ctx.fill();
+  ctx.textAlign="center"; ctx.font="10px Segoe UI Emoji,Segoe UI,sans-serif"; ctx.fillStyle="#fff";
+  ctx.fillText(line.ico,cx,cy+1);
+  ctx.textAlign="left"; ctx.font="600 10px Segoe UI,sans-serif"; ctx.fillStyle="#1f2f34";
+  ctx.fillText(certEllipsis(ctx,line.txt,w-34),x+26,y+10);
+}
 function certCardArt(ctx,x,y,w,h,teamId){
   var sky=ctx.createLinearGradient(x,y,x,y+h);
   sky.addColorStop(0,"#4a90b8"); sky.addColorStop(0.55,"#7eb8d4"); sky.addColorStop(1,"#c4dde8");
@@ -4510,6 +4541,11 @@ function certCardArt(ctx,x,y,w,h,teamId){
   ctx.beginPath(); ctx.rect(x,y,w,h); ctx.clip();
   var gnd=y+h*0.62;
   ctx.fillStyle="#3d5c3a"; ctx.fillRect(x,gnd,w,h-(gnd-y));
+  ctx.strokeStyle="rgba(255,255,255,0.08)"; ctx.lineWidth=1;
+  for(var iso=0;iso<6;iso++){
+    var iy=gnd-4-iso*10;
+    ctx.beginPath(); ctx.moveTo(x,iy); ctx.lineTo(x+w,iy); ctx.stroke();
+  }
   if(teamId==="mina"){
     for(var i=0;i<4;i++){
       var tx=x+18+i*88, th=h*0.22+i*6;
@@ -4575,7 +4611,7 @@ function certCardArt(ctx,x,y,w,h,teamId){
 }
 function renderCertificateCard(){
   var cv=$("certCanvas"); if(!cv||!cv.getContext) return;
-  var W=400,H=560,pt=L()==="pt";
+  var W=400,H=580,pt=L()==="pt";
   var dpr=Math.max(1,Math.min(window.devicePixelRatio||1,3));
   cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
   var ctx=cv.getContext("2d"); ctx.setTransform(dpr,0,0,dpr,0,0);
@@ -4585,100 +4621,94 @@ function renderCertificateCard(){
   var avgRes=bossAvgIndex(),resRank=bossGuardianRank(avgRes);
   checkMedals();
   var achEarned=MEDALS.filter(function(m){ return !!S.medals[m.id]; }).length;
+  var lvShort=t("profile.certCardLvShort"), lvLbl=t("profile.certCardLevel");
 
   ctx.fillStyle="#050d11"; certRoundRect(ctx,0,0,W,H,20); ctx.fill();
-
-  if(tier.label==="legendary"){ ctx.save(); ctx.shadowColor=tier.inner; ctx.shadowBlur=22; certRoundRect(ctx,4,4,W-8,H-8,18); ctx.fillStyle=tier.outer1; ctx.fill(); ctx.restore(); }
+  if(tier.label==="legendary"){
+    ctx.save(); ctx.shadowColor=tier.inner; ctx.shadowBlur=24;
+    certRoundRect(ctx,3,3,W-6,H-6,19); ctx.fillStyle="rgba(236,177,31,0.12)"; ctx.fill(); ctx.restore();
+  }
 
   var bezelGrad=ctx.createLinearGradient(0,0,W,H);
-  bezelGrad.addColorStop(0,tier.outer1); bezelGrad.addColorStop(1,tier.outer2);
+  bezelGrad.addColorStop(0,"#c9a227"); bezelGrad.addColorStop(0.35,tier.outer1); bezelGrad.addColorStop(1,tier.outer2);
   certRoundRect(ctx,4,4,W-8,H-8,18); ctx.fillStyle=bezelGrad; ctx.fill();
   ctx.save(); certRoundRect(ctx,4,4,W-8,H-8,18); ctx.clip();
-  var sheen=ctx.createLinearGradient(0,0,W,H*0.5);
-  sheen.addColorStop(0,"rgba(255,255,255,0.16)"); sheen.addColorStop(0.35,"rgba(255,255,255,0.02)"); sheen.addColorStop(1,"rgba(255,255,255,0)");
-  ctx.fillStyle=sheen; ctx.fillRect(0,0,W,H*0.55);
+  var sheen=ctx.createLinearGradient(0,0,W,H*0.45);
+  sheen.addColorStop(0,"rgba(255,255,255,0.22)"); sheen.addColorStop(0.4,"rgba(255,255,255,0.04)"); sheen.addColorStop(1,"rgba(255,255,255,0)");
+  ctx.fillStyle=sheen; ctx.fillRect(0,0,W,H*0.45);
   ctx.restore();
 
   var faceGrad=ctx.createLinearGradient(0,16,0,H-16);
   faceGrad.addColorStop(0,tier.face1); faceGrad.addColorStop(1,tier.face2);
-  certRoundRect(ctx,16,16,W-32,H-32,11); ctx.fillStyle=faceGrad; ctx.fill();
-  ctx.lineWidth=1.5; ctx.strokeStyle=tier.accent; ctx.stroke();
-
-  [[17,17],[W-17,17],[17,H-17],[W-17,H-17]].forEach(function(p){ certDrawGem(ctx,p[0],p[1],4,tier.inner,"rgba(0,0,0,.4)"); });
-
-  ctx.textAlign="left"; ctx.textBaseline="alphabetic";
-  certDrawGem(ctx,30,34,4,tier.inner);
-  ctx.fillStyle="#eaf2f6"; ctx.font="700 14px Segoe UI,sans-serif";
-  ctx.fillText(certEllipsis(ctx,name,W-40-68),42,39);
-
-  var lvlCx=W-38,lvlCy=35,lvlR=18;
-  var lvlGrad=ctx.createRadialGradient(lvlCx-5,lvlCy-6,2,lvlCx,lvlCy,lvlR);
-  lvlGrad.addColorStop(0,tier.glow); lvlGrad.addColorStop(1,tier.accent);
-  ctx.beginPath(); ctx.arc(lvlCx,lvlCy,lvlR,0,Math.PI*2); ctx.fillStyle=lvlGrad; ctx.fill();
+  certRoundRect(ctx,14,14,W-28,H-28,12); ctx.fillStyle=faceGrad; ctx.fill();
   ctx.lineWidth=1.5; ctx.strokeStyle=tier.inner; ctx.stroke();
-  ctx.textAlign="center"; ctx.textBaseline="middle";
-  ctx.font="700 7px Segoe UI,sans-serif"; ctx.fillStyle="rgba(255,255,255,.85)";
-  ctx.fillText(pt?"NÍVEL":"LEVEL",lvlCx,lvlCy-7);
-  ctx.font="800 14px Segoe UI,sans-serif"; ctx.fillStyle="#fff";
-  ctx.fillText(String(levelOf()),lvlCx,lvlCy+6);
+  [[15,15],[W-15,15],[15,H-15],[W-15,H-15]].forEach(function(p){ certDrawGem(ctx,p[0],p[1],4,tier.inner,"rgba(0,0,0,.45)"); });
+
+  var headY=22, headH=28;
+  ctx.fillStyle="rgba(0,0,0,0.42)"; certRoundRect(ctx,22,headY,W-44,headH,6); ctx.fill();
+  ctx.textAlign="left"; ctx.textBaseline="middle";
+  ctx.fillStyle="#eaf2f6"; ctx.font="700 13px Segoe UI,sans-serif";
+  ctx.fillText(certEllipsis(ctx,name,W-130),30,headY+headH/2);
+  ctx.textAlign="right"; ctx.font="700 12px Segoe UI,sans-serif"; ctx.fillStyle=tier.glow;
+  ctx.fillText(lvShort+" "+levelOf(),W-30,headY+headH/2);
   ctx.textBaseline="alphabetic"; ctx.textAlign="left";
 
-  var artX=26,artY=56,artW=W-52,artH=190;
+  var artX=26,artY=58,artW=W-52,artH=178;
   certRoundRect(ctx,artX,artY,artW,artH,7); ctx.save(); ctx.clip();
   certCardArt(ctx,artX,artY,artW,artH,S.team||"");
   ctx.restore();
   certRoundRect(ctx,artX,artY,artW,artH,7); ctx.lineWidth=2; ctx.strokeStyle=tier.inner; ctx.stroke();
 
   var tlabel=tier.labelTxt[pt?"pt":"en"];
-  ctx.font="800 8px Segoe UI,sans-serif";
-  var tlw=ctx.measureText(tlabel).width+16;
-  ctx.fillStyle="rgba(4,10,13,0.72)"; certRoundRect(ctx,artX+8,artY+8,tlw,16,4); ctx.fill();
+  ctx.font="800 7.5px Segoe UI,sans-serif";
+  var tlw=ctx.measureText(tlabel).width+14;
+  ctx.fillStyle="rgba(4,10,13,0.78)"; certRoundRect(ctx,artX+7,artY+7,tlw,15,4); ctx.fill();
   ctx.strokeStyle=tier.inner; ctx.lineWidth=1; ctx.stroke();
   ctx.textAlign="center"; ctx.fillStyle=tier.inner;
-  ctx.fillText(tlabel,artX+8+tlw/2,artY+8+11.5);
+  ctx.fillText(tlabel,artX+7+tlw/2,artY+7+10.5);
   ctx.textAlign="left";
 
-  var typeY=artY+artH+12,typeH=25;
-  var typeGrad=ctx.createLinearGradient(22,0,W-22,0);
-  typeGrad.addColorStop(0,tier.accent); typeGrad.addColorStop(1,"#0a1a22");
-  certRoundRect(ctx,22,typeY,W-44,typeH,typeH/2); ctx.fillStyle=typeGrad; ctx.fill();
+  var typeY=artY+artH+10,typeH=24;
+  ctx.fillStyle="#0a1218"; certRoundRect(ctx,22,typeY,W-44,typeH,5); ctx.fill();
   ctx.lineWidth=1; ctx.strokeStyle=tier.inner; ctx.stroke();
-  ctx.beginPath(); ctx.arc(22+14,typeY+typeH/2,10,0,Math.PI*2); ctx.fillStyle="#fff"; ctx.fill();
   ctx.textAlign="center"; ctx.textBaseline="middle";
-  ctx.font="11px Segoe UI Emoji,Segoe UI,sans-serif"; ctx.fillStyle="#000";
-  ctx.fillText(teamIcon(S.team),22+14,typeY+typeH/2+1);
+  ctx.font="600 9.5px Segoe UI,sans-serif"; ctx.fillStyle="#eaf2f6";
+  ctx.fillText(certEllipsis(ctx,certCardTypeLine(tr),W-52),W/2,typeY+typeH/2);
   ctx.textBaseline="alphabetic"; ctx.textAlign="left";
-  ctx.font="700 10.5px Segoe UI,sans-serif"; ctx.fillStyle="#eaf2f6";
-  var typeLine=[tr.team,tr.role].filter(Boolean).join(" · ")||t("profile.certCardType");
-  ctx.fillText(certEllipsis(ctx,typeLine,W-44-46),22+32,typeY+typeH/2+4);
 
-  var sy=typeY+typeH+14, gap=6;
-  var rowW=W-44, chipW=(rowW-2*gap)/3, rowH=32;
-  certDrawChip(ctx,22,sy,chipW,rowH,"✨","XP "+S.xp,pt?"Experiência":"Experience",tier.chipAccent);
-  certDrawChip(ctx,22+chipW+gap,sy,chipW,rowH,"🛡",avgRes+"%",pt?"Resiliência":"Resilience",tier.chipAccent);
-  certDrawChip(ctx,22+(chipW+gap)*2,sy,chipW,rowH,"🔥",String(S.streak.count||0),pt?"Sequência":"Streak",tier.chipAccent);
+  var creamY=typeY+typeH+10,creamH=188,creamW=W-44;
+  var creamGrad=ctx.createLinearGradient(22,creamY,22,creamY+creamH);
+  creamGrad.addColorStop(0,"#faf6ee"); creamGrad.addColorStop(1,"#efe6d4");
+  certRoundRect(ctx,22,creamY,creamW,creamH,8); ctx.fillStyle=creamGrad; ctx.fill();
+  ctx.lineWidth=1; ctx.strokeStyle="rgba(180,160,120,0.45)"; ctx.stroke();
 
-  var gy=sy+rowH+8, cellW=(rowW-gap)/2, cellH=38;
-  certDrawChip(ctx,22,gy,cellW,cellH,"🐉",bossCompletedCount()+"/"+BOSSES.length,pt?"Crises":"Crises",tier.chipAccent);
-  certDrawChip(ctx,22+cellW+gap,gy,cellW,cellH,"⛓️",chainStagesDone()+"/"+chainTotalStages(),pt?"Cadeia":"Chain",tier.chipAccent);
-  certDrawChip(ctx,22,gy+cellH+gap,cellW,cellH,"🌍",Object.keys(S.done).length+"/"+COUNTRIES.length,pt?"Países":"Countries",tier.chipAccent);
-  certDrawChip(ctx,22+cellW+gap,gy+cellH+gap,cellW,cellH,"🏅",achEarned+"/"+MEDALS.length,pt?"Conquistas":"Achievements",tier.chipAccent);
+  var statLines=[
+    {ico:"⚔",txt:"× "+lvLbl+" "+levelOf()+" · "+t("profile.certCardXp")+" "+S.xp},
+    {ico:"🐉",txt:t("profile.certCardCrises")+" "+bossCompletedCount()+"/"+BOSSES.length+" · "+t("profile.certCardChain")+" "+chainStagesDone()+"/"+chainTotalStages()},
+    {ico:"🌍",txt:t("profile.certCardCountries")+" "+Object.keys(S.done).length+"/"+COUNTRIES.length+" · 🏅 "+t("profile.certCardAch")+" "+achEarned+"/"+MEDALS.length},
+    {ico:"🛡",txt:t("profile.certCardRes")+" "+avgRes+"% · "+resRank.ico+" "+resRank[pt?"pt":"en"]}
+  ];
+  var sy=creamY+16;
+  statLines.forEach(function(line){
+    certDrawCreamStatLine(ctx,22,sy,creamW,line,tier.chipAccent);
+    sy+=22;
+  });
 
-  var ry=gy+cellH*2+gap+20;
-  ctx.textAlign="center"; ctx.font="700 11px Segoe UI,sans-serif"; ctx.fillStyle=tier.glow;
-  ctx.fillText(resRank.ico+" "+resRank[pt?"pt":"en"],W/2,ry);
-  certDrawDivider(ctx,W/2,ry-14,70,tier.accent);
+  certDrawDivider(ctx,W/2,sy+6,62,tier.accent);
+  sy+=20;
+  ctx.textAlign="center"; ctx.font="700 10.5px Segoe UI,sans-serif"; ctx.fillStyle="#005f5c";
+  ctx.fillText(title.ico+" "+title[pt?"pt":"en"],W/2,sy);
+  sy+=18;
+  ctx.font="italic 9px Segoe UI,Georgia,serif"; ctx.fillStyle="#4a5a60"; ctx.textAlign="left";
+  ctx.fillText(certEllipsis(ctx,t("profile.certCardFlavor"),creamW-20),32,sy);
 
-  var fy=ry+24;
-  ctx.font="italic 9px Segoe UI,Georgia,serif"; ctx.fillStyle="#9fb8bc"; ctx.textAlign="left";
-  ctx.fillText("“",26,fy+2);
-  ctx.fillText(certEllipsis(ctx,t("profile.certCardFlavor"),W-64),36,fy);
-
-  ctx.textAlign="center"; ctx.font="700 9px Segoe UI,sans-serif"; ctx.fillStyle=tier.inner;
-  ctx.fillText("◆ ORBITA ◆",W/2,H-52);
-  ctx.font="500 8px Segoe UI,sans-serif"; ctx.fillStyle="#8a9aa0";
-  ctx.fillText(dateStr+"  ·  "+title.ico+" "+title[pt?"pt":"en"],W/2,H-38);
-  ctx.fillText(pt?"Ferramenta educativa interna":"Internal educational tool",W/2,H-24);
+  var footY=H-58;
+  ctx.fillStyle="rgba(0,0,0,0.35)"; certRoundRect(ctx,22,footY,W-44,36,6); ctx.fill();
+  ctx.textAlign="center"; ctx.font="700 10px Segoe UI,sans-serif"; ctx.fillStyle=tier.inner;
+  ctx.fillText("◆ ORBITA ◆",W/2,footY+12);
+  ctx.font="500 8px Segoe UI,sans-serif"; ctx.fillStyle="#9fb0b8";
+  ctx.fillText(dateStr+"  ·  "+title.ico+" "+title[pt?"pt":"en"],W/2,footY+24);
+  ctx.fillText(t("profile.certCardFooter"),W/2,footY+34);
 }
 function renderCertificateFull(){
   var cv=$("certCanvas"); if(!cv||!cv.getContext) return;

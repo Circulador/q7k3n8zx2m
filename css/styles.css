@@ -240,112 +240,119 @@ body.onboard-open{overflow:hidden}
 #certCanvas{display:block;width:100%;max-width:800px;height:auto;margin:0 auto;border-radius:6px;background:#fff}
 .cert-actions{margin-top:8px}
 
-/* Álbum de figurinhas — conquistas */
-.album-progress-wrap{margin:10px 0 14px}
-.album-progress-track{height:8px;border-radius:999px;background:rgba(0,0,0,.35);overflow:hidden;border:1px solid rgba(0,126,122,.35)}
+/* Álbum de figurinhas — estilo página de álbum (ref. UX) */
+.album-progress-wrap{margin:10px 0 12px}
+.album-progress-track{height:6px;border-radius:999px;background:rgba(0,0,0,.35);overflow:hidden;border:1px solid rgba(236,177,31,.35)}
 .album-progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:999px;transition:width .35s ease}
-.album-progress-label{text-align:center;font-size:.84rem;color:var(--steel);margin-top:6px}
-.album-progress-label strong{color:#eaf2f6}
+.album-progress-label{text-align:center;font-size:.8rem;font-weight:700;letter-spacing:.06em;color:var(--gold);margin-top:8px;text-transform:uppercase}
+.album-progress-label strong{color:#fff;font-weight:800}
 .album-spread{
-  border:3px solid #ECB11F;border-radius:14px;padding:10px 10px 12px;
-  background:
-    radial-gradient(ellipse 120% 80% at 50% 0%,rgba(0,126,122,.22),transparent 55%),
-    linear-gradient(165deg,#0d2a24 0%,#0a1a22 45%,#07151c 100%);
-  box-shadow:inset 0 0 0 2px rgba(0,126,122,.45),0 6px 20px rgba(0,0,0,.25);
+  border:2px solid #ECB11F;border-radius:12px;padding:12px 10px 14px;
+  background:linear-gradient(180deg,#0b2a26 0%,#071a20 55%,#051218 100%);
+  box-shadow:inset 0 0 0 1px rgba(0,126,122,.35),0 8px 24px rgba(0,0,0,.3);
   position:relative;overflow:hidden;
 }
-.album-spread::before{
-  content:"";position:absolute;inset:0;opacity:.08;pointer-events:none;
-  background-image:repeating-linear-gradient(45deg,transparent,transparent 18px,rgba(236,177,31,.4) 18px,rgba(236,177,31,.4) 19px);
+.album-spread::after{
+  content:"";position:absolute;left:12px;right:12px;top:52px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(236,177,31,.55),transparent);pointer-events:none;
 }
-.album-spread-banner{text-align:center;margin-bottom:10px;position:relative;z-index:1}
-.album-spread-brand{display:block;font-size:.68rem;font-weight:800;letter-spacing:.22em;color:var(--gold)}
-.album-spread-title{display:block;font-size:1rem;font-weight:800;letter-spacing:.06em;color:#eaf2f6;margin-top:2px}
-.album-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 8px;position:relative;z-index:1}
+.album-spread-banner{text-align:center;margin-bottom:14px;position:relative;z-index:1}
+.album-spread-brand{display:block;font-size:.62rem;font-weight:800;letter-spacing:.24em;color:rgba(236,177,31,.75);margin-bottom:4px}
+.album-spread-title{display:block;font-size:.92rem;font-weight:800;letter-spacing:.08em;color:var(--gold);line-height:1.25}
+.album-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;position:relative;z-index:1;margin-top:4px}
 .album-slot{
   appearance:none;-webkit-appearance:none;border:0;padding:0;margin:0;background:transparent;
   cursor:pointer;text-align:center;touch-action:manipulation;min-height:0;position:relative;
 }
-.album-slot-tag{
-  position:absolute;top:-6px;left:50%;transform:translateX(-50%);z-index:2;
-  display:inline-flex;align-items:center;justify-content:center;
-  font-size:.56rem;font-weight:800;letter-spacing:.03em;color:#1a2a30;
-  background:linear-gradient(180deg,#ffe9a8,var(--gold));
-  border-radius:5px;padding:1px 5px;box-shadow:0 2px 4px rgba(0,0,0,.4);
-  min-width:16px;
-}
-.album-slot.is-missing .album-slot-tag{
-  background:linear-gradient(180deg,#3a4a50,#25323a);color:rgba(200,221,228,.75);
-}
 .album-sticker{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-  min-height:92px;padding:12px 5px 7px;border-radius:9px;position:relative;overflow:hidden;
-  background:linear-gradient(150deg,#ffffff 0%,#f2f8f7 55%,#e6f2f0 100%);
-  border:2px solid #007E7A;
-  box-shadow:0 3px 8px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.6);
-  transform:rotate(-1.6deg);transition:transform .18s ease,box-shadow .18s ease;
+  display:flex;flex-direction:column;border-radius:8px;overflow:hidden;position:relative;
+  border:2px solid rgba(236,177,31,.75);
+  background:linear-gradient(180deg,#0f3530 0%,#0a2428 100%);
+  box-shadow:0 3px 10px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06);
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
 }
-.album-slot.is-earned:nth-child(3n+2) .album-sticker{transform:rotate(1.4deg)}
-.album-slot.is-earned:nth-child(3n) .album-sticker{transform:rotate(-0.6deg)}
 .album-slot.is-earned:hover .album-sticker,.album-slot.is-earned:focus-visible .album-sticker{
-  transform:rotate(0) scale(1.05) translateY(-2px);box-shadow:0 8px 16px rgba(0,126,122,.4),inset 0 1px 0 rgba(255,255,255,.6);
+  transform:translateY(-2px) scale(1.02);border-color:var(--gold);
+  box-shadow:0 8px 18px rgba(0,126,122,.35),inset 0 1px 0 rgba(255,255,255,.08);
 }
 .album-sticker-shine{
-  position:absolute;top:-60%;left:-60%;width:60%;height:220%;
-  background:linear-gradient(115deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.75) 48%,rgba(255,255,255,0) 100%);
-  transform:rotate(20deg);pointer-events:none;
+  position:absolute;top:-40%;left:-40%;width:50%;height:180%;z-index:2;pointer-events:none;
+  background:linear-gradient(115deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.55) 48%,rgba(255,255,255,0) 100%);
+  transform:rotate(18deg);
 }
 .album-sticker-corner{
-  position:absolute;top:0;right:0;width:0;height:0;pointer-events:none;
-  border-style:solid;border-width:0 12px 12px 0;
-  border-color:transparent rgba(0,0,0,.14) transparent transparent;
+  position:absolute;top:0;right:0;z-index:3;width:0;height:0;pointer-events:none;
+  border-style:solid;border-width:0 14px 14px 0;border-color:transparent rgba(0,0,0,.22) transparent transparent;
 }
-.album-sticker-ico{font-size:1.65rem;line-height:1;position:relative;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
-.album-sticker-name{font-size:.58rem;font-weight:800;line-height:1.15;color:#123338;padding:0 3px;position:relative}
-.album-slot.rarity-rare .album-sticker{
-  border-color:#0aa89f;
-  background:linear-gradient(150deg,#eafffb 0%,#d6f5ef 55%,#c3ecE2 100%);
-  box-shadow:0 3px 10px rgba(10,168,159,.45),inset 0 1px 0 rgba(255,255,255,.7);
+.album-sticker-art{
+  display:flex;align-items:center;justify-content:center;min-height:72px;padding:10px 6px 6px;position:relative;
+  background:radial-gradient(ellipse 80% 70% at 50% 65%,rgba(0,126,122,.35),transparent 70%);
 }
-.album-slot.rarity-rare .album-sticker-name{color:#00483f}
+.album-sticker-art::before{
+  content:"";position:absolute;inset:8px 10px 4px;border-radius:6px;
+  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(0,0,0,.12));pointer-events:none;
+}
+.album-sticker-ico{font-size:2rem;line-height:1;position:relative;z-index:1;filter:drop-shadow(0 3px 6px rgba(0,0,0,.45))}
+.album-sticker-footer{
+  display:flex;align-items:center;gap:4px;justify-content:center;
+  padding:5px 4px 6px;border-top:1px solid rgba(236,177,31,.25);
+  background:rgba(0,0,0,.28);min-height:28px;
+}
+.album-sticker-num{font-size:.58rem;font-weight:800;color:var(--gold);flex:none}
+.album-sticker-sep{font-size:.58rem;font-weight:700;color:rgba(236,177,31,.55);flex:none}
+.album-sticker-name{font-size:.54rem;font-weight:700;line-height:1.1;color:#dce8ec;text-align:left}
+.album-slot.rarity-rare .album-sticker{border-color:#5ec4be}
+.album-slot.rarity-rare .album-sticker-art{background:radial-gradient(ellipse 80% 70% at 50% 65%,rgba(94,196,190,.4),transparent 70%)}
 .album-slot.rarity-legendary .album-sticker{
   border-color:var(--gold);
-  background:linear-gradient(150deg,#fff8e0 0%,#ffe9a8 45%,#ffd75e 75%,#ffe9a8 100%);
-  box-shadow:0 4px 12px rgba(237,177,17,.55),inset 0 1px 0 rgba(255,255,255,.8);
+  background:linear-gradient(180deg,#2a2410 0%,#1a1608 100%);
+  box-shadow:0 4px 14px rgba(237,177,17,.35),inset 0 1px 0 rgba(255,255,255,.1);
 }
-.album-slot.rarity-legendary .album-sticker-name{color:#5a3d00}
-.album-slot.rarity-legendary .album-sticker-ico{font-size:1.8rem}
+.album-slot.rarity-legendary .album-sticker-art{background:radial-gradient(ellipse 80% 70% at 50% 65%,rgba(237,177,17,.35),transparent 70%)}
+.album-slot.rarity-legendary .album-sticker-ico{font-size:2.15rem}
 .album-slot.rarity-legendary .album-sticker-shine{
-  background:linear-gradient(115deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.9) 45%,rgba(255,240,180,.4) 60%,rgba(255,255,255,0) 100%);
+  background:linear-gradient(115deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.85) 42%,rgba(255,230,150,.35) 58%,rgba(255,255,255,0) 100%);
   animation:albumFoilSheen 3.2s ease-in-out infinite;
 }
+.album-slot.rarity-legendary .album-sticker-name{color:#ffe9a8}
 @keyframes albumFoilSheen{
-  0%,100%{transform:rotate(20deg) translateX(-6%)}
-  50%{transform:rotate(20deg) translateX(6%)}
+  0%,100%{transform:rotate(18deg) translateX(-8%)}
+  50%{transform:rotate(18deg) translateX(8%)}
 }
 .album-placeholder{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-  min-height:92px;padding:10px 4px 6px;border-radius:9px;position:relative;overflow:hidden;
-  background:linear-gradient(160deg,rgba(0,0,0,.28),rgba(0,0,0,.16));
-  border:2px dashed rgba(143,180,192,.4);
-  box-shadow:inset 0 1px 3px rgba(0,0,0,.35);
+  display:flex;flex-direction:column;border-radius:8px;overflow:hidden;position:relative;
+  border:2px dashed rgba(143,180,192,.38);
+  background:linear-gradient(180deg,rgba(0,0,0,.32),rgba(0,0,0,.2));
+  box-shadow:inset 0 1px 4px rgba(0,0,0,.35);
+  transition:border-color .18s ease,background .18s ease;
 }
 .album-placeholder-mark{
   position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-size:2.6rem;font-weight:900;color:rgba(255,255,255,.05);line-height:1;pointer-events:none;
+  font-size:2.8rem;font-weight:900;color:rgba(255,255,255,.04);line-height:1;pointer-events:none;z-index:0;
 }
-.album-placeholder-lock{font-size:.72rem;opacity:.55;position:relative;line-height:1}
-.album-placeholder-ico{font-size:1.15rem;opacity:.22;filter:grayscale(1);line-height:1;position:relative}
-.album-placeholder-name{font-size:.56rem;font-weight:700;line-height:1.15;color:rgba(200,221,228,.5);padding:0 3px;position:relative}
+.album-placeholder-art{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  min-height:72px;padding:8px 6px;position:relative;z-index:1;
+}
+.album-placeholder-lock{font-size:.7rem;opacity:.5;line-height:1}
+.album-placeholder-ico{font-size:1.35rem;opacity:.18;filter:grayscale(1);line-height:1}
+.album-placeholder-footer{
+  display:flex;align-items:center;gap:4px;justify-content:center;
+  padding:5px 4px 6px;border-top:1px dashed rgba(143,180,192,.25);
+  background:rgba(0,0,0,.22);min-height:28px;position:relative;z-index:1;
+}
+.album-placeholder-num{font-size:.58rem;font-weight:800;color:rgba(200,221,228,.45);flex:none}
+.album-placeholder-sep{font-size:.58rem;font-weight:700;color:rgba(200,221,228,.28);flex:none}
+.album-placeholder-name{font-size:.54rem;font-weight:700;line-height:1.1;color:rgba(200,221,228,.42);text-align:left}
 .album-slot.is-missing:hover .album-placeholder,.album-slot.is-missing:focus-visible .album-placeholder{
-  border-color:rgba(236,177,31,.6);background:linear-gradient(160deg,rgba(0,126,122,.22),rgba(0,126,122,.1));
+  border-color:rgba(236,177,31,.55);background:linear-gradient(180deg,rgba(0,126,122,.18),rgba(0,0,0,.22));
 }
 @media(max-width:420px){
-  .album-grid{gap:8px 6px}
-  .album-sticker,.album-placeholder{min-height:80px}
-  .album-sticker-ico{font-size:1.4rem}
-  .album-slot.rarity-legendary .album-sticker-ico{font-size:1.55rem}
-  .album-sticker-name,.album-placeholder-name{font-size:.52rem}
+  .album-grid{gap:6px}
+  .album-sticker-art,.album-placeholder-art{min-height:64px}
+  .album-sticker-ico{font-size:1.7rem}
+  .album-slot.rarity-legendary .album-sticker-ico{font-size:1.85rem}
+  .album-sticker-name,.album-placeholder-name{font-size:.5rem}
 }
 @media(max-width:340px){
   .album-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
