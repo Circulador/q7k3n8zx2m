@@ -220,13 +220,6 @@ function buildProfileRegistry(cfg) {
       var tm = teamById[id];
       return !!(tm && tm.skipScenarioAdapt);
     },
-    teamSubtitle: function(lang) {
-      var prefix = lang === "pt" ? "Onde você trabalha — " : "Where you work — ";
-      return prefix + teams.map(function(x) { return lang === "pt" ? x.pt : x.en; }).join(", ") + "…";
-    },
-    roleSubtitle: function(lang) {
-      return roles.map(function(x) { return lang === "pt" ? x.pt : x.en; }).join(", ") + ".";
-    },
     ensureState: function(state) {
       if (!state) return;
       if (!this.validateTeam(state.team)) state.team = this.defaultTeam;

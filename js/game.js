@@ -189,11 +189,11 @@ var UI = {
   "onboard.a11yT":{pt:"Acessibilidade",en:"Accessibility"},
   "onboard.a11yB":{pt:"Ative narração, contraste, Libras ou redução de animações agora — ou ajuste depois no menu ♿.",en:"Enable narration, contrast, sign language or reduced motion now — or adjust later in the ♿ menu."},
   "onboard.profileT":{pt:"Personalize seu perfil",en:"Personalize your profile"},
-  "onboard.profileB":{pt:"Na próxima tela: nome (opcional), equipe e dia a dia. O jogo prioriza temas e situações da sua operação — cerca de 20 segundos.",en:"On the next screen: name (optional), team and day-to-day role. The game prioritizes themes and situations from your operation — about 20 seconds."},
+  "onboard.profileB":{pt:"Na próxima tela: nome (opcional), onde você atua e como é seu trabalho. Cerca de 20 segundos.",en:"On the next screen: name (optional), where you work and your routine. About 20 seconds."},
   "onboard.playT":{pt:"Como funciona",en:"How it works"},
   "onboard.playB":{pt:"📅 Atividade de hoje → 🗺️ Jornada no mapa → 🎯 Simulação de crise. Cada acerto fortalece a operação — erros mostram o que revisar.",en:"📅 Today's activity → 🗺️ Map journey → 🎯 Crisis simulation. Each correct answer strengthens operations — mistakes show what to review."},
   "onboard.readyT":{pt:"Pronto para começar",en:"Ready to start"},
-  "onboard.readyB":{pt:"Primeiro personalize seu perfil (nome, equipe e papel), depois faça sua primeira atividade — cerca de 5 minutos.",en:"First personalize your profile (name, team and role), then do your first activity — about 5 minutes."},
+  "onboard.readyB":{pt:"Primeiro personalize seu perfil (nome, área e rotina), depois faça sua primeira atividade — cerca de 5 minutos.",en:"First personalize your profile (name, area and routine), then do your first activity — about 5 minutes."},
   "onboard.startSetup":{pt:"Personalizar agora →",en:"Personalize now →"},
   "mgr.kpiAdoption":{pt:"Adoção",en:"Adoption"},
   "mgr.kpiWeak":{pt:"Tema mais fraco",en:"Weakest theme"},
@@ -395,23 +395,23 @@ var UI = {
   "setup.badge":{pt:"👤 Perfil rápido",en:"👤 Quick profile"},
   "setup.editBadge":{pt:"✏️ Editar perfil",en:"✏️ Edit profile"},
   "setup.head":{pt:"Personalize seu perfil",en:"Personalize your profile"},
-  "setup.intro":{pt:"Nome (opcional), equipe e dia a dia — o jogo prioriza missões e perguntas do seu ambiente de trabalho. Leva cerca de 20 segundos.",en:"Name (optional), team and day-to-day role — the game prioritizes missions and questions from your work environment. Takes about 20 seconds."},
-  "setup.why":{pt:"💡 A equipe define o cenário (mina, porto, corporativo…); o dia a dia define os riscos do seu papel.",en:"💡 Your team sets the setting (mine, port, corporate…); your role sets the risks you face."},
+  "setup.intro":{pt:"Nome (opcional). Em seguida, escolha onde você atua e como é seu trabalho. Leva cerca de 20 segundos.",en:"Name (optional). Then choose where you work and what best describes your routine. Takes about 20 seconds."},
+  "setup.why":{pt:"💡 O jogo combina onde você atua com a forma como você trabalha para criar missões mais relevantes para a sua realidade.",en:"💡 The game combines where you work with how you work to create missions that are more relevant to your reality."},
   "setup.editHead":{pt:"Editar perfil",en:"Edit profile"},
-  "setup.editIntro":{pt:"Ajuste nome, equipe ou dia a dia — as próximas missões já refletem sua escolha.",en:"Adjust name, team or role — upcoming missions reflect your choices right away."},
+  "setup.editIntro":{pt:"Ajuste nome, área ou rotina — as próximas missões já refletem sua escolha.",en:"Adjust name, area or routine — upcoming missions reflect your choices right away."},
   "setup.nameOptional":{pt:"Adicionar nome (opcional)",en:"Add name (optional)"},
   "setup.goFirst":{pt:"▶️ Começar primeira atividade",en:"▶️ Start first activity"},
   "setup.save":{pt:"💾 Salvar e voltar",en:"💾 Save and go back"},
   "setup.saved":{pt:"Perfil atualizado.",en:"Profile updated."},
-  "setup.teamTitle":{pt:"Sua equipe",en:"Your team"},
-  "setup.teamSub":{pt:"Onde você trabalha — mina, ferrovia, porto, corporativo, TI, logística, energia…",en:"Where you work — mine, railway, port, corporate, IT, logistics, energy…"},
-  "setup.roleTitle":{pt:"Seu dia a dia",en:"Your day-to-day"},
-  "setup.roleSub":{pt:"Administrativo, campo, OT, liderança, técnico, analista, terceiros ou em formação.",en:"Office, field, OT, leadership, technician, analyst, contractor or in training."},
+  "setup.teamTitle":{pt:"Onde você atua?",en:"Where do you work?"},
+  "setup.teamSub":{pt:"Escolha sua área ou ambiente de trabalho.",en:"Choose your area or work environment."},
+  "setup.roleTitle":{pt:"Como é o seu trabalho?",en:"What best describes your work?"},
+  "setup.roleSub":{pt:"Escolha a atividade que mais representa sua rotina.",en:"Choose the activity that best represents your routine."},
   "setup.go":{pt:"▶️ Começar primeira atividade",en:"▶️ Start first activity"},
-  "setup.banner":{pt:"👤 Defina equipe e dia a dia para missões no contexto da sua operação.",en:"👤 Set team and role for missions in your operation's context."},
+  "setup.banner":{pt:"👤 Defina onde você atua e como trabalha para missões mais relevantes.",en:"👤 Set where you work and how you work for more relevant missions."},
   "setup.bannerGo":{pt:"Personalizar agora",en:"Personalize now"},
-  "setup.teamRequired":{pt:"Escolha uma equipe para continuar.",en:"Choose a team to continue."},
-  "setup.roleRequired":{pt:"Escolha um papel para continuar.",en:"Choose a role to continue."},
+  "setup.teamRequired":{pt:"Escolha onde você atua para continuar.",en:"Choose where you work to continue."},
+  "setup.roleRequired":{pt:"Escolha como é o seu trabalho para continuar.",en:"Choose what best describes your work to continue."},
   "setup.managerTitle":{pt:"🧭 Modo gestor",en:"🧭 Manager mode"},
   "setup.managerSub":{pt:"Ative se você acompanha métricas da equipe. O painel aparece no menu Mais.",en:"Enable if you track team metrics. The panel appears in the More menu."},
   "setup.managerLabel":{pt:"Exibir painel do gestor",en:"Show manager panel"},
@@ -873,7 +873,6 @@ function applyI18n(){
   updateLangSwitch();
   applyHudTips();
   renderA11yMenu(); renderA11yCatalog(); updateHeroCaption(); renderSettingsUi();
-  renderProfileSetupSubs();
 }
 function renderSettingsUi(){
   var sel=$("themeSelect");
@@ -1123,7 +1122,7 @@ var MEDALS = [
 ];
 
 var MEDAL_HINTS={
-  profile:{pt:"Personalize perfil: nome, equipe e papel.",en:"Set up profile: name, team and role."},
+  profile:{pt:"Personalize perfil: nome, área e rotina.",en:"Set up profile: name, area and routine."},
   first:{pt:"Conclua sua primeira jornada no mapa.",en:"Complete your first map journey."},
   explorer:{pt:"Conclua campanhas em 5 países.",en:"Complete campaigns in 5 countries."},
   worldwide:{pt:"Conclua todos os países do mapa.",en:"Complete every country on the map."},
@@ -5033,14 +5032,8 @@ function exportThemes(){ var rows=[[L()==="pt"?"Tema":"Theme",L()==="pt"?"Acerto
 /* ==========================================================
    SETUP
    ========================================================== */
-function renderProfileSetupSubs(){
-  if(typeof PROFILE==="undefined") return;
-  var ts=$("setupTeamSub"), rs=$("setupRoleSub");
-  if(ts) ts.textContent=PROFILE.teamSubtitle(L());
-  if(rs) rs.textContent=PROFILE.roleSubtitle(L());
-}
-function renderTeams(){ var g=$("teamsGrid"); if(!g) return; g.innerHTML=""; TEAMS.forEach(function(tm){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.team===tm.id?"true":"false"); b.innerHTML='<div class="pi">'+tm.ico+'</div><div class="pn">'+tt(tm)+'</div>'; b.addEventListener("click",function(){ S.team=tm.id; save(); renderTeams(); }); g.appendChild(b); }); renderProfileSetupSubs(); }
-function renderRoles(){ var g=$("rolesGrid"); if(!g) return; g.innerHTML=""; ROLES.forEach(function(r){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.role===r.id?"true":"false"); b.innerHTML='<div class="pi">'+r.ico+'</div><div class="pn">'+r[L()]+'</div><div class="pd">'+r[L()+"d"]+'</div>'; b.addEventListener("click",function(){ S.role=r.id; save(); renderRoles(); }); g.appendChild(b); }); renderProfileSetupSubs(); }
+function renderTeams(){ var g=$("teamsGrid"); if(!g) return; g.innerHTML=""; TEAMS.forEach(function(tm){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.team===tm.id?"true":"false"); b.innerHTML='<div class="pi">'+tm.ico+'</div><div class="pn">'+tt(tm)+'</div>'; b.addEventListener("click",function(){ S.team=tm.id; save(); renderTeams(); }); g.appendChild(b); }); }
+function renderRoles(){ var g=$("rolesGrid"); if(!g) return; g.innerHTML=""; ROLES.forEach(function(r){ var b=document.createElement("button"); b.className="pick"; b.setAttribute("aria-pressed",S.role===r.id?"true":"false"); b.innerHTML='<div class="pi">'+r.ico+'</div><div class="pn">'+r[L()]+'</div><div class="pd">'+r[L()+"d"]+'</div>'; b.addEventListener("click",function(){ S.role=r.id; save(); renderRoles(); }); g.appendChild(b); }); }
 var setupEditMode=false;
 function applySetupDefaults(){
   if(!S.team) S.team=PROFILE.defaultTeam;
