@@ -1,7 +1,7 @@
 /* Service Worker — Guardião Cibernético (Orbita)
    Estratégia: cache-first com fallback de rede; navegações caem para index.html offline.
    Ao publicar nova versão, altere CACHE_VERSION (idealmente = APP_VERSION do index.html). */
-var CACHE_VERSION = "v114";
+var CACHE_VERSION = "v115";
 var CACHE_NAME = "gdv-cache-" + CACHE_VERSION;
 
 /* App shell — caminhos relativos para funcionar em subpasta do GitHub Pages */
@@ -9,22 +9,22 @@ var PRECACHE = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
-  "./icons/icon-192.png?v=114",
-  "./icons/icon-512.png?v=114",
-  "./css/styles.css?v=114",
-  "./js/sign-lang.js?v=114",
-  "./js/orbita-world-map.js?v=114",
-  "./js/questions-data.js?v=114",
-  "./js/country-questions-data.js?v=114",
-  "./js/bosses-data.js?v=114",
-  "./js/boss-personal-tips.js?v=114",
-  "./js/chain-data.js?v=114",
-  "./js/boss-maps.js?v=114",
-  "./js/glossary-data.js?v=114",
-  "./js/game.js?v=114",
-  "./js/demo-menu.js?v=114",
-  "./js/review-bank.js?v=114",
-  "./js/access-gate.js?v=114",
+  "./icons/icon-192.png?v=115",
+  "./icons/icon-512.png?v=115",
+  "./css/styles.css?v=115",
+  "./js/sign-lang.js?v=115",
+  "./js/orbita-world-map.js?v=115",
+  "./js/questions-data.js?v=115",
+  "./js/country-questions-data.js?v=115",
+  "./js/bosses-data.js?v=115",
+  "./js/boss-personal-tips.js?v=115",
+  "./js/chain-data.js?v=115",
+  "./js/boss-maps.js?v=115",
+  "./js/glossary-data.js?v=115",
+  "./js/game.js?v=115",
+  "./js/demo-menu.js?v=115",
+  "./js/review-bank.js?v=115",
+  "./js/access-gate.js?v=115",
   "./assets/d3.min.js",
   "./assets/topojson-client.min.js",
   "./assets/countries-110m.json",

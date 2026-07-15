@@ -9,17 +9,17 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=114">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=115">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=114">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=114">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=115">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=115">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=114"></script>
-<link rel="stylesheet" href="css/styles.css?v=114">
+<script src="js/access-gate.js?v=115"></script>
+<link rel="stylesheet" href="css/styles.css?v=115">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -94,7 +94,7 @@
         <div class="onboard-mission" id="onboardMission"></div>
       </div>
     </div>
-    <div class="onboard-dots" id="onboardDots" aria-hidden="true"></div>
+    <div class="onboard-dots" id="onboardDots" role="tablist" aria-label="Passos do guia"></div>
     <div class="onboard-actions">
       <button type="button" class="btn btn-primary btn-lg" id="onboardNextBtn" data-i18n="onboard.next">Próximo →</button>
     </div>
@@ -152,7 +152,7 @@
     <div class="am-section glossary-term-section">
       <div class="glossary-card" id="glossaryCard"></div>
     </div>
-    <details class="glossary-browse am-section" open>
+    <details class="glossary-browse am-section">
       <summary class="glossary-browse-sum" data-i18n="settings.glossaryBrowse">Ver lista completa</summary>
       <label class="sr-only" for="glossaryPick" data-i18n="settings.glossaryPick">Escolha um termo</label>
       <select class="dp-select" id="glossaryPick"></select>
@@ -214,7 +214,15 @@
         <span class="chip hud-tip hud-arcade" id="hudScoreChip" hidden>🎯 <span id="hudScore">0</span></span>
       </div>
       <div class="hud-actions">
-        <button type="button" class="toolbar-btn hud-tip" id="onboardOpenBtn" data-i18n-attr="aria-label:onboard.reopenTip;title:onboard.reopenTip" aria-label="Guia do jogo"><span aria-hidden="true">🧭</span></button>
+        <div class="toolbar-overflow-wrap">
+          <button type="button" class="toolbar-btn hud-tip toolbar-more-btn" id="toolbarMoreBtn" data-i18n-attr="aria-label:toolbar.more;title:toolbar.more" aria-haspopup="true" aria-expanded="false" aria-controls="toolbarMoreMenu"><span aria-hidden="true">⋯</span></button>
+          <div class="toolbar-more-menu" id="toolbarMoreMenu" role="menu" hidden>
+            <button type="button" class="toolbar-more-item" role="menuitem" data-toolbar-action="onboard"><span aria-hidden="true">🧭</span> <span data-i18n="onboard.reopen">Guia</span></button>
+            <button type="button" class="toolbar-more-item demo-toolbar-btn" role="menuitem" data-toolbar-action="demo" id="toolbarMoreDemo"><span aria-hidden="true">🧪</span> Demo</button>
+            <button type="button" class="toolbar-more-item" role="menuitem" data-toolbar-action="settings"><span aria-hidden="true">⚙️</span> <span data-i18n="settings.title">Configurações</span></button>
+          </div>
+        </div>
+        <button type="button" class="toolbar-btn hud-tip toolbar-overflow-item" id="onboardOpenBtn" data-i18n-attr="aria-label:onboard.reopenTip;title:onboard.reopenTip" aria-label="Guia do jogo"><span aria-hidden="true">🧭</span></button>
         <div class="glossary-menu-wrap">
           <button type="button" class="toolbar-btn hud-tip" id="glossaryBtn" data-i18n-attr="aria-label:hud.tip.glossary;title:hud.tip.glossary" aria-label="Glossário" aria-haspopup="dialog" aria-expanded="false" aria-controls="glossaryMenu"><span aria-hidden="true">📖</span></button>
         </div>
@@ -307,8 +315,8 @@
           </div>
         </div>
         <div class="settings-menu-wrap">
-          <button type="button" class="toolbar-btn hud-tip demo-toolbar-btn" id="demoMenuBtn" title="Menu demo — testar jornada 0→100%" aria-label="Menu demo" aria-haspopup="dialog" aria-expanded="false"><span aria-hidden="true">🧪</span></button>
-          <button type="button" class="toolbar-btn hud-tip" id="settingsBtn" data-i18n-attr="aria-label:hud.tip.settings;title:hud.tip.settings" aria-label="Configurações" aria-haspopup="true" aria-expanded="false"><span aria-hidden="true">⚙️</span></button>
+          <button type="button" class="toolbar-btn hud-tip demo-toolbar-btn toolbar-overflow-item" id="demoMenuBtn" title="Menu demo — testar jornada 0→100%" aria-label="Menu demo" aria-haspopup="dialog" aria-expanded="false"><span aria-hidden="true">🧪</span></button>
+          <button type="button" class="toolbar-btn hud-tip toolbar-overflow-item" id="settingsBtn" data-i18n-attr="aria-label:hud.tip.settings;title:hud.tip.settings" aria-label="Configurações" aria-haspopup="true" aria-expanded="false"><span aria-hidden="true">⚙️</span></button>
           <div class="settings-menu" id="settingsMenu" role="dialog" aria-labelledby="settingsMenuTitle" hidden>
             <div class="dp-header">
               <h2 class="dp-title" id="settingsMenuTitle" data-i18n="settings.title">Configurações</h2>
@@ -445,6 +453,7 @@
       <p class="hero-journey" data-i18n="home.journey">🌍 Navegue pelo <span class="nav-ref">Mapa</span> global, enfrente <span class="nav-ref">Desafios / Crises</span> inspirados em situações reais, cumpra <span class="nav-ref">Missões</span> diárias e evolua sua jornada em <span class="nav-ref">Eu</span> — contribuindo para um ambiente mais seguro para todos.</p>
       </div>
       <button type="button" class="btn btn-ghost btn-sm hero-expand-btn" id="heroExpandBtn" hidden data-i18n="home.expand">📖 Saber mais sobre o jogo</button>
+      <p class="home-loop-preview" id="homeLoopPreview" hidden aria-live="polite"></p>
       <div class="row-actions hero-actions" id="homeHeroActions">
         <button class="btn btn-primary btn-lg" id="homeStartBtn" data-i18n="home.start">▶️ Começar</button>
         <button type="button" class="btn btn-ghost" id="pwaInstallBtn" hidden data-i18n="home.install">⬇️ Instalar app</button>
@@ -515,7 +524,7 @@
 
   <!-- ============ MAP ============ -->
   <section id="screenMap" class="screen" aria-label="Mapa da operação">
-    <div class="ctx-tip" id="ctxTip_map" hidden><span data-i18n="tip.map">Toque no país destacado para iniciar sua expedição. Use +/− para zoom.</span><button type="button" class="ctx-tip-dismiss" data-tip="map" data-i18n="tip.dismiss">Entendi</button></div>
+    <div class="ctx-tip map-fit-tip" id="ctxTip_map" hidden><span data-i18n="tip.map">Toque no país destacado para iniciar sua expedição. Use +/− para zoom.</span><button type="button" class="ctx-tip-dismiss" data-tip="map" data-i18n="tip.dismiss">Entendi</button></div>
     <div class="card">
       <div class="orbita-world-map" id="orbitaWorldMap">
       <header class="vwm-header">
@@ -553,7 +562,7 @@
             <button type="button" class="map-country-nav-btn map-country-nav-next" id="mapCountryNext" data-i18n-attr="aria-label:map.countryNext" aria-label="Próximo país">›</button>
             <div class="map-country-nav-counter" id="mapCountryNavCounter" aria-hidden="true" hidden></div>
           </div>
-          <div class="map-progress-legend" id="mapProgressLegend" aria-hidden="true">
+          <div class="map-progress-legend" id="mapProgressLegend" role="group" aria-label="Progresso no mapa">
             <span class="mpl-item"><span class="mpl-dot mpl-pending"></span><span data-i18n="map.legPending">Pendente</span></span>
             <span class="mpl-item"><span class="mpl-dot mpl-partial"></span><span data-i18n="map.legPartial">Em progresso</span></span>
             <span class="mpl-item"><span class="mpl-dot mpl-done"></span><span data-i18n="map.legDone">Concluído</span></span>
@@ -573,10 +582,10 @@
         <summary data-i18n="map.moreOptions">Mais informações do mapa</summary>
         <div class="map-more-body">
           <div class="section-sub map-vwm-sub" data-i18n="map.sub">Com sede no Brasil, a Orbita atua em 19 países no mapa oficial. Clique no mapa, na legenda ou na lista para explorar cada presença.</div>
-          <details class="map-about" id="mapAboutWrap">
-            <summary data-i18n="map.aboutTitle">Presença global da Orbita</summary>
+          <div class="map-about" id="mapAboutWrap">
+            <h3 class="map-about-title" data-i18n="map.aboutTitle">Presença global da Orbita</h3>
             <div id="mapAbout" class="map-about-body"></div>
-          </details>
+          </div>
           <div class="map-mission" id="mapMissionWrap">
             <div class="map-mission-head"><span data-i18n="map.missionTitle">Missão da mineração Orbita</span></div>
             <div id="mapMission"></div>
@@ -611,6 +620,7 @@
       </div>
       </div>
       <div class="sr-only" id="mapFilterLive" aria-live="polite" aria-atomic="true"></div>
+      <div class="sr-only" id="mapLegendLive" aria-live="polite" aria-atomic="true"></div>
     </div>
   </section>
 
@@ -626,8 +636,10 @@
       <div class="integrity integrity-res quiz-resilience-hidden"><div class="il"><span data-i18n="quiz.resilience">🛡️ Proteção da operação</span><span id="quizResilienceVal">100%</span></div><div class="bar" role="progressbar"><div class="fill" id="quizResilienceFill" style="width:100%;background:var(--green)"></div></div></div>
       <div class="quiz-head"><span class="theme-tag" id="themeTag">🔐</span><span class="diff-tag" id="diffTag"></span></div>
       <div class="progress-line" id="progressLine"></div>
-      <h2 class="scene-title"><button class="speak-btn" id="speakBtn" title="Ouvir" aria-label="Ouvir cenário">🔊</button> <span id="sceneTitleTxt"></span></h2>
+      <h2 class="scene-title"><button class="speak-btn" id="speakBtn" data-i18n-attr="title:quiz.speak;aria-label:quiz.speak" title="Ouvir cenário" aria-label="Ouvir cenário">🔊</button> <span id="sceneTitleTxt"></span></h2>
+      <button type="button" class="quiz-glossary-return btn btn-ghost btn-sm" id="quizGlossaryReturn" hidden data-i18n="quiz.returnGlossary">← Voltar à pergunta</button>
       <p class="quiz-glossary-hint" id="quizGlossaryHint" hidden></p>
+      <p class="quiz-next-hint" id="quizNextHint" hidden aria-live="polite"></p>
       <p class="scene-text" id="sceneText"></p>
       <p class="personal-bridge" id="personalBridge" hidden></p>
       <div class="options" id="options" role="group" aria-label="Alternativas"></div>
@@ -880,19 +892,19 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="114";</script>
-<script src="js/sign-lang.js?v=114"></script>
-<script src="js/orbita-world-map.js?v=114"></script>
-<script src="js/questions-data.js?v=114"></script>
-<script src="js/country-questions-data.js?v=114"></script>
-<script src="js/bosses-data.js?v=114"></script>
-<script src="js/boss-personal-tips.js?v=114"></script>
-<script src="js/chain-data.js?v=114"></script>
-<script src="js/boss-maps.js?v=114"></script>
-<script src="js/glossary-data.js?v=114"></script>
-<script src="js/game.js?v=114"></script>
-<script src="js/demo-menu.js?v=114"></script>
-<script src="js/review-bank.js?v=114"></script>
+<script>window.APP_VERSION="115";</script>
+<script src="js/sign-lang.js?v=115"></script>
+<script src="js/orbita-world-map.js?v=115"></script>
+<script src="js/questions-data.js?v=115"></script>
+<script src="js/country-questions-data.js?v=115"></script>
+<script src="js/bosses-data.js?v=115"></script>
+<script src="js/boss-personal-tips.js?v=115"></script>
+<script src="js/chain-data.js?v=115"></script>
+<script src="js/boss-maps.js?v=115"></script>
+<script src="js/glossary-data.js?v=115"></script>
+<script src="js/game.js?v=115"></script>
+<script src="js/demo-menu.js?v=115"></script>
+<script src="js/review-bank.js?v=115"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {

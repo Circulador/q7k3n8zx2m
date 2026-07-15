@@ -62,6 +62,16 @@ var UI = {
   "settings.glossaryFun":{pt:"No seu dia a dia",en:"In your daily life"},
   "settings.glossaryEmpty":{pt:"Digite uma sigla ou escolha um termo na lista.",en:"Type an acronym or pick a term from the list."},
   "settings.glossaryFavsEmpty":{pt:"Toque ☆ em um termo para favoritar.",en:"Tap ☆ on a term to favorite it."},
+  "settings.glossarySuggest":{pt:"Termos populares:",en:"Popular terms:"},
+  "quiz.nextHint":{pt:"Responda para continuar →",en:"Answer to continue →"},
+  "quiz.returnGlossary":{pt:"← Voltar à pergunta",en:"← Back to question"},
+  "quiz.speak":{pt:"Ouvir cenário",en:"Listen to scenario"},
+  "daily.doneTitle":{pt:"🎉 Missão diária concluída!",en:"🎉 Daily mission complete!"},
+  "daily.doneSub":{pt:"Volte amanhã para manter sua ofensiva e revisar novos cenários.",en:"Come back tomorrow to keep your streak and review new scenarios."},
+  "home.previewLoop":{pt:"Seu loop de treino: 📅 Missão diária → 🗺️ Mapa global → 🎯 Desafios / Crises",en:"Your training loop: 📅 Daily mission → 🗺️ World map → 🎯 Challenges / Crises"},
+  "weekly.emptyStart":{pt:"Semana nova — jogue a diária ou explore o mapa para começar as metas.",en:"New week — play daily or explore the map to start your goals."},
+  "map.legendSummary":{pt:"{done} concluídos · {partial} em progresso · {pending} pendentes",en:"{done} complete · {partial} in progress · {pending} pending"},
+  "toolbar.more":{pt:"Mais ferramentas",en:"More tools"},
   "glossary.cat.access":{pt:"Acesso",en:"Access"},
   "glossary.cat.threat":{pt:"Ameaças",en:"Threats"},
   "glossary.cat.network":{pt:"Rede",en:"Network"},
@@ -847,6 +857,7 @@ function show(id){
   if(NAVMAP[id]){ var nb=$(NAVMAP[id]); if(nb) nb.classList.add("on"); }
   if(NAV_IMMERSIVE.indexOf(id)>=0) document.body.classList.add("nav-hidden");
   else document.body.classList.remove("nav-hidden");
+  updateHomeCtaLayout();
   announce(el?(el.getAttribute("aria-label")||""):"");
   if(scrollWeekly){
     var card=$("missionsWeeklyCard");
@@ -854,7 +865,100 @@ function show(id){
   }
 }
 function announce(m){ var live=$("a11yLive"); if(!live) return; live.textContent=""; setTimeout(function(){ live.textContent=m; },40); }
-function toast(m){ var w=$("toastWrap"); if(!w) return; w.innerHTML=""; var d=document.createElement("div"); d.className="toast"; d.textContent=m; w.appendChild(d); setTimeout(function(){ if(d.parentNode) d.remove(); },2200); }
+var focusTrapState=null, toastQueue=[], toastShowing=false, glossaryFromQuiz=false;
+var GLOSSARY_SUGGESTIONS=["mfa","phishing","dlp"];
+function trapFocus(container, returnEl){
+  releaseFocusTrap();
+  if(!container||container.hidden) return;
+  var nodes=[].slice.call(container.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])')).filter(function(n){ return !n.disabled&&n.offsetParent!==null; });
+  if(!nodes.length) return;
+  focusTrapState={container:container, nodes:nodes, ret:returnEl||document.activeElement, fn:function(e){
+    if(e.key!=="Tab"||!focusTrapState) return;
+    var f=focusTrapState.nodes[0], l=focusTrapState.nodes[focusTrapState.nodes.length-1];
+    if(e.shiftKey&&document.activeElement===f){ e.preventDefault(); l.focus(); }
+    else if(!e.shiftKey&&document.activeElement===l){ e.preventDefault(); f.focus(); }
+  }};
+  container.addEventListener("keydown", focusTrapState.fn);
+  setTimeout(function(){ nodes[0].focus(); },30);
+}
+function releaseFocusTrap(){
+  if(!focusTrapState) return;
+  focusTrapState.container.removeEventListener("keydown", focusTrapState.fn);
+  var r=focusTrapState.ret; focusTrapState=null;
+  if(r&&r.focus) try{ r.focus(); }catch(e){}
+}
+function toast(m){
+  if(!m) return;
+  toastQueue.push(String(m));
+  if(!toastShowing) pumpToast();
+}
+function pumpToast(){
+  var w=$("toastWrap"); if(!w||!toastQueue.length){ toastShowing=false; return; }
+  toastShowing=true;
+  var item=toastQueue.shift(), d=document.createElement("div");
+  d.className="toast"; d.setAttribute("role","status");
+  if(item&&typeof item==="object"&&item.title){
+    d.classList.add("toast-celebration");
+    d.innerHTML='<span class="toast-t">'+item.title+'</span><span class="toast-s">'+item.sub+'</span>';
+  } else d.textContent=String(item);
+  w.appendChild(d);
+  setTimeout(function(){
+    if(d.parentNode) d.remove();
+    toastShowing=false;
+    if(toastQueue.length) pumpToast();
+  },item&&item.title?4200:3200);
+}
+function celebrationToast(title,sub){ toastQueue.push({title:title,sub:sub}); if(!toastShowing) pumpToast(); }
+function applyProductionUi(){
+  var hideDemo=!(window.APP_SHOW_DEMO===true||/demo=1/.test(location.search));
+  ["demoMenuBtn","demoOpenSettingsBtn","toolbarMoreDemo","settingsOpenDemoBtn"].forEach(function(id){ var el=$(id); if(el) el.hidden=hideDemo; });
+}
+function updateHomeCtaLayout(){
+  var onHome=$("screenHome")&&$("screenHome").classList.contains("active");
+  var hero=$("homeHeroActions");
+  document.body.classList.toggle("home-cta-visible",!!(onHome&&hero&&!hero.hidden));
+}
+function renderHomeLoopPreview(){
+  var el=$("homeLoopPreview"); if(!el) return;
+  var show=!S.onboardingDone;
+  el.hidden=!show;
+  if(show) el.textContent=t("home.previewLoop");
+}
+function renderMapLegendSummary(){
+  var el=$("mapLegendLive"); if(!el) return;
+  var pending=0, partial=0, done=0;
+  COUNTRIES.forEach(function(c){
+    var p=S.done[c.id];
+    if(p===undefined) pending++;
+    else if(p>=100) done++;
+    else partial++;
+  });
+  el.textContent=t("map.legendSummary").replace("{done}",String(done)).replace("{partial}",String(partial)).replace("{pending}",String(pending));
+}
+function toggleToolbarMore(force){
+  var menu=$("toolbarMoreMenu"), btn=$("toolbarMoreBtn");
+  if(!menu) return;
+  var open=force!==undefined?!!force:menu.hidden;
+  if(open){ toggleA11yMenu(false); toggleSettingsMenu(false); toggleGlossaryMenu(false); toggleStreakPopover(false); }
+  menu.hidden=!open;
+  if(btn) btn.setAttribute("aria-expanded",open?"true":"false");
+  if(open) trapFocus(menu, btn);
+  else if(focusTrapState&&focusTrapState.container===menu) releaseFocusTrap();
+}
+function wireA11yMenuKeyboard(){
+  var menu=$("a11yMenu"); if(!menu||menu._kbWired) return;
+  menu._kbWired=true;
+  menu.addEventListener("keydown",function(e){
+    if(menu.hidden) return;
+    var items=[].slice.call(menu.querySelectorAll(".am-toggle,.am-action,.am-reset,.am-close"));
+    if(!items.length) return;
+    var i=items.indexOf(document.activeElement);
+    if(e.key==="ArrowDown"||e.key==="ArrowRight"){ e.preventDefault(); items[(i<0?0:i+1)%items.length].focus(); }
+    else if(e.key==="ArrowUp"||e.key==="ArrowLeft"){ e.preventDefault(); items[i<=0?items.length-1:i-1].focus(); }
+    else if(e.key==="Home"){ e.preventDefault(); items[0].focus(); }
+    else if(e.key==="End"){ e.preventDefault(); items[items.length-1].focus(); }
+  });
+}
 
 /* -------------------- ACESSIBILIDADE -------------------- */
 var A11Y_DEFAULT={voice:false,contrast:false,large:false,motion:false,signs:false,fontScale:0,links:false,spacing:false,letterSpace:false,dyslexia:false,colorblind:"none",readingMode:false,easyRead:false};
@@ -1092,7 +1196,7 @@ function renderGlossarySelect(filter){
 function showGlossaryTerm(id){
   var host=$("glossaryCard"); if(!host) return;
   ensureUxState();
-  if(!id){ host.innerHTML='<p class="glossary-empty muted">'+t("settings.glossaryEmpty")+'</p>'; return; }
+  if(!id){ renderGlossaryEmptyState(); return; }
   var g=GLOSSARY.filter(function(x){ return x.id===id; })[0];
   if(!g){ host.innerHTML=""; return; }
   var cat=g.cat?'<span class="glossary-cat">'+glossaryCatLabel(g.cat)+'</span>':"";
@@ -1101,6 +1205,17 @@ function showGlossaryTerm(id){
   host.innerHTML='<div class="glossary-term-row">'+cat+'<div class="glossary-term">'+g.term+'</div><button type="button" class="glossary-fav-toggle" data-gid="'+g.id+'" aria-label="'+(L()==="pt"?"Favorito":"Favorite")+'">'+fav+'</button></div><div class="glossary-name">'+tt(g.name)+'</div>'+acr+'<div class="glossary-def-k">'+t("settings.glossaryDef")+'</div><p class="glossary-def">'+tt(g.def)+'</p><div class="glossary-fun-k">'+t("settings.glossaryFun")+'</div><p class="glossary-fun">'+tt(g.fun)+'</p>';
   var fb=host.querySelector(".glossary-fav-toggle");
   if(fb) fb.addEventListener("click",function(e){ e.stopPropagation(); toggleGlossaryFav(g.id); showGlossaryTerm(g.id); });
+}
+function renderGlossaryEmptyState(){
+  var host=$("glossaryCard"); if(!host) return;
+  var chips=GLOSSARY_SUGGESTIONS.map(function(id){
+    var g=GLOSSARY.filter(function(x){return x.id===id;})[0]; if(!g) return "";
+    return '<button type="button" class="glossary-suggest-chip" data-gid="'+id+'">'+g.term+'</button>';
+  }).join("");
+  host.innerHTML='<p class="glossary-empty muted">'+t("settings.glossaryEmpty")+'</p><div class="glossary-suggest-k">'+t("settings.glossarySuggest")+'</div><div class="glossary-suggest">'+chips+'</div>';
+  host.querySelectorAll(".glossary-suggest-chip").forEach(function(b){
+    b.addEventListener("click",function(){ openGlossaryForTerm(b.getAttribute("data-gid")); });
+  });
 }
 function syncOverlayBackdrop(){
   var bd=$("a11yBackdrop"); if(!bd) return;
@@ -1126,37 +1241,48 @@ function toggleGlossaryMenu(force){
   var menu=$("glossaryMenu"),btn=$("glossaryBtn");
   if(!menu) return;
   var open=force!==undefined?!!force:menu.hidden;
-  if(open){ toggleA11yMenu(false); toggleSettingsMenu(false); toggleStreakPopover(false); }
+  if(open){ toggleA11yMenu(false); toggleSettingsMenu(false); toggleStreakPopover(false); toggleToolbarMore(false); }
   menu.hidden=!open;
+  menu.setAttribute("aria-modal",open?"true":"false");
   if(btn) btn.setAttribute("aria-expanded",open?"true":"false");
   syncOverlayBackdrop();
   document.body.classList.toggle("glossary-menu-open",open);
   if(open){
     positionGlossaryMenu();
     renderGlossarySelect(); renderGlossaryFavs();
+    var sel=$("glossaryPick");
+    if(sel&&sel.value) showGlossaryTerm(sel.value); else renderGlossaryEmptyState();
+    trapFocus(menu, btn);
     var gs=$("glossarySearch"); if(gs){ gs.focus(); try{ gs.select(); }catch(e){} }
+  } else {
+    releaseFocusTrap();
+    if(glossaryFromQuiz){ glossaryFromQuiz=false; var rh=$("quizGlossaryReturn"); if(rh) rh.hidden=false; }
   }
 }
 function toggleSettingsMenu(force){
   var menu=$("settingsMenu"),btn=$("settingsBtn");
   if(!menu) return;
   var open=force!==undefined?!!force:menu.hidden;
-  if(open){ toggleA11yMenu(false); toggleStreakPopover(false); toggleGlossaryMenu(false); }
+  if(open){ toggleA11yMenu(false); toggleStreakPopover(false); toggleGlossaryMenu(false); toggleToolbarMore(false); }
   menu.hidden=!open;
+  menu.setAttribute("aria-modal",open?"true":"false");
   if(btn) btn.setAttribute("aria-expanded",open?"true":"false");
   syncOverlayBackdrop();
   document.body.classList.toggle("settings-menu-open",open);
-  if(open){ renderA11yCatalog(); var ts=$("themeSelect"); if(ts) ts.value=S.theme||"default"; }
+  if(open){ renderA11yCatalog(); var ts=$("themeSelect"); if(ts) ts.value=S.theme||"default"; trapFocus(menu, btn); }
+  else releaseFocusTrap();
 }
 function toggleA11yMenu(force){
   var menu=$("a11yMenu"),btn=$("a11yBtn"); if(!menu) return;
   var open=force!==undefined?!!force:menu.hidden;
-  if(open){ toggleSettingsMenu(false); toggleStreakPopover(false); toggleGlossaryMenu(false); }
+  if(open){ toggleSettingsMenu(false); toggleStreakPopover(false); toggleGlossaryMenu(false); toggleToolbarMore(false); }
   menu.hidden=!open;
+  menu.setAttribute("aria-modal",open?"true":"false");
   if(btn) btn.setAttribute("aria-expanded", open?"true":"false");
   syncOverlayBackdrop();
   document.body.classList.toggle("a11y-menu-open", open);
-  if(open) renderA11yCatalog();
+  if(open){ renderA11yCatalog(); trapFocus(menu, btn); }
+  else releaseFocusTrap();
 }
 
 /* -------------------- HUD -------------------- */
@@ -1179,10 +1305,12 @@ function toggleStreakPopover(force){
   var pop=$("streakPopover"), btn=$("hudStreakBtn");
   if(!pop) return;
   var open=force!==undefined?!!force:pop.hidden;
-  if(open){ toggleA11yMenu(false); toggleSettingsMenu(false); toggleGlossaryMenu(false); renderHudStreak(); }
+  if(open){ toggleA11yMenu(false); toggleSettingsMenu(false); toggleGlossaryMenu(false); toggleToolbarMore(false); renderHudStreak(); }
   pop.hidden=!open;
   if(btn) btn.setAttribute("aria-expanded", open?"true":"false");
   document.body.classList.toggle("streak-pop-open", open);
+  if(open) trapFocus(pop, btn);
+  else if(focusTrapState&&focusTrapState.container===pop) releaseFocusTrap();
 }
 function renderHudStreak(){
   ensureStreak();
@@ -1342,13 +1470,17 @@ function updateQuizProgress(){
   if(fill) fill.style.width=pct+"%";
   if(bar){ bar.setAttribute("aria-valuenow",String(pct)); bar.setAttribute("aria-label",lab.textContent); }
 }
-function initQuizSession(){ cur.sessionLog=[]; cur.qStates={}; cur.optOrder={}; cur.reportPending=false; cur.reportDone=false; var rs=$("reportStep"); if(rs) rs.hidden=true; updateQuizResilienceVisibility(); }
+function initQuizSession(){ cur.sessionLog=[]; cur.qStates={}; cur.optOrder={}; cur.reportPending=false; cur.reportDone=false; glossaryFromQuiz=false; var rs=$("reportStep"); if(rs) rs.hidden=true; var rh=$("quizGlossaryReturn"); if(rh) rh.hidden=true; updateQuizResilienceVisibility(); }
 function countQuizCorrect(){ var n=0,i; if(!cur.qStates) return 0; for(i=0;i<cur.questions.length;i++){ if(cur.qStates[i]&&cur.qStates[i].ok) n++; } return n; }
 function rebuildSessionLog(){ cur.sessionLog=[]; var i; for(i=0;i<cur.questions.length;i++){ if(cur.qStates[i]) cur.sessionLog.push({q:cur.questions[i],ok:cur.qStates[i].ok,i:i}); } }
 function updateQuizNav(){
-  var prev=$("prevBtn"), next=$("nextBtn"); if(!prev||!next) return;
+  var prev=$("prevBtn"), next=$("nextBtn"), hint=$("quizNextHint"); if(!prev||!next) return;
   prev.disabled=cur.i<=0||!!cur.reportPending;
   var answered=!!(cur.qStates&&cur.qStates[cur.i]);
+  if(hint){
+    if(!answered&&!cur.reportPending){ hint.hidden=false; hint.textContent=t("quiz.nextHint"); }
+    else hint.hidden=true;
+  }
   if(cur.reportPending){ next.style.display="none"; return; }
   if(answered){
     next.style.display="inline-block";
@@ -1930,6 +2062,7 @@ function syncMapProgress(){
   var m={};
   COUNTRIES.forEach(function(c){ if(S.done&&S.done[c.id]!==undefined&&S.done[c.id]!==null) m[c.id]=S.done[c.id]; });
   OrbitaWorldMap.setProgress(m);
+  renderMapLegendSummary();
 }
 function finishWorldMapUI(){
   updateViewBox();
@@ -2006,6 +2139,7 @@ function updateMapCountryNav(){
   var legend=$("mapProgressLegend");
   if(legend) legend.hidden=!open||isMapWorldView();
   renderCountryNavCounter();
+  renderMapLegendSummary();
 }
 function renderCountryNavCounter(){
   var el=$("mapCountryNavCounter"); if(!el) return;
@@ -2224,21 +2358,10 @@ function panMapHorizontal(dir){
 function bindMapCountryNavArrows(){
   function wire(btnId,navDir,panDir){
     var btn=$(btnId); if(!btn) return;
-    var clickTimer=null;
     btn.addEventListener("click",function(e){
       e.stopPropagation();
-      if(clickTimer) clearTimeout(clickTimer);
-      clickTimer=setTimeout(function(){
-        clickTimer=null;
-        if(isMapWorldView()) panMapHorizontal(panDir);
-        else navigateMapCountry(navDir);
-      },280);
-    });
-    btn.addEventListener("dblclick",function(e){
-      e.stopPropagation();
-      e.preventDefault();
-      if(clickTimer){ clearTimeout(clickTimer); clickTimer=null; }
-      panMapHorizontal(panDir);
+      if(isMapWorldView()) panMapHorizontal(panDir);
+      else navigateMapCountry(navDir);
     });
   }
   wire("mapCountryPrev",-1,-1);
@@ -3154,7 +3277,10 @@ function markDailyDone(won){
   ensureDaily();
   var first=!S.daily.done.mission;
   S.daily.done.mission=true;
-  if(first&&won){ addReward(50); toast(L()==="pt"?"📅 Diária concluída! +50 XP":"📅 Daily done! +50 XP"); }
+  if(first&&won){
+    addReward(50);
+    celebrationToast(t("daily.doneTitle"), t("daily.doneSub")+(L()==="pt"?" (+50 XP)":" (+50 XP)"));
+  }
   save();
 }
 function renderDaily(){
@@ -3200,6 +3326,12 @@ function renderWeekly(){
   var wt=getWeekTheme();
   $("weeklyWeek").textContent=(L()==="pt"?"Semana ":"Week ")+S.weekly.week+" · "+t("weekly.theme")+": "+THEMES[wt].ico+" "+tt(THEMES[wt]);
   var host=$("weeklyList"); host.innerHTML="";
+  var wp=S.weekly.prog||{};
+  var hasProg=WEEKLY.some(function(w){ return (wp[w.id]||0)>0; });
+  if(!hasProg){
+    host.innerHTML='<p class="weekly-empty muted">'+t("weekly.emptyStart")+'</p>';
+    return;
+  }
   WEEKLY.forEach(function(w){
     var p=Math.min(w.goal,S.weekly.prog[w.id]||0),pct=Math.round(p/w.goal*100),done=p>=w.goal;
     var label=tt(w.name);
@@ -3327,6 +3459,8 @@ function renderNextStep(){
   var card=$("nextStepCard"); if(!card) return;
   var hero=$("homeHeroActions");
   applyHeroCompact();
+  renderHomeLoopPreview();
+  updateHomeCtaLayout();
   if(!S.onboardingDone){ card.hidden=true; if(hero) hero.hidden=false; return; }
   if(hero) hero.hidden=true;
   var ns=computeNextStep();
@@ -3748,6 +3882,7 @@ function showContextTip(key){
   ensureUxState();
   var el=$("ctxTip_"+key); if(!el||S.tipsSeen[key]) return;
   el.hidden=false;
+  if(key==="map") el.classList.add("map-fit-tip");
 }
 function dismissContextTip(key){
   ensureUxState();
@@ -3785,7 +3920,10 @@ function renderFirstDayHint(){
   var showHint=(S.streak.count||0)<=1&&!streakPlayedToday();
   el.hidden=!showHint;
 }
-function openGlossaryForTerm(id){
+function openGlossaryForTerm(id, fromQuiz){
+  if(fromQuiz===undefined) fromQuiz=!!($("screenQuiz")&&$("screenQuiz").classList.contains("active"));
+  glossaryFromQuiz=fromQuiz;
+  var ret=$("quizGlossaryReturn"); if(ret) ret.hidden=!fromQuiz;
   toggleGlossaryMenu(true);
   var sel=$("glossaryPick"), search=$("glossarySearch");
   if(sel) sel.value=id;
@@ -3841,7 +3979,14 @@ function renderQuizGlossaryHint(theme){
   el.hidden=false;
   el.innerHTML='<button type="button" class="quiz-gloss-btn" id="quizGlossBtn">'+t("quiz.glossaryTip")+': <b>'+g.term+'</b></button>';
   var btn=$("quizGlossBtn");
-  if(btn) btn.onclick=function(e){ e.stopPropagation(); openGlossaryForTerm(gid); };
+  if(btn) btn.onclick=function(e){ e.stopPropagation(); openGlossaryForTerm(gid, true); };
+}
+function returnFromGlossaryToQuiz(){
+  toggleGlossaryMenu(false);
+  glossaryFromQuiz=false;
+  var rh=$("quizGlossaryReturn"); if(rh) rh.hidden=true;
+  show("screenQuiz");
+  var opts=$("options"); if(opts){ var first=opts.querySelector(".opt:not([disabled])"); if(first) first.focus(); }
 }
 function renderSessionFeedback(win,acc){
   var host=$("sessionFeedback"); if(!host) return;
@@ -3898,6 +4043,7 @@ var ONBOARD_STEPS=[
 ];
 var onboardStep=0, onboardReplay=false;
 function closeOnboarding(skipped){
+  releaseFocusTrap();
   S.onboardingDone=true;
   S.offlineHintSeen=true;
   save();
@@ -3939,7 +4085,16 @@ function renderOnboarding(){
   var dots=$("onboardDots");
   if(dots){
     dots.innerHTML="";
-    ONBOARD_STEPS.forEach(function(_,i){ var d=document.createElement("span"); d.className="onboard-dot"+(i===onboardStep?" on":""); dots.appendChild(d); });
+    ONBOARD_STEPS.forEach(function(_,i){
+      var d=document.createElement("button");
+      d.type="button";
+      d.className="onboard-dot"+(i===onboardStep?" on":"");
+      d.setAttribute("role","tab");
+      d.setAttribute("aria-label",t("onboard.step")+" "+(i+1)+"/"+ONBOARD_STEPS.length);
+      d.setAttribute("aria-current",i===onboardStep?"step":"false");
+      d.addEventListener("click",function(){ onboardStep=i; renderOnboarding(); });
+      dots.appendChild(d);
+    });
   }
   if($("onboardNextBtn")) $("onboardNextBtn").textContent=onboardStep>=ONBOARD_STEPS.length-1?(onboardReplay?(L()==="pt"?"Fechar":"Close"):t("onboard.start")):t("onboard.next");
 }
@@ -3952,6 +4107,7 @@ function showOnboarding(force){
   onboardStep=0; renderOnboarding();
   var ov=$("onboardOverlay"); if(!ov) return;
   ov.hidden=false; document.body.classList.add("onboard-open");
+  trapFocus(ov.querySelector(".onboard-modal"), $("onboardNextBtn"));
   if($("onboardNextBtn")) $("onboardNextBtn").focus();
 }
 function onboardNext(){
@@ -3995,6 +4151,18 @@ function bind(){
   on("resetA11yMenuBtn","click",function(){ resetA11yDefaults(); toggleA11yMenu(false); });
   on("glossaryBtn","click",function(e){ e.stopPropagation(); toggleGlossaryMenu(); });
   on("glossaryMenuClose","click",function(e){ e.stopPropagation(); toggleGlossaryMenu(false); });
+  on("quizGlossaryReturn","click",returnFromGlossaryToQuiz);
+  on("toolbarMoreBtn","click",function(e){ e.stopPropagation(); toggleToolbarMore(); });
+  document.querySelectorAll("#toolbarMoreMenu [data-toolbar-action]").forEach(function(b){
+    b.addEventListener("click",function(e){
+      e.stopPropagation();
+      toggleToolbarMore(false);
+      var act=b.getAttribute("data-toolbar-action");
+      if(act==="onboard") showOnboarding(true);
+      else if(act==="demo"){ var db=$("demoMenuBtn"); if(db&&!db.hidden) db.click(); }
+      else if(act==="settings") toggleSettingsMenu(true);
+    });
+  });
   on("settingsBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(); });
   on("settingsMenuClose","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); });
   on("settingsOpenA11yBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); toggleA11yMenu(true); if($("a11yBtn")) $("a11yBtn").focus(); });
@@ -4020,8 +4188,7 @@ function bind(){
   on("onboardSkipBtn","click",function(){ closeOnboarding(true); });
   on("onboardNextBtn","click",onboardNext);
   on("onboardOpenBtn","click",function(){ showOnboarding(true); });
-  on("onboardOverlay","click",function(e){ if(e.target===$("onboardOverlay")) closeOnboarding(); });
-  document.addEventListener("keydown",function(e){ var ov=$("onboardOverlay"); if(e.key==="Escape"&&ov&&!ov.hidden) closeOnboarding(); });
+  on("onboardOverlay","click",function(e){ if(e.target===$("onboardOverlay")) closeOnboarding(true); });
 
   on("homeStartBtn","click",function(){
     if(setupComplete()){ playNow(); return; }
@@ -4069,7 +4236,10 @@ function bind(){
     if(sm&&!sm.hidden){ if(e.target.closest&&(e.target.closest(".settings-menu-wrap")||e.target.closest("#settingsMenu"))) return; toggleSettingsMenu(false); }
     if(gm&&!gm.hidden){ if(e.target.closest&&(e.target.closest("#glossaryMenu")||e.target.closest("#glossaryBtn"))) return; toggleGlossaryMenu(false); }
     if(sp&&!sp.hidden){ if(e.target.closest&&(e.target.closest(".streak-hud-wrap")||e.target.closest("#streakPopover"))) return; toggleStreakPopover(false); }
+    var tm=$("toolbarMoreMenu");
+    if(tm&&!tm.hidden){ if(e.target.closest&&e.target.closest(".toolbar-overflow-wrap")) return; toggleToolbarMore(false); }
   });
+  wireA11yMenuKeyboard();
   document.querySelectorAll("#a11yMenu .am-toggle").forEach(function(b){ b.addEventListener("click",function(e){ e.stopPropagation(); var k=b.getAttribute("data-opt"); if(k==="colorblind"){ cycleColorblind(); return; } S.a11y[k]=!S.a11y[k]; if(k==="contrast"||k==="large"||k==="spacing") S.a11y.easyRead=false; save(); applyA11y(); syncEasyReadUi(); if(k==="voice"&&S.a11y.voice) speak(L()==="pt"?"Narração por voz ativada.":"Voice narration enabled."); if(k==="signs"&&S.a11y.signs) speak(L()==="pt"?"Hand Talk e Libras ativados.":"Hand Talk and ASL enabled."); }); });
 
   on("speakBtn","click",function(){ var q=cur.questions[cur.i]; if(q) speak(tt(q.q)); });
@@ -4121,6 +4291,8 @@ function bind(){
       var gm=$("glossaryMenu"); if(gm&&!gm.hidden){ toggleGlossaryMenu(false); return; }
       var sp=$("streakPopover"); if(sp&&!sp.hidden){ toggleStreakPopover(false); return; }
       var am=$("a11yMenu"); if(am&&!am.hidden){ toggleA11yMenu(false); return; }
+      var tmm=$("toolbarMoreMenu"); if(tmm&&!tmm.hidden){ toggleToolbarMore(false); return; }
+      var ov=$("onboardOverlay"); if(ov&&!ov.hidden){ closeOnboarding(true); return; }
       if($("screenQuiz")&&$("screenQuiz").classList.contains("active")){ quizQuit(); return; }
       if($("mapDetail")&&!$("mapDetail").hidden){ closeMapDetail(); return; }
       var tip=$("mapTooltip"); if(tip&&!tip.hidden){ tip.hidden=true; if(typeof OrbitaWorldMap!=="undefined") OrbitaWorldMap.clearSelection(); return; }
@@ -4202,7 +4374,7 @@ function init(){
   try{
   sanitizeA11y(); ensureManagerMode(); ensureUxState();
   dismissBlockingUI();
-  applyI18n(); applyA11y(); applyTheme(); applySimpleUi(); applyCosmetics(); applyFocusLearn(); ensureDaily(); ensureWeekly(); ensureTeamScores(); ensureStreak(); refreshHud();
+  applyI18n(); applyA11y(); applyTheme(); applySimpleUi(); applyCosmetics(); applyFocusLearn(); applyProductionUi(); ensureDaily(); ensureWeekly(); ensureTeamScores(); ensureStreak(); refreshHud();
   requestAnimationFrame(syncBottomShellHeight);
   applyHeroCompact(); updateSetupBanner(); renderA11yCatalog();
   updateNavBadges();
@@ -4210,6 +4382,7 @@ function init(){
   try{ renderWeekCard(); }catch(e){ console.error(e); }
   try{ renderDaily(); }catch(e){ console.error(e); }
   try{ renderNextStep(); }catch(e){ console.error(e); }
+  renderHomeLoopPreview(); updateHomeCtaLayout();
   updateManagerNav();
   try{ updateHeroCaption(); }catch(e){ console.error(e); }
   document.querySelectorAll(".lang-card").forEach(function(x){ x.setAttribute("aria-pressed",x.getAttribute("data-lang")===S.lang?"true":"false"); });
