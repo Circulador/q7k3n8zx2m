@@ -61,6 +61,7 @@ var OrbitaWorldMap = (function () {
   var state = { filterId: null, filterType: null, selectedIso: null };
   var projection, pathFn, countrySel, svgNode, tooltipNode, clearBtn, loadingNode;
   var itemById, onCountryClick, onFilterChange, onClearSelection, langFn, ready = false, routesLayer, countryFeatures;
+  var progressByGame = {};
 
   function notifyFilterChange() {
     if (onFilterChange) onFilterChange();
@@ -219,11 +220,25 @@ var OrbitaWorldMap = (function () {
       .attr("fill", function (f) {
         if (!getData(f)) return BASE;
         if (state.selectedIso === getIso(f)) return ACTIVE;
-        return HIGHLIGHT;
+        return statusFill(f);
       })
       .classed("is-muted", function (f) { return hasSel && !matchesState(f); })
       .classed("is-active", function (f) { return state.selectedIso === getIso(f); })
       .classed("is-filtered", function (f) { return Boolean(state.filterId && matchesFilter(f)); });
+  }
+
+  var PROGRESS_PENDING = "#ECB11F", PROGRESS_PARTIAL = "#E8823A", PROGRESS_DONE = "#2E9E5B";
+  function statusFill(f) {
+    var gid = ISO_TO_GAME[getIso(f)];
+    if (!gid) return HIGHLIGHT;
+    var p = progressByGame[gid];
+    if (p === undefined || p === null) return PROGRESS_PENDING;
+    if (p >= 80) return PROGRESS_DONE;
+    return PROGRESS_PARTIAL;
+  }
+  function setProgress(map) {
+    progressByGame = map || {};
+    if (countrySel) updateState();
   }
 
   function buildTooltip(feature) {
@@ -554,6 +569,7 @@ var OrbitaWorldMap = (function () {
     project: project,
     drawRoutes: drawRoutes,
     getCountryView: getCountryView,
+    setProgress: setProgress,
     isReady: isReady,
     gameToIso: gameToIso,
     ISO_TO_GAME: ISO_TO_GAME,

@@ -391,6 +391,14 @@ input#playerName{width:100%;padding:12px 14px;border-radius:12px;border:1px soli
 .map-country-nav-btn:active{transform:translateY(-50%) scale(.96)}
 .map-country-nav-prev{left:10px}
 .map-country-nav-next{right:10px}
+.map-country-nav-counter{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);pointer-events:none;background:rgba(0,95,92,.92);color:#fff;font-size:.72rem;font-weight:800;letter-spacing:.03em;padding:4px 12px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.map-country-nav-counter[hidden]{display:none!important}
+.map-progress-legend{position:absolute;left:10px;bottom:10px;z-index:14;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;background:rgba(255,255,255,.92);border:1px solid #d3e0e3;border-radius:8px;padding:5px 9px;box-shadow:0 2px 8px rgba(0,0,0,.1);pointer-events:none}
+.map-progress-legend .mpl-item{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:700;color:#2d3f45}
+.map-progress-legend .mpl-dot{width:11px;height:11px;border-radius:3px;flex:none;border:1px solid rgba(0,0,0,.12)}
+.map-progress-legend .mpl-pending{background:#ECB11F}
+.map-progress-legend .mpl-partial{background:#E8823A}
+.map-progress-legend .mpl-done{background:#2E9E5B}
 .map-stage.dragging{cursor:grabbing}
 #mapSvg{display:block;width:100%;height:auto}
 .route-line{fill:none;stroke-width:2.5;stroke-linecap:round;opacity:.9;display:none}

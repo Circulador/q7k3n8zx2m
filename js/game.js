@@ -178,6 +178,9 @@ var UI = {
   "map.riskTitle":{pt:"Risco",en:"Risk"},
   "map.countryPrev":{pt:"País anterior",en:"Previous country"},
   "map.countryNext":{pt:"Próximo país",en:"Next country"},
+  "map.legPending":{pt:"Pendente",en:"Pending"},
+  "map.legPartial":{pt:"Em progresso",en:"In progress"},
+  "map.legDone":{pt:"Concluído",en:"Completed"},
   "a11y.menuTitle":{pt:"Acessibilidade",en:"Accessibility"},
   "a11y.langLabel":{pt:"Idioma",en:"Language"},
   "a11y.prefsLabel":{pt:"Preferências",en:"Preferences"},
@@ -1818,8 +1821,15 @@ function ensureOrbitaWorldMap(cb){
   }
   orbitaMapInitPromise.then(function(){ if(cb) cb(true); }).catch(function(){ if(cb) cb(false); });
 }
+function syncMapProgress(){
+  if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.setProgress) return;
+  var m={};
+  COUNTRIES.forEach(function(c){ if(S.done&&S.done[c.id]!==undefined&&S.done[c.id]!==null) m[c.id]=S.done[c.id]; });
+  OrbitaWorldMap.setProgress(m);
+}
 function finishWorldMapUI(){
   updateViewBox();
+  syncMapProgress();
   renderMapLegend();
   var cl=$("countryList"); if(cl) cl.hidden=false;
   renderCountryList();
@@ -1866,6 +1876,19 @@ function updateMapCountryNav(){
   var onMap=$("screenMap")&&$("screenMap").classList.contains("active");
   var open=!!onMap&&mapReady&&!mapChainMode();
   nav.hidden=!open;
+  var legend=$("mapProgressLegend");
+  if(legend) legend.hidden=!open;
+  renderCountryNavCounter();
+}
+function renderCountryNavCounter(){
+  var el=$("mapCountryNavCounter"); if(!el) return;
+  var nav=$("mapCountryNav");
+  if(nav&&nav.hidden){ el.hidden=true; return; }
+  var ids=getPlayableCountryIds();
+  var idx=mapHitActive?ids.indexOf(mapHitActive):-1;
+  if(idx<0||!ids.length){ el.hidden=true; el.textContent=""; return; }
+  el.hidden=false;
+  el.textContent=(idx+1)+" / "+ids.length;
 }
 function buildMapDetailHTML(c,official){
   var themes=c.themes.map(function(th){ return '<span class="tag md-risk-tag">'+tt(THEMES[th])+'</span>'; }).join("");
@@ -1969,6 +1992,30 @@ function drawMap(){
 }
 function ensureMap(){ if(!mapReady) drawMap(); }
 function updateViewBox(){ var s=$("mapSvg"); if(s) s.setAttribute("viewBox",view.x+" "+view.y+" "+view.w+" "+view.h); }
+var mapReduceMotion=function(){
+  if(S.a11y&&S.a11y.motion) return true;
+  return !!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+};
+var viewAnimRaf=null;
+function cancelViewAnim(){ if(viewAnimRaf){ cancelAnimationFrame(viewAnimRaf); viewAnimRaf=null; } }
+function animateView(target){
+  cancelViewAnim();
+  if(mapReduceMotion()){ view.x=target.x; view.y=target.y; view.w=target.w; view.h=target.h; updateViewBox(); return; }
+  var start={x:view.x,y:view.y,w:view.w,h:view.h};
+  var t0=null,dur=320;
+  function step(ts){
+    if(t0===null) t0=ts;
+    var k=Math.min(1,(ts-t0)/dur);
+    var e=k<0.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+    view.x=start.x+(target.x-start.x)*e;
+    view.y=start.y+(target.y-start.y)*e;
+    view.w=start.w+(target.w-start.w)*e;
+    view.h=start.h+(target.h-start.h)*e;
+    updateViewBox();
+    if(k<1) viewAnimRaf=requestAnimationFrame(step); else viewAnimRaf=null;
+  }
+  viewAnimRaf=requestAnimationFrame(step);
+}
 function mapPaneAspect(){
   var inner=document.querySelector(".vwm-map-stage-inner");
   if(inner){ var r=inner.getBoundingClientRect(); if(r.width>0&&r.height>0) return r.width/r.height; }
@@ -1980,10 +2027,11 @@ function zoomToCountry(gameId){
   if(!v) return;
   var nw=Math.max(50,Math.min(VW,v.targetW));
   var nh=Math.max(50,Math.min(VH,v.targetH||nw*(VH/VW)));
-  view.w=nw; view.h=nh;
-  view.x=Math.max(0,Math.min(VW-nw,v.cx-nw/2));
-  view.y=Math.max(0,Math.min(VH-nh,v.cy-nh/2));
-  updateViewBox();
+  animateView({
+    w:nw, h:nh,
+    x:Math.max(0,Math.min(VW-nw,v.cx-nw/2)),
+    y:Math.max(0,Math.min(VH-nh,v.cy-nh/2))
+  });
 }
 function scrollMapIntoView(){
   var stage=$("mapStage");
@@ -1992,20 +2040,67 @@ function scrollMapIntoView(){
     stage.scrollIntoView({behavior:"smooth",block:"start"});
   });
 }
-function zoomTo(cx,cy,f){ var nw=Math.max(200,Math.min(VW,view.w*f)),nh=nw*(VH/VW); view.x=Math.max(0,Math.min(VW-nw,cx-nw/2)); view.y=Math.max(0,Math.min(VH-nh,cy-nh/2)); view.w=nw; view.h=nh; updateViewBox(); }
+function zoomTo(cx,cy,f){ cancelViewAnim(); var nw=Math.max(140,Math.min(VW,view.w*f)),nh=nw*(VH/VW); view.x=Math.max(0,Math.min(VW-nw,cx-nw/2)); view.y=Math.max(0,Math.min(VH-nh,cy-nh/2)); view.w=nw; view.h=nh; updateViewBox(); }
 function resetView(){
-  view={x:0,y:0,w:VW,h:VH};
-  updateViewBox();
+  animateView({x:0,y:0,w:VW,h:VH});
   updateMapCountryNav();
 }
 function focusIronChain(){ openBossChain(true); }
 function bindMapPanZoom(){
-  var wrap=$("mapStage"),svg=$("mapSvg"),drag=false,sx,sy,ox,oy;
+  var wrap=$("mapStage"),svg=$("mapSvg");
   if(!wrap||!svg) return;
-  wrap.addEventListener("pointerdown",function(e){ if(mapChainMode()) return; if(e.target.closest(".map-detail,.map-zoom-float,.map-country-nav,.cmap-pin,.vwm-country,.vwm-tooltip,.vwm-legend-button")) return; drag=true; wrap.classList.add("dragging"); sx=e.clientX; sy=e.clientY; ox=view.x; oy=view.y; });
-  window.addEventListener("pointerup",function(){ drag=false; if(wrap) wrap.classList.remove("dragging"); });
-  window.addEventListener("pointermove",function(e){ if(!drag) return; var r=svg.getBoundingClientRect(); var kx=view.w/r.width,ky=view.h/r.height; view.x=Math.max(0,Math.min(VW-view.w,ox-(e.clientX-sx)*kx)); view.y=Math.max(0,Math.min(VH-view.h,oy-(e.clientY-sy)*ky)); updateViewBox(); });
-  wrap.addEventListener("wheel",function(e){ if(mapChainMode()) return; e.preventDefault(); var r=svg.getBoundingClientRect(); var mx=view.x+(e.clientX-r.left)/r.width*view.w,my=view.y+(e.clientY-r.top)/r.height*view.h; zoomTo(mx,my,e.deltaY>0?1.2:.83); },{passive:false});
+  var drag=false,sx,sy,ox,oy;
+  var pointers={},pinch=null;
+  var lastTap=0,lastTapX=0,lastTapY=0;
+  function ptCount(){ return Object.keys(pointers).length; }
+  function toView(clientX,clientY){ var r=svg.getBoundingClientRect(); return {x:view.x+(clientX-r.left)/r.width*view.w, y:view.y+(clientY-r.top)/r.height*view.h}; }
+  wrap.addEventListener("pointerdown",function(e){
+    if(mapChainMode()) return;
+    pointers[e.pointerId]={x:e.clientX,y:e.clientY};
+    if(ptCount()===2){
+      cancelViewAnim();
+      drag=false; wrap.classList.remove("dragging");
+      var ks=Object.keys(pointers),a=pointers[ks[0]],b=pointers[ks[1]];
+      var mid=toView((a.x+b.x)/2,(a.y+b.y)/2);
+      pinch={dist:Math.hypot(a.x-b.x,a.y-b.y)||1,cx:mid.x,cy:mid.y,w:view.w};
+      return;
+    }
+    if(e.target.closest&&e.target.closest(".map-detail,.map-zoom-float,.map-country-nav,.cmap-pin,.vwm-country,.vwm-tooltip,.vwm-legend-button")) return;
+    drag=true; wrap.classList.add("dragging"); sx=e.clientX; sy=e.clientY; ox=view.x; oy=view.y;
+  });
+  window.addEventListener("pointermove",function(e){
+    if(pointers[e.pointerId]) pointers[e.pointerId]={x:e.clientX,y:e.clientY};
+    if(pinch&&ptCount()>=2){
+      var ks=Object.keys(pointers),a=pointers[ks[0]],b=pointers[ks[1]];
+      var dist=Math.hypot(a.x-b.x,a.y-b.y)||1;
+      var nw=Math.max(120,Math.min(VW,pinch.w*(pinch.dist/dist))),nh=nw*(VH/VW);
+      view.w=nw; view.h=nh;
+      view.x=Math.max(0,Math.min(VW-nw,pinch.cx-nw/2));
+      view.y=Math.max(0,Math.min(VH-nh,pinch.cy-nh/2));
+      updateViewBox();
+      return;
+    }
+    if(!drag) return;
+    var r=svg.getBoundingClientRect(),kx=view.w/r.width,ky=view.h/r.height;
+    view.x=Math.max(0,Math.min(VW-view.w,ox-(e.clientX-sx)*kx));
+    view.y=Math.max(0,Math.min(VH-view.h,oy-(e.clientY-sy)*ky));
+    updateViewBox();
+  });
+  function endPointer(e){
+    if(!mapChainMode()&&e.pointerType!=="mouse"&&ptCount()===1&&!pinch){
+      var isCountry=e.target.closest&&e.target.closest(".vwm-country,.cmap-pin,.map-detail,.map-zoom-float,.map-country-nav,.vwm-legend-button");
+      var now=Date.now();
+      if(!isCountry&&now-lastTap<300&&Math.abs(e.clientX-lastTapX)<30&&Math.abs(e.clientY-lastTapY)<30){
+        var p=toView(e.clientX,e.clientY); zoomTo(p.x,p.y,0.6); lastTap=0;
+      } else { lastTap=now; lastTapX=e.clientX; lastTapY=e.clientY; }
+    }
+    if(pointers[e.pointerId]) delete pointers[e.pointerId];
+    if(ptCount()<2) pinch=null;
+    if(ptCount()===0){ drag=false; if(wrap) wrap.classList.remove("dragging"); }
+  }
+  window.addEventListener("pointerup",endPointer);
+  window.addEventListener("pointercancel",endPointer);
+  wrap.addEventListener("wheel",function(e){ if(mapChainMode()) return; e.preventDefault(); var p=toView(e.clientX,e.clientY); zoomTo(p.x,p.y,e.deltaY>0?1.2:.83); },{passive:false});
 }
 function countriesExploredCount(){ return Object.keys(S.done||{}).length; }
 function nextExpeditionCountry(){
@@ -2173,7 +2268,7 @@ function finishCampaign(){
   cur.correct=countQuizCorrect();
   var c=cur.country,total=cur.questions.length,acc=Math.round(cur.correct/total*100),win=cur.integrity>0&&acc>=60;
   if(cur.mode==="review"){ show("screenProfile"); renderProfile(); toast(L()==="pt"?"📚 Revisão concluída":"📚 Review complete"); return; }
-  if(cur.mode==="campaign"){ S.done[c.id]=Math.max(S.done[c.id]||0,acc); bumpWeekly("campaign",1); }
+  if(cur.mode==="campaign"){ S.done[c.id]=Math.max(S.done[c.id]||0,acc); bumpWeekly("campaign",1); syncMapProgress(); }
   if(cur.mode==="chain"){ S.chainDone[cur.chainKey]=Math.max(S.chainDone[cur.chainKey]||0,acc); }
   if(cur.mode==="daily"){ markDailyDone(win); recordStreak(); }
   else if(win) recordStreak();
