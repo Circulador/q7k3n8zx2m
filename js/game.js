@@ -82,6 +82,7 @@ var UI = {
   "glossary.cat.compliance":{pt:"Compliance",en:"Compliance"},
   "glossary.cat.remote":{pt:"Remoto",en:"Remote"},
   "glossary.cat.control":{pt:"Controles",en:"Controls"},
+  "glossary.cat.device":{pt:"Dispositivos",en:"Devices"},
   "glossary.cat.physical":{pt:"Física",en:"Physical"},
   "settings.openA11y":{pt:"♿ Acessibilidade",en:"♿ Accessibility"},
   "settings.simpleUi":{pt:"Modo simples",en:"Simple mode"},
@@ -3858,7 +3859,7 @@ function renderRoles(){ var g=$("rolesGrid"); g.innerHTML=""; ROLES.forEach(func
 /* ==========================================================
    UX ENHANCEMENTS (v67)
    ========================================================== */
-var THEME_GLOSSARY={phishing:"phishing",password:"mfa",ot:"ot",data:"dlp",device:"malware",remote:"vpn",bec:"bec",port:"port"};
+var THEME_GLOSSARY={phishing:"phishing",password:"mfa",ot:"scada",data:"dlp",device:"homolog",remote:"vpn",bec:"bec",port:"recon"};
 function ensureUxState(){
   if(!S.tipsSeen) S.tipsSeen={map:false,daily:false,boss:false};
   if(!S.glossaryFavs) S.glossaryFavs=[];
