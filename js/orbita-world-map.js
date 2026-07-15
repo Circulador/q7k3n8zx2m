@@ -469,23 +469,31 @@ var OrbitaWorldMap = (function () {
     return projectedBoxBounds(CONTINENT_BOXES[cont]);
   }
 
-  // Frames the whole continent that contains the country, filling the
-  // available viewport aspect (opts.aspect) so it uses 100% of the pane.
+  // Uniform country view: fixed zoom so map pane + arrows stay identical for every country.
   function getCountryView(gameId, opts) {
     opts = opts || {};
     if (!pathFn) return null;
-    var b = getContinentBounds(gameId);
+    var feature = findCountryFeature(gameId);
+    var b = null;
+    if (feature) b = pathFn.bounds(feature);
     if (!b) {
-      var feature = findCountryFeature(gameId);
-      if (!feature) return null;
-      b = pathFn.bounds(feature);
+      b = getContinentBounds(gameId);
+      if (!b) return null;
+    }
+    var cx = (b[0][0] + b[1][0]) / 2;
+    var cy = (b[0][1] + b[1][1]) / 2;
+    var aspect = opts.aspect && opts.aspect > 0 ? opts.aspect : VW / VH;
+    if (opts.uniform) {
+      var fw = opts.fixedW > 0 ? opts.fixedW : 400;
+      var nh = fw / aspect;
+      if (nh > VH) { nh = VH; fw = nh * aspect; }
+      return { cx: cx, cy: cy, targetW: fw, targetH: nh };
     }
     var bw = Math.max(b[1][0] - b[0][0], 3);
     var bh = Math.max(b[1][1] - b[0][1], 3);
     var pad = 1.03;
     var boxW = bw * pad;
     var boxH = bh * pad;
-    var aspect = opts.aspect && opts.aspect > 0 ? opts.aspect : VW / VH;
     var nw, nh;
     if (boxW / boxH > aspect) {
       nw = boxW;
@@ -497,8 +505,8 @@ var OrbitaWorldMap = (function () {
     if (nw > VW) { nw = VW; nh = nw / aspect; }
     if (nh > VH) { nh = VH; nw = nh * aspect; }
     return {
-      cx: (b[0][0] + b[1][0]) / 2,
-      cy: (b[0][1] + b[1][1]) / 2,
+      cx: cx,
+      cy: cy,
       targetW: nw,
       targetH: nh
     };

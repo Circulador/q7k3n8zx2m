@@ -1384,6 +1384,7 @@ function renderRank(host){
    MAPA GLOBAL (D3 / orbita-world-map.js)
    ========================================================== */
 var VW=960,VH=520,mapProcess=null,mapHitActive=null,chainStageActive=null,mapSearchQuery="",view={x:0,y:0,w:VW,h:VH};
+var MAP_UNIFORM_VIEW_W=400;
 var MAP_PROCESSES=[{id:null, label:"map.procWorld", tip:"map.procWorldTip"}];
 function normalizeMapProcess(){ mapProcess=null; }
 function mapChainMode(){ return false; }
@@ -1894,7 +1895,7 @@ function closeMapDetail(){
   var p=$("mapDetail"); if(p) p.hidden=true;
   var foot=$("mapDetailFooter"); if(foot){ foot.hidden=true; foot.innerHTML=""; }
   var tip=$("mapTooltip"); if(tip) tip.hidden=true;
-  var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open","map-detail-dense");
+  var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open");
   syncMapDetailLayout(); updateMapCountryNav();
 }
 function resetMapView(){
@@ -1981,10 +1982,11 @@ function openMapDetailCountry(id){
   mapHitActive=id;
   setMapHitHighlight(id);
   var tip=$("mapTooltip"); if(tip) tip.hidden=true;
-  var stage=$("mapStage"); if(stage){ stage.classList.add("map-detail-open"); stage.classList.toggle("map-detail-dense",isDenseMapCountry(id)); }
+  var stage=$("mapStage"); if(stage){ stage.classList.add("map-detail-open"); }
   var body=$("mapDetailBody"), panel=$("mapDetail"); if(!body||!panel) return;
   var official=(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.getCountry)?OrbitaWorldMap.getCountry(id,L()):null;
   body.innerHTML=buildMapDetailHTML(c,official);
+  body.scrollTop=0;
   setMapDetailAction('<button type="button" class="btn btn-primary btn-lg map-detail-play" id="mapDetailPlay">'+t("region.start")+'</button>',startCampaign);
   panel.hidden=false;
   syncMapDetailLayout();
@@ -2095,7 +2097,7 @@ function mapPaneAspect(){
 }
 function zoomToCountry(gameId){
   if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.isReady()||!gameId) return;
-  var v=OrbitaWorldMap.getCountryView(gameId,{aspect:mapPaneAspect()});
+  var v=OrbitaWorldMap.getCountryView(gameId,{aspect:mapPaneAspect(),uniform:true,fixedW:MAP_UNIFORM_VIEW_W});
   if(!v) return;
   var nw=Math.max(50,Math.min(VW,v.targetW));
   var nh=Math.max(50,Math.min(VH,v.targetH||nw*(VH/VW)));
