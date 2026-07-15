@@ -2,11 +2,11 @@
 var BOSS_MAP_ROUTES={
   carajas:[[95,248],[222,205],[306,206],[404,186],[504,214],[600,250],[760,232],[978,246]],
   office:[[70,235],[210,198],[360,215],[520,175],[680,205],[890,228]],
-  ceo:[[55,238],[148,198],[242,218],[336,188],[430,208],[524,178],[618,198],[712,188],[806,208],[920,228]],
-  otintr:[[60,240],[155,195],[250,215],[345,180],[440,205],[535,175],[630,200],[725,185],[820,210],[915,230]],
-  omphish:[[65,235],[160,195],[255,215],[350,180],[445,205],[540,175],[635,200],[730,185],[825,210],[910,228]],
-  leakchain:[[58,238],[152,198],[246,218],[340,188],[434,208],[528,178],[622,198],[716,188],[810,208],[904,228]],
-  portintr:[[62,240],[156,200],[250,220],[344,185],[438,205],[532,175],[626,200],[720,188],[814,210],[908,232]]
+  ceo:[[78,238],[172,215],[268,228],[362,202],[458,218],[552,198],[646,212],[740,202],[834,218],[928,232]],
+  otintr:[[62,246],[156,218],[250,232],[344,206],[438,218],[532,198],[626,212],[720,204],[814,218],[908,230]],
+  omphish:[[68,240],[162,212],[256,226],[350,200],[444,214],[538,194],[632,208],[726,198],[820,212],[914,226]],
+  leakchain:[[70,242],[164,214],[258,228],[352,204],[446,216],[540,196],[634,210],[728,200],[822,214],[916,228]],
+  portintr:[[64,244],[158,216],[252,230],[346,206],[440,218],[534,198],[628,212],[722,204],[816,218],[910,230]]
 };
 var BOSS_MAP_META={
   carajas:{theme:"iron",labelPt:"Minério → China 🇨🇳",labelEn:"Ore → China 🇨🇳"},
@@ -66,56 +66,242 @@ function bossMapDefs(sfx,theme){
   else if(theme==="port") d+='<stop offset="0" stop-color="#3a5a6a"/><stop offset="1" stop-color="#254550"/>';
   else d+='<stop offset="0" stop-color="#3d5260"/><stop offset="1" stop-color="#2a3840"/>';
   d+='</linearGradient>';
-  if(theme==="iron") d+='<linearGradient id="bmSea'+sfx+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b8fb0"/><stop offset="1" stop-color="#16607a"/></linearGradient>';
+  if(theme==="iron"||theme==="port"||theme==="hub") d+='<linearGradient id="bmSea'+sfx+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b8fb0"/><stop offset="1" stop-color="#16607a"/></linearGradient>';
+  if(theme==="office") d+='<linearGradient id="omFloor'+sfx+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d5260"/><stop offset="1" stop-color="#2a3840"/></linearGradient>';
   d+='<linearGradient id="bmGold'+sfx+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#EDB111"/><stop offset="1" stop-color="#007E7A"/></linearGradient>';
   return d;
 }
+function bossMapBanner(sfx,lang,pt,en){
+  var t=lang==="en"?en:pt;
+  return '<rect x="0" y="0" width="1000" height="300" fill="url(#bmSky'+sfx+')"/>'
+    +'<rect x="18" y="8" width="964" height="48" rx="10" fill="rgba(6,24,32,.22)" stroke="rgba(237,177,17,.4)" stroke-width="1.5"/>'
+    +'<text x="500" y="28" font-size="11" text-anchor="middle" fill="rgba(255,255,255,.92)" font-weight="700" letter-spacing=".4">'+t+'</text>';
+}
+function bossMapGround(sfx,y){ return '<rect x="0" y="'+(y||72)+'" width="1000" height="'+(300-(y||72))+'" fill="url(#bmGround'+sfx+')"/>'; }
+function bossMapCeoScene(sfx,lang){
+  var pt=lang!=="en";
+  var s=bossMapBanner(sfx,lang,"GOLPE DO CEO — FINANCEIRO ORBITA","CEO SCAM — ORBITA FINANCE");
+  s+='<path d="M90,42 Q500,32 910,42" fill="none" stroke="rgba(0,126,122,.4)" stroke-width="2"/>';
+  s+='<circle cx="90" cy="42" r="7" fill="#007E7A"/><text x="90" y="58" font-size="8" text-anchor="middle" fill="#eaf2f6">📧</text>';
+  s+='<circle cx="500" cy="42" r="7" fill="#007E7A"/><text x="500" y="58" font-size="8" text-anchor="middle" fill="#eaf2f6">🏦</text>';
+  s+='<circle cx="910" cy="42" r="7" fill="#007E7A"/><text x="910" y="58" font-size="8" text-anchor="middle" fill="#eaf2f6">⚖️</text>';
+  s+=bossMapGround(sfx,68);
+  s+='<line x1="0" y1="108" x2="1000" y2="108" stroke="rgba(255,255,255,.08)" stroke-width="1"/>';
+  /* skyline */
+  for(var bx=0;bx<12;bx++){ var bh=24+(bx%4)*14; s+='<rect x="'+(24+bx*78)+'" y="'+(108+70-bh)+'" width="52" height="'+bh+'" rx="2" fill="#1a2840" opacity=".55"/>'; }
+  /* 1 e-mail falso */
+  s+='<rect x="34" y="148" width="88" height="58" rx="5" fill="#2d4060" stroke="#ff6b6b" stroke-width="1.5"/>';
+  s+='<rect x="44" y="158" width="68" height="36" rx="3" fill="#cbe8f2"/>';
+  s+='<g class="om-email-ping" transform="translate(108,144)"><rect x="-16" y="-14" width="32" height="20" rx="4" fill="#ff4d4f"/><text x="0" y="2" font-size="12" text-anchor="middle">📧</text></g>';
+  s+='<text x="78" y="218" font-size="8" text-anchor="middle" fill="#ff8a8a" font-weight="700">'+(pt?"URGENTE":"URGENT")+'</text>';
+  /* 2 telefone / validação */
+  s+='<rect x="148" y="162" width="64" height="48" rx="4" fill="#0a2a32" stroke="#007E7A"/>';
+  s+='<circle cx="180" cy="180" r="12" fill="#2fbf71" opacity=".85"/><text x="180" y="184" font-size="11" text-anchor="middle">📞</text>';
+  s+='<text x="180" y="206" font-size="7" text-anchor="middle" fill="#eaf2f6">'+(pt?"Confirmar":"Confirm")+'</text>';
+  /* 3 SAP */
+  s+='<rect x="248" y="152" width="78" height="62" rx="4" fill="#1a2840" stroke="#EDB111" stroke-width="1.5"/>';
+  s+='<text x="287" y="178" font-size="13" text-anchor="middle" fill="#EDB111" font-weight="800">SAP</text>';
+  s+='<rect x="258" y="186" width="58" height="8" rx="2" fill="#2d4060"/><rect x="258" y="198" width="42" height="8" rx="2" fill="#ff4d4f" opacity=".7"/>';
+  /* 4 banco */
+  s+='<rect x="352" y="145" width="92" height="72" rx="5" fill="#0a2a32" stroke="#007E7A" stroke-width="2"/>';
+  s+='<path d="M398,158 L378,178 L418,178 Z" fill="#EDB111"/><rect x="372" y="178" width="52" height="28" rx="2" fill="#1a3a45"/>';
+  s+='<text x="398" y="198" font-size="9" text-anchor="middle" fill="#eaf2f6">US$ 2.3M</text>';
+  /* 5 WhatsApp */
+  s+='<rect x="468" y="158" width="72" height="54" rx="8" fill="#1a3a28" stroke="#25d366" stroke-width="1.5"/>';
+  s+='<text x="504" y="182" font-size="18" text-anchor="middle">💬</text>';
+  s+='<circle class="boss-visual-pulse" cx="532" cy="162" r="8" fill="#ff4d4f" opacity=".75"/>';
+  /* 6 dupla aprovação */
+  s+='<rect x="568" y="150" width="84" height="64" rx="4" fill="#2d4060"/>';
+  s+='<circle cx="594" cy="178" r="10" fill="#5a8a9a"/><circle cx="626" cy="178" r="10" fill="#5a8a9a"/>';
+  s+='<rect x="582" y="196" width="56" height="10" rx="2" fill="#2fbf71" opacity=".8"/>';
+  /* 7 fornecedor */
+  s+='<rect x="672" y="155" width="80" height="58" rx="4" fill="#3d4f58" stroke="#EDB111"/>';
+  s+='<text x="712" y="182" font-size="16" text-anchor="middle">🤝</text>';
+  s+='<text x="712" y="202" font-size="7" text-anchor="middle" fill="#eaf2f6">'+(pt?"Conta nova":"New acct")+'</text>';
+  /* 8 jurídico */
+  s+='<rect x="776" y="148" width="88" height="66" rx="4" fill="#0a2a32" stroke="#007E7A"/>';
+  s+='<text x="820" y="186" font-size="20" text-anchor="middle">⚖️</text>';
+  /* 9 workshop */
+  s+='<rect x="878" y="152" width="96" height="60" rx="4" fill="rgba(237,177,17,.12)" stroke="rgba(237,177,17,.45)"/>';
+  s+='<text x="926" y="178" font-size="11" text-anchor="middle" fill="#EDB111" font-weight="700">'+(pt?"TREINAMENTO":"TRAINING")+'</text>';
+  s+='<text x="926" y="196" font-size="16" text-anchor="middle">🎭</text>';
+  s+='<path class="om-data-flow" d="M78,178 L172,178 L268,182 L362,172 L458,180 L552,174 L646,182 L740,174 L834,180 L928,186" fill="none" stroke="#EDB111" stroke-width="2.5" opacity=".7"/>';
+  return s;
+}
+function bossMapOtScene(sfx,lang){
+  var pt=lang!=="en";
+  var s=bossMapBanner(sfx,lang,"S11D CARAJÁS — INVASÃO TI → OT","S11D CARAJÁS — IT → OT INTRUSION");
+  s+=bossMapGround(sfx,68);
+  s+='<polygon points="0,300 8,200 120,200 140,300" fill="#6f5137"/><polygon points="0,200 12,168 108,168 120,200" fill="#7d5c3e"/><polygon points="14,168 24,142 96,142 108,168" fill="#8a6746"/>';
+  s+='<g class="cm-smoke" fill="rgba(255,255,255,.45)"><circle cx="52" cy="138" r="6"/><circle cx="58" cy="128" r="5"/></g>';
+  /* TI cloud */
+  s+='<ellipse cx="108" cy="168" rx="34" ry="16" fill="#3d5260"/><ellipse cx="92" cy="162" rx="22" ry="12" fill="#4a6070"/><ellipse cx="124" cy="162" rx="20" ry="11" fill="#4a6070"/>';
+  s+='<text x="108" y="168" font-size="9" text-anchor="middle" fill="#eaf2f6" font-weight="700">TI</text>';
+  /* firewall */
+  s+='<rect x="198" y="148" width="56" height="72" rx="4" fill="#2d3740" stroke="#ff4d4f" stroke-width="2"/>';
+  s+='<rect x="208" y="158" width="36" height="52" rx="2" fill="#1a2330"/>';
+  s+='<text x="226" y="188" font-size="9" text-anchor="middle" fill="#ff6b6b" font-weight="800">TI↔OT</text>';
+  s+='<g class="boss-visual-pulse"><line x1="226" y1="168" x2="226" y2="200" stroke="#ff4d4f" stroke-width="3"/></g>';
+  /* CLP */
+  s+='<rect x="292" y="162" width="72" height="52" rx="4" fill="#2d3740" stroke="#007E7A"/>';
+  s+='<rect x="302" y="172" width="18" height="14" rx="1" fill="#2fbf71"/><rect x="324" y="172" width="18" height="14" rx="1" fill="#EDB111"/><rect x="346" y="172" width="18" height="14" rx="1" fill="#ff4d4f"/>';
+  s+='<text x="328" y="206" font-size="8" text-anchor="middle" fill="#eaf2f6">CLP</text>';
+  /* britagem */
+  s+='<rect x="396" y="178" width="64" height="48" rx="3" fill="#5b6b73"/>';
+  s+='<polygon points="398,178 458,178 448,158 408,158" fill="#48565d"/>';
+  s+='<g class="cm-exc-arm" transform="translate(420,210)"><line x1="0" y1="0" x2="28" y2="-18" stroke="#e0aa43" stroke-width="5" stroke-linecap="round"/></g>';
+  /* SCADA */
+  s+='<rect x="492" y="148" width="100" height="72" rx="4" fill="#0a2a32" stroke="#007E7A" stroke-width="2"/>';
+  s+='<rect x="502" y="158" width="28" height="20" rx="2" fill="#1a3a45"/><rect x="534" y="158" width="28" height="20" rx="2" fill="#1a3a45"/><rect x="566" y="158" width="22" height="20" rx="2" fill="#ff4d4f" opacity=".6"/>';
+  s+='<text x="542" y="206" font-size="9" text-anchor="middle" fill="#eaf2f6">SCADA</text>';
+  /* SIS */
+  s+='<rect x="616" y="155" width="76" height="62" rx="4" fill="#1a3a28" stroke="#2fbf71" stroke-width="2"/>';
+  s+='<text x="654" y="192" font-size="18" text-anchor="middle">🛡️</text>';
+  s+='<text x="654" y="208" font-size="8" text-anchor="middle" fill="#2fbf71" font-weight="700">SIS</text>';
+  /* backup */
+  s+='<rect x="716" y="160" width="68" height="54" rx="4" fill="#3d4f58"/>';
+  s+='<rect x="726" y="170" width="48" height="10" rx="2" fill="#2fbf71"/><rect x="726" y="184" width="48" height="10" rx="2" fill="#EDB111"/>';
+  s+='<text x="750" y="204" font-size="8" text-anchor="middle" fill="#eaf2f6">'+(pt?"Backup":"Backup")+'</text>';
+  /* segmentação */
+  s+='<rect x="808" y="152" width="88" height="64" rx="4" fill="#2d4060" stroke="#007E7A"/>';
+  s+='<line x1="828" y1="168" x2="876" y2="168" stroke="#EDB111" stroke-width="2"/><line x1="828" y1="188" x2="876" y2="188" stroke="#2fbf71" stroke-width="2"/>';
+  /* treinamento OT */
+  s+='<rect x="908" y="156" width="72" height="58" rx="4" fill="rgba(237,177,17,.1)" stroke="rgba(237,177,17,.4)"/>';
+  s+='<text x="944" y="190" font-size="16" text-anchor="middle">🏭</text>';
+  s+='<line class="cmap-belt" x1="142" y1="188" x2="198" y2="182" stroke="#e0aa43" stroke-width="3"/>';
+  return s;
+}
+function bossMapOmphishScene(sfx,lang){
+  var pt=lang!=="en";
+  var s=bossMapBanner(sfx,lang,"SOHAR, OMÃ — MEGA HUB & PHISHING","SOHAR, OMAN — MEGA HUB & PHISHING");
+  s+='<circle cx="860" cy="46" r="22" fill="#ffe08a" opacity=".75"/>';
+  s+=bossMapGround(sfx,68);
+  s+='<rect x="780" y="196" width="220" height="104" fill="url(#bmSea'+sfx+')"/>';
+  s+='<path class="cmap-wave" d="M780,214 Q830,206 880,214 T980,214" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="2"/>';
+  /* complexo Sohar */
+  s+='<rect x="28" y="168" width="120" height="56" rx="4" fill="#5c4510" stroke="#EDB111"/>';
+  s+='<rect x="38" y="148" width="24" height="36" rx="3" fill="#7a878f"/><rect x="66" y="138" width="20" height="46" rx="3" fill="#7a878f"/>';
+  s+='<text x="88" y="198" font-size="10" text-anchor="middle" fill="#EDB111" font-weight="700">SOHAR</text>';
+  /* portal falso */
+  s+='<rect x="178" y="155" width="96" height="68" rx="5" fill="#1a2840" stroke="#ff4d4f" stroke-width="2"/>';
+  s+='<rect x="188" y="165" width="76" height="40" rx="3" fill="#cbe8f2"/>';
+  s+='<g class="om-email-ping" transform="translate(252,150)"><text font-size="16" text-anchor="middle">🎣</text></g>';
+  s+='<text x="226" y="214" font-size="7" text-anchor="middle" fill="#ff8a8a">'+(pt?"Portal falso":"Fake portal")+'</text>';
+  /* credenciais */
+  s+='<rect x="302" y="162" width="72" height="56" rx="4" fill="#2d4060"/>';
+  s+='<rect x="312" y="172" width="52" height="8" rx="2" fill="#ff4d4f"/><rect x="312" y="184" width="52" height="8" rx="2" fill="#8aa4ad"/>';
+  s+='<text x="338" y="206" font-size="8" text-anchor="middle" fill="#eaf2f6">🔑</text>';
+  /* pelotização */
+  s+='<rect x="402" y="170" width="80" height="50" rx="3" fill="#55636c"/>';
+  s+='<circle cx="442" cy="188" r="14" fill="#8a6746"/><g class="cm-smoke" fill="rgba(255,255,255,.4)"><circle cx="448" cy="162" r="5"/></g>';
+  /* correia */
+  s+='<line x1="482" y1="198" x2="578" y2="188" stroke="#2b3438" stroke-width="8"/>';
+  s+='<line class="cmap-belt" x1="482" y1="198" x2="578" y2="188" stroke="#e0aa43" stroke-width="3.5"/>';
+  /* píer */
+  s+='<rect x="598" y="228" width="80" height="10" fill="#455055"/>';
+  s+='<line x1="618" y1="228" x2="618" y2="188" stroke="#5b6b73" stroke-width="5"/>';
+  s+='<line class="cmap-belt" x1="622" y1="220" x2="668" y2="204" stroke="#e0aa43" stroke-width="3"/>';
+  /* navio */
+  s+='<g class="cm-ship" transform="translate(700,218)"><path d="M0,0 L80,0 L72,20 L8,20 Z" fill="#b23b32"/><rect x="12" y="-10" width="48" height="10" fill="#7a4f28"/><rect x="54" y="-20" width="14" height="12" fill="#eef3f5"/></g>';
+  /* parceiros alertados */
+  s+='<rect x="818" y="158" width="88" height="62" rx="4" fill="#0a2a32" stroke="#007E7A"/>';
+  s+='<text x="862" y="188" font-size="9" text-anchor="middle" fill="#eaf2f6">'+(pt?"Parceiros":"Partners")+'</text>';
+  s+='<text x="862" y="206" font-size="14" text-anchor="middle">📡</text>';
+  s+='<rect x="918" y="162" width="68" height="56" rx="4" fill="rgba(47,191,113,.15)" stroke="#2fbf71"/>';
+  s+='<text x="952" y="196" font-size="14" text-anchor="middle">✅</text>';
+  return s;
+}
+function bossMapLeakScene(sfx,lang){
+  var pt=lang!=="en";
+  var s=bossMapBanner(sfx,lang,"VAZAMENTO — CADEIA CARAJÁS → CHINA","DATA LEAK — CARAJÁS → CHINA CHAIN");
+  s+=bossMapGround(sfx,68);
+  s+='<polygon points="0,300 40,180 130,190 200,300" fill="#6f5137" opacity=".85"/>';
+  s+='<text x="90" y="168" font-size="9" text-anchor="middle" fill="rgba(255,255,255,.8)" font-weight="700">⛏️ CARAJÁS</text>';
+  s+='<rect x="792" y="196" width="208" height="104" fill="url(#bmSea'+sfx+')"/>';
+  s+='<text x="900" y="230" font-size="11" text-anchor="middle" fill="#fff" font-weight="700">🇨🇳 CLIENTE</text>';
+  /* planilha */
+  s+='<rect x="48" y="168" width="64" height="48" rx="4" fill="#2d4060" stroke="#EDB111"/>';
+  s+='<rect x="56" y="176" width="12" height="10" fill="#2fbf71"/><rect x="72" y="176" width="12" height="10" fill="#ff4d4f"/><rect x="88" y="176" width="12" height="10" fill="#EDB111"/>';
+  s+='<text x="80" y="206" font-size="14" text-anchor="middle">📊</text>';
+  /* e-mail errado */
+  s+='<g class="om-email-ping" transform="translate(168,158)"><rect x="-18" y="-14" width="36" height="22" rx="4" fill="#ff4d4f"/><text x="0" y="2" font-size="12" text-anchor="middle">📧</text></g>';
+  s+='<path class="om-data-flow" d="M112,192 Q200,140 288,192" fill="none" stroke="#ff4d4f" stroke-width="3" stroke-dasharray="8 5"/>';
+  s+='<rect x="268" y="168" width="88" height="52" rx="4" fill="#1a2840" stroke="#ff4d4f" stroke-width="2"/>';
+  s+='<text x="312" y="192" font-size="8" text-anchor="middle" fill="#ff6b6b" font-weight="700">'+(pt?"DESTINO ERRADO":"WRONG RECIPIENT")+'</text>';
+  s+='<text x="312" y="208" font-size="14" text-anchor="middle">⚠️</text>';
+  /* DLP */
+  s+='<rect x="388" y="152" width="96" height="72" rx="5" fill="#0a2a32" stroke="#2fbf71" stroke-width="2"/>';
+  s+='<text x="436" y="182" font-size="11" text-anchor="middle" fill="#2fbf71" font-weight="800">DLP</text>';
+  s+='<rect x="400" y="192" width="72" height="22" rx="3" fill="#1a3a45"/><circle class="om-cloud-pulse" cx="460" cy="203" r="4" fill="#2fbf71"/>';
+  /* classificação */
+  s+='<rect x="508" y="160" width="80" height="60" rx="4" fill="#2d4060" stroke="#EDB111"/>';
+  s+='<text x="548" y="188" font-size="10" text-anchor="middle" fill="#EDB111">'+(pt?"CONFIDENCIAL":"CONFIDENTIAL")+'</text>';
+  s+='<text x="548" y="208" font-size="14" text-anchor="middle">🔒</text>';
+  /* trem / logística */
+  s+='<line x1="600" y1="262" x2="720" y2="252" stroke="#3a464c" stroke-width="4"/>';
+  s+='<g class="cm-train" transform="translate(608,248)"><rect x="0" y="-12" width="24" height="14" rx="2" fill="#0f6e6a"/><circle cx="8" cy="2" r="3" fill="#15181a"/><circle cx="18" cy="2" r="3" fill="#15181a"/></g>';
+  /* porto */
+  s+='<rect x="728" y="232" width="56" height="8" fill="#455055"/><line x1="748" y1="232" x2="748" y2="196" stroke="#5b6b73" stroke-width="4"/>';
+  s+='<g class="cm-ship" transform="translate(792,224)"><path d="M0,0 L56,0 L50,16 L6,16 Z" fill="#8b2942"/></g>';
+  /* LGPD */
+  s+='<rect x="848" y="156" width="88" height="64" rx="4" fill="#1a2840" stroke="#007E7A"/>';
+  s+='<text x="892" y="186" font-size="9" text-anchor="middle" fill="#eaf2f6">'+(pt?"Privacidade":"Privacy")+'</text>';
+  s+='<text x="892" y="206" font-size="14" text-anchor="middle">📜</text>';
+  s+='<path class="om-data-flow" d="M112,198 L268,190 L388,186 L508,182 L628,188 L748,194 L892,188" fill="none" stroke="rgba(237,177,17,.35)" stroke-width="2" stroke-dasharray="6 4"/>';
+  return s;
+}
+function bossMapPortScene(sfx,lang){
+  var pt=lang!=="en";
+  var s=bossMapBanner(sfx,lang,"PONTA DA MADEIRA — PORTO & SCADA","PONTA DA MADEIRA — PORT & SCADA");
+  s+='<circle cx="820" cy="44" r="20" fill="#ffe08a" opacity=".7"/>';
+  s+='<g fill="#fff" opacity=".55"><ellipse cx="400" cy="42" rx="28" ry="11"/></g>';
+  s+=bossMapGround(sfx,68);
+  s+='<rect x="620" y="200" width="380" height="100" fill="url(#bmSea'+sfx+')"/>';
+  s+='<path class="cmap-wave" d="M620,218 Q700,210 780,218 T940,218" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="2"/>';
+  s+='<text x="820" y="248" font-size="10" text-anchor="middle" fill="rgba(255,255,255,.85)" font-weight="700">ATLÂNTICO</text>';
+  /* píer principal */
+  s+='<rect x="24" y="228" width="200" height="12" fill="#455055"/>';
+  s+='<line x1="68" y1="228" x2="68" y2="148" stroke="#5b6b73" stroke-width="6"/>';
+  s+='<line x1="148" y1="228" x2="148" y2="158" stroke="#5b6b73" stroke-width="5"/>';
+  s+='<line class="cmap-belt" x1="72" y1="218" x2="148" y2="198" stroke="#e0aa43" stroke-width="3.5"/>';
+  /* estoque minério */
+  s+='<polygon points="200,244 240,204 280,244" fill="#7a5a3a"/><polygon points="268,244 304,212 340,244" fill="#8a6844"/>';
+  /* navio atracado */
+  s+='<g transform="translate(360,222)"><path d="M0,0 L90,0 L82,22 L8,22 Z" fill="#b23b32" stroke="#7d271f"/><rect x="14" y="-12" width="52" height="12" fill="#7a4f28"/><rect x="62" y="-22" width="16" height="14" fill="#eef3f5"/></g>';
+  /* técnico sem crachá */
+  s+='<g transform="translate(248,188)"><circle cx="0" cy="0" r="14" fill="#4a5568"/><text x="0" y="5" font-size="12" text-anchor="middle">👷</text><circle class="boss-visual-pulse" cx="14" cy="-10" r="7" fill="#ff4d4f" opacity=".8"/><text x="14" y="-6" font-size="8" text-anchor="middle" fill="#fff">!</text></g>';
+  /* catraca */
+  s+='<rect x="468" y="168" width="64" height="58" rx="4" fill="#3d4f58" stroke="#ff4d4f"/>';
+  s+='<rect x="488" y="182" width="24" height="32" rx="2" fill="#2d3740"/><text x="500" y="214" font-size="10" text-anchor="middle">🚪</text>';
+  /* SCADA sala */
+  s+='<rect x="556" y="142" width="108" height="80" rx="5" fill="#0a2a32" stroke="#007E7A" stroke-width="2"/>';
+  s+='<rect x="568" y="152" width="32" height="24" rx="2" fill="#1a3a45"/><rect x="604" y="152" width="32" height="24" rx="2" fill="#1a3a45"/><rect x="640" y="152" width="18" height="24" rx="2" fill="#ff4d4f" opacity=".55"/>';
+  s+='<text x="610" y="206" font-size="9" text-anchor="middle" fill="#eaf2f6" font-weight="700">SCADA</text>';
+  /* shiploader */
+  s+='<line x1="680" y1="228" x2="680" y2="172" stroke="#5b6b73" stroke-width="5"/>';
+  s+='<line x1="680" y1="176" x2="748" y2="176" stroke="#5b6b73" stroke-width="4"/>';
+  s+='<line class="cmap-belt" x1="684" y1="220" x2="740" y2="200" stroke="#e0aa43" stroke-width="3"/>';
+  /* auditoria */
+  s+='<rect x="768" y="158" width="88" height="62" rx="4" fill="#2d4060" stroke="#EDB111"/>';
+  s+='<text x="812" y="188" font-size="10" text-anchor="middle" fill="#EDB111">'+(pt?"AUDITORIA":"AUDIT")+'</text>';
+  s+='<text x="812" y="206" font-size="14" text-anchor="middle">📋</text>';
+  /* resiliência */
+  s+='<rect x="872" y="152" width="100" height="68" rx="5" fill="rgba(47,191,113,.12)" stroke="#2fbf71" stroke-width="2"/>';
+  s+='<text x="922" y="182" font-size="10" text-anchor="middle" fill="#2fbf71" font-weight="700">'+(pt?"RESILIÊNCIA":"RESILIENCE")+'</text>';
+  s+='<text x="922" y="204" font-size="16" text-anchor="middle">🛡️</text>';
+  return s;
+}
 function bossMapSceneContent(id,sfx,lang){
-  var pt=lang==="pt";
   if(id==="carajas"&&typeof window.__gdvCmapScene==="function") return window.__gdvCmapScene().replace(/id="cmSky"/g,'id="bmSky'+sfx+'"').replace(/url\(#cmSky\)/g,"url(#bmSky"+sfx+")")
     .replace(/id="cmGround"/g,'id="bmGround'+sfx+'"').replace(/url\(#cmGround\)/g,"url(#bmGround"+sfx+")")
     .replace(/id="cmSea"/g,'id="bmSea'+sfx+'"').replace(/url\(#cmSea\)/g,"url(#bmSea"+sfx+")");
   if(id==="office"&&typeof window.__gdvOffmapScene==="function") return window.__gdvOffmapScene(sfx).replace(/id="omSky/g,'id="bmSky').replace(/url\(#omSky/g,"url(#bmSky").replace(/id="omFloor/g,'id="bmGround').replace(/url\(#omFloor/g,"url(#bmGround").replace(/id="omShield/g,'id="bmGold').replace(/url\(#omShield/g,"url(#bmGold");
-  var s='';
-  s+='<rect x="0" y="0" width="1000" height="300" fill="url(#bmSky'+sfx+')"/>';
-  s+='<rect x="0" y="70" width="1000" height="230" fill="url(#bmGround'+sfx+')"/>';
-  if(id==="ceo"){
-    s+='<rect x="40" y="90" width="120" height="80" rx="6" fill="#2d4060" stroke="#EDB111" stroke-width="1.5"/>';
-    s+='<rect x="52" y="102" width="96" height="50" rx="3" fill="#cbe8f2"/><g class="om-email-ping" transform="translate(120,95)"><text font-size="14" text-anchor="middle">📧</text></g>';
-    s+='<rect x="200" y="100" width="90" height="60" rx="4" fill="#1a2840"/><text x="245" y="135" font-size="11" fill="#EDB111" text-anchor="middle" font-weight="700">SAP</text>';
-    s+='<rect x="360" y="95" width="100" height="70" rx="4" fill="#0a2a32" stroke="#007E7A"/><text x="410" y="135" font-size="20" text-anchor="middle">🏦</text>';
-    s+='<path class="om-data-flow" d="M160,130 L200,130 L290,130 L360,130" fill="none" stroke="#EDB111" stroke-width="2.5"/>';
-    s+='<text x="500" y="88" font-size="11" text-anchor="middle" fill="rgba(255,255,255,.8)" font-weight="700">'+(pt?"GOLPE DO CEO — FLUXO DE PAGAMENTO":"CEO SCAM — PAYMENT FLOW")+'</text>';
-  }else if(id==="otintr"){
-    s+='<polygon points="30,300 50,160 180,160 200,300" fill="#5c4030"/><polygon points="50,160 70,120 160,120 180,160" fill="#6b5030"/>';
-    s+='<rect x="280" y="130" width="80" height="55" rx="4" fill="#2d3740"/><text x="320" y="162" font-size="10" fill="#cbe8f2" text-anchor="middle">CLP</text>';
-    s+='<rect x="420" y="120" width="50" height="70" rx="3" fill="#ff4d4f" opacity=".7"/><text x="445" y="158" font-size="9" fill="#fff" text-anchor="middle" font-weight="700">TI↔OT</text>';
-    s+='<rect x="520" y="125" width="100" height="60" rx="4" fill="#0a2a32" stroke="#007E7A"/><text x="570" y="160" font-size="10" fill="#eaf2f6" text-anchor="middle">SCADA</text>';
-    s+='<g class="cm-smoke" fill="rgba(255,255,255,.4)"><circle cx="100" cy="115" r="6"/><circle cx="108" cy="105" r="5"/></g>';
-    s+='<text x="500" y="88" font-size="11" text-anchor="middle" fill="rgba(255,255,255,.85)" font-weight="700">'+(pt?"S11D — BRITAGEM OT/ICS":"S11D — CRUSHING OT/ICS")+'</text>';
-  }else if(id==="omphish"){
-    s+='<rect x="30" y="110" width="140" height="70" rx="4" fill="#5c4510"/><text x="100" y="150" font-size="11" fill="#EDB111" text-anchor="middle" font-weight="700">MEGA HUB</text>';
-    s+='<rect x="220" y="120" width="90" height="55" rx="4" fill="#1a2840"/><text x="265" y="152" font-size="10" fill="#cbe8f2" text-anchor="middle">PORTAL</text>';
-    s+='<g class="om-email-ping" transform="translate(350,130)"><text font-size="16">🎣</text></g>';
-    s+='<path class="cm-ship" transform="translate(520,145)" d="M0,0 L80,0 L70,22 L10,22 Z" fill="#8b2942"/><rect x="20" y="-14" width="50" height="14" fill="#6b5030"/>';
-    s+='<line class="cmap-belt" x1="400" y1="150" x2="520" y2="150" stroke="#e0aa43" stroke-width="3"/>';
-    s+='<text x="500" y="88" font-size="11" text-anchor="middle" fill="rgba(255,255,255,.85)" font-weight="700">'+(pt?"SOHAR — HUB & EMBARQUE":"SOHAR — HUB & LOADING")+'</text>';
-  }else if(id==="leakchain"){
-    s+='<rect x="40" y="115" width="70" height="50" rx="3" fill="#2d4060"/><text x="75" y="145" font-size="18" text-anchor="middle">📊</text>';
-    s+='<path class="om-data-flow" d="M110,140 Q200,100 290,140" fill="none" stroke="#ff4d4f" stroke-width="2.5" stroke-dasharray="6 4"/>';
-    s+='<rect x="300" y="120" width="80" height="45" rx="3" fill="#1a2840" stroke="#ff4d4f"/><text x="340" y="148" font-size="9" fill="#ff6b6b" text-anchor="middle">'+(pt?"DESTINO ERRADO":"WRONG RECIPIENT")+'</text>';
-    s+='<rect x="450" y="110" width="90" height="60" rx="4" fill="#0a2a32"/><text x="495" y="145" font-size="10" fill="#2fbf71" text-anchor="middle">DLP</text>';
-    s+='<text x="500" y="88" font-size="11" text-anchor="middle" fill="rgba(255,255,255,.85)" font-weight="700">'+(pt?"VAZAMENTO — CADEIA DE DADOS":"LEAK — DATA CHAIN")+'</text>';
-  }else if(id==="portintr"){
-    s+='<rect x="30" y="200" width="200" height="12" fill="#455055"/>';
-    s+='<line x1="80" y1="200" x2="80" y2="140" stroke="#5b6b73" stroke-width="5"/>';
-    s+='<path class="cm-ship" transform="translate(250,175)" d="M0,0 L90,0 L78,24 L12,24 Z" fill="#8b2942"/><rect x="25" y="-16" width="55" height="16" fill="#6b5030"/>';
-    s+='<rect x="400" y="125" width="100" height="65" rx="4" fill="#0a2a32" stroke="#007E7A"/><text x="450" y="162" font-size="10" fill="#eaf2f6" text-anchor="middle">SCADA</text>';
-    s+='<rect x="560" y="140" width="60" height="45" rx="3" fill="#3d4f58"/><text x="590" y="168" font-size="16" text-anchor="middle">🚪</text>';
-    s+='<line class="cmap-belt" x1="130" y1="195" x2="250" y2="185" stroke="#e0aa43" stroke-width="3"/>';
-    s+='<text x="500" y="88" font-size="11" text-anchor="middle" fill="rgba(255,255,255,.85)" font-weight="700">'+(pt?"PONTA DA MADEIRA — PORTO":"PONTA DA MADEIRA — PORT")+'</text>';
-  }
-  return s;
+  if(id==="ceo") return bossMapCeoScene(sfx,lang);
+  if(id==="otintr") return bossMapOtScene(sfx,lang);
+  if(id==="omphish") return bossMapOmphishScene(sfx,lang);
+  if(id==="leakchain") return bossMapLeakScene(sfx,lang);
+  if(id==="portintr") return bossMapPortScene(sfx,lang);
+  return bossMapCeoScene(sfx,lang);
 }
 function bossMapPinLabel(ch,st,ph,i,lang){
   if(ch&&ch.stages&&ch.stages[i]&&ch.stages[i].name){

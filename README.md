@@ -2,7 +2,7 @@
 
 Jogo web **bilíngue (Português 🇧🇷 / Inglês 🇬🇧)** de conscientização em **Cyber Security e Segurança da Informação**, ambientado nas operações reais da Orbita ao redor do mundo. Funciona 100% no navegador, sem login, com suporte **PWA** (instalável e offline após a primeira visita).
 
-**Versão atual:** `v130` · **Demo ao vivo:** [circulador.github.io/q7k3n8zx2m](https://circulador.github.io/q7k3n8zx2m/?v=130)
+**Versão atual:** `v131` · **Demo ao vivo:** [circulador.github.io/q7k3n8zx2m](https://circulador.github.io/q7k3n8zx2m/?v=131)
 
 ---
 
@@ -42,7 +42,7 @@ Certificado com **layout revisado** — estatísticas em grade (rótulo + valor)
 
 - **🗺️ Mapa “A Orbita no mundo”** — D3 + TopoJSON, alinhado a [orbita.com/pt/onde-estamos](https://www.orbita.com/pt/onde-estamos)
 - **⛓️ Cadeia Carajás → China** — storytelling tabletop com SVG animado
-- **🎯 Desafios / Crises** — 6 crises com 10 cenas cada; dicas **“Na sua vida”** por cena
+- **🎯 Desafios / Crises** — 6 crises com 10 cenas cada; mapas vetoriais animados por cenário (Carajás, escritórios, BEC, OT, hub Omã, vazamento, porto)
 - **📅 Missões diárias** + **🏆 metas semanais** na mesma tela
 - **🛒 Loja**, **📊 perfil Eu**, **🧭 painel do gestor**, **📚 banco de revisão** in-app
 - **📜 Certificado** gerável na aba Eu (PNG / impressão)
