@@ -552,7 +552,8 @@ var UI = {
   "progress.daily":{pt:"Diária",en:"Daily"},
   "progress.dailyD":{pt:"5 situações (2 revisões de erros + temas fracos). Mantém sequência.",en:"5 scenarios (2 error reviews + weak themes). Keeps streak."},
   "progress.boss":{pt:"Desafios / Crises",en:"Challenges / Crises"},
-  "progress.bossD":{pt:"Cadeia Norte + crises simuladas estilo mesa. Alimenta maturidade, conquistas e selo do certificado.",en:"Northern Chain + tabletop simulated crises. Feeds maturity, achievements and certificate seal."},
+  "progress.bossD":{pt:"Simulações estilo mesa (10 cenas cada). Contam para maturidade, conquistas e selo do certificado.",en:"Tabletop simulations (10 scenes each). Count toward maturity, achievements and certificate seal."},
+  "progress.bossM":{pt:"Crises vencidas: {crises} · Cenas Carajás: {chain} · Maturidade: {mat}",en:"Crises beaten: {crises} · Carajás scenes: {chain} · Maturity: {mat}"},
   "progress.weekly":{pt:"Semanal",en:"Weekly"},
   "progress.weeklyD":{pt:"Metas que somam automaticamente enquanto você joga qualquer modo acima.",en:"Goals that add up automatically as you play any mode above."},
   "daily.title":{pt:"📅 Atividade de hoje",en:"📅 Today's activity"},
@@ -3865,6 +3866,20 @@ function todayKey(){ var d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+
 function yesterdayKey(){ var d=new Date(); d.setDate(d.getDate()-1); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
 function ensureStreak(){ if(!S.streak) S.streak={count:0,lastDate:"",best:0}; }
 function chainStagesDone(){ return Object.keys(S.chainDone||{}).length; }
+function chainCarajasDone(){
+  var ch=chainById("carajas"), n=0, i;
+  if(!ch||!ch.stages) return 0;
+  for(i=0;i<ch.stages.length;i++){
+    if(S.chainDone[chainKey("carajas",ch.stages[i].id)]!==undefined) n++;
+  }
+  return n;
+}
+function progressBossMetrics(){
+  var crises=bossCompletedCount()+'/'+BOSSES.length;
+  var chain=chainCarajasDone()+'/'+chainTotalStages();
+  var mat=bossAvgIndex()+'%';
+  return t("progress.bossM").replace("{crises}",crises).replace("{chain}",chain).replace("{mat}",mat);
+}
 function meetsUnlock(item){
   if(!item.unlock) return true;
   if(item.unlock==="chain1") return chainStagesDone()>=1;
@@ -4278,7 +4293,7 @@ function renderProgressHub(){
     '<div class="prog-hub-grid">'+
       '<div class="prog-hub-item"><span class="prog-hub-ico">🗺️</span><div><div class="prog-hub-t">'+t("progress.map")+'</div><div class="prog-hub-d">'+t("progress.mapD")+'</div><div class="prog-hub-m">'+Object.keys(S.done).length+'/'+COUNTRIES.length+' · '+(wp.campaign||0)+'/3</div></div></div>'+
       '<div class="prog-hub-item"><span class="prog-hub-ico">📅</span><div><div class="prog-hub-t">'+t("progress.daily")+'</div><div class="prog-hub-d">'+t("progress.dailyD")+'</div><div class="prog-hub-m">🔥 '+(S.streak.count||0)+' · '+(wp.correct||0)+'/20</div></div></div>'+
-      '<div class="prog-hub-item"><span class="prog-hub-ico">🐉</span><div><div class="prog-hub-t">'+t("progress.boss")+'</div><div class="prog-hub-d">'+t("progress.bossD")+'</div><div class="prog-hub-m">'+bossCompletedCount()+'/'+BOSSES.length+' · '+chainStagesDone()+'/'+chainTotalStages()+' ⛓️ · '+bossAvgIndex()+'%</div></div></div>'+
+      '<div class="prog-hub-item"><span class="prog-hub-ico">🐉</span><div><div class="prog-hub-t">'+t("progress.boss")+'</div><div class="prog-hub-d">'+t("progress.bossD")+'</div><div class="prog-hub-m">'+progressBossMetrics()+'</div></div></div>'+
       '<div class="prog-hub-item"><span class="prog-hub-ico">🏆</span><div><div class="prog-hub-t">'+t("progress.weekly")+'</div><div class="prog-hub-d">'+t("progress.weeklyD")+'</div><div class="prog-hub-m">'+(wp.theme||0)+'/8 '+tt(THEMES[getWeekTheme()])+'</div></div></div>'+
     '</div>';
 }
