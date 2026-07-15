@@ -9,17 +9,17 @@
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <title>Guardião Cibernético — Orbita</title>
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=115">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png?v=116">
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-512.png?v=115">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=115">
+<link rel="apple-touch-icon" href="icons/icon-512.png?v=116">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/icon-512.png?v=116">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
-<script src="js/access-gate.js?v=115"></script>
-<link rel="stylesheet" href="css/styles.css?v=115">
+<script src="js/access-gate.js?v=116"></script>
+<link rel="stylesheet" href="css/styles.css?v=116">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -142,21 +142,16 @@
       <h2 class="am-title" id="glossaryMenuTitle" data-i18n="settings.glossary">📖 Glossário</h2>
       <button type="button" class="am-close" id="glossaryMenuClose" data-i18n-attr="aria-label:a11y.close" aria-label="Fechar">×</button>
     </div>
-    <div class="am-section">
+    <div class="am-section glossary-search-section">
       <span class="am-section-label" data-i18n="settings.glossarySearch">Buscar termo</span>
       <p class="glossary-meta" id="glossaryCount"></p>
       <label class="sr-only" for="glossarySearch" data-i18n="settings.glossarySearch">Buscar termo</label>
-      <input type="search" class="dp-input glossary-search" id="glossarySearch" list="glossaryDatalist" autocomplete="off" data-i18n-attr="placeholder:settings.glossaryPh">
-      <datalist id="glossaryDatalist"></datalist>
+      <input type="search" class="dp-input glossary-search" id="glossarySearch" autocomplete="off" data-i18n-attr="placeholder:settings.glossaryPh">
+      <div class="glossary-word-list" id="glossaryWordList" role="listbox" data-i18n-attr="aria-label:settings.glossaryList"></div>
     </div>
     <div class="am-section glossary-term-section">
       <div class="glossary-card" id="glossaryCard"></div>
     </div>
-    <details class="glossary-browse am-section">
-      <summary class="glossary-browse-sum" data-i18n="settings.glossaryBrowse">Ver lista completa</summary>
-      <label class="sr-only" for="glossaryPick" data-i18n="settings.glossaryPick">Escolha um termo</label>
-      <select class="dp-select" id="glossaryPick"></select>
-    </details>
     <div class="am-section">
       <span class="am-section-label" data-i18n="settings.glossaryFavs">⭐ Favoritos</span>
       <div class="glossary-favs" id="glossaryFavsList"></div>
@@ -892,19 +887,19 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="115";</script>
-<script src="js/sign-lang.js?v=115"></script>
-<script src="js/orbita-world-map.js?v=115"></script>
-<script src="js/questions-data.js?v=115"></script>
-<script src="js/country-questions-data.js?v=115"></script>
-<script src="js/bosses-data.js?v=115"></script>
-<script src="js/boss-personal-tips.js?v=115"></script>
-<script src="js/chain-data.js?v=115"></script>
-<script src="js/boss-maps.js?v=115"></script>
-<script src="js/glossary-data.js?v=115"></script>
-<script src="js/game.js?v=115"></script>
-<script src="js/demo-menu.js?v=115"></script>
-<script src="js/review-bank.js?v=115"></script>
+<script>window.APP_VERSION="116";</script>
+<script src="js/sign-lang.js?v=116"></script>
+<script src="js/orbita-world-map.js?v=116"></script>
+<script src="js/questions-data.js?v=116"></script>
+<script src="js/country-questions-data.js?v=116"></script>
+<script src="js/bosses-data.js?v=116"></script>
+<script src="js/boss-personal-tips.js?v=116"></script>
+<script src="js/chain-data.js?v=116"></script>
+<script src="js/boss-maps.js?v=116"></script>
+<script src="js/glossary-data.js?v=116"></script>
+<script src="js/game.js?v=116"></script>
+<script src="js/demo-menu.js?v=116"></script>
+<script src="js/review-bank.js?v=116"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
 if ("serviceWorker" in navigator) {

@@ -54,7 +54,8 @@ var UI = {
   "settings.glossary":{pt:"📖 Glossário",en:"📖 Glossary"},
   "settings.glossarySub":{pt:"Siglas e termos do jogo — com exemplos do dia a dia.",en:"Game acronyms and terms — with everyday examples."},
   "settings.glossarySearch":{pt:"Buscar termo",en:"Search term"},
-  "settings.glossaryPh":{pt:"Ex.: MFA, DLP, phishing…",en:"e.g. MFA, DLP, phishing…"},
+  "settings.glossaryList":{pt:"Lista de termos do glossário",en:"Glossary term list"},
+  "settings.glossaryPh":{pt:"Digite ou escolha na lista…",en:"Type or pick from the list…"},
   "settings.glossaryPick":{pt:"Escolha um termo",en:"Choose a term"},
   "settings.glossaryBrowse":{pt:"Ver lista completa",en:"Browse full list"},
   "settings.glossaryDef":{pt:"O que significa",en:"What it means"},
@@ -583,12 +584,9 @@ function renderSettingsUi(){
     if(o[2]) o[2].textContent=t("settings.themeDark");
     sel.value=S.theme||"default";
   }
-  var dl=$("glossaryDatalist");
-  if(dl){
-    dl.innerHTML="";
-    GLOSSARY.forEach(function(g){ var op=document.createElement("option"); op.value=g.term+" — "+tt(g.name); dl.appendChild(op); });
-  }
-  renderGlossarySelect(); renderGlossaryFavs(); renderGlossaryMeta();
+  var dl=$("glossaryWordList");
+  if(dl) renderGlossaryWordList();
+  renderGlossaryFavs(); renderGlossaryMeta();
   var su=$("optSimpleUiSettings"); if(su) su.checked=S.simpleUi!==false;
   syncEasyReadUi();
   requestAnimationFrame(syncBottomShellHeight);
@@ -619,7 +617,7 @@ function setLang(lang){
   if(lang!=="pt"&&lang!=="en") return;
   S.lang=lang; save();
   document.querySelectorAll(".lang-card").forEach(function(x){ x.setAttribute("aria-pressed",x.getAttribute("data-lang")===lang?"true":"false"); });
-  applyI18n(); renderTeams(); renderRoles(); refreshHud(); applySignLanguage(); renderGlossarySelect();
+  applyI18n(); renderTeams(); renderRoles(); refreshHud(); applySignLanguage(); renderGlossaryWordList();
   var ov=$("onboardOverlay"); if(ov&&!ov.hidden) renderOnboarding();
   if($("screenMap").classList.contains("active")){ drawMap(); renderMapExpedition(); }
 }
@@ -865,7 +863,7 @@ function show(id){
   }
 }
 function announce(m){ var live=$("a11yLive"); if(!live) return; live.textContent=""; setTimeout(function(){ live.textContent=m; },40); }
-var focusTrapState=null, toastQueue=[], toastShowing=false, glossaryFromQuiz=false;
+var focusTrapState=null, toastQueue=[], toastShowing=false, glossaryFromQuiz=false, glossaryActiveId=null;
 var GLOSSARY_SUGGESTIONS=["mfa","phishing","dlp"];
 function trapFocus(container, returnEl){
   releaseFocusTrap();
@@ -1159,13 +1157,6 @@ function glossaryMatchFromSearch(q){
   var list=glossaryFilter(q);
   return list.length===1?list[0].id:null;
 }
-function syncGlossaryFromSearch(){
-  var search=$("glossarySearch"), sel=$("glossaryPick");
-  if(!search||!sel) return;
-  var id=glossaryMatchFromSearch(search.value);
-  renderGlossarySelect();
-  if(id){ sel.value=id; showGlossaryTerm(id); }
-}
 function glossaryFilter(q){
   q=(q||"").toLowerCase().trim();
   if(!q) return GLOSSARY.slice();
@@ -1177,21 +1168,58 @@ function glossaryFilter(q){
       || (g.cat&&(glossaryCatLabel(g.cat)||"").toLowerCase().indexOf(q)>=0);
   });
 }
-function renderGlossarySelect(filter){
-  var sel=$("glossaryPick"), search=$("glossarySearch");
-  if(!sel) return;
-  var q=search?search.value:"", list=glossaryFilter(q), cur=sel.value;
-  sel.innerHTML='<option value="">'+t("settings.glossaryPick")+'</option>';
+function syncGlossaryFromSearch(){
+  var search=$("glossarySearch");
+  if(!search) return;
+  var q=search.value.trim();
+  renderGlossaryWordList();
+  var id=glossaryMatchFromSearch(search.value);
+  if(id){ selectGlossaryTerm(id, false); return; }
+  var list=glossaryFilter(search.value);
+  if(list.length===1){ selectGlossaryTerm(list[0].id, false); return; }
+  if(!q){ glossaryActiveId=null; renderGlossaryEmptyState(); }
+}
+function selectGlossaryTerm(id, updateSearch){
+  glossaryActiveId=id||null;
+  if(updateSearch!==false){
+    var g=GLOSSARY.filter(function(x){ return x.id===id; })[0];
+    var search=$("glossarySearch");
+    if(g&&search) search.value=g.term;
+  }
+  renderGlossaryWordList();
+  if(id) showGlossaryTerm(id);
+  else renderGlossaryEmptyState();
+}
+function renderGlossaryWordList(){
+  var host=$("glossaryWordList"), search=$("glossarySearch");
+  if(!host) return;
+  var q=search?search.value:"", list=glossaryFilter(q).slice();
+  list.sort(function(a,b){ return a.term.localeCompare(b.term); });
+  host.innerHTML="";
+  if(!list.length){
+    host.innerHTML='<p class="glossary-list-empty muted">'+(L()==="pt"?"Nenhum termo encontrado.":"No terms found.")+'</p>';
+    renderGlossaryMeta(q);
+    return;
+  }
   list.forEach(function(g){
-    var o=document.createElement("option");
-    o.value=g.id;
-    o.textContent=g.term+" — "+tt(g.name);
-    sel.appendChild(o);
+    var b=document.createElement("button");
+    b.type="button";
+    b.className="glossary-word-item"+(glossaryActiveId===g.id?" active":"");
+    b.setAttribute("role","option");
+    b.setAttribute("aria-selected", glossaryActiveId===g.id?"true":"false");
+    b.setAttribute("data-gid", g.id);
+    var cat=g.cat?'<span class="glossary-word-cat">'+glossaryCatLabel(g.cat)+'</span>':"";
+    b.innerHTML=cat+'<span class="glossary-word-term">'+g.term+'</span><span class="glossary-word-sep">—</span><span class="glossary-word-name">'+tt(g.name)+'</span>';
+    b.addEventListener("click",function(e){ e.stopPropagation(); selectGlossaryTerm(g.id); });
+    host.appendChild(b);
   });
-  if(cur&&list.some(function(g){ return g.id===cur; })) sel.value=cur;
-  else if(list.length===1){ sel.value=list[0].id; showGlossaryTerm(list[0].id); }
-  else showGlossaryTerm(sel.value||null);
   renderGlossaryMeta(q);
+  scrollGlossaryActiveIntoView();
+}
+function scrollGlossaryActiveIntoView(){
+  var host=$("glossaryWordList"); if(!host||!glossaryActiveId) return;
+  var el=host.querySelector('[data-gid="'+glossaryActiveId+'"]');
+  if(el) try{ el.scrollIntoView({block:"nearest",behavior:S.a11y&&S.a11y.motion?"auto":"smooth"}); }catch(e){}
 }
 function showGlossaryTerm(id){
   var host=$("glossaryCard"); if(!host) return;
@@ -1249,9 +1277,9 @@ function toggleGlossaryMenu(force){
   document.body.classList.toggle("glossary-menu-open",open);
   if(open){
     positionGlossaryMenu();
-    renderGlossarySelect(); renderGlossaryFavs();
-    var sel=$("glossaryPick");
-    if(sel&&sel.value) showGlossaryTerm(sel.value); else renderGlossaryEmptyState();
+    renderGlossaryWordList(); renderGlossaryFavs();
+    if(glossaryActiveId) showGlossaryTerm(glossaryActiveId);
+    else renderGlossaryEmptyState();
     trapFocus(menu, btn);
     var gs=$("glossarySearch"); if(gs){ gs.focus(); try{ gs.select(); }catch(e){} }
   } else {
@@ -3925,11 +3953,9 @@ function openGlossaryForTerm(id, fromQuiz){
   glossaryFromQuiz=fromQuiz;
   var ret=$("quizGlossaryReturn"); if(ret) ret.hidden=!fromQuiz;
   toggleGlossaryMenu(true);
-  var sel=$("glossaryPick"), search=$("glossarySearch");
-  if(sel) sel.value=id;
+  var search=$("glossarySearch");
   if(search){ var g=GLOSSARY.filter(function(x){return x.id===id;})[0]; if(g) search.value=g.term; }
-  showGlossaryTerm(id);
-  renderGlossarySelect();
+  selectGlossaryTerm(id, false);
 }
 function toggleGlossaryFav(id){
   ensureUxState();
@@ -4167,7 +4193,6 @@ function bind(){
   on("settingsMenuClose","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); });
   on("settingsOpenA11yBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); toggleA11yMenu(true); if($("a11yBtn")) $("a11yBtn").focus(); });
   on("themeSelect","change",function(e){ e.stopPropagation(); themePreview(this.value); setTheme(this.value); });
-  on("glossaryPick","change",function(e){ e.stopPropagation(); showGlossaryTerm(this.value); });
   on("glossarySearch","input",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
   on("glossarySearch","change",function(e){ e.stopPropagation(); syncGlossaryFromSearch(); });
   on("hudStreakBtn","click",function(e){ e.stopPropagation(); toggleStreakPopover(); });
