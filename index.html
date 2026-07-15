@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=118">
+<link rel="stylesheet" href="css/styles.css?v=119">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -142,27 +142,37 @@
       <h2 class="am-title" id="glossaryMenuTitle" data-i18n="settings.glossary">📖 Glossário</h2>
       <button type="button" class="am-close" id="glossaryMenuClose" data-i18n-attr="aria-label:a11y.close" aria-label="Fechar">×</button>
     </div>
-    <div class="am-section glossary-search-section">
-      <span class="am-section-label" data-i18n="settings.glossarySearch">Buscar termo</span>
-      <p class="glossary-meta" id="glossaryCount"></p>
+    <div class="glossary-sticky-head">
       <label class="sr-only" for="glossarySearch" data-i18n="settings.glossarySearch">Buscar termo</label>
       <input type="search" class="dp-input glossary-search" id="glossarySearch" autocomplete="off" data-i18n-attr="placeholder:settings.glossaryPh">
-    </div>
-    <div class="am-section glossary-term-section">
-      <div class="glossary-nav" id="glossaryNav" hidden>
-        <button type="button" class="glossary-nav-btn" id="glossaryPrev" data-i18n-attr="aria-label:settings.glossaryPrev;title:settings.glossaryPrev" aria-label="Termo anterior">‹</button>
-        <span class="glossary-nav-pos" id="glossaryNavPos" aria-live="polite"></span>
-        <button type="button" class="glossary-nav-btn" id="glossaryNext" data-i18n-attr="aria-label:settings.glossaryNext;title:settings.glossaryNext" aria-label="Próximo termo">›</button>
+      <p class="glossary-meta" id="glossaryCount"></p>
+      <div class="glossary-progress" id="glossaryProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="glossary-progress-fill" id="glossaryProgressFill"></div>
       </div>
-      <p class="glossary-nav-hint muted" id="glossaryNavHint" hidden data-i18n="settings.glossaryNavHint">Use ← → ou os botões para ver o próximo termo</p>
-      <div class="glossary-card" id="glossaryCard" tabindex="0"></div>
+      <div class="glossary-cat-chips" id="glossaryCatChips" role="tablist"></div>
     </div>
-    <div class="am-section glossary-browse-section">
-      <div class="glossary-word-list" id="glossaryWordList" role="listbox" data-i18n-attr="aria-label:settings.glossaryList"></div>
-    </div>
-    <div class="am-section">
-      <span class="am-section-label" data-i18n="settings.glossaryFavs">⭐ Favoritos</span>
-      <div class="glossary-favs" id="glossaryFavsList"></div>
+    <div class="glossary-body">
+      <div class="glossary-layout">
+        <div class="glossary-panel-list">
+          <details class="glossary-list-collapse" id="glossaryListCollapse" open>
+            <summary class="glossary-list-sum" data-i18n="settings.glossaryList">Lista de termos</summary>
+            <div class="glossary-word-list" id="glossaryWordList" role="listbox" data-i18n-attr="aria-label:settings.glossaryList"></div>
+          </details>
+          <div class="glossary-favs-block">
+            <span class="glossary-favs-label" data-i18n="settings.glossaryFavs">⭐ Favoritos</span>
+            <div class="glossary-favs" id="glossaryFavsList"></div>
+          </div>
+        </div>
+        <div class="glossary-panel-detail">
+          <div class="glossary-nav" id="glossaryNav" hidden>
+            <button type="button" class="glossary-nav-btn" id="glossaryPrev" data-i18n-attr="aria-label:settings.glossaryPrev;title:settings.glossaryPrev" aria-label="Termo anterior">‹</button>
+            <span class="glossary-nav-pos" id="glossaryNavPos" aria-live="polite"></span>
+            <button type="button" class="glossary-nav-btn" id="glossaryNext" data-i18n-attr="aria-label:settings.glossaryNext;title:settings.glossaryNext" aria-label="Próximo termo">›</button>
+          </div>
+          <p class="glossary-nav-hint muted" id="glossaryNavHint" hidden data-i18n="settings.glossaryNavHint">Use ← → ou os botões para ver o próximo termo</p>
+          <div class="glossary-card" id="glossaryCard" tabindex="0"></div>
+        </div>
+      </div>
     </div>
   </div>
   <header class="topbar" role="banner">
@@ -895,18 +905,18 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="118";</script>
-<script src="js/sign-lang.js?v=118"></script>
-<script src="js/orbita-world-map.js?v=118"></script>
-<script src="js/questions-data.js?v=118"></script>
-<script src="js/country-questions-data.js?v=118"></script>
-<script src="js/bosses-data.js?v=118"></script>
-<script src="js/boss-personal-tips.js?v=118"></script>
-<script src="js/chain-data.js?v=118"></script>
-<script src="js/boss-maps.js?v=118"></script>
-<script src="js/glossary-data.js?v=118"></script>
-<script src="js/game.js?v=118"></script>
-<script src="js/demo-menu.js?v=118"></script>
+<script>window.APP_VERSION="119";</script>
+<script src="js/sign-lang.js?v=119"></script>
+<script src="js/orbita-world-map.js?v=119"></script>
+<script src="js/questions-data.js?v=119"></script>
+<script src="js/country-questions-data.js?v=119"></script>
+<script src="js/bosses-data.js?v=119"></script>
+<script src="js/boss-personal-tips.js?v=119"></script>
+<script src="js/chain-data.js?v=119"></script>
+<script src="js/boss-maps.js?v=119"></script>
+<script src="js/glossary-data.js?v=119"></script>
+<script src="js/game.js?v=119"></script>
+<script src="js/demo-menu.js?v=119"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */

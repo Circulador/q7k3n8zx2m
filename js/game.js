@@ -18,7 +18,7 @@ var DEF = { lang:"pt", name:"", team:"mina", role:"admin",
   a11y:{voice:false, contrast:false, large:false, motion:false, signs:false, fontScale:0, links:false, spacing:false, letterSpace:false, dyslexia:false, colorblind:"none", readingMode:false},
   done:{}, themeStats:{}, medals:{}, owned:{}, equipped:{avatar:"🛡️",frame:"default",skin:"default"},
   bossDone:{}, bossStats:{}, onboardingDone:false, daily:{date:"",done:{}}, weekly:{week:"",prog:{}}, teamScores:{},
-  chainDone:{}, streak:{count:0,lastDate:"",best:0}, missed:{}, reports:0, managerMode:false, focusLearn:false, simpleUi:true, theme:"default", tipsSeen:{map:false,daily:false,boss:false}, glossaryFavs:[], offlineHintSeen:false, heroExpanded:false };
+  chainDone:{}, streak:{count:0,lastDate:"",best:0}, missed:{}, reports:0, managerMode:false, focusLearn:false, simpleUi:true, theme:"default", tipsSeen:{map:false,daily:false,boss:false}, glossaryFavs:[], glossaryLearned:{}, glossaryReview:[], offlineHintSeen:false, heroExpanded:false };
 var S = merge(load(), DEF);
 
 function merge(a,b){ a=a||{}; for(var k in b){ if(a[k]===undefined) a[k]=b[k]; else if(b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])) a[k]=merge(a[k],b[k]); } return a; }
@@ -64,6 +64,16 @@ var UI = {
   "settings.glossaryDef":{pt:"O que significa",en:"What it means"},
   "settings.glossaryAcr":{pt:"Sigla letra a letra",en:"Acronym spelled out"},
   "settings.glossaryFun":{pt:"No seu dia a dia",en:"In your daily life"},
+  "settings.glossaryWhatIs":{pt:"O que é",en:"What it is"},
+  "settings.glossaryDayToDay":{pt:"No seu dia a dia",en:"In your daily life"},
+  "settings.glossaryRelated":{pt:"Termos relacionados",en:"Related terms"},
+  "settings.glossaryMore":{pt:"Mais detalhes",en:"More details"},
+  "settings.glossaryFullDef":{pt:"Definição completa",en:"Full definition"},
+  "settings.glossaryAllCats":{pt:"Todos",en:"All"},
+  "settings.glossaryLearned":{pt:"Já aprendi",en:"Mark learned"},
+  "settings.glossaryLearnedDone":{pt:"Aprendido",en:"Learned"},
+  "settings.glossaryReview":{pt:"Revisar depois",en:"Review later"},
+  "settings.glossaryReviewing":{pt:"Para revisar",en:"To review"},
   "settings.glossaryEmpty":{pt:"Digite uma sigla ou escolha um termo na lista.",en:"Type an acronym or pick a term from the list."},
   "settings.glossaryFavsEmpty":{pt:"Toque ☆ em um termo para favoritar.",en:"Tap ☆ on a term to favorite it."},
   "settings.glossarySuggest":{pt:"Termos populares:",en:"Popular terms:"},
@@ -867,8 +877,15 @@ function show(id){
   }
 }
 function announce(m){ var live=$("a11yLive"); if(!live) return; live.textContent=""; setTimeout(function(){ live.textContent=m; },40); }
-var focusTrapState=null, toastQueue=[], toastShowing=false, glossaryFromQuiz=false, glossaryActiveId=null;
+var focusTrapState=null, toastQueue=[], toastShowing=false, glossaryFromQuiz=false, glossaryActiveId=null, glossaryActiveCat=null;
 var GLOSSARY_SUGGESTIONS=["mfa","phishing","dlp"];
+var GLOSSARY_CAT_EMOJI={access:"🔐",threat:"⚠️",network:"🌐",data:"📁",ops:"🛠️",ot:"🏭",compliance:"📜",remote:"🏠",control:"🛡️",device:"📱",physical:"🔒"};
+var GLOSSARY_RELATED={
+  phishing:["mfa","phishreport","typosquat","socialeng"],mfa:["2fa","iam","password","vpn"],dlp:["classification","encryption","exfiltr","datalleak"],
+  vpn:["remoteacc","rdp","byod","jumpserver"],ransomware:["backup","incident","edr","antivirus"],scada:["ics","hmi","plc","ot"],bec:["supplierfraud","imperson","deepfake","phishing"],
+  firewall:["dmz","dns","segmentation","vpn"],iam:["accessctrl","permissions","2fa","mfa"],backup:["ransomware","incident","datalleak","encryption"],
+  ot:["ics","scada","hmi","itotbridge"],lgpd:["gdpr","classification","dlp","datalleak"],password:["mfa","2fa","pwdmanager","defaultpwd"]
+};
 function trapFocus(container, returnEl){
   releaseFocusTrap();
   if(!container||container.hidden) return;
@@ -1142,13 +1159,77 @@ function setTheme(th){
 function glossaryCatLabel(cat){
   return cat?t("glossary.cat."+cat)||cat:"";
 }
+function glossarySummary(g){
+  if(!g) return "";
+  if(g.summary) return tt(g.summary);
+  var d=tt(g.def)||"";
+  if(d.length<=140) return d;
+  var cut=d.slice(0,137), sp=cut.lastIndexOf(" ");
+  if(sp>80) cut=cut.slice(0,sp);
+  return cut+"…";
+}
+function glossaryRelatedIds(g){
+  if(!g) return [];
+  if(g.related&&g.related.length) return g.related.slice(0,4);
+  if(GLOSSARY_RELATED[g.id]) return GLOSSARY_RELATED[g.id].slice(0,4);
+  return GLOSSARY.filter(function(x){ return x.id!==g.id&&x.cat===g.cat; }).slice(0,3).map(function(x){ return x.id; });
+}
+function glossaryLearnedCount(){
+  ensureUxState();
+  var n=0;
+  if(!S.glossaryLearned) return 0;
+  for(var k in S.glossaryLearned) if(S.glossaryLearned[k]) n++;
+  return n;
+}
+function toggleGlossaryLearned(id){
+  ensureUxState();
+  if(!S.glossaryLearned) S.glossaryLearned={};
+  if(S.glossaryLearned[id]) delete S.glossaryLearned[id];
+  else S.glossaryLearned[id]=true;
+  save();
+}
+function toggleGlossaryReview(id){
+  ensureUxState();
+  if(!S.glossaryReview) S.glossaryReview=[];
+  var i=S.glossaryReview.indexOf(id);
+  if(i>=0) S.glossaryReview.splice(i,1); else S.glossaryReview.push(id);
+  save();
+}
+function renderGlossaryCatChips(){
+  var host=$("glossaryCatChips"); if(!host||typeof GLOSSARY==="undefined") return;
+  var cats=[], seen={};
+  GLOSSARY.forEach(function(g){ if(g.cat&&!seen[g.cat]){ seen[g.cat]=1; cats.push(g.cat); } });
+  var all='<button type="button" class="glossary-cat-chip'+(!glossaryActiveCat?" active":"")+'" data-cat="" role="tab" aria-selected="'+(!glossaryActiveCat?"true":"false")+'">'+t("settings.glossaryAllCats")+'</button>';
+  host.innerHTML=all+cats.map(function(c){
+    var em=GLOSSARY_CAT_EMOJI[c]||"";
+    var on=glossaryActiveCat===c;
+    return '<button type="button" class="glossary-cat-chip'+(on?" active":"")+'" data-cat="'+c+'" role="tab" aria-selected="'+(on?"true":"false")+'">'+em+" "+glossaryCatLabel(c)+'</button>';
+  }).join("");
+  host.querySelectorAll(".glossary-cat-chip").forEach(function(b){
+    b.addEventListener("click",function(e){
+      e.stopPropagation();
+      glossaryActiveCat=b.getAttribute("data-cat")||null;
+      renderGlossaryCatChips();
+      syncGlossaryFromSearch();
+    });
+  });
+}
 function renderGlossaryMeta(q){
   var el=$("glossaryCount"); if(!el||typeof GLOSSARY==="undefined") return;
+  ensureUxState();
   var list=glossaryFilter(q||""), total=GLOSSARY.length;
-  var msg=list.length<total&&(q||"").trim()
-    ?(L()==="pt"?list.length+" de "+total+" termos encontrados":list.length+" of "+total+" terms found")
-    :(L()==="pt"?total+" termos · siglas e conceitos de cyber security":total+" terms · cyber security acronyms and concepts");
-  el.textContent=msg;
+  var learned=glossaryLearnedCount(), favs=S.glossaryFavs?S.glossaryFavs.length:0;
+  var pct=total?Math.round(learned/total*100):0;
+  var learnedLbl=L()==="pt"?"aprendidos":"learned";
+  if((q||"").trim()||glossaryActiveCat){
+    var msg=L()==="pt"?list.length+" de "+total+" termos":list.length+" of "+total+" terms";
+    el.textContent=msg+" · "+favs+" ⭐ · "+pct+"% "+learnedLbl;
+  } else {
+    el.textContent=(L()==="pt"?total+" termos · ":total+" terms · ")+favs+" ⭐ · "+pct+"% "+learnedLbl;
+  }
+  var fill=$("glossaryProgressFill"), bar=$("glossaryProgress");
+  if(fill) fill.style.width=pct+"%";
+  if(bar){ bar.setAttribute("aria-valuenow",String(pct)); bar.setAttribute("aria-label",(L()==="pt"?"Progresso do glossário":"Glossary progress")+" "+pct+"%"); }
 }
 function glossaryMatchFromSearch(q){
   q=(q||"").trim(); if(!q) return null;
@@ -1163,8 +1244,10 @@ function glossaryMatchFromSearch(q){
 }
 function glossaryFilter(q){
   q=(q||"").toLowerCase().trim();
-  if(!q) return GLOSSARY.slice();
-  return GLOSSARY.filter(function(g){
+  var list=GLOSSARY.slice();
+  if(glossaryActiveCat) list=list.filter(function(g){ return g.cat===glossaryActiveCat; });
+  if(!q) return list;
+  return list.filter(function(g){
     return g.term.toLowerCase().indexOf(q)>=0 || g.id.indexOf(q)>=0
       || (tt(g.name)||"").toLowerCase().indexOf(q)>=0
       || (tt(g.def)||"").toLowerCase().indexOf(q)>=0
@@ -1260,7 +1343,8 @@ function renderGlossaryWordList(){
     b.setAttribute("aria-selected", glossaryActiveId===g.id?"true":"false");
     b.setAttribute("data-gid", g.id);
     var cat=g.cat?'<span class="glossary-word-cat">'+glossaryCatLabel(g.cat)+'</span>':"";
-    b.innerHTML=cat+'<span class="glossary-word-term">'+g.term+'</span><span class="glossary-word-sep">—</span><span class="glossary-word-name">'+tt(g.name)+'</span>';
+    var learned=S.glossaryLearned&&S.glossaryLearned[g.id]?'<span class="glossary-word-learned" aria-hidden="true">✓</span>':"";
+    b.innerHTML=cat+'<span class="glossary-word-term">'+g.term+'</span><span class="glossary-word-sep">—</span><span class="glossary-word-name">'+tt(g.name)+'</span>'+learned;
     b.addEventListener("click",function(e){ e.stopPropagation(); selectGlossaryTerm(g.id); });
     host.appendChild(b);
   });
@@ -1278,12 +1362,50 @@ function showGlossaryTerm(id){
   if(!id){ renderGlossaryEmptyState(); return; }
   var g=GLOSSARY.filter(function(x){ return x.id===id; })[0];
   if(!g){ host.innerHTML=""; return; }
-  var cat=g.cat?'<span class="glossary-cat">'+glossaryCatLabel(g.cat)+'</span>':"";
-  var acr=g.acr?'<p class="glossary-acr"><span class="glossary-acr-k">'+t("settings.glossaryAcr")+'</span>'+tt(g.acr)+'</p>':"";
-  var fav=S.glossaryFavs&&S.glossaryFavs.indexOf(g.id)>=0?"⭐":"☆";
-  host.innerHTML='<div class="glossary-term-row">'+cat+'<div class="glossary-term">'+g.term+'</div><button type="button" class="glossary-fav-toggle" data-gid="'+g.id+'" aria-label="'+(L()==="pt"?"Favorito":"Favorite")+'">'+fav+'</button></div><div class="glossary-name">'+tt(g.name)+'</div>'+acr+'<div class="glossary-def-k">'+t("settings.glossaryDef")+'</div><p class="glossary-def">'+tt(g.def)+'</p><div class="glossary-fun-k">'+t("settings.glossaryFun")+'</div><p class="glossary-fun">'+tt(g.fun)+'</p>';
-  var fb=host.querySelector(".glossary-fav-toggle");
-  if(fb) fb.addEventListener("click",function(e){ e.stopPropagation(); toggleGlossaryFav(g.id); showGlossaryTerm(g.id); });
+  var em=g.cat?(GLOSSARY_CAT_EMOJI[g.cat]||""):"";
+  var cat=g.cat?'<span class="glossary-cat">'+em+" "+glossaryCatLabel(g.cat)+'</span>':"";
+  var isFav=S.glossaryFavs&&S.glossaryFavs.indexOf(g.id)>=0;
+  var isLearned=S.glossaryLearned&&S.glossaryLearned[g.id];
+  var isReview=S.glossaryReview&&S.glossaryReview.indexOf(g.id)>=0;
+  var related=glossaryRelatedIds(g);
+  var relHtml=related.length?'<div class="glossary-related-k">'+t("settings.glossaryRelated")+'</div><div class="glossary-related">'+related.map(function(rid){
+    var rg=GLOSSARY.filter(function(x){return x.id===rid;})[0]; if(!rg) return "";
+    return '<button type="button" class="glossary-related-chip" data-gid="'+rid+'">'+rg.term+'</button>';
+  }).join("")+'</div>':"";
+  var sum=glossarySummary(g), fullDef=tt(g.def)||"";
+  var details="";
+  if(g.acr||fullDef.length>sum.length){
+    details='<details class="glossary-more"><summary>'+t("settings.glossaryMore")+'</summary>';
+    if(g.acr) details+='<p class="glossary-acr"><span class="glossary-acr-k">'+t("settings.glossaryAcr")+'</span>'+tt(g.acr)+'</p>';
+    if(fullDef.length>sum.length) details+='<div class="glossary-def-k">'+t("settings.glossaryFullDef")+'</div><p class="glossary-def">'+fullDef+'</p>';
+    details+='</details>';
+  }
+  host.innerHTML=
+    cat+
+    '<div class="glossary-term">'+g.term+'</div>'+
+    '<div class="glossary-name">'+tt(g.name)+'</div>'+
+    '<div class="glossary-card-actions">'+
+      '<button type="button" class="glossary-action-btn glossary-fav-toggle'+(isFav?" on":"")+'" data-act="fav" aria-label="'+(L()==="pt"?"Favorito":"Favorite")+'">'+(isFav?"⭐":"☆")+'</button>'+
+      '<button type="button" class="glossary-action-btn glossary-learn-toggle'+(isLearned?" on":"")+'" data-act="learn">✅ '+(isLearned?t("settings.glossaryLearnedDone"):t("settings.glossaryLearned"))+'</button>'+
+      '<button type="button" class="glossary-action-btn glossary-review-toggle'+(isReview?" on":"")+'" data-act="review">🔖 '+(isReview?t("settings.glossaryReviewing"):t("settings.glossaryReview"))+'</button>'+
+    '</div>'+
+    '<div class="glossary-summary-block"><div class="glossary-def-k">'+t("settings.glossaryWhatIs")+'</div><p class="glossary-summary">'+sum+'</p></div>'+
+    '<div class="glossary-fun-block"><div class="glossary-fun-k">'+t("settings.glossaryDayToDay")+'</div><p class="glossary-fun">'+tt(g.fun)+'</p></div>'+
+    relHtml+details;
+  host.querySelectorAll(".glossary-action-btn").forEach(function(b){
+    b.addEventListener("click",function(e){
+      e.stopPropagation();
+      var act=b.getAttribute("data-act");
+      if(act==="fav"){ toggleGlossaryFav(g.id); showGlossaryTerm(g.id); }
+      else if(act==="learn"){ toggleGlossaryLearned(g.id); showGlossaryTerm(g.id); renderGlossaryMeta($("glossarySearch")?$("glossarySearch").value:""); renderGlossaryWordList(); }
+      else if(act==="review"){ toggleGlossaryReview(g.id); showGlossaryTerm(g.id); }
+    });
+  });
+  host.querySelectorAll(".glossary-related-chip").forEach(function(b){
+    b.addEventListener("click",function(){ selectGlossaryTerm(b.getAttribute("data-gid")); });
+  });
+  var collapse=$("glossaryListCollapse");
+  if(collapse&&window.matchMedia("(max-width:640px)").matches) collapse.open=false;
   updateGlossaryNav();
 }
 function renderGlossaryEmptyState(){
@@ -1314,7 +1436,7 @@ function positionGlossaryMenu(){
     menu.style.top=""; menu.style.right=""; menu.style.left=""; menu.style.bottom=""; menu.style.width="";
     return;
   }
-  var r=btn.getBoundingClientRect(), w=Math.min(340, window.innerWidth-28);
+  var r=btn.getBoundingClientRect(), w=Math.min(720, window.innerWidth-28);
   menu.style.top=(r.bottom+8)+"px";
   menu.style.right=Math.max(8, window.innerWidth-r.right)+"px";
   menu.style.left="auto";
@@ -1332,6 +1454,7 @@ function toggleGlossaryMenu(force){
   document.body.classList.toggle("glossary-menu-open",open);
   if(open){
     positionGlossaryMenu();
+    renderGlossaryCatChips();
     renderGlossaryWordList(); renderGlossaryFavs();
     if(glossaryActiveId) showGlossaryTerm(glossaryActiveId);
     else renderGlossaryEmptyState();
@@ -3918,6 +4041,8 @@ var THEME_GLOSSARY={phishing:"phishing",password:"mfa",ot:"scada",data:"dlp",dev
 function ensureUxState(){
   if(!S.tipsSeen) S.tipsSeen={map:false,daily:false,boss:false};
   if(!S.glossaryFavs) S.glossaryFavs=[];
+  if(!S.glossaryLearned) S.glossaryLearned={};
+  if(!S.glossaryReview) S.glossaryReview=[];
 }
 function setSimpleUi(on){
   S.simpleUi=!!on; save(); applySimpleUi(); refreshHud();
@@ -4017,7 +4142,7 @@ function toggleGlossaryFav(id){
   ensureUxState();
   var i=S.glossaryFavs.indexOf(id);
   if(i>=0) S.glossaryFavs.splice(i,1); else S.glossaryFavs.push(id);
-  save(); renderGlossaryFavs();
+  save(); renderGlossaryFavs(); renderGlossaryMeta($("glossarySearch")?$("glossarySearch").value:"");
 }
 function renderGlossaryFavs(){
   var host=$("glossaryFavsList"); if(!host) return;
