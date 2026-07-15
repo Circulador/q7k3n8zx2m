@@ -2,15 +2,15 @@
 
 Jogo web **bilíngue (Português 🇧🇷 / Inglês 🇬🇧)** de conscientização em **Cyber Security e Segurança da Informação**, ambientado nas operações reais da Orbita ao redor do mundo. Funciona 100% no navegador, sem login, com suporte **PWA** (instalável e offline após a primeira visita).
 
-**Versão atual:** `v131` · **Demo ao vivo:** [circulador.github.io/q7k3n8zx2m](https://circulador.github.io/q7k3n8zx2m/?v=131)
+**Versão atual:** `v156` · **Demo ao vivo:** [circulador.github.io/q7k3n8zx2m](https://circulador.github.io/q7k3n8zx2m/?v=156)
 
 ---
 
 ## ✨ Destaques desta versão
 
-### Perfil unificado (onboarding + edição)
+### Perfil escalável (equipe × papel)
 
-Uma **única tela de perfil** (`#screenSetup`) cobre nome, equipe e papel:
+Configuração centralizada em **`js/profile-data.js`** — novas equipes e papéis podem ser adicionados sem alterar `game.js`.
 
 | Momento | Badge | Título |
 |---------|-------|--------|
@@ -21,31 +21,41 @@ Uma **única tela de perfil** (`#screenSetup`) cobre nome, equipe e papel:
 
 **Papéis (8):** Administrativo · Operação/Campo · Automação (OT) · Liderança · Analista · Técnico · Terceiros · Em formação
 
-- **Nome (opcional)** no topo — certificado e ranking (`Exemplo: Rodolfo Conte`)
+- **Matriz de correlação** área × rotina (alta / média / baixa / especial) com feedback dinâmico no setup
+- **Nome (opcional)** no topo — certificado e ranking
 - Onboarding em **5 passos** → Setup → primeira atividade
 
-### Conquistas e certificado
+### Home mobile-first (UX v2)
 
-**16 conquistas** ligadas às mecânicas do jogo: perfil, mapa, diária, metas semanais, cadeia Norte, crises, sequência e glossário.
+- **Launcher de 5 segundos:** CTA principal no topo, metas semanais compactas (chips), próxima conquista e contexto social por área
+- **Sticky CTA** no mobile quando a diária está pendente
+- **Faixa “Como funciona”** recolhível nos primeiros dias
+- Rollback de interface legada via `?ux=122` ou toggle em Configurações
 
-Certificado com **layout revisado** — estatísticas em grade (rótulo + valor) e conquistas em 3 colunas sem sobreposição.
+### Navegação (mobile-first)
 
-### Navegação e UX (mobile-first)
+**Barra inferior (5 itens):**
 
-- **Barra inferior (5 itens):** Início · Mapa · **Missões** (diária + semanal) · Desafios / Crises · Eu · **Loja**
-- **Barra superior:** idioma, ofensiva, progresso, **🧭 guia**, **📖 glossário**, ♿ acessibilidade, ⚙️ configurações
-- **Início e Missões (UX v2):** hierarquia clara, linguagem acessível, CTA contextual (“Jogar agora”)
-- Rollback de interface legada via `?ux=122` (sem toggle na UI)
-- Menus fixos acima da taskbar no celular
+Início → Mapa → Desafios / Crises → Missões → Eu
+
+**Barra superior:** idioma, ofensiva, progresso, 📖 glossário, ♿ acessibilidade, ⚙️ configurações
+
+**Dentro de ⚙️ Configurações:**
+
+- 🧭 Reabrir guia do jogo
+- 🛒 Loja
+- ✏️ Editar perfil
+- Tema, acessibilidade, modo simples, painel do gestor, menu demo
+
+> A **Loja** e o **Guia** saíram da taskbar inferior e da toolbar — ficam apenas em Configurações.
 
 ### Conteúdo e pedagogia
 
-- **🗺️ Mapa “A Orbita no mundo”** — D3 + TopoJSON, alinhado a [orbita.com/pt/onde-estamos](https://www.orbita.com/pt/onde-estamos)
+- **🗺️ Mapa “A Orbita no mundo”** — D3 + TopoJSON
 - **⛓️ Cadeia Carajás → China** — storytelling tabletop com SVG animado
-- **🎯 Desafios / Crises** — 6 crises com 10 cenas cada; mapas vetoriais animados por cenário (Carajás, escritórios, BEC, OT, hub Omã, vazamento, porto)
+- **🎯 Desafios / Crises** — crises com cenas interativas e mapas vetoriais por cenário
 - **📅 Missões diárias** + **🏆 metas semanais** na mesma tela
-- **🛒 Loja**, **📊 perfil Eu**, **🧭 painel do gestor**, **📚 banco de revisão** in-app
-- **📜 Certificado** gerável na aba Eu (PNG / impressão)
+- **16 conquistas**, **📜 certificado** (PNG / impressão), **🧭 painel do gestor**, **📚 banco de revisão** in-app
 
 ### Acessibilidade
 
@@ -75,7 +85,7 @@ Inclui atalhos de estado e **ir para tela** (mapa, missões, crises, loja, etc.)
 .
 ├── index.html              # Telas, topbar, taskbar inferior, PWA
 ├── manifest.webmanifest
-├── sw.js                   # Service Worker (cache v130)
+├── sw.js                   # Service Worker (cache v156)
 ├── README.md
 ├── RACIONAL-PEDAGOGICO.md
 ├── review.html             # Banco de revisão (legado; revisão também in-app)
@@ -91,8 +101,9 @@ Inclui atalhos de estado e **ir para tela** (mapa, missões, crises, loja, etc.)
 ├── icons/                  # PWA (192 / 512)
 └── js/
     ├── game.js             # Jogo, i18n, navegação, certificado, gestor…
+    ├── profile-data.js     # Equipes, papéis, correlação (escalável)
     ├── orbita-world-map.js # Mapa mundial (D3/TopoJSON)
-    ├── bosses-data.js      # Crises / storytelling (10 cenas)
+    ├── bosses-data.js      # Crises / storytelling
     ├── boss-maps.js        # SVG animado da cadeia
     ├── boss-personal-tips.js
     ├── chain-data.js
@@ -104,7 +115,7 @@ Inclui atalhos de estado e **ir para tela** (mapa, missões, crises, loja, etc.)
     └── demo-menu.js        # Menu demo temporário (QA)
 ```
 
-> Lógica principal: **`js/game.js`**. Versão de cache: `window.APP_VERSION` em `index.html` e `CACHE_VERSION` em `sw.js` (atualmente **130**). Ao publicar, altere ambos e use `?v=130` na URL para forçar atualização.
+> Lógica principal: **`js/game.js`**. Versão de cache: `window.APP_VERSION` em `index.html` e `CACHE_VERSION` em `sw.js` (atualmente **156**). Ao publicar, altere ambos e use `?v=156` na URL para forçar atualização.
 
 ---
 
@@ -112,24 +123,25 @@ Inclui atalhos de estado e **ir para tela** (mapa, missões, crises, loja, etc.)
 
 ### Opção 1 — Servidor local (recomendado)
 
-```bash
+```powershell
 cd GuardiaoDigitalVale
 python -m http.server 8093
 ```
 
-Abra **http://localhost:8093** ou **http://localhost:8093/?v=130** após mudanças em CSS/JS.
+Abra **[http://localhost:8093/?v=156](http://localhost:8093/?v=156)** após mudanças em CSS/JS.
 
 ### Opção 2 — GitHub Pages
 
-Deploy automático na branch `main`. URL: [circulador.github.io/q7k3n8zx2m](https://circulador.github.io/q7k3n8zx2m/?v=130)
+Deploy automático na branch `main`. URL: [circulador.github.io/q7k3n8zx2m/?v=156](https://circulador.github.io/q7k3n8zx2m/?v=156)
 
 ### Fluxo do jogador
 
 1. Escolha **idioma** e **acessibilidade** (onboarding ou menu ♿).
-2. **Personalize seu perfil** — nome (opcional), equipe e papel.
-3. Use a **taskbar inferior** e a **topbar** para navegar.
-4. Edite o perfil depois em **⚙️ Configurações** ou **Eu → Editar perfil**.
-5. Progresso, preferências e conquistas ficam em `localStorage` (`guardiao_orbita_v7`).
+2. **Personalize seu perfil** — onde você atua e como é seu trabalho.
+3. Na **Início**, use o botão ▶️ principal para o próximo passo do treino.
+4. Navegue pela **taskbar inferior** (Início, Mapa, Desafios/Crises, Missões, Eu).
+5. **Loja** e **guia** ficam em **⚙️ Configurações**.
+6. Progresso, preferências e conquistas ficam em `localStorage` (`guardiao_orbita_v7`).
 
 ### Testar integração (demo)
 
@@ -153,8 +165,9 @@ Deploy automático na branch `main`. URL: [circulador.github.io/q7k3n8zx2m](http
 ## 🌍 Publicar nova versão
 
 1. Atualize `window.APP_VERSION` em `index.html`, query `?v=` nos assets, `CACHE_VERSION` e lista `PRECACHE` em `sw.js`, e ícones em `manifest.webmanifest`.
-2. Commit e push para `main`.
-3. Aguarde o GitHub Pages (1–2 min) e acesse com `?v=XX` para evitar cache antigo do Service Worker.
+2. Atualize este `README.md` (versão, URLs e destaques).
+3. Commit e push para `main`.
+4. Aguarde o GitHub Pages (1–2 min) e acesse com `?v=XX` para evitar cache antigo do Service Worker.
 
 ---
 
