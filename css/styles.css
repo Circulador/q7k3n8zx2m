@@ -887,6 +887,7 @@ body.contrast .chain-map-wrap{background:#04141b}
 .stat .l{color:var(--steel);font-size:.78rem;margin-top:2px}
 .theme-errors{margin-top:12px;display:grid;gap:6px}
 .theme-err{display:flex;justify-content:space-between;font-size:.85rem;padding:8px 12px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.theme-err-weak{border-color:rgba(255,107,107,.45);background:rgba(255,107,107,.08)}
 
 /* Medals / ranking */
 .medals{display:flex;flex-wrap:wrap;gap:10px}
@@ -903,13 +904,34 @@ body.contrast .chain-map-wrap{background:#04141b}
 .rank-val{font-size:.82rem;color:var(--steel);width:46px;text-align:right}
 
 /* Chefões — estilo tabletop */
-.boss-list{display:grid;gap:12px;position:relative;z-index:2;padding-bottom:4px}
-.boss-card{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;font:inherit;color:inherit;text-align:left;width:100%;touch-action:manipulation;-webkit-tap-highlight-color:rgba(237,177,17,.2);min-height:52px;position:relative;z-index:1;user-select:none;-webkit-user-select:none;appearance:none;-webkit-appearance:none}
+.boss-list{display:grid;gap:14px;position:relative;z-index:2;padding-bottom:4px}
+.boss-list-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border:1px solid rgba(0,126,122,.28);border-radius:12px;background:rgba(0,126,122,.08)}
+.boss-list-summary{font-weight:800;font-size:.86rem;color:var(--gold)}
+.boss-list-legend{display:flex;flex-wrap:wrap;gap:8px}
+.boss-legend-item{font-size:.68rem;font-weight:700;padding:4px 8px;border-radius:999px;border:1px solid var(--line)}
+.boss-legend-pending{border-color:rgba(237,177,17,.45);color:var(--gold);background:rgba(237,177,17,.1)}
+.boss-legend-done{border-color:rgba(76,175,125,.45);color:var(--ok);background:rgba(76,175,125,.1)}
+.boss-list-section{display:grid;gap:10px}
+.boss-list-section-k{margin:0;font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--steel)}
+.boss-list-section--pending .boss-list-section-k{color:var(--gold)}
+.boss-list-section--done .boss-list-section-k{color:var(--ok)}
+.boss-list-section-grid{display:grid;gap:10px}
+.boss-card{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;font:inherit;color:inherit;text-align:left;width:100%;touch-action:manipulation;-webkit-tap-highlight-color:rgba(237,177,17,.2);min-height:52px;position:relative;z-index:1;user-select:none;-webkit-user-select:none;appearance:none;-webkit-appearance:none;flex-wrap:wrap}
 .boss-card,.boss-card:focus-visible{outline:none}
 .boss-card:active{border-color:var(--gold);background:rgba(237,177,17,.08);transform:scale(.995)}
 .boss-card:hover,.boss-card:focus-visible{border-color:var(--gold);box-shadow:0 0 0 2px rgba(236,177,31,.25)}
-.boss-card .be{font-size:2rem;flex:none;line-height:1}
-.boss-card-body{flex:1;min-width:0}
+.boss-card .be{font-size:2rem;flex:none;line-height:1;order:2}
+.boss-card-body{flex:1;min-width:0;order:3}
+.boss-card-status,.boss-status-pill{order:1;flex:1 1 100%;margin-bottom:2px}
+.boss-status-pill{display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:800;padding:4px 10px;border-radius:999px;letter-spacing:.02em}
+.boss-status-pill--pending{border:1px solid rgba(237,177,17,.5);background:rgba(237,177,17,.14);color:var(--gold)}
+.boss-status-pill--done{border:1px solid rgba(76,175,125,.45);background:rgba(76,175,125,.12);color:var(--ok)}
+.boss-status-tier{color:inherit;opacity:.95}
+.boss-card-action{order:4;margin-left:auto;flex:none;font-weight:800;font-size:1.15rem;line-height:1;padding-top:4px}
+.boss-card--pending{border-color:rgba(237,177,17,.35);background:rgba(237,177,17,.04)}
+.boss-card--pending .boss-card-action{color:var(--gold)}
+.boss-card--done{border-color:rgba(76,175,125,.35);background:rgba(76,175,125,.05);border-left:4px solid var(--ok)}
+.boss-card--done .boss-card-action{color:var(--ok);opacity:.85}
 .boss-card-tag{display:inline-block;font-size:.62rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
 .boss-card .bt{font-weight:800;font-size:.95rem}
 .boss-card .bd{color:var(--steel);font-size:.82rem;line-height:1.35;margin-top:3px}
@@ -1483,7 +1505,7 @@ body.theme-dark .card{background:rgba(255,255,255,.04);border-color:rgba(255,255
 .wg-txt{flex:1}
 .wg-val{font-weight:700;color:var(--steel);font-size:.8rem}
 .boss-card--rec{border-color:rgba(237,177,17,.55);box-shadow:0 0 0 1px rgba(237,177,17,.25)}
-.boss-card--done{opacity:.92}
+.boss-card--done{opacity:1}
 .boss-rec-tag{color:var(--gold);font-weight:800}
 .map-explorer-hint{margin:4px 0 0;font-size:.82rem;color:var(--gold);font-weight:700}
 .nav-badge{position:absolute;top:2px;right:8px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:var(--bad);color:#fff;font-size:.62rem;font-weight:800;line-height:16px;text-align:center}
@@ -1574,7 +1596,8 @@ body.pwa-install-open{overflow:hidden}
 .demo-status-list li{margin:3px 0}
 .demo-section{margin-bottom:14px}
 .demo-section-k{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);margin-bottom:8px}
-.demo-preset-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.demo-preset-row{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+@media(max-width:420px){.demo-preset-row{grid-template-columns:repeat(3,1fr)}}
 .demo-preset-btn{padding:10px 4px;border:2px solid rgba(237,177,17,.45);border-radius:10px;background:rgba(237,177,17,.1);color:#eaf2f6;font:inherit;font-weight:800;font-size:.9rem;cursor:pointer;touch-action:manipulation}
 .demo-preset-btn:hover,.demo-preset-btn:focus-visible{border-color:var(--gold);background:rgba(237,177,17,.22)}
 .demo-action-grid,.demo-nav-grid{display:flex;flex-wrap:wrap;gap:6px}

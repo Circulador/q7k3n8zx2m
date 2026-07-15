@@ -164,6 +164,14 @@ var UI = {
   "boss.estTime":{pt:"~{n} min",en:"~{n} min"},
   "boss.recommended":{pt:"Recomendado",en:"Recommended"},
   "boss.completed":{pt:"Concluído",en:"Completed"},
+  "boss.statusPending":{pt:"Pendente",en:"Pending"},
+  "boss.statusDone":{pt:"Concluída",en:"Completed"},
+  "boss.listSummary":{pt:"{done}/{total} histórias concluídas · {pending} pendentes",en:"{done}/{total} stories completed · {pending} pending"},
+  "boss.sectionPending":{pt:"Histórias pendentes",en:"Pending stories"},
+  "boss.sectionDone":{pt:"Histórias concluídas",en:"Completed stories"},
+  "boss.scenes":{pt:"{n} cenas",en:"{n} scenes"},
+  "boss.playStory":{pt:"Jogar história",en:"Play story"},
+  "boss.replayStory":{pt:"Jogar novamente",en:"Play again"},
   "boss.nextAction":{pt:"Próxima crise →",en:"Next crisis →"},
   "boss.resultNext":{pt:"Continuar jornada",en:"Continue journey"},
   "nav.more":{pt:"Mais",en:"More"},
@@ -3340,9 +3348,15 @@ function finishCampaign(){
   if(win) toast(L()==="pt"?"🏆 "+tt(c.name)+" protegido!":"🏆 "+tt(c.name)+" protected!");
 }
 function renderThemeErrors(host){
-  host.innerHTML=""; var any=false;
-  for(var th in S.themeStats){ var a=themeAcc(th); if(a===null) continue; any=true; var d=document.createElement("div"); d.className="theme-err"; d.innerHTML='<span>'+THEMES[th].ico+' '+tt(THEMES[th])+'</span><span>'+a+'%</span>'; host.appendChild(d); }
-  if(!any) host.innerHTML='<div class="muted">'+(L()==="pt"?"Jogue para ver suas estatísticas por tema.":"Play to see your stats by theme.")+'</div>';
+  host.innerHTML="";
+  var arr=Object.keys(S.themeStats||{}).map(function(th){ return {th:th,a:themeAcc(th)}; }).filter(function(x){ return x.a!==null; }).sort(function(a,b){ return a.a-b.a; });
+  if(!arr.length){ host.innerHTML='<div class="muted">'+(L()==="pt"?"Jogue para ver suas estatísticas por tema.":"Play to see your stats by theme.")+'</div>'; return; }
+  arr.forEach(function(x){
+    var d=document.createElement("div");
+    d.className="theme-err"+(x.a<70?" theme-err-weak":"");
+    d.innerHTML='<span>'+THEMES[x.th].ico+' '+tt(THEMES[x.th])+'</span><span>'+x.a+'%</span>';
+    host.appendChild(d);
+  });
 }
 
 /* ==========================================================
@@ -3759,27 +3773,68 @@ function renderBossList(){
     if(a.chainId!=="office"&&b.chainId==="office") return 1;
     return 0;
   });
+  var pending=[], done=[];
   list.forEach(function(b){
-    var st=S.bossStats[b.id], best=st&&st.best, tier=best?bossTierInfo(best.tier):null;
-    var d=document.createElement("button");
-    d.type="button";
-    d.setAttribute("data-boss",b.id);
-    d.addEventListener("click",function(){ startBoss(b.id); });
-    var rec=getRecommendedBossId()===b.id;
-    var done=!!best;
-    d.className="boss-card boss-card--tabletop boss-card--map"+(rec?" boss-card--rec":"")+(done?" boss-card--done":"");
-    var phaseN=b.phases&&b.phases.length?b.phases.length:0;
-    var estMin=Math.max(3,Math.round(phaseN*1.5));
-    var meta=t("boss.estTime").replace("{n}",String(estMin));
-    if(rec) meta+=' · <span class="boss-rec-tag">'+t("boss.recommended")+'</span>';
-    if(done) meta+=' · '+t("boss.completed");
-    if(best) meta+=" · "+(tier?tier.ico:"")+" "+best.index+"%";
-    var badge=best?'<span class="bdone" title="'+tt(tier.title)+'">'+tier.ico+'</span>':'<span class="boss-card-play" aria-hidden="true">▶</span>';
-    var tagLabel=t("boss.storyMapLabel");
-    var preview=tt(b.desc).length>90?tt(b.desc).slice(0,87)+"…":tt(b.desc);
-    d.innerHTML='<span class="be">'+b.emoji+'</span><div class="boss-card-body"><span class="boss-card-tag">'+tagLabel+'</span><div class="bt">'+tt(b.name)+'</div><div class="bd">'+preview+'</div><div class="boss-card-meta">'+meta+'</div></div>'+badge;
-    host.appendChild(d);
+    var st=S.bossStats[b.id], best=st&&st.best;
+    if(best) done.push(b); else pending.push(b);
   });
+  var head=document.createElement("div");
+  head.className="boss-list-head";
+  head.innerHTML=
+    '<div class="boss-list-summary">'+t("boss.listSummary").replace("{done}",String(done.length)).replace("{total}",String(BOSSES.length)).replace("{pending}",String(pending.length))+'</div>'+
+    '<div class="boss-list-legend" aria-hidden="true">'+
+      '<span class="boss-legend-item boss-legend-pending">▶ '+t("boss.statusPending")+'</span>'+
+      '<span class="boss-legend-item boss-legend-done">✅ '+t("boss.statusDone")+'</span>'+
+    '</div>';
+  host.appendChild(head);
+  function appendSection(title, items, isDone){
+    if(!items.length) return;
+    var sec=document.createElement("div");
+    sec.className="boss-list-section"+(isDone?" boss-list-section--done":" boss-list-section--pending");
+    var h=document.createElement("h3");
+    h.className="boss-list-section-k";
+    h.textContent=title+" ("+items.length+")";
+    sec.appendChild(h);
+    var grid=document.createElement("div");
+    grid.className="boss-list-section-grid";
+    items.forEach(function(b){ grid.appendChild(buildBossCard(b,isDone)); });
+    sec.appendChild(grid);
+    host.appendChild(sec);
+  }
+  appendSection(t("boss.sectionPending"), pending, false);
+  appendSection(t("boss.sectionDone"), done, true);
+}
+function buildBossCard(b,isDone){
+  var st=S.bossStats[b.id], best=st&&st.best, tier=best?bossTierInfo(best.tier):null;
+  var d=document.createElement("button");
+  d.type="button";
+  d.setAttribute("data-boss",b.id);
+  d.addEventListener("click",function(){ startBoss(b.id); });
+  var rec=getRecommendedBossId()===b.id;
+  d.className="boss-card boss-card--tabletop boss-card--map"+(isDone?" boss-card--done":" boss-card--pending")+(rec&&!isDone?" boss-card--rec":"");
+  var phaseN=b.phases&&b.phases.length?b.phases.length:0;
+  var estMin=Math.max(3,Math.round(phaseN*1.5));
+  var tagLabel=b.tag?tt(b.tag):t("boss.storyMapLabel");
+  var preview=tt(b.desc).length>90?tt(b.desc).slice(0,87)+"…":tt(b.desc);
+  var statusPill=isDone
+    ?'<span class="boss-status-pill boss-status-pill--done">✅ '+t("boss.statusDone")+(best&&tier?' · <span class="boss-status-tier">'+tier.ico+' '+best.index+'%</span>':"")+'</span>'
+    :'<span class="boss-status-pill boss-status-pill--pending">▶ '+t("boss.statusPending")+'</span>';
+  var meta=t("boss.estTime").replace("{n}",String(estMin))+" · "+t("boss.scenes").replace("{n}",String(phaseN));
+  if(rec&&!isDone) meta+=' · <span class="boss-rec-tag">'+t("boss.recommended")+'</span>';
+  var actionLabel=isDone?t("boss.replayStory"):t("boss.playStory");
+  var ariaStatus=isDone?(t("boss.statusDone")+(best?" "+best.index+"%":"")):t("boss.statusPending");
+  d.setAttribute("aria-label",tt(b.name)+". "+ariaStatus+". "+actionLabel);
+  d.innerHTML=
+    statusPill+
+    '<span class="be" aria-hidden="true">'+b.emoji+'</span>'+
+    '<div class="boss-card-body">'+
+      '<span class="boss-card-tag">'+tagLabel+'</span>'+
+      '<div class="bt">'+tt(b.name)+'</div>'+
+      '<div class="bd">'+preview+'</div>'+
+      '<div class="boss-card-meta">'+meta+'</div>'+
+    '</div>'+
+    '<span class="boss-card-action" aria-hidden="true">'+(isDone?"↻":"▶")+'</span>';
+  return d;
 }
 function startBoss(id){
   hydrateNorthernBoss();
@@ -5513,14 +5568,14 @@ function init(){
 }
 function progressPct(){
   ensureDaily(); ensureWeekly();
-  var map=Object.keys(S.done).length/Math.max(1,COUNTRIES.length)*28;
-  var boss=bossCompletedCount()/Math.max(1,BOSSES.length)*22;
+  var map=Object.keys(S.done).length/Math.max(1,COUNTRIES.length)*30;
+  var boss=bossCompletedCount()/Math.max(1,BOSSES.length)*24;
   var week=0, wp=S.weekly.prog||{};
   WEEKLY.forEach(function(w){ week+=Math.min(1,(wp[w.id]||0)/w.goal); });
   week=week/Math.max(1,WEEKLY.length)*20;
-  var daily=S.daily.done.mission?12:0;
-  var onboard=(S.onboardingDone?1:0)+(setupComplete()?1:0);
-  var streak=Math.min(10,(S.streak&&S.streak.best||0)/3);
+  var daily=S.daily.done.mission?10:0;
+  var onboard=(S.onboardingDone?2:0)+(setupComplete()?2:0);
+  var streak=Math.min(12,Math.round(((S.streak&&S.streak.best)||0)*12/25));
   return Math.min(100,Math.round(map+boss+week+daily+onboard+streak));
 }
 window.gdvDemoApi={
@@ -5544,6 +5599,22 @@ window.gdvDemoApi={
     S.themeStats={};
     Object.keys(THEMES).forEach(function(k){ S.themeStats[k]={c:c,t:t}; });
   },
+  fillThemeStatsMixed:function(map){
+    S.themeStats={};
+    Object.keys(THEMES).forEach(function(k){
+      var acc=map&&map[k]!=null?Math.max(0,Math.min(100,map[k]|0)):70;
+      var t=20, c=Math.max(0,Math.round(acc/100*t));
+      S.themeStats[k]={c:c,t:t};
+    });
+  },
+  seedMissed:function(items){
+    ensureMissed();
+    var today=todayNum();
+    (items||[]).forEach(function(it){
+      if(!it||!it.id) return;
+      S.missed[it.id]={interval:0,streak:0,theme:it.theme||"phishing",nextReview:today,lastSeen:today-1};
+    });
+  },
   seedGlossary:function(termIds, quizzes){
     S.glossaryLearned=S.glossaryLearned||{};
     (termIds||[]).forEach(function(id){ S.glossaryLearned[id]=true; });
@@ -5551,6 +5622,7 @@ window.gdvDemoApi={
   },
   computeNextStep:computeNextStep,
   progressPct:progressPct,
+  journeyCompletionPct:journeyCompletionPct,
   ensureDaily:ensureDaily,
   ensureWeekly:ensureWeekly,
   bumpWeekly:bumpWeekly,

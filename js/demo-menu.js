@@ -42,9 +42,10 @@ function renderDemoStatus(){
   var daily=!!(S.daily&&S.daily.done&&S.daily.done.mission);
   var setup=!!(S.team&&S.role);
   var pct=api.progressPct();
+  var journey=api.journeyCompletionPct?api.journeyCompletionPct():pct;
   host.innerHTML=
-    '<div class="demo-status-pct">'+pct+'% '+pt("complete","concluído")+'</div>'+
-    '<p class="demo-status-note">'+pt("Onboarding + profile ≈ 2% — real progress comes from map, missions and crises.","Onboarding + perfil ≈ 2% — progresso real vem do mapa, missões e crises.")+'</p>'+
+    '<div class="demo-status-pct">'+pct+'% '+pt("integrated","integrado")+' · '+journey+'% '+pt("journey","jornada")+'</div>'+
+    '<p class="demo-status-note">'+pt("Integrated = map + missions + crises. Journey = countries + crises + medals + chain.","Integrado = mapa + missões + crises. Jornada = países + crises + conquistas + cadeia.")+'</p>'+
     '<ul class="demo-status-list">'+
     '<li>'+(S.onboardingDone?"✅":"⬜")+' '+pt("Onboarding","Onboarding")+'</li>'+
     '<li>'+(setup?"✅":"⬜")+' '+pt("Team & role","Equipe e papel")+'</li>'+
@@ -62,6 +63,16 @@ function setCountries(n, score){
   var ids=api.countryIds(), i;
   S.done={};
   for(i=0;i<Math.min(n,ids.length);i++) S.done[ids[i]]=score;
+}
+
+function setCountriesVaried(n, scores){
+  var S=api.getState();
+  var ids=api.countryIds(), i;
+  S.done={};
+  for(i=0;i<Math.min(n,ids.length);i++){
+    var sc=Array.isArray(scores)?scores[i%scores.length]:scores;
+    S.done[ids[i]]=sc;
+  }
 }
 
 function setBosses(n, index, opts){
@@ -144,6 +155,32 @@ function applyPreset(pct){
       for(si=0;si<Math.min(4,ch.stages.length);si++)
         S.chainDone["carajas__"+ch.stages[si].id]=100;
     }
+  } else if(pct===80){
+    S.xp=api.xpForLevel?api.xpForLevel(9):1760; S.coins=340;
+    setCountriesVaried(Math.round(nCountries*0.84),[100,88,72,95,68,100,82,75,90,100,65,88,100,78,92,70]);
+    setBosses(5,70);
+    S.streak={count:21,lastDate:api.todayKey(),best:21};
+    S.daily.done.mission=true;
+    S.dailyTotal=10;
+    S.weekly.prog={correct:16,campaign:3,boss:1,theme:6};
+    S.managerMode=false;
+    api.fillThemeStatsMixed&&api.fillThemeStatsMixed({
+      phishing:52,ot:48,bec:55,password:78,data:82,device:75,remote:80,port:72
+    });
+    api.seedGlossary&&api.seedGlossary(["2fa","accessctrl","antivirus"],1);
+    api.seedMissed&&api.seedMissed([
+      {id:"q_phish_02",theme:"phishing"},
+      {id:"q_ot_01",theme:"ot"},
+      {id:"q_bec_01",theme:"bec"},
+      {id:"q_data_02",theme:"data"}
+    ]);
+    var ch80=api.chainById&&api.chainById("carajas");
+    if(ch80&&ch80.stages){
+      var s80, accs=[100,100,88,42,52,78];
+      for(s80=0;s80<Math.min(accs.length,ch80.stages.length);s80++)
+        S.chainDone["carajas__"+ch80.stages[s80].id]=accs[s80];
+    }
+    api.checkMedals();
   } else if(pct===100){
     S.xp=api.xpForMaxLevel?api.xpForMaxLevel():2600; S.coins=500; S.score=1200;
     setCountries(nCountries,100);
