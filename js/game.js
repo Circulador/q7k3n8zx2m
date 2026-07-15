@@ -4228,8 +4228,8 @@ function setFocusLearn(on){
 }
 function setManagerMode(on){
   S.managerMode=!!on; save(); updateManagerNav();
-  var a=$("optManager"), b=$("optManagerProfile");
-  if(a) a.checked=S.managerMode; if(b) b.checked=S.managerMode;
+  var a=$("optManager");
+  if(a) a.checked=S.managerMode;
 }
 function renderWeekCard(){ renderWeekLine(); }
 function renderCompletionCard(){
@@ -4581,8 +4581,8 @@ function ensureUxState(){
 }
 function setSimpleUi(on){
   S.simpleUi=!!on; save(); applySimpleUi(); refreshHud();
-  var a=$("optSimpleUi"), b=$("optSimpleUiSettings");
-  if(a) a.checked=S.simpleUi; if(b) b.checked=S.simpleUi;
+  var b=$("optSimpleUiSettings");
+  if(b) b.checked=S.simpleUi;
 }
 function setEasyRead(on){
   S.a11y.easyRead=!!on;
@@ -5019,7 +5019,6 @@ function bind(){
   on("settingsEditProfileBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); openEditSetup(); });
   on("optEasyReadSettings","change",function(e){ e.stopPropagation(); setEasyRead(this.checked); });
   on("optSimpleUiSettings","change",function(e){ e.stopPropagation(); setSimpleUi(this.checked); });
-  on("optSimpleUi","change",function(){ setSimpleUi(this.checked); });
   on("profileEditSetupBtn","click",openEditSetup);
   on("profileWeeklyBtn","click",openWeeklyScreen);
   on("profileShopBtn","click",function(){ renderShop(); show("screenShop"); });
@@ -5032,10 +5031,6 @@ function bind(){
   on("mgrExportTeams","click",exportTeams);
   on("mgrExportThemes","click",exportThemes);
 
-  on("profileExportBtn","click",exportProgress);
-  on("profileImportBtn","click",function(){ var f=$("profileImportFile"); if(f) f.click(); });
-  on("profileImportFile","change",function(){ if(this.files&&this.files[0]) importProgress(this.files[0]); this.value=""; });
-  if($("optManagerProfile")){ $("optManagerProfile").checked=!!S.managerMode; on("optManagerProfile","change",function(){ setManagerMode(this.checked); }); }
   [["onboardOptVoice","voice"],["onboardOptContrast","contrast"],["onboardOptSigns","signs"],["onboardOptMotion","motion"]].forEach(function(pair){
     var el=$(pair[0]); if(!el) return;
     el.addEventListener("change",function(){ S.a11y[pair[1]]=this.checked; save(); applyA11y(); });
