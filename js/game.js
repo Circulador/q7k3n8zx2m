@@ -2127,14 +2127,8 @@ function measureMapViewport(){
   var anchor=sm.querySelector(".card")||sm;
   var top=anchor.getBoundingClientRect().top;
   var shell=document.querySelector(".bottom-shell");
-  var bottomH=shell?shell.getBoundingClientRect().height:112;
-  var more=$("mapMoreOptions");
-  var moreH=0;
-  if(more&&!more.hidden){
-    var sum=more.querySelector("summary");
-    moreH=sum?Math.ceil(sum.getBoundingClientRect().height)+10:40;
-  }
-  var h=Math.max(280,Math.floor(window.innerHeight-top-bottomH-moreH-4));
+  var bottomH=shell?shell.getBoundingClientRect().height:parseInt(getComputedStyle(document.documentElement).getPropertyValue("--bottom-shell-h"),10)||112;
+  var h=Math.max(300,Math.floor(window.innerHeight-top-bottomH-1));
   document.documentElement.style.setProperty("--map-viewport-h",h+"px");
 }
 function syncMapDetailLayout(){
