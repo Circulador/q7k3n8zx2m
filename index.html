@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=126">
+<link rel="stylesheet" href="css/styles.css?v=127">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -558,6 +558,11 @@
       <h1 id="setupHead" data-i18n="setup.head">Personalize seu treino</h1>
       <p class="section-sub setup-intro" id="setupIntro" data-i18n="setup.intro">Assim os cenários ficam parecidos com seu dia a dia — leva cerca de 20 segundos.</p>
       <p class="setup-why" id="setupWhy" data-i18n="setup.why">💡 Situações de phishing, senha e dados aparecem no contexto da sua operação.</p>
+      <div class="setup-block setup-block-name setup-block-top">
+        <div class="section-title" data-i18n="setup.nameOptional">Adicionar nome (opcional)</div>
+        <div class="section-sub" data-i18n="setup.nameSub">Opcional — aparece no certificado e no ranking da equipe.</div>
+        <input id="playerName" maxlength="24" data-i18n-ph="setup.namePh" placeholder="Rodolfo Conte">
+      </div>
       <div class="setup-block setup-block-primary">
         <div class="section-title" data-i18n="setup.teamTitle">Sua equipe</div>
         <div class="section-sub" data-i18n="setup.teamSub">Onde você trabalha na organização — usado no ranking anônimo do time.</div>
@@ -568,13 +573,6 @@
         <div class="section-sub" data-i18n="setup.roleSub">Escritório, campo, automação (OT) ou liderança — define os exemplos das situações.</div>
         <div class="roles-grid" id="rolesGrid" role="group" aria-label="Papéis"></div>
       </div>
-      <details class="setup-name-details">
-        <summary data-i18n="setup.nameOptional">Adicionar nome (opcional)</summary>
-        <div class="setup-block setup-block-name">
-          <div class="section-sub" data-i18n="setup.nameSub">Opcional — aparece no certificado e no ranking da equipe.</div>
-          <input id="playerName" maxlength="24" data-i18n-ph="setup.namePh" placeholder="Seu nome ou apelido">
-        </div>
-      </details>
     </div>
     <div class="row-actions">
       <button class="btn btn-primary btn-lg" id="setupGoBtn" data-i18n="setup.goFirst">▶️ Começar primeira atividade</button>
@@ -960,18 +958,18 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="126";</script>
-<script src="js/sign-lang.js?v=126"></script>
-<script src="js/orbita-world-map.js?v=126"></script>
-<script src="js/questions-data.js?v=126"></script>
-<script src="js/country-questions-data.js?v=126"></script>
-<script src="js/bosses-data.js?v=126"></script>
-<script src="js/boss-personal-tips.js?v=126"></script>
-<script src="js/chain-data.js?v=126"></script>
-<script src="js/boss-maps.js?v=126"></script>
-<script src="js/glossary-data.js?v=126"></script>
-<script src="js/game.js?v=126"></script>
-<script src="js/demo-menu.js?v=126"></script>
+<script>window.APP_VERSION="127";</script>
+<script src="js/sign-lang.js?v=127"></script>
+<script src="js/orbita-world-map.js?v=127"></script>
+<script src="js/questions-data.js?v=127"></script>
+<script src="js/country-questions-data.js?v=127"></script>
+<script src="js/bosses-data.js?v=127"></script>
+<script src="js/boss-personal-tips.js?v=127"></script>
+<script src="js/chain-data.js?v=127"></script>
+<script src="js/boss-maps.js?v=127"></script>
+<script src="js/glossary-data.js?v=127"></script>
+<script src="js/game.js?v=127"></script>
+<script src="js/demo-menu.js?v=127"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
