@@ -1115,7 +1115,9 @@ body.theme-dark{color:#e8f0f4;background:#01080c;background-image:linear-gradien
 body.theme-dark .card{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1)}
 
 /* UX v67 */
-.offline-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px;padding:10px 12px;border-radius:10px;background:rgba(0,126,122,.15);border:1px solid rgba(0,126,122,.35);font-size:.82rem}
+.offline-banner{position:fixed;left:50%;bottom:calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px) + 10px);transform:translateX(-50%);z-index:10050;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;width:min(1080px,calc(100vw - 28px));margin:0;padding:10px 12px;border-radius:10px;background:rgba(10,42,50,.96);border:1px solid rgba(0,126,122,.45);font-size:.82rem;color:#eaf2f6;box-shadow:0 8px 28px rgba(0,0,0,.4);pointer-events:auto;transition:transform .25s ease,opacity .25s ease}
+.offline-banner[hidden]{display:none!important}
+body.map-viewport-lock .offline-banner{transform:translateX(-50%) translateY(calc(100% + 24px));opacity:0;pointer-events:none}
 .ctx-tip{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 10px;padding:10px 12px;border-radius:10px;background:rgba(237,177,17,.12);border:1px solid rgba(237,177,17,.35);font-size:.84rem}
 .ctx-tip-dismiss{margin-left:auto;padding:6px 12px;border:0;border-radius:8px;background:var(--green);color:#fff;font:inherit;font-weight:700;font-size:.78rem;cursor:pointer}
 .week-progress-wrap{display:grid;gap:6px;width:100%;margin:8px 0 10px;padding:10px 12px;border:1px solid rgba(0,126,122,.35);border-radius:10px;background:rgba(0,126,122,.08);cursor:pointer;text-align:left;font:inherit;color:inherit}

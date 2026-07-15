@@ -3687,7 +3687,7 @@ function showOfflineBanner(){
   var el=$("offlineBanner"); if(!el) return;
   el.hidden=false;
 }
-function dismissOfflineBanner(){ S.offlineHintSeen=true; save(); var el=$("offlineBanner"); if(el) el.hidden=true; }
+function dismissOfflineBanner(){ S.offlineHintSeen=true; save(); var el=$("offlineBanner"); if(el) el.hidden=true; if($("screenMap")&&$("screenMap").classList.contains("map-screen-fit")) measureMapViewport(); }
 function renderMapExplorerHint(){
   var el=$("mapExplorerHint"); if(!el) return;
   var next=nextExpeditionCountry();
