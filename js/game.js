@@ -1662,6 +1662,9 @@ function renderAnimatedChainMap(){
 }
 var mapBgClickHintShown=false;
 var _mapResetDepth=0;
+var mapDragMoved=false;
+var MAP_DRAG_THRESH=8;
+function isMapWorldView(){ return !mapHitActive&&!isMapDetailOpen(); }
 function isMapDetailOpen(){
   var stage=$("mapStage"), panel=$("mapDetail");
   return !!(stage&&stage.classList.contains("map-detail-open")&&panel&&!panel.hidden);
@@ -1850,6 +1853,7 @@ function ensureOrbitaWorldMap(cb){
       activityLegend:$("mapActivityLegend"), productLegend:$("mapProductLegend"),
       lang:L,
       onCountryClick:function(gameId){
+        if(mapDragMoved){ mapDragMoved=false; return; }
         if(!gameId) return;
         openMapDetailCountry(gameId);
       },
@@ -1902,13 +1906,15 @@ function resetMapView(){
   if(_mapResetDepth>0) return;
   _mapResetDepth++;
   closeMapDetail();
-  resetView();
+  view={x:0,y:0,w:VW,h:VH};
+  updateViewBox();
   renderMapExplorerHint();
   updateMapContext();
   var more=$("mapMoreOptions"); if(more) more.removeAttribute("open");
   window.scrollTo(0,0);
   if(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.clearSelection) OrbitaWorldMap.clearSelection(true);
   syncMapDetailLayout();
+  updateMapCountryNav();
   _mapResetDepth--;
 }
 function getPlayableCountryIds(){
@@ -1942,7 +1948,7 @@ function updateMapCountryNav(){
   var open=!!onMap&&mapReady&&!mapChainMode();
   nav.hidden=!open;
   var legend=$("mapProgressLegend");
-  if(legend) legend.hidden=!open;
+  if(legend) legend.hidden=!open||isMapWorldView();
   renderCountryNavCounter();
 }
 function renderCountryNavCounter(){
@@ -2167,7 +2173,8 @@ function bindMapCountryNavArrows(){
       if(clickTimer) clearTimeout(clickTimer);
       clickTimer=setTimeout(function(){
         clickTimer=null;
-        navigateMapCountry(navDir);
+        if(isMapWorldView()) panMapHorizontal(panDir);
+        else navigateMapCountry(navDir);
       },280);
     });
     btn.addEventListener("dblclick",function(e){
@@ -2182,31 +2189,37 @@ function bindMapCountryNavArrows(){
 }
 function zoomTo(cx,cy,f){ cancelViewAnim(); var nw=Math.max(140,Math.min(VW,view.w*f)),nh=nw*(VH/VW); view.x=Math.max(0,Math.min(VW-nw,cx-nw/2)); view.y=Math.max(0,Math.min(VH-nh,cy-nh/2)); view.w=nw; view.h=nh; updateViewBox(); }
 function resetView(){
-  animateView({x:0,y:0,w:VW,h:VH});
+  cancelViewAnim();
+  view={x:0,y:0,w:VW,h:VH};
+  updateViewBox();
   updateMapCountryNav();
 }
 function focusIronChain(){ openBossChain(true); }
 function bindMapPanZoom(){
   var wrap=$("mapStage"),svg=$("mapSvg");
   if(!wrap||!svg) return;
-  var drag=false,sx,sy,ox,oy;
+  var drag=false,dragMoved=false,sx,sy,ox,oy;
   var pointers={},pinch=null;
   var lastTap=0,lastTapX=0,lastTapY=0;
   function ptCount(){ return Object.keys(pointers).length; }
   function toView(clientX,clientY){ var r=svg.getBoundingClientRect(); return {x:view.x+(clientX-r.left)/r.width*view.w, y:view.y+(clientY-r.top)/r.height*view.h}; }
+  function mapPanBlocker(el){
+    return el&&el.closest&&el.closest(".map-detail,.map-zoom-float,.map-country-nav,.cmap-pin,.vwm-tooltip,.vwm-legend-button");
+  }
   wrap.addEventListener("pointerdown",function(e){
     if(mapChainMode()) return;
+    if(mapPanBlocker(e.target)) return;
     pointers[e.pointerId]={x:e.clientX,y:e.clientY};
     if(ptCount()===2){
       cancelViewAnim();
-      drag=false; wrap.classList.remove("dragging");
+      drag=false; dragMoved=false; wrap.classList.remove("dragging");
       var ks=Object.keys(pointers),a=pointers[ks[0]],b=pointers[ks[1]];
       var mid=toView((a.x+b.x)/2,(a.y+b.y)/2);
       pinch={dist:Math.hypot(a.x-b.x,a.y-b.y)||1,cx:mid.x,cy:mid.y,w:view.w};
       return;
     }
-    if(e.target.closest&&e.target.closest(".map-detail,.map-zoom-float,.map-country-nav,.cmap-pin,.vwm-country,.vwm-tooltip,.vwm-legend-button")) return;
-    drag=true; wrap.classList.add("dragging"); sx=e.clientX; sy=e.clientY; ox=view.x; oy=view.y;
+    drag=true; dragMoved=false; mapDragMoved=false;
+    wrap.classList.add("dragging"); sx=e.clientX; sy=e.clientY; ox=view.x; oy=view.y;
   });
   window.addEventListener("pointermove",function(e){
     if(pointers[e.pointerId]) pointers[e.pointerId]={x:e.clientX,y:e.clientY};
@@ -2221,6 +2234,7 @@ function bindMapPanZoom(){
       return;
     }
     if(!drag) return;
+    if(Math.abs(e.clientX-sx)>MAP_DRAG_THRESH||Math.abs(e.clientY-sy)>MAP_DRAG_THRESH) dragMoved=true;
     var r=svg.getBoundingClientRect(),kx=view.w/r.width,ky=view.h/r.height;
     view.x=Math.max(0,Math.min(VW-view.w,ox-(e.clientX-sx)*kx));
     view.y=Math.max(0,Math.min(VH-view.h,oy-(e.clientY-sy)*ky));
@@ -2236,7 +2250,11 @@ function bindMapPanZoom(){
     }
     if(pointers[e.pointerId]) delete pointers[e.pointerId];
     if(ptCount()<2) pinch=null;
-    if(ptCount()===0){ drag=false; if(wrap) wrap.classList.remove("dragging"); }
+    if(ptCount()===0){
+      if(drag&&dragMoved) mapDragMoved=true;
+      drag=false; dragMoved=false;
+      if(wrap) wrap.classList.remove("dragging");
+    }
   }
   window.addEventListener("pointerup",endPointer);
   window.addEventListener("pointercancel",endPointer);
