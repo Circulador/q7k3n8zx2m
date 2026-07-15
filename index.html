@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=151">
+<link rel="stylesheet" href="css/styles.css?v=152">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -414,7 +414,7 @@
   <!-- ============ HOME: LANGUAGE + ACCESSIBILITY ============ -->
   <section id="screenHome" class="screen active" aria-label="Início">
     <div class="card hero" id="heroCard">
-      <button type="button" class="hero-scene hero-scene-btn" id="heroIronBtn" data-i18n-attr="aria-label:home.heroIronTip;title:home.heroIronTip" aria-label="Explorar cadeia operacional em Desafios / Crises">
+      <div class="hero-scene" id="heroScene" role="img" data-i18n-attr="aria-label:home.heroDecorAria" aria-label="Ilustração da cadeia operacional">
         <svg class="hero-svg" viewBox="0 0 900 168" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <defs>
             <linearGradient id="heroSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a4a52"/><stop offset="1" stop-color="#063540"/></linearGradient>
@@ -432,7 +432,7 @@
           <path d="M44 112 L44 100 L58 94 L72 100 L72 112 Z" fill="#7a5a32"/>
           <g class="hero-exc"><rect x="54" y="82" width="5" height="16" fill="#EDB111"/><path d="M59 82 L74 74 L74 78 L62 86 Z" fill="#aaa"/></g>
           <!-- Britagem / usina -->
-          <rect x="151" y="96" width="40" height="16" rx="2" fill="#6a6a6a"/>
+          <rect x="152" y="96" width="40" height="16" rx="2" fill="#6a6a6a"/>
           <rect x="156" y="86" width="24" height="10" fill="#555"/>
           <rect x="162" y="76" width="6" height="12" fill="#888"/>
           <circle cx="165" cy="72" r="3" fill="#bbb" class="hero-smoke"/>
@@ -484,7 +484,7 @@
           <path d="M88 64 Q200 38 320 58 Q420 44 500 62 Q590 48 660 54 Q730 42 800 58" fill="none" stroke="#007E7A" stroke-width="1.5" stroke-dasharray="4 5" opacity=".6" class="hero-net"/>
           <g class="hero-lock" transform="translate(450, 78)"><circle r="14" fill="none" stroke="#EDB111" stroke-width="1" opacity=".45"/><rect x="-5" y="-2" width="10" height="8" rx="1" fill="#007E7A"/><path d="M-4 -2 V-5 Q0 -9 4 -5 V-2" fill="none" stroke="#EDB111" stroke-width="1.5"/></g>
         </svg>
-      </button>
+      </div>
       <span class="badge" data-i18n="home.badge">Treinamento de Segurança Digital · ~5 min/dia</span>
       <h1 data-i18n="home.title">Você é o <span class="accent">Guardião Digital</span></h1>
       <p class="hero-lead hero-lead-short" id="heroLeadShort" hidden data-i18n="home.shortDesc">Treinamento rápido de segurança digital — situações do seu dia a dia, em poucos minutos.</p>
@@ -493,7 +493,7 @@
       <p class="hero-body" data-i18n="home.explore">Explore minas, usinas, portos, ferrovias e escritórios, identifique ameaças cibernéticas, responda a incidentes simulados e fortaleça a resiliência das operações.</p>
       <p class="hero-body" data-i18n="home.impact">Cada decisão que você toma pode proteger pessoas, informações e processos essenciais para o negócio.</p>
       <div class="mission" data-i18n="home.objective">🎯 <b>Objetivo do jogo:</b> reconhecer riscos digitais, aplicar boas práticas de segurança da informação e desenvolver a mentalidade de um verdadeiro Guardião Digital.</div>
-      <p class="hero-journey" data-i18n="home.journey">🌍 Navegue pelo <span class="nav-ref">Mapa</span> global, enfrente <span class="nav-ref">Desafios / Crises</span> inspirados em situações reais, cumpra <span class="nav-ref">Missões</span> diárias e evolua sua jornada em <span class="nav-ref">Eu</span> — contribuindo para um ambiente mais seguro para todos.</p>
+      <p class="hero-journey" data-i18n="home.journey">🌍 Use o menu inferior — Mapa, Desafios / Crises, Missões e Eu. Na Início, o botão ▶️ sempre indica por onde continuar.</p>
       </div>
       <button type="button" class="btn btn-ghost btn-sm hero-expand-btn" id="heroExpandBtn" hidden data-i18n="home.expand">📖 Saber mais sobre o jogo</button>
       <p class="home-loop-preview" id="homeLoopPreview" hidden aria-live="polite"></p>
@@ -531,12 +531,14 @@
         <p class="streak-status streak-status-inline" id="streakStatus" data-i18n="streak.risk">⚠️ Jogue hoje para não perder sua ofensiva!</p>
         </div>
       <p class="first-day-hint" id="firstDayHint" hidden data-i18n="home.firstDay">Dia 1 da sua ofensiva — 5 minutos de treino bastam para começar.</p>
-      <button type="button" class="week-progress-wrap" id="weekProgressBar" aria-label="Meta da semana" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <button type="button" class="week-progress-wrap" id="weekProgressBar" data-i18n-attr="aria-label:home.weekBarAria" aria-label="Metas da semana — ver resumo" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <span class="week-progress-k" data-i18n="home.weekBar">Meta da semana</span>
         <span class="week-progress-track"><span class="week-progress-fill" id="weekProgressFill"></span></span>
         <span class="week-progress-lab" id="weekProgressLabel"></span>
-        <span class="week-progress-go" data-i18n="home.weekBarGo">Ver metas da semana →</span>
+        <span class="week-progress-go" data-i18n="home.weekBarGo">Ver resumo das metas →</span>
       </button>
+      <p class="week-bar-hint muted" id="weekBarHint" data-i18n="home.weekBarHint">Toque para ver o resumo das metas — não inicia o jogo.</p>
+      <p class="next-step-k" id="nextStepK" data-i18n="home.nextStepK">Próximo passo recomendado</p>
       <div class="next-step-main">
         <span class="next-step-ico" id="nextStepIco" aria-hidden="true">▶️</span>
         <div class="next-step-txt">
@@ -547,7 +549,7 @@
       <p class="next-step-week-line" id="nextStepWeek" aria-live="polite"></p>
       <p class="next-step-preview" id="nextStepPreview" hidden aria-live="polite"></p>
       <button type="button" class="btn btn-primary btn-lg" id="nextStepBtn" data-i18n="home.playNow">▶️ Jogar agora</button>
-      <button type="button" class="btn btn-ghost btn-sm" id="nextStepWeeklyBtn" data-i18n="home.weekBarGo">Ver metas da semana →</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="nextStepWeeklyBtn" data-i18n="home.weekBarGo" hidden>Ver resumo das metas →</button>
     </div>
 
   </section>
@@ -953,19 +955,19 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="151";</script>
-<script src="js/sign-lang.js?v=151"></script>
-<script src="js/orbita-world-map.js?v=151"></script>
-<script src="js/questions-data.js?v=151"></script>
-<script src="js/country-questions-data.js?v=151"></script>
-<script src="js/bosses-data.js?v=151"></script>
-<script src="js/boss-personal-tips.js?v=151"></script>
-<script src="js/chain-data.js?v=151"></script>
-<script src="js/boss-maps.js?v=151"></script>
-<script src="js/glossary-data.js?v=151"></script>
-<script src="js/profile-data.js?v=151"></script>
-<script src="js/game.js?v=151"></script>
-<script src="js/demo-menu.js?v=151"></script>
+<script>window.APP_VERSION="152";</script>
+<script src="js/sign-lang.js?v=152"></script>
+<script src="js/orbita-world-map.js?v=152"></script>
+<script src="js/questions-data.js?v=152"></script>
+<script src="js/country-questions-data.js?v=152"></script>
+<script src="js/bosses-data.js?v=152"></script>
+<script src="js/boss-personal-tips.js?v=152"></script>
+<script src="js/chain-data.js?v=152"></script>
+<script src="js/boss-maps.js?v=152"></script>
+<script src="js/glossary-data.js?v=152"></script>
+<script src="js/profile-data.js?v=152"></script>
+<script src="js/game.js?v=152"></script>
+<script src="js/demo-menu.js?v=152"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */

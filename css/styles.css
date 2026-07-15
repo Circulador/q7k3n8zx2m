@@ -360,8 +360,8 @@ body.onboard-open{overflow:hidden}
 
 .row-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
 
-/* Home hero — cadeia global + cyber */
-.hero-scene{position:relative;height:168px;border-radius:10px;overflow:hidden;margin-bottom:12px;border:1px solid var(--line);background:#063540}
+/* Home hero — cadeia global + cyber (ilustração decorativa) */
+.hero-scene{position:relative;height:168px;border-radius:10px;overflow:hidden;margin-bottom:12px;border:1px solid var(--line);background:#063540;cursor:default}
 .hero-scene-btn{display:block;width:100%;padding:0;font:inherit;text-align:left;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
 .hero-scene-btn:hover,.hero-scene-btn:focus-visible{border-color:var(--gold);box-shadow:0 0 0 2px rgba(237,177,17,.25);transform:translateY(-1px)}
 .hero-scene-btn:focus{outline:none}
@@ -1286,7 +1286,9 @@ body.simple-ui #hudMaturityChip{display:none}
 @media (max-width:720px){
 body.simple-ui .onboard-chip span[data-i18n="onboard.reopen"]{display:none}
 }
-.next-step-week-line{width:100%;margin:0;font-size:.8rem;color:var(--steel);line-height:1.45}
+.next-step-week-line{width:100%;margin:0;font-size:.8rem;color:var(--steel);line-height:1.45;cursor:default}
+.next-step-k{width:100%;margin:0 0 6px;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)}
+.week-bar-hint{width:100%;margin:-4px 0 10px;font-size:.74rem;line-height:1.35}
 .next-step-card .week-streak-row{width:100%;margin-bottom:2px}
 .map-toolbar-row.map-toolbar-collapsed{display:none}
 .map-zoom-toggle{margin:6px 0}
@@ -1629,11 +1631,13 @@ body.demo-menu-open{overflow:hidden}
 .hero-ux-v2 .hero-scene{opacity:.92}
 .hero-scene-btn.hero-locked{cursor:not-allowed;opacity:.55}
 .hero-scene-btn.hero-locked .hero-svg{filter:grayscale(.35)}
-.next-step-ux-v2 .next-step-main{order:2;width:100%}
-.next-step-ux-v2 .next-step-week-line{order:3;width:100%;font-size:.84rem}
-.next-step-ux-v2 .next-step-preview{order:4;width:100%;margin:0;font-size:.82rem;color:var(--steel)}
-.next-step-ux-v2 #nextStepBtn{order:5;width:100%;margin-top:4px}
 .next-step-ux-v2 .week-progress-wrap{order:1;width:100%;margin-bottom:4px}
+.next-step-ux-v2 .week-bar-hint{order:1;width:100%;margin:-2px 0 8px}
+.next-step-ux-v2 .next-step-k{order:2;width:100%}
+.next-step-ux-v2 .next-step-main{order:3;width:100%}
+.next-step-ux-v2 .next-step-week-line{order:4;width:100%;font-size:.84rem}
+.next-step-ux-v2 .next-step-preview{order:5;width:100%;margin:0;font-size:.82rem;color:var(--steel)}
+.next-step-ux-v2 #nextStepBtn{order:6;width:100%;margin-top:4px}
 .next-step-ux-v2 .week-streak-row{order:0;width:100%}
 .missions-focus-banner{padding:12px 14px;margin-bottom:10px;border:1px solid rgba(0,126,122,.45);background:linear-gradient(135deg,rgba(0,126,122,.12),rgba(15,59,87,.2))}
 .missions-focus-k{font-weight:800;font-size:.95rem;color:#eaf2f6}

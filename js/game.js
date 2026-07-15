@@ -37,7 +37,7 @@ var UI = {
   "brand.main":{pt:"Guardião Cibernético",en:"Cyber Guardian"},
   "brand.sub":{pt:"Segurança digital",en:"Digital security"},
   "home.badge":{pt:"Treinamento de Segurança Digital · ~5 min/dia",en:"Digital Security Training · ~5 min/day"},
-  "home.shortDesc":{pt:"Treinamento rápido de segurança digital — situações do seu dia a dia, em poucos minutos.",en:"Quick digital security training — everyday scenarios in just a few minutes."},
+  "home.shortDesc":{pt:"Treinamento de cyber security em ~5 min/dia — um botão na Início guia seu próximo passo.",en:"Cyber security training in ~5 min/day — one Home button guides your next step."},
   "home.howTitle":{pt:"Como funciona",en:"How it works"},
   "home.howDaily":{pt:"Atividade de hoje",en:"Today's activity"},
   "home.howMap":{pt:"Jornada no mapa",en:"Map journey"},
@@ -66,7 +66,7 @@ var UI = {
   "home.explore":{pt:"Explore minas, usinas, portos, ferrovias e escritórios, identifique ameaças cibernéticas, responda a incidentes simulados e fortaleça a resiliência das operações.",en:"Explore mines, plants, ports, railways and offices — identify cyber threats, respond to simulated incidents and strengthen operational resilience."},
   "home.impact":{pt:"Cada decisão que você toma pode proteger pessoas, informações e processos essenciais para o negócio.",en:"Every decision you make can protect people, information and processes essential to the business."},
   "home.objective":{pt:"🎯 <b>Objetivo do jogo:</b> reconhecer riscos digitais, aplicar boas práticas de segurança da informação e desenvolver a mentalidade de um verdadeiro Guardião Digital.",en:"🎯 <b>Game objective:</b> recognize digital risks, apply information security best practices and develop the mindset of a true Digital Guardian."},
-  "home.journey":{pt:'🌍 Navegue pelo <span class="nav-ref">Mapa</span> global, enfrente <span class="nav-ref">Desafios / Crises</span> inspirados em situações reais, cumpra <span class="nav-ref">Missões</span> diárias e evolua sua jornada em <span class="nav-ref">Eu</span> — contribuindo para um ambiente mais seguro para todos.',en:'🌍 Navigate the global <span class="nav-ref">Map</span>, face <span class="nav-ref">Challenges / Crises</span> inspired by real situations, complete daily <span class="nav-ref">Missions</span> and grow your journey in <span class="nav-ref">Me</span> — helping build a safer environment for everyone.'},
+  "home.journey":{pt:"🌍 Use o menu inferior — <strong>Mapa</strong>, <strong>Desafios / Crises</strong>, <strong>Missões</strong> e <strong>Eu</strong>. Na Início, o botão ▶️ sempre indica por onde continuar; a ilustração do topo é apenas decorativa.",en:"🌍 Use the bottom menu — <strong>Map</strong>, <strong>Challenges / Crises</strong>, <strong>Missions</strong> and <strong>Me</strong>. On Home, the ▶️ button always shows where to continue; the top illustration is decorative only."},
   "home.langTitle":{pt:"Idioma / Language",en:"Language / Idioma"},
   "home.langSub":{pt:"Perguntas, respostas e narração seguem o idioma escolhido.",en:"Questions, answers and narration follow the chosen language."},
   "home.a11yTitle":{pt:"Acessibilidade / Accessibility",en:"Accessibility / Acessibilidade"},
@@ -121,7 +121,11 @@ var UI = {
   "quiz.speak":{pt:"Ouvir cenário",en:"Listen to scenario"},
   "daily.doneTitle":{pt:"🎉 Atividade de hoje concluída!",en:"🎉 Today's activity complete!"},
   "daily.doneSub":{pt:"Volte amanhã para manter sua sequência e revisar novos cenários.",en:"Come back tomorrow to keep your streak and review new scenarios."},
-  "home.previewLoop":{pt:"Seu treino: 📅 Atividade de hoje → 🗺️ Jornada no mapa → 🎯 Simulação de crise",en:"Your training: 📅 Today's activity → 🗺️ Map journey → 🎯 Crisis simulation"},
+  "home.previewLoop":{pt:"Seu treino: 📅 Atividade de hoje → 🗺️ Jornada no mapa → 🎯 Desafios / Crises",en:"Your training: 📅 Today's activity → 🗺️ Map journey → 🎯 Challenges / Crises"},
+  "home.nextStepK":{pt:"Próximo passo recomendado",en:"Recommended next step"},
+  "home.weekBarHint":{pt:"Toque para ver o resumo das metas — não inicia o jogo.",en:"Tap to view goal summary — does not start a session."},
+  "home.weekBarAria":{pt:"Metas da semana — ver resumo",en:"Weekly goals — view summary"},
+  "home.heroDecorAria":{pt:"Ilustração da cadeia operacional: mina, processamento, logística e mercados globais",en:"Operational chain illustration: mine, processing, logistics and global markets"},
   "weekly.emptyStart":{pt:"Semana nova — jogue a diária ou explore o mapa para começar as metas.",en:"New week — play daily or explore the map to start your goals."},
   "map.legendSummary":{pt:"{done} concluídos · {partial} em progresso · {pending} pendentes",en:"{done} complete · {partial} in progress · {pending} pending"},
   "toolbar.more":{pt:"Mais ferramentas",en:"More tools"},
@@ -153,7 +157,7 @@ var UI = {
   "tip.boss":{pt:"Crises estilo mesa — leia o cenário e tome decisões como na operação real.",en:"Tabletop crises — read the scenario and decide as in real operations."},
   "tip.dismiss":{pt:"Entendi",en:"Got it"},
   "home.weekBar":{pt:"Meta da semana",en:"Weekly goal"},
-  "home.weekBarGo":{pt:"Ver metas da semana →",en:"View weekly goals →"},
+  "home.weekBarGo":{pt:"Ver resumo das metas →",en:"View goal summary →"},
   "home.firstDay":{pt:"Dia 1 da sua sequência — 5 minutos de treino bastam para começar.",en:"Day 1 of your streak — 5 minutes of training is enough to start."},
   "session.title":{pt:"Resumo da sessão",en:"Session summary"},
   "session.streakKept":{pt:"🔥 Sequência mantida hoje!",en:"🔥 Streak kept today!"},
@@ -189,11 +193,11 @@ var UI = {
   "onboard.a11yT":{pt:"Acessibilidade",en:"Accessibility"},
   "onboard.a11yB":{pt:"Ative narração, contraste, Libras ou redução de animações agora — ou ajuste depois no menu ♿.",en:"Enable narration, contrast, sign language or reduced motion now — or adjust later in the ♿ menu."},
   "onboard.profileT":{pt:"Personalize seu perfil",en:"Personalize your profile"},
-  "onboard.profileB":{pt:"Na próxima tela: nome (opcional), onde você atua e como é seu trabalho. Cerca de 20 segundos.",en:"On the next screen: name (optional), where you work and your routine. About 20 seconds."},
-  "onboard.playT":{pt:"Como funciona",en:"How it works"},
-  "onboard.playB":{pt:"📅 Atividade de hoje → 🗺️ Jornada no mapa → 🎯 Simulação de crise. Cada acerto fortalece a operação — erros mostram o que revisar.",en:"📅 Today's activity → 🗺️ Map journey → 🎯 Crisis simulation. Each correct answer strengthens operations — mistakes show what to review."},
+  "onboard.profileB":{pt:"Na próxima tela: nome (opcional), onde você atua e como é seu trabalho. O jogo usa essa combinação para priorizar situações. Cerca de 20 segundos.",en:"On the next screen: name (optional), where you work and your routine. The game uses this combination to prioritize scenarios. About 20 seconds."},
+  "onboard.playT":{pt:"Como jogar",en:"How to play"},
+  "onboard.playB":{pt:"Fluxo do treino: 📅 Atividade de hoje → 🗺️ Jornada no mapa → 🎯 Desafios / Crises.\n\nNa tela Início, o botão principal (▶️ Jogar agora) sempre indica o próximo passo. A barra de metas da semana só mostra o resumo — não inicia o jogo.",en:"Training flow: 📅 Today's activity → 🗺️ Map journey → 🎯 Challenges / Crises.\n\nOn Home, the main button (▶️ Play now) always shows your next step. The weekly goals bar is for progress summary only — it does not start a session."},
   "onboard.readyT":{pt:"Pronto para começar",en:"Ready to start"},
-  "onboard.readyB":{pt:"Primeiro personalize seu perfil (nome, área e rotina), depois faça sua primeira atividade — cerca de 5 minutos.",en:"First personalize your profile (name, area and routine), then do your first activity — about 5 minutes."},
+  "onboard.readyB":{pt:"1) Defina onde você atua e como trabalha.\n2) Na Início, toque ▶️ Jogar agora — comece pela atividade de hoje.\n3) Use o menu inferior para Mapa, Desafios / Crises, Missões e Eu.",en:"1) Set where you work and your routine.\n2) On Home, tap ▶️ Play now — start with today's activity.\n3) Use the bottom menu for Map, Challenges / Crises, Missions and Me."},
   "onboard.startSetup":{pt:"Personalizar agora →",en:"Personalize now →"},
   "mgr.kpiAdoption":{pt:"Adoção",en:"Adoption"},
   "mgr.kpiWeak":{pt:"Tema mais fraco",en:"Weakest theme"},
@@ -211,7 +215,7 @@ var UI = {
   "home.weekLine":{pt:"Semana: {theme} · Acertos {correct}/20 · Campanhas {campaign}/3 · Missão {daily}",en:"Week: {theme} · Correct {correct}/20 · Campaigns {campaign}/3 · Mission {daily}"},
   "home.map":{pt:"🗺️ Mapa da Operação",en:"🗺️ Operations Map"},
   "home.install":{pt:"⬇️ Instalar app",en:"⬇️ Install app"},
-  "home.heroIronTip":{pt:"Toque para explorar a cadeia operacional em Desafios / Crises.",en:"Tap to explore the operational chain in Challenges / Crises."},
+  "home.heroIronTip":{pt:"Ilustração da cadeia operacional (somente visual)",en:"Operational chain illustration (visual only)"},
   "home.chain":{pt:"⛓️ Cadeia de Produção",en:"⛓️ Production Chain"},
   "home.weekTitle":{pt:"Minha semana",en:"My week"},
   "home.weekSub":{pt:"Metas da semana e próximo passo recomendado.",en:"Weekly goals and your recommended next step."},
@@ -837,13 +841,8 @@ function renderUxBanner(){
   if(!el.hidden) el.textContent=t("settings.uxV122On");
 }
 function renderHeroUxState(){
-  var hb=$("heroIronBtn"), card=$("heroCard");
+  var scene=$("heroScene"), card=$("heroCard");
   var shortEl=$("heroLeadShort"), longEl=$("heroLeadLong");
-  if(hb){
-    var lock=!uxLegacy()&&!S.onboardingDone;
-    hb.disabled=lock;
-    hb.classList.toggle("hero-locked",lock);
-  }
   if(card) card.classList.toggle("hero-ux-v2",!uxLegacy());
   if(shortEl&&longEl){
     if(uxLegacy()){ shortEl.hidden=true; longEl.hidden=false; }
@@ -851,6 +850,7 @@ function renderHeroUxState(){
     else if(S.onboardingDone&&!S.heroExpanded){ shortEl.hidden=true; longEl.hidden=true; }
     else { shortEl.hidden=true; longEl.hidden=false; }
   }
+  if(scene) scene.setAttribute("aria-label",t("home.heroDecorAria"));
 }
 function langFlagSvg(lang){
   if(lang==="pt") return '<svg viewBox="0 0 36 24" class="flag-chip" aria-hidden="true"><rect width="36" height="24" fill="#009b3a"/><polygon points="18,2 34,12 18,22 2,12" fill="#fedf00"/><circle cx="18" cy="12" r="5.5" fill="#002776"/></svg>';
@@ -4400,7 +4400,11 @@ function renderNextStep(){
   if(ti) ti.textContent=ns.title;
   if(sub) sub.textContent=ns.sub;
   if(btn){ btn.textContent=ns.btn||t("home.playNow"); btn.onclick=playNow; }
-  if(wkBtn) wkBtn.hidden=!uxLegacy();
+  if(wkBtn) wkBtn.hidden=true;
+  var stepK=$("nextStepK");
+  if(stepK) stepK.textContent=t("home.nextStepK");
+  var weekHint=$("weekBarHint");
+  if(weekHint) weekHint.textContent=t("home.weekBarHint");
   if(preview){
     var pv=nextStepPreviewText(ns);
     if(pv&&!uxLegacy()){ preview.hidden=false; preview.textContent=t("home.nextPreview").replace("{next}",pv); }
@@ -5152,6 +5156,7 @@ function renderWeekProgressBar(){
   var score=Math.min(100,Math.round((correct/20*40)+(campaign/3*35)+(boss/1*25)));
   if(fill) fill.style.width=score+"%";
   if(lab) lab.textContent=correct+"/20 · "+campaign+"/3 · "+(S.daily.done.mission?(L()==="pt"?"missão ✅":"mission ✅"):(L()==="pt"?"missão pendente":"mission pending"));
+  host.setAttribute("aria-label",t("home.weekBarAria"));
   host.setAttribute("aria-valuenow",String(score));
 }
 function openWeeklyScreen(){ show("screenWeekly"); }
@@ -5469,7 +5474,6 @@ function bind(){
   on("hudStatsSummary","keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); renderProfile(); show("screenProfile"); } });
   if($("optManager")){ $("optManager").checked=!!S.managerMode; on("optManager","change",function(){ setManagerMode(this.checked); }); }
   if($("optFocusLearn")){ $("optFocusLearn").checked=!!S.focusLearn; on("optFocusLearn","change",function(){ setFocusLearn(this.checked); }); }
-  on("heroIronBtn","click",function(){ if(this.disabled) return; openBossChain(true); });
   on("setupGoBtn","click",function(){
     if($("playerName")) S.name=$("playerName").value.trim();
     if(!S.team){ toast(t("setup.teamRequired")); return; }
@@ -5529,7 +5533,6 @@ function bind(){
   on("dailyStartBtn","click",startDaily);
   on("weeklyMapBtn","click",function(){ openMap(null,true); });
   on("weekProgressBar","click",openWeeklyScreen);
-  on("nextStepWeek","click",openWeeklyScreen);
   on("settingsEditProfileBtn","click",function(e){ e.stopPropagation(); toggleSettingsMenu(false); openEditSetup(); });
   on("optEasyReadSettings","change",function(e){ e.stopPropagation(); setEasyRead(this.checked); });
   on("optSimpleUiSettings","change",function(e){ e.stopPropagation(); setSimpleUi(this.checked); });
