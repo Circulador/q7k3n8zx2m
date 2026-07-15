@@ -1845,7 +1845,7 @@ function finishWorldMapUI(){
   mapReady=true;
   updateMapCountryNav();
 }
-function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open"); updateMapCountryNav(); }
+function closeMapDetail(){ mapHitActive=null; setMapHitHighlight(null); chainStageActive=null; setChainStageHighlight(null); var p=$("mapDetail"); if(p) p.hidden=true; var tip=$("mapTooltip"); if(tip) tip.hidden=true; var stage=$("mapStage"); if(stage) stage.classList.remove("map-detail-open","map-detail-br"); syncMapDetailLayout(); updateMapCountryNav(); }
 function getPlayableCountryIds(){
   if(typeof OrbitaWorldMap==="undefined"||!OrbitaWorldMap.getCountries) return COUNTRIES.map(function(c){ return c.id; });
   var countries=OrbitaWorldMap.getCountries(L());
@@ -1910,11 +1910,12 @@ function openMapDetailCountry(id){
   mapHitActive=id;
   setMapHitHighlight(id);
   var tip=$("mapTooltip"); if(tip) tip.hidden=true;
-  var stage=$("mapStage"); if(stage) stage.classList.add("map-detail-open");
+  var stage=$("mapStage"); if(stage){ stage.classList.add("map-detail-open"); stage.classList.toggle("map-detail-br",id==="br"); }
   var body=$("mapDetailBody"), panel=$("mapDetail"); if(!body||!panel) return;
   var official=(typeof OrbitaWorldMap!=="undefined"&&OrbitaWorldMap.getCountry)?OrbitaWorldMap.getCountry(id,L()):null;
   body.innerHTML=buildMapDetailHTML(c,official);
   panel.hidden=false;
+  syncMapDetailLayout();
   zoomToCountry(id);
   scrollMapIntoView();
   $("mapDetailPlay").addEventListener("click",startCampaign);
@@ -2034,11 +2035,17 @@ function zoomToCountry(gameId){
   });
 }
 function scrollMapIntoView(){
-  var stage=$("mapStage");
-  if(!stage) return;
+  var stage=$("mapStage"), sm=$("screenMap");
+  if(!stage||sm&&sm.classList.contains("map-screen-fit")) return;
   requestAnimationFrame(function(){
     stage.scrollIntoView({behavior:"smooth",block:"start"});
   });
+}
+function syncMapDetailLayout(){
+  var stage=$("mapStage"), ow=$("orbitaWorldMap"), sm=$("screenMap");
+  var open=!!(stage&&stage.classList.contains("map-detail-open"));
+  if(ow) ow.classList.toggle("map-detail-active",open);
+  if(sm) sm.classList.toggle("map-screen-fit",open);
 }
 function zoomTo(cx,cy,f){ cancelViewAnim(); var nw=Math.max(140,Math.min(VW,view.w*f)),nh=nw*(VH/VW); view.x=Math.max(0,Math.min(VW-nw,cx-nw/2)); view.y=Math.max(0,Math.min(VH-nh,cy-nh/2)); view.w=nw; view.h=nh; updateViewBox(); }
 function resetView(){

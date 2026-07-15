@@ -437,6 +437,33 @@ input#playerName{width:100%;padding:12px 14px;border-radius:12px;border:1px soli
 .map-detail .md-progress{font-size:.8rem;color:#5a6f78;margin:0 0 12px}
 .map-detail-play{width:100%;margin-top:4px}
 .map-stage.map-detail-open{overflow:visible}
+/* Mapa — cabe na viewport com país aberto + rodapé "Mais informações" */
+#screenMap.map-screen-fit{overflow:hidden}
+#screenMap.map-screen-fit .card{margin:8px 0 0;padding:0;overflow:hidden}
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active{display:flex;flex-direction:column;max-height:calc(100dvh - var(--bottom-shell-h) - 132px);margin-top:4px}
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .vwm-header{padding:8px 16px 4px;min-height:0;flex-shrink:0}
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .vwm-helper,
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-explorer-hint,
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-expedition{display:none}
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-controls-sticky{padding:4px 16px 6px;flex-shrink:0}
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-stage{flex:1;min-height:0}
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-stage.map-detail-open{min-height:0;height:100%;max-height:100%}
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-stage.map-detail-open .vwm-map-stage-inner,
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-stage.map-detail-open .vwm-svg{min-height:0;height:100%}
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-more-options{flex-shrink:0;margin:4px 0 0;padding:0 16px 6px}
+#screenMap.map-screen-fit .orbita-world-map.map-detail-active .map-more-options summary{padding:6px 0}
+/* Brasil — painel mais largo e chips em grade (mesmas fontes, todo o conteúdo visível) */
+.map-stage.map-detail-br.map-detail-open .map-detail{flex:0 0 clamp(300px,42%,420px);max-width:420px;padding:12px 14px 10px}
+.map-stage.map-detail-br .md-presence .presence-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 6px}
+.map-stage.map-detail-br .md-presence .presence-chip{white-space:normal;line-height:1.2;text-align:center}
+.map-stage.map-detail-br .md-risk-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 6px}
+.map-stage.map-detail-br .md-risk-tag{white-space:normal;line-height:1.2;text-align:center}
+@media(max-width:900px){
+  #screenMap.map-screen-fit .orbita-world-map.map-detail-active{max-height:calc(100dvh - var(--bottom-shell-h) - 120px)}
+  .map-stage.map-detail-br.map-detail-open .vwm-map-stage-inner{flex:0 0 auto;max-height:min(30dvh,240px);min-height:min(30dvh,240px)}
+  .map-stage.map-detail-br .md-presence .presence-row{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .map-stage.map-detail-br .md-risk-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 @media(max-width:900px){
   .map-stage.map-detail-open{flex-direction:column}
   .map-stage.map-detail-open .vwm-map-stage-inner{flex:0 0 auto;order:1;width:100%;border-radius:8px 8px 0 0}
