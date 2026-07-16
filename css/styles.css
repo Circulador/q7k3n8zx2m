@@ -324,6 +324,17 @@ body.onboard-open{overflow:hidden}
   animation:albumFoilSheen 3.2s ease-in-out infinite;
 }
 .album-slot.rarity-legendary .album-sticker-name{color:#ffe9a8}
+.album-slot.rarity-secret .album-sticker{
+  border-color:#c77dff;
+  box-shadow:0 4px 18px rgba(199,125,255,.45),inset 0 1px 0 rgba(255,255,255,.12);
+}
+.album-slot.rarity-secret .album-sticker-art{background:radial-gradient(ellipse 80% 70% at 50% 65%,rgba(199,125,255,.42),transparent 70%)}
+.album-slot.rarity-secret .album-sticker-ico{font-size:2.1rem}
+.album-slot.rarity-secret .album-sticker-name{color:#e8c8ff}
+.album-slot.rarity-secret .album-sticker-shine{
+  background:linear-gradient(115deg,rgba(255,255,255,0) 0%,rgba(220,180,255,.9) 45%,rgba(199,125,255,.35) 60%,rgba(255,255,255,0) 100%);
+  animation:albumFoilSheen 2.8s ease-in-out infinite;
+}
 @keyframes albumFoilSheen{
   0%,100%{transform:rotate(18deg) translateX(-8%)}
   50%{transform:rotate(18deg) translateX(8%)}
@@ -370,7 +381,9 @@ body.onboard-open{overflow:hidden}
 .row-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
 
 /* Home hero — cadeia global + cyber (ilustração decorativa) */
-.hero-scene{position:relative;height:168px;border-radius:10px;overflow:hidden;margin-bottom:12px;border:1px solid var(--line);background:#063540;cursor:default}
+.hero-scene{position:relative;height:168px;border-radius:10px;overflow:hidden;margin-bottom:12px;border:1px solid var(--line);background:#063540;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.hero-scene.hero-egg-pulse{animation:heroEggPulse .35s ease-out}
+@keyframes heroEggPulse{0%{box-shadow:0 0 0 0 rgba(0,212,255,.55)}100%{box-shadow:0 0 0 10px rgba(0,212,255,0)}}
 .hero-svg{display:block;width:100%;height:100%}
 .hero-train{animation:heroTrain 14s linear infinite}
 .hero-belt{animation:heroBelt 1.2s linear infinite}
@@ -1734,4 +1747,41 @@ body.ux-v2 .hero-lead-short{display:none}
   .next-step-ux-v2 .next-step-preview{grid-area:preview}
   .home-how-steps{justify-content:center}
   .home-sticky-cta{display:none!important}
+}
+
+/* Easter Egg — Descoberta Suprema */
+body.easter-egg-open{overflow:hidden}
+.easter-egg-overlay{position:fixed;inset:0;z-index:10300;display:flex;flex-direction:column;background:#020c10}
+.easter-egg-overlay[hidden]{display:none!important}
+.easter-egg-backdrop{position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 50% 20%,rgba(0,126,122,.22),transparent 55%),#020c10}
+.easter-egg-shell{position:relative;z-index:1;display:flex;flex-direction:column;flex:1;min-height:0;width:100%;max-width:980px;margin:0 auto}
+.easter-egg-scroll{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 14px 8px;padding-top:calc(12px + env(safe-area-inset-top,0px))}
+.easter-egg-art-wrap{position:relative;width:100%;overflow:hidden;border-radius:10px;border:1px solid rgba(0,212,255,.35);box-shadow:0 8px 32px rgba(0,0,0,.45);aspect-ratio:2.4/1;background:#041820}
+.easter-egg-art{display:block;width:100%;height:auto}
+.easter-egg-art-wrap--en .easter-egg-art{transform:translateY(-50%)}
+.easter-egg-head{margin-top:12px;text-align:center}
+.easter-egg-title{margin:0;font-size:1.15rem;font-weight:800;color:#e8f6f5;line-height:1.3}
+.easter-egg-sub{margin:6px 0 0;font-size:.88rem;line-height:1.45;color:#8ec8d0}
+.easter-egg-dock{
+  flex-shrink:0;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(180deg,rgba(6,28,34,.92),#061a20);
+  border-top:1px solid rgba(0,212,255,.28);
+  box-shadow:0 -8px 28px rgba(0,0,0,.35);
+}
+.easter-egg-dock-k{margin:0 0 8px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5ec4be;text-align:center}
+.easter-egg-pillars{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:10px}
+.easter-egg-pillar{
+  min-height:44px;padding:6px 4px;border-radius:8px;border:1px solid rgba(94,196,190,.28);
+  background:rgba(0,0,0,.28);color:#b8dce4;font-size:.68rem;font-weight:700;line-height:1.2;text-align:center;cursor:pointer;
+}
+.easter-egg-pillar.on{border-color:#00D4FF;background:rgba(0,126,122,.35);color:#fff;box-shadow:0 0 0 1px rgba(0,212,255,.25)}
+.easter-egg-pillar-ico{display:block;font-size:1rem;line-height:1;margin-bottom:2px}
+.easter-egg-pillar-body{margin:0 0 12px;min-height:2.6em;font-size:.82rem;line-height:1.45;color:#c8e8ec;text-align:center}
+.easter-egg-actions{display:grid;gap:8px}
+.easter-egg-close-btn{background:rgba(255,255,255,.06);border:1px solid rgba(143,180,192,.35);color:#c8e0e4}
+.easter-egg-actions .btn:disabled{opacity:.55}
+@media (min-width:640px){
+  .easter-egg-pillars{gap:8px}
+  .easter-egg-pillar{font-size:.74rem}
+  .easter-egg-actions{grid-template-columns:1fr 1fr}
 }

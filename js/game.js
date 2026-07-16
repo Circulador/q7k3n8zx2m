@@ -19,7 +19,7 @@ var DEF = { lang:"pt", name:"", team:"mina", role:"field",
   a11y:{voice:false, contrast:false, large:false, motion:false, signs:false, fontScale:0, links:false, spacing:false, letterSpace:false, dyslexia:false, colorblind:"none", readingMode:false},
   done:{}, themeStats:{}, medals:{}, owned:{}, equipped:{avatar:"🛡️",frame:"default",skin:"default"},
   bossDone:{}, bossStats:{}, onboardingDone:false, daily:{date:"",done:{}}, weekly:{week:"",prog:{}}, teamScores:{},
-  chainDone:{}, streak:{count:0,lastDate:"",best:0}, missed:{}, reports:0, managerMode:false, focusLearn:false, simpleUi:true, theme:"default", tipsSeen:{map:false,daily:false,boss:false}, glossaryFavs:[], glossaryLearned:{}, glossaryReview:[], glossaryReviewMeta:{}, glossaryLearnedXp:{}, glossaryQuizDone:0, offlineHintSeen:false, heroExpanded:false, uxV122:false };
+  chainDone:{}, streak:{count:0,lastDate:"",best:0}, missed:{}, reports:0, managerMode:false, focusLearn:false, simpleUi:true, theme:"default", tipsSeen:{map:false,daily:false,boss:false}, glossaryFavs:[], glossaryLearned:{}, glossaryReview:[], glossaryReviewMeta:{}, glossaryLearnedXp:{}, glossaryQuizDone:0, offlineHintSeen:false, heroExpanded:false, uxV122:false, easterEggClaimed:false };
 var S = merge(load(), DEF);
 function ensureValidProfile(){ if(typeof PROFILE!=="undefined") PROFILE.ensureState(S); }
 ensureValidProfile();
@@ -145,6 +145,23 @@ var UI = {
   "home.weekBarHint":{pt:"Toque para ver o resumo das metas — não inicia o jogo.",en:"Tap to view goal summary — does not start a session."},
   "home.weekBarAria":{pt:"Metas da semana — ver resumo",en:"Weekly goals — view summary"},
   "home.heroDecorAria":{pt:"Ilustração da cadeia operacional: mina, processamento, logística e mercados globais",en:"Operational chain illustration: mine, processing, logistics and global markets"},
+  "egg.title":{pt:"🏆 Descoberta Suprema",en:"🏆 Supreme Discovery"},
+  "egg.sub":{pt:"Da mina ao mundo — cada conexão protegida por decisões cibernéticas conscientes.",en:"From mine to world — every connection protected by mindful cyber decisions."},
+  "egg.imgAlt":{pt:"Banner especial: da mina ao mundo, protegemos cada conexão",en:"Special banner: from mine to world, we protect every connection"},
+  "egg.dockK":{pt:"Cibersegurança em cada etapa",en:"Cybersecurity in every step"},
+  "egg.pillarProtect":{pt:"Proteger",en:"Protect"},
+  "egg.pillarMonitor":{pt:"Monitorar",en:"Monitor"},
+  "egg.pillarRespond":{pt:"Responder",en:"Respond"},
+  "egg.pillarEvolve":{pt:"Evoluir",en:"Evolve"},
+  "egg.pillarProtectD":{pt:"Reduzimos riscos com controles, segmentação e boas práticas no dia a dia.",en:"We reduce risks with controls, segmentation and daily best practices."},
+  "egg.pillarMonitorD":{pt:"Detectamos ameaças cedo — logs, alertas e vigilância na cadeia operacional.",en:"We detect threats early — logs, alerts and vigilance across the operational chain."},
+  "egg.pillarRespondD":{pt:"Garantimos continuidade com playbooks, isolamento e resposta coordenada.",en:"We ensure continuity with playbooks, isolation and coordinated response."},
+  "egg.pillarEvolveD":{pt:"Fortalecemos o futuro aprendendo com cada incidente e treinando a equipe.",en:"We strengthen the future by learning from incidents and training the team."},
+  "egg.claim":{pt:"Resgatar recompensa exclusiva",en:"Claim exclusive reward"},
+  "egg.claimed":{pt:"Recompensa resgatada",en:"Reward claimed"},
+  "egg.claimToast":{pt:"🏆 Descoberta Suprema desbloqueada! +100 XP · conquista secreta no seu perfil e certificado.",en:"🏆 Supreme Discovery unlocked! +100 XP · secret achievement on your profile and certificate."},
+  "egg.close":{pt:"Fechar",en:"Close"},
+  "egg.opened":{pt:"Easter egg secreto aberto — explore e resgate sua recompensa.",en:"Secret easter egg opened — explore and claim your reward."},
   "weekly.emptyStart":{pt:"Semana nova — jogue a diária ou explore o mapa para começar as metas.",en:"New week — play daily or explore the map to start your goals."},
   "map.legendSummary":{pt:"{done} concluídos · {partial} em progresso · {pending} pendentes",en:"{done} complete · {partial} in progress · {pending} pending"},
   "toolbar.more":{pt:"Mais ferramentas",en:"More tools"},
@@ -806,6 +823,7 @@ function getNextAchievement(){
   var list=[], i, m, left;
   for(i=0;i<MEDALS.length;i++){
     m=MEDALS[i];
+    if(m.secret) continue;
     if(S.medals[m.id]) continue;
     left=0;
     if(m.id==="daily") left=Math.max(0,1-(S.dailyTotal||0));
@@ -998,6 +1016,7 @@ function applyI18n(){
   updateLangSwitch();
   applyHudTips();
   renderA11yMenu(); renderA11yCatalog(); updateHeroCaption(); renderSettingsUi();
+  var eggOv=$("easterEggOverlay"); if(eggOv&&!eggOv.hidden) renderEasterEgg();
 }
 function renderSettingsUi(){
   var sel=$("themeSelect");
@@ -1045,6 +1064,7 @@ function setLang(lang){
   if($("screenSetup")&&$("screenSetup").classList.contains("active")) renderSetupUi();
   var ov=$("onboardOverlay"); if(ov&&!ov.hidden) renderOnboarding();
   if($("screenProfile")&&$("screenProfile").classList.contains("active")) renderProfile();
+  var eggOv=$("easterEggOverlay"); if(eggOv&&!eggOv.hidden) renderEasterEgg();
   refreshActiveScreenForLang();
 }
 function isScreenActive(id){ var el=$(id); return !!(el&&el.classList.contains("active")); }
@@ -1282,7 +1302,8 @@ var MEDALS = [
   {id:"streak7", ico:"🔥", name:{pt:"Sequência 7 dias",en:"7-day streak"}, test:function(){ return (S.streak&&S.streak.best>=7)||(S.streak&&S.streak.count>=7); }},
   {id:"streak30", ico:"💥", rarity:"legendary", name:{pt:"Sequência 30 dias",en:"30-day streak"}, test:function(){ return S.streak&&S.streak.best>=30; }},
   {id:"gloss5", ico:"📖", name:{pt:"5 termos no glossário",en:"5 glossary terms"}, test:function(){ return glossaryLearnedCount()>=5; }},
-  {id:"glossQuiz3", ico:"❓", name:{pt:"3 quizzes glossário",en:"3 glossary quizzes"}, test:function(){ return (S.glossaryQuizDone||0)>=3; }}
+  {id:"glossQuiz3", ico:"❓", name:{pt:"3 quizzes glossário",en:"3 glossary quizzes"}, test:function(){ return (S.glossaryQuizDone||0)>=3; }},
+  {id:"supreme", ico:"🏆", secret:true, rarity:"secret", name:{pt:"Descoberta Suprema",en:"Supreme Discovery"}, test:function(){ return !!S.easterEggClaimed; }}
 ];
 
 var MEDAL_HINTS={
@@ -1301,7 +1322,8 @@ var MEDAL_HINTS={
   streak7:{pt:"Mantenha sequência de 7 dias jogando.",en:"Keep a 7-day play streak."},
   streak30:{pt:"Mantenha sequência de 30 dias.",en:"Keep a 30-day streak."},
   gloss5:{pt:"Aprenda 5 termos no glossário.",en:"Learn 5 glossary terms."},
-  glossQuiz3:{pt:"Complete 3 quizzes do glossário.",en:"Complete 3 glossary quizzes."}
+  glossQuiz3:{pt:"Complete 3 quizzes do glossário.",en:"Complete 3 glossary quizzes."},
+  supreme:{pt:"Encontre o Easter Egg secreto na ilustração da Home.",en:"Find the secret Easter Egg on the Home illustration."}
 };
 
 /* -------------------- ÁUDIO / NARRAÇÃO -------------------- */
@@ -1639,6 +1661,117 @@ function updateHeroCaption(){
     lb.textContent=stages[i];
     svg.appendChild(lb);
   }
+}
+
+/* -------------------- EASTER EGG (heroScene ×10) -------------------- */
+var HERO_EGG_TARGET=10, HERO_EGG_GAP_MS=2500;
+var heroEggClicks=0, heroEggTimer=null, easterEggPillar="protect";
+var EASTER_EGG_PILLARS=[
+  {id:"protect",ico:"🛡️",k:"egg.pillarProtect",d:"egg.pillarProtectD"},
+  {id:"monitor",ico:"🔍",k:"egg.pillarMonitor",d:"egg.pillarMonitorD"},
+  {id:"respond",ico:"⚡",k:"egg.pillarRespond",d:"egg.pillarRespondD"},
+  {id:"evolve",ico:"📈",k:"egg.pillarEvolve",d:"egg.pillarEvolveD"}
+];
+function medalsVisibleList(){ return MEDALS.filter(function(m){ return !m.secret || !!S.medals[m.id]; }); }
+function resetHeroEggClicks(){
+  heroEggClicks=0;
+  if(heroEggTimer){ clearTimeout(heroEggTimer); heroEggTimer=null; }
+}
+function pulseHeroScene(){
+  var scene=$("heroScene"); if(!scene) return;
+  scene.classList.remove("hero-egg-pulse");
+  void scene.offsetWidth;
+  scene.classList.add("hero-egg-pulse");
+  setTimeout(function(){ scene.classList.remove("hero-egg-pulse"); },360);
+}
+function onHeroSceneClick(e){
+  if(e&&e.stopPropagation) e.stopPropagation();
+  heroEggClicks++;
+  pulseHeroScene();
+  if(heroEggTimer) clearTimeout(heroEggTimer);
+  heroEggTimer=setTimeout(resetHeroEggClicks, HERO_EGG_GAP_MS);
+  if(heroEggClicks>=HERO_EGG_TARGET){
+    resetHeroEggClicks();
+    openEasterEgg();
+  }
+}
+function setEasterEggPillar(id){
+  easterEggPillar=id||"protect";
+  renderEasterEgg();
+}
+function renderEasterEgg(){
+  var ov=$("easterEggOverlay"); if(!ov||ov.hidden) return;
+  var wrap=$("easterEggArtWrap"), img=$("easterEggImg");
+  if(wrap){
+    wrap.classList.toggle("easter-egg-art-wrap--en", L()==="en");
+    wrap.classList.toggle("easter-egg-art-wrap--pt", L()==="pt");
+  }
+  if(img) img.setAttribute("alt", t("egg.imgAlt"));
+  var title=$("easterEggTitle"); if(title) title.textContent=t("egg.title");
+  var sub=$("easterEggSub"); if(sub) sub.textContent=t("egg.sub");
+  var dockK=$("easterEggDockK"); if(dockK) dockK.textContent=t("egg.dockK");
+  var host=$("easterEggPillars");
+  if(host){
+    host.innerHTML="";
+    EASTER_EGG_PILLARS.forEach(function(p){
+      var b=document.createElement("button");
+      b.type="button";
+      b.className="easter-egg-pillar"+(easterEggPillar===p.id?" on":"");
+      b.setAttribute("role","tab");
+      b.setAttribute("aria-selected", easterEggPillar===p.id?"true":"false");
+      b.innerHTML='<span class="easter-egg-pillar-ico" aria-hidden="true">'+p.ico+'</span>'+t(p.k);
+      b.addEventListener("click",function(){ setEasterEggPillar(p.id); });
+      host.appendChild(b);
+    });
+  }
+  var body=$("easterEggPillarBody");
+  if(body){
+    var cur=EASTER_EGG_PILLARS.filter(function(p){ return p.id===easterEggPillar; })[0]||EASTER_EGG_PILLARS[0];
+    body.textContent=t(cur.d);
+  }
+  var claim=$("easterEggClaimBtn"), close=$("easterEggCloseBtn");
+  if(claim){
+    var got=!!S.easterEggClaimed;
+    claim.textContent=got?t("egg.claimed"):t("egg.claim");
+    claim.disabled=got;
+  }
+  if(close) close.textContent=t("egg.close");
+}
+function openEasterEgg(){
+  var ov=$("easterEggOverlay"); if(!ov) return;
+  easterEggPillar="protect";
+  renderEasterEgg();
+  ov.hidden=false;
+  document.body.classList.add("easter-egg-open");
+  trapFocus(ov, $("heroScene"));
+  announce(t("egg.opened"));
+  var scroll=$("easterEggScroll"); if(scroll) scroll.scrollTop=0;
+}
+function closeEasterEgg(){
+  var ov=$("easterEggOverlay"); if(!ov||ov.hidden) return;
+  ov.hidden=true;
+  document.body.classList.remove("easter-egg-open");
+  releaseFocusTrap();
+}
+function claimEasterEggReward(){
+  if(S.easterEggClaimed) return;
+  S.easterEggClaimed=true;
+  addReward(100, 50, 0);
+  checkMedals();
+  save();
+  renderEasterEgg();
+  renderHomeNextAchievement();
+  if($("screenProfile")&&$("screenProfile").classList.contains("active")) renderAchievementAlbum();
+  toast(t("egg.claimToast"));
+  if(S.a11y.voice) speak(t("egg.claimToast"));
+}
+function wireEasterEgg(){
+  function on(id,ev,fn){ var el=$(id); if(el) el.addEventListener(ev,fn); }
+  var scene=$("heroScene");
+  if(scene) scene.addEventListener("click", onHeroSceneClick);
+  on("easterEggBackdrop","click", closeEasterEgg);
+  on("easterEggCloseBtn","click", closeEasterEgg);
+  on("easterEggClaimBtn","click", claimEasterEggReward);
 }
 
 /* -------------------- GLOSSÁRIO / TEMA / CONFIG -------------------- */
@@ -4517,7 +4650,10 @@ function albumSlotTap(id){
 function renderAchievementAlbum(){
   var grid=$("albumSpread"), prog=$("albumProgress"); if(!grid) return;
   checkMedals();
-  var earned=medalsEarned(), total=MEDALS.length, pct=Math.round(earned/Math.max(1,total)*100);
+  var visible=medalsVisibleList();
+  var earned=0, vi, vm;
+  for(vi=0;vi<visible.length;vi++){ vm=visible[vi]; if(S.medals[vm.id]) earned++; }
+  var total=visible.length, pct=Math.round(earned/Math.max(1,total)*100);
   if(prog){
     var complete=earned>=total;
     prog.innerHTML='<div class="album-progress-track" aria-hidden="true"><div class="album-progress-fill" style="width:'+pct+'%"></div></div>'+
@@ -4527,6 +4663,7 @@ function renderAchievementAlbum(){
   }
   grid.innerHTML="";
   MEDALS.forEach(function(m,i){
+    if(m.secret && !S.medals[m.id]) return;
     var got=!!S.medals[m.id], num=String(i+1).padStart(2,"0");
     var rarity=m.rarity||"common";
     var btn=document.createElement("button");
@@ -4847,22 +4984,27 @@ function certRoundRect(ctx,x,y,w,h,r){
 }
 function certDrawAchievements(ctx,W,startY){
   checkMedals();
-  var earned=MEDALS.filter(function(m){ return !!S.medals[m.id]; }).length;
+  var visible=medalsVisibleList();
+  var earned=0, vi, vm;
+  for(vi=0;vi<visible.length;vi++){ vm=visible[vi]; if(S.medals[vm.id]) earned++; }
   var cols=3, padX=56, usableW=W-padX*2, cellW=usableW/cols, cellH=56;
   ctx.textAlign="center";
   ctx.fillStyle="#005f5c"; ctx.font="700 13px Segoe UI,sans-serif";
-  ctx.fillText("🏅 "+t("profile.certAch")+" ("+earned+"/"+MEDALS.length+")", W/2, startY);
+  ctx.fillText("🏅 "+t("profile.certAch")+" ("+earned+"/"+visible.length+")", W/2, startY);
   ctx.strokeStyle="#e8e8e8"; ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(100,startY+8); ctx.lineTo(W-100,startY+8); ctx.stroke();
-  MEDALS.forEach(function(m,i){
-    var col=i%cols, row=Math.floor(i/cols);
+  var rowIdx=0;
+  visible.forEach(function(m){
+    var col=rowIdx%cols, row=Math.floor(rowIdx/cols);
+    rowIdx++;
     var cx=padX+col*cellW+cellW/2;
     var cardX=padX+col*cellW+8, cardY=startY+18+row*cellH;
     var cardW=cellW-16, cardH=cellH-10;
     var got=!!S.medals[m.id];
     ctx.save();
     ctx.globalAlpha=got?1:0.45;
-    if(got){ ctx.fillStyle="#f4faf9"; ctx.strokeStyle="#007E7A"; }
+    if(got && m.rarity==="secret"){ ctx.fillStyle="#f6f0ff"; ctx.strokeStyle="#9b59d6"; }
+    else if(got){ ctx.fillStyle="#f4faf9"; ctx.strokeStyle="#007E7A"; }
     else { ctx.fillStyle="#f5f5f5"; ctx.strokeStyle="#c8d4d8"; }
     ctx.lineWidth=got?1.5:1;
     certRoundRect(ctx,cardX,cardY,cardW,cardH,6);
@@ -4874,9 +5016,14 @@ function certDrawAchievements(ctx,W,startY){
     ctx.font=(got?"700":"500")+" 8.5px Segoe UI,sans-serif";
     var label=certEllipsis(ctx, tt(m.name), cardW-10);
     ctx.fillText(label, cx, cardY+40);
+    if(got && m.rarity==="secret"){
+      ctx.font="600 6.5px Segoe UI,sans-serif";
+      ctx.fillStyle="#7b3fbf";
+      ctx.fillText(L()==="pt"?"SECRETO":"SECRET", cx, cardY+50);
+    }
     ctx.restore();
   });
-  return startY+18+Math.ceil(MEDALS.length/cols)*cellH+10;
+  return startY+18+Math.ceil(visible.length/cols)*cellH+10;
 }
 function certDrawStats(ctx,W,startY,stats){
   var cols=3, padX=70, usableW=W-padX*2, colW=usableW/cols, rowH=38;
@@ -5848,6 +5995,7 @@ function bind(){
 
   document.addEventListener("keydown",function(e){
     if(e.key==="Escape"){
+      var eggOv=$("easterEggOverlay"); if(eggOv&&!eggOv.hidden){ closeEasterEgg(); return; }
       var qd=$("quitDialog"); if(qd&&!qd.hidden){ hideQuitDialog(); return; }
       var sm=$("settingsMenu"); if(sm&&!sm.hidden){ toggleSettingsMenu(false); return; }
       var gm=$("glossaryMenu"); if(gm&&!gm.hidden){ toggleGlossaryMenu(false); return; }
@@ -5861,6 +6009,7 @@ function bind(){
     }
   });
   on("mapSearch","input",function(){ mapSearchQuery=this.value; applyMapSearch(); });
+  wireEasterEgg();
 }
 function dismissBlockingUI(){
   try{

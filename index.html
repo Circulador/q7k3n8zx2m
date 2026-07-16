@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=166">
+<link rel="stylesheet" href="css/styles.css?v=167">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -53,6 +53,31 @@
     <div class="quit-dialog-actions">
       <button type="button" class="btn btn-primary btn-lg quit-btn-stay" id="quitDialogCancel" data-i18n="quit.stay">Continuar jogando</button>
       <button type="button" class="btn btn-lg quit-btn-leave" id="quitDialogConfirm" data-i18n="quit.leave">Sair da missão</button>
+    </div>
+  </div>
+</div>
+
+<!-- Easter Egg — Descoberta Suprema (10 cliques no heroScene) -->
+<div id="easterEggOverlay" class="easter-egg-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="easterEggTitle">
+  <div class="easter-egg-backdrop" id="easterEggBackdrop"></div>
+  <div class="easter-egg-shell">
+    <div class="easter-egg-scroll" id="easterEggScroll">
+      <div class="easter-egg-art-wrap" id="easterEggArtWrap">
+        <img id="easterEggImg" class="easter-egg-art" src="images/easter-egg-reveal.png?v=167" alt="" decoding="async">
+      </div>
+      <div class="easter-egg-head">
+        <h2 class="easter-egg-title" id="easterEggTitle"></h2>
+        <p class="easter-egg-sub" id="easterEggSub"></p>
+      </div>
+    </div>
+    <div class="easter-egg-dock" id="easterEggDock">
+      <div class="easter-egg-dock-k" id="easterEggDockK"></div>
+      <div class="easter-egg-pillars" id="easterEggPillars" role="tablist"></div>
+      <p class="easter-egg-pillar-body" id="easterEggPillarBody" role="tabpanel"></p>
+      <div class="easter-egg-actions">
+        <button type="button" class="btn btn-primary btn-lg" id="easterEggClaimBtn"></button>
+        <button type="button" class="btn btn-lg easter-egg-close-btn" id="easterEggCloseBtn"></button>
+      </div>
     </div>
   </div>
 </div>
@@ -994,18 +1019,18 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="166";</script>
-<script src="js/sign-lang.js?v=166"></script>
-<script src="js/orbita-world-map.js?v=166"></script>
-<script src="js/questions-data.js?v=166"></script>
-<script src="js/country-questions-data.js?v=166"></script>
-<script src="js/bosses-data.js?v=166"></script>
-<script src="js/chain-data.js?v=166"></script>
-<script src="js/boss-maps.js?v=166"></script>
-<script src="js/glossary-data.js?v=166"></script>
-<script src="js/profile-data.js?v=166"></script>
-<script src="js/game.js?v=166"></script>
-<script src="js/demo-menu.js?v=166"></script>
+<script>window.APP_VERSION="167";</script>
+<script src="js/sign-lang.js?v=167"></script>
+<script src="js/orbita-world-map.js?v=167"></script>
+<script src="js/questions-data.js?v=167"></script>
+<script src="js/country-questions-data.js?v=167"></script>
+<script src="js/bosses-data.js?v=167"></script>
+<script src="js/chain-data.js?v=167"></script>
+<script src="js/boss-maps.js?v=167"></script>
+<script src="js/glossary-data.js?v=167"></script>
+<script src="js/profile-data.js?v=167"></script>
+<script src="js/game.js?v=167"></script>
+<script src="js/demo-menu.js?v=167"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
