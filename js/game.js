@@ -1621,13 +1621,24 @@ function renderA11yMenu(){
 function updateHeroCaption(){
   var svg=document.querySelector(".hero-svg"); if(!svg) return;
   var old=svg.querySelectorAll(".hero-caption"); old.forEach(function(n){ n.remove(); });
-  var t1=document.createElementNS("http://www.w3.org/2000/svg","text");
-  t1.setAttribute("class","hero-caption"); t1.setAttribute("x","450"); t1.setAttribute("y","24"); t1.setAttribute("text-anchor","middle"); t1.setAttribute("fill","#EDB111"); t1.setAttribute("font-size","11"); t1.setAttribute("font-weight","700"); t1.setAttribute("font-family","Segoe UI,sans-serif");
+  var ns="http://www.w3.org/2000/svg";
+  var t1=document.createElementNS(ns,"text");
+  t1.setAttribute("class","hero-caption"); t1.setAttribute("x","450"); t1.setAttribute("y","22"); t1.setAttribute("text-anchor","middle"); t1.setAttribute("fill","#EDB111"); t1.setAttribute("font-size","10"); t1.setAttribute("font-weight","700"); t1.setAttribute("font-family","Segoe UI,sans-serif");
   t1.textContent=L()==="pt"?"Extração → Processamento → Logística → Mercados globais":"Extraction → Processing → Logistics → Global markets";
-  var t2=document.createElementNS("http://www.w3.org/2000/svg","text");
-  t2.setAttribute("class","hero-caption"); t2.setAttribute("x","450"); t2.setAttribute("y","40"); t2.setAttribute("text-anchor","middle"); t2.setAttribute("fill","#8ec8d0"); t2.setAttribute("font-size","9"); t2.setAttribute("font-family","Segoe UI,sans-serif");
+  var t2=document.createElementNS(ns,"text");
+  t2.setAttribute("class","hero-caption"); t2.setAttribute("x","450"); t2.setAttribute("y","34"); t2.setAttribute("text-anchor","middle"); t2.setAttribute("fill","#8ec8d0"); t2.setAttribute("font-size","8.5"); t2.setAttribute("font-family","Segoe UI,sans-serif");
   t2.textContent=L()==="pt"?"Recursos essenciais protegidos por decisões cibernéticas":"Essential resources protected by cyber decisions";
   svg.appendChild(t1); svg.appendChild(t2);
+  var stages=L()==="pt"?["Mina","Beneficiamento","Ferrovia","Porto","Exportação","Global"]:["Mine","Processing","Railway","Port","Export","Global"];
+  var xs=[72,195,335,485,635,805],i,lb;
+  for(i=0;i<stages.length;i++){
+    lb=document.createElementNS(ns,"text");
+    lb.setAttribute("class","hero-caption hero-stage-label");
+    lb.setAttribute("x",String(xs[i])); lb.setAttribute("y","162"); lb.setAttribute("text-anchor","middle");
+    lb.setAttribute("fill","#9ed8e8"); lb.setAttribute("font-size","7"); lb.setAttribute("font-family","Segoe UI,sans-serif"); lb.setAttribute("opacity",".85");
+    lb.textContent=stages[i];
+    svg.appendChild(lb);
+  }
 }
 
 /* -------------------- GLOSSÁRIO / TEMA / CONFIG -------------------- */
