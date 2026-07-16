@@ -1706,7 +1706,10 @@ function renderEasterEgg(){
     wrap.classList.toggle("easter-egg-art-wrap--en", L()==="en");
     wrap.classList.toggle("easter-egg-art-wrap--pt", L()==="pt");
   }
-  if(img) img.setAttribute("alt", t("egg.imgAlt"));
+  if(img){
+    if(!img.getAttribute("src")||img.getAttribute("src").indexOf("easter-egg-reveal")<0) img.src="images/easter-egg-reveal.png?v=168";
+    img.setAttribute("alt", t("egg.imgAlt"));
+  }
   var title=$("easterEggTitle"); if(title) title.textContent=t("egg.title");
   var sub=$("easterEggSub"); if(sub) sub.textContent=t("egg.sub");
   var dockK=$("easterEggDockK"); if(dockK) dockK.textContent=t("egg.dockK");
@@ -4987,7 +4990,7 @@ function certDrawAchievements(ctx,W,startY){
   var visible=medalsVisibleList();
   var earned=0, vi, vm;
   for(vi=0;vi<visible.length;vi++){ vm=visible[vi]; if(S.medals[vm.id]) earned++; }
-  var cols=3, padX=56, usableW=W-padX*2, cellW=usableW/cols, cellH=56;
+  var cols=3, padX=56, usableW=W-padX*2, cellW=usableW/cols, cellH=62;
   ctx.textAlign="center";
   ctx.fillStyle="#005f5c"; ctx.font="700 13px Segoe UI,sans-serif";
   ctx.fillText("🏅 "+t("profile.certAch")+" ("+earned+"/"+visible.length+")", W/2, startY);
@@ -4999,27 +5002,28 @@ function certDrawAchievements(ctx,W,startY){
     rowIdx++;
     var cx=padX+col*cellW+cellW/2;
     var cardX=padX+col*cellW+8, cardY=startY+18+row*cellH;
-    var cardW=cellW-16, cardH=cellH-10;
+    var cardW=cellW-16, cardH=cellH-8;
     var got=!!S.medals[m.id];
+    var isSecret=got && m.rarity==="secret";
     ctx.save();
     ctx.globalAlpha=got?1:0.45;
-    if(got && m.rarity==="secret"){ ctx.fillStyle="#f6f0ff"; ctx.strokeStyle="#9b59d6"; }
+    if(isSecret){ ctx.fillStyle="#f6f0ff"; ctx.strokeStyle="#9b59d6"; }
     else if(got){ ctx.fillStyle="#f4faf9"; ctx.strokeStyle="#007E7A"; }
     else { ctx.fillStyle="#f5f5f5"; ctx.strokeStyle="#c8d4d8"; }
     ctx.lineWidth=got?1.5:1;
     certRoundRect(ctx,cardX,cardY,cardW,cardH,6);
     ctx.fill(); ctx.stroke();
     ctx.textAlign="center";
-    ctx.font=(got?"700":"600")+" 20px Segoe UI Emoji,Segoe UI,sans-serif";
+    ctx.font=(got?"700":"600")+" 18px Segoe UI Emoji,Segoe UI,sans-serif";
     ctx.fillStyle=got?"#1a1a1a":"#8a9aa0";
-    ctx.fillText(m.ico, cx, cardY+24);
-    ctx.font=(got?"700":"500")+" 8.5px Segoe UI,sans-serif";
-    var label=certEllipsis(ctx, tt(m.name), cardW-10);
-    ctx.fillText(label, cx, cardY+40);
-    if(got && m.rarity==="secret"){
-      ctx.font="600 6.5px Segoe UI,sans-serif";
+    ctx.fillText(m.ico, cx, cardY+(isSecret?20:22));
+    ctx.font=(got?"700":"500")+" 7.5px Segoe UI,sans-serif";
+    var label=certEllipsis(ctx, tt(m.name), cardW-8);
+    ctx.fillText(label, cx, cardY+(isSecret?36:38));
+    if(isSecret){
+      ctx.font="600 6px Segoe UI,sans-serif";
       ctx.fillStyle="#7b3fbf";
-      ctx.fillText(L()==="pt"?"SECRETO":"SECRET", cx, cardY+50);
+      ctx.fillText(L()==="pt"?"SECRETO":"SECRET", cx, cardY+48);
     }
     ctx.restore();
   });
@@ -5209,7 +5213,9 @@ function renderCertificateCard(){
   var dateStr=new Date().toLocaleDateString(pt?"pt-BR":"en-US",{year:"numeric",month:"short",day:"numeric"});
   var avgRes=bossAvgIndex(),resRank=bossGuardianRank(avgRes);
   checkMedals();
-  var achEarned=MEDALS.filter(function(m){ return !!S.medals[m.id]; }).length;
+  var visible=medalsVisibleList();
+  var achEarned=0;
+  visible.forEach(function(m){ if(S.medals[m.id]) achEarned++; });
   var lvShort=t("profile.certCardLvShort"), lvLbl=t("profile.certCardLevel");
 
   ctx.fillStyle="#050d11"; certRoundRect(ctx,0,0,W,H,20); ctx.fill();
@@ -5274,7 +5280,7 @@ function renderCertificateCard(){
   var statLines=[
     {ico:"⚔",txt:"× "+lvLbl+" "+levelOf()+" · "+t("profile.certCardXp")+" "+S.xp},
     {ico:"🐉",txt:t("profile.certCardCrises")+" "+bossCompletedCount()+"/"+BOSSES.length+" · "+t("profile.certCardChain")+" "+chainStagesDone()+"/"+chainTotalStages()},
-    {ico:"🌍",txt:t("profile.certCardCountries")+" "+Object.keys(S.done).length+"/"+COUNTRIES.length+" · 🏅 "+t("profile.certCardAch")+" "+achEarned+"/"+MEDALS.length},
+    {ico:"🌍",txt:t("profile.certCardCountries")+" "+Object.keys(S.done).length+"/"+COUNTRIES.length+" · 🏅 "+t("profile.certCardAch")+" "+achEarned+"/"+visible.length},
     {ico:"🛡",txt:t("profile.certCardRes")+" "+avgRes+"% · "+resRank.ico+" "+resRank[pt?"pt":"en"]}
   ];
   var sy=creamY+16;
@@ -5315,8 +5321,9 @@ function renderCertificateFull(){
     [pt?"Resiliência":"Resilience", avgRes+"%"],
     [pt?"Sequência":"Streak", String(S.streak.count||0)+(pt?" d":" d")]
   ];
-  var achRows=Math.ceil(MEDALS.length/3);
-  var H=Math.max(920, 500+achRows*56+150);
+  var visible=medalsVisibleList();
+  var achRows=Math.ceil(visible.length/3);
+  var H=Math.max(940, 500+achRows*62+160);
   cv.width=W; cv.height=H;
   var ctx=cv.getContext("2d");
   ctx.fillStyle="#ffffff"; ctx.fillRect(0,0,W,H);
