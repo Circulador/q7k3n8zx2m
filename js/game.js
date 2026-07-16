@@ -1045,7 +1045,47 @@ function setLang(lang){
   if($("screenSetup")&&$("screenSetup").classList.contains("active")) renderSetupUi();
   var ov=$("onboardOverlay"); if(ov&&!ov.hidden) renderOnboarding();
   if($("screenProfile")&&$("screenProfile").classList.contains("active")) renderProfile();
-  if($("screenMap").classList.contains("active")){ drawMap(); renderMapExpedition(); }
+  refreshActiveScreenForLang();
+}
+function isScreenActive(id){ var el=$(id); return !!(el&&el.classList.contains("active")); }
+function rebuildQuizFeedbackHtml(q,st){
+  var review=cur.mode==="review", drill=cur.mode==="themeDrill";
+  if(st.ok) return "✅ <b>"+(L()==="pt"?"Correto!":"Correct!")+"</b> "+tt(q.why);
+  if(review||drill) return "❌ <b>"+(L()==="pt"?"Revise:":"Review:")+"</b> "+tt(q.why);
+  return "❌ <b>"+(L()==="pt"?"Cuidado!":"Careful!")+"</b> "+tt(q.why)+(THREAT_RESILIENCE[q.theme]?" <span class='res-hit'>−"+THREAT_RESILIENCE[q.theme]+"% "+(L()==="pt"?"resiliência":"resilience")+"</span>":"");
+}
+function rebuildBossFeedbackHtml(ph,ok){
+  var impact=bossImpactText(ph,ok);
+  if(ok) return "✅ <strong>"+t("boss.impactOk")+":</strong> "+impact;
+  return "⚠️ <strong>"+t("boss.impactBad")+":</strong> "+impact;
+}
+function renderResultScreen(){
+  var r=cur.lastResult; if(!r) return;
+  var c=r.country, total=r.total, acc=r.acc, win=r.win;
+  var titlePt=win?"Operação protegida!":"Operação comprometida", titleEn=win?"Operation protected!":"Operation compromised";
+  var hero=$("resultHero");
+  if(hero) hero.innerHTML='<div class="big">'+(win?"🏆":"⚠️")+'</div><h2>'+(L()==="pt"?titlePt:titleEn)+'</h2><p style="color:var(--steel)">'+c.flag+" "+tt(c.name)+'</p>';
+  var lab=L()==="pt"?{a:"Acertos",b:"Precisão",c:"Integridade",d:"XP total"}:{a:"Correct",b:"Accuracy",c:"Integrity",d:"Total XP"};
+  var grid=$("statsGrid");
+  if(grid) grid.innerHTML='<div class="stat"><div class="v">'+r.correct+"/"+total+'</div><div class="l">'+lab.a+'</div></div><div class="stat"><div class="v">'+acc+'%</div><div class="l">'+lab.b+'</div></div><div class="stat"><div class="v">'+r.integrity+'%</div><div class="l">'+lab.c+'</div></div><div class="stat"><div class="v">'+S.xp+'</div><div class="l">'+lab.d+'</div></div>';
+  renderCampaignDebrief(); renderThemeErrors($("themeErrors")); renderMedals($("medalsBox")); renderRank($("rankList"));
+  renderSessionFeedback(win,acc); renderPostSessionActions("resultPostActions");
+}
+function refreshActiveScreenForLang(){
+  if(isScreenActive("screenQuiz")&&cur.questions&&cur.questions.length) renderQuestion();
+  if(isScreenActive("screenBoss")&&bossCur&&bossCur.boss) renderBossPhase();
+  if(isScreenActive("screenBossList")) renderBossList();
+  if(isScreenActive("screenResult")&&cur.lastResult) renderResultScreen();
+  if(isScreenActive("screenMap")){
+    if(mapHitActive) openMapDetailCountry(mapHitActive);
+    else if(chainStageActive) openMapDetailChain(chainStageActive);
+    else { if(mapReady) drawMap(); renderMapExpedition(); }
+  }
+  var gm=$("glossaryMenu");
+  if(gm&&!gm.hidden){
+    renderGlossaryWordList();
+    if(glossaryActiveId) showGlossaryTerm(glossaryActiveId);
+  }
 }
 
 /* -------------------- EQUIPES / PAPÉIS — ver js/profile-data.js (escalável) -------------------- */
@@ -3528,12 +3568,18 @@ function renderQuestion(){
     else b.addEventListener("click",function(){ answer(item.idx,b,q); });
     opts.appendChild(b);
   });
-  var rs=$("reportStep"); if(rs) rs.hidden=true;
+  var rs=$("reportStep");
   if(st){
-    $("feedback").className=st.feedbackClass||"feedback";
-    $("feedback").innerHTML=st.feedbackHtml||"";
-    if(st.reportDone&&rs){ rs.hidden=false; rs.innerHTML='<p class="report-done">'+t("report.done")+'</p>'; }
-  } else { $("feedback").className="feedback"; $("feedback").innerHTML=""; }
+    $("feedback").className=st.ok?"feedback show good":"feedback show err";
+    $("feedback").innerHTML=rebuildQuizFeedbackHtml(q,st);
+    if(cur.reportPending) showReportPrompt(q);
+    else if(st.reportDone&&rs){ rs.hidden=false; rs.innerHTML='<p class="report-done">'+t("report.done")+'</p>'; }
+    else if(rs) rs.hidden=true;
+  } else {
+    $("feedback").className="feedback";
+    $("feedback").innerHTML="";
+    if(rs) rs.hidden=true;
+  }
   updateQuizNav();
   speak(getQuestionField(q,"q"));
 }
@@ -3553,7 +3599,7 @@ function answer(idx,btn,q){
   else if(review||drill){ btn.classList.add("wrong"); $("options").querySelectorAll(".opt").forEach(function(b){ if(b.getAttribute("data-correct")==="1") b.classList.add("correct"); }); fb.className="feedback show err"; fb.innerHTML="❌ <b>"+(L()==="pt"?"Revise:":"Review:")+"</b> "+tt(q.why); }
   else{ btn.classList.add("wrong"); $("options").querySelectorAll(".opt").forEach(function(b){ if(b.getAttribute("data-correct")==="1") b.classList.add("correct"); }); cur.integrity=Math.max(0,cur.integrity-20); S.lives=Math.max(0,(S.lives||3)-1); renderLives(); applyResilienceHit(q.theme); fb.className="feedback show err"; fb.innerHTML="❌ <b>"+(L()==="pt"?"Cuidado!":"Careful!")+"</b> "+tt(q.why)+(THREAT_RESILIENCE[q.theme]?" <span class='res-hit'>−"+THREAT_RESILIENCE[q.theme]+"% "+(L()==="pt"?"resiliência":"resilience")+"</span>":""); save(); }
   if(!cur.qStates) cur.qStates={};
-  cur.qStates[cur.i]={selectedIdx:idx,ok:ok,feedbackClass:fb.className,feedbackHtml:fb.innerHTML,reportDone:false};
+  cur.qStates[cur.i]={selectedIdx:idx,ok:ok,reportDone:false};
   cur.correct=countQuizCorrect();
   speak((ok?(L()==="pt"?"Correto. ":"Correct. "):(L()==="pt"?"Cuidado. ":"Careful. "))+tt(q.why));
   setIntegrity(); renderQuizResilience(); updateQuizResilienceVisibility();
@@ -3579,6 +3625,7 @@ function finishCampaign(){
   if(cur.mode==="daily"){ markDailyDone(win); recordStreak(); }
   else if(win) recordStreak();
   checkMedals(); save();
+  cur.lastResult={win:win,acc:acc,total:total,correct:cur.correct,integrity:cur.integrity,country:c};
   var hero=$("resultHero"); var titlePt=win?"Operação protegida!":"Operação comprometida",titleEn=win?"Operation protected!":"Operation compromised";
   hero.innerHTML='<div class="big">'+(win?"🏆":"⚠️")+'</div><h2>'+(L()==="pt"?titlePt:titleEn)+'</h2><p style="color:var(--steel)">'+c.flag+" "+tt(c.name)+'</p>';
   var lab=L()==="pt"?{a:"Acertos",b:"Precisão",c:"Integridade",d:"XP total"}:{a:"Correct",b:"Accuracy",c:"Integrity",d:"Total XP"};
@@ -4168,7 +4215,7 @@ function renderBossPhase(){
     opts.appendChild(btn);
   });
   var fb=$("bossFb");
-  if(st){ fb.className=st.feedbackClass||"feedback"; fb.innerHTML=st.feedbackHtml||""; }
+  if(st){ fb.className=st.ok?"feedback show good":"feedback show err"; fb.innerHTML=rebuildBossFeedbackHtml(ph,st.ok); }
   else { fb.className="feedback"; fb.innerHTML=""; }
   var nxt=$("bossNext");
   if(nxt) nxt.textContent=bossCur.phase>=b.phases.length-1?t("boss.finish"):(L()==="pt"?"Próxima cena →":"Next scene →");
@@ -4201,7 +4248,7 @@ function bossAnswer(idx,btn,ph,order){
     fb.innerHTML="⚠️ <strong>"+t("boss.impactBad")+":</strong> "+impact;
   }
   if(!bossCur.phaseStates) bossCur.phaseStates={};
-  bossCur.phaseStates[bossCur.phase]={selectedIdx:idx,ok:ok,feedbackClass:fb.className,feedbackHtml:fb.innerHTML,hp:bossCur.hp,ops:bossCur.ops,order:order||bossCur._optOrder};
+  bossCur.phaseStates[bossCur.phase]={selectedIdx:idx,ok:ok,hp:bossCur.hp,ops:bossCur.ops,order:order||bossCur._optOrder};
   bossCur.log.push({good:ph.impactOk||ph.why,bad:ph.impactBad||ph.why,ok:ok});
   if(b.chainId&&ph.stageId){
     var key=chainKey(b.chainId||"carajas",ph.stageId);
