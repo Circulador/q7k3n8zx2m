@@ -30,22 +30,7 @@ function load(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY)); }catch
 function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(S)); }catch(e){} }
 function $(id){ return document.getElementById(id); }
 function L(){ return S.lang; }
-function tt(o){
-  if(!o) return "";
-  if(typeof o==="string") return o;
-  var lang=L(), alt=lang==="pt"?"en":"pt";
-  var val=o[lang];
-  if(val!=null&&String(val).trim()!=="") return val;
-  val=o[alt];
-  if(val!=null&&String(val).trim()!=="") return val;
-  return "";
-}
-function glossaryTerm(g){ return g?(typeof g.term==="object"?tt(g.term):(g.term||"")):""; }
-function glossaryTermSearchText(g){
-  if(!g) return "";
-  if(typeof g.term==="object") return ((g.term.pt||"")+" "+(g.term.en||"")).trim();
-  return g.term||"";
-}
+function tt(o){ return o? (o[L()]!==undefined?o[L()]:o.pt) : ""; }
 
 /* -------------------- i18n (UI) -------------------- */
 var UI = {
@@ -1060,107 +1045,7 @@ function setLang(lang){
   if($("screenSetup")&&$("screenSetup").classList.contains("active")) renderSetupUi();
   var ov=$("onboardOverlay"); if(ov&&!ov.hidden) renderOnboarding();
   if($("screenProfile")&&$("screenProfile").classList.contains("active")) renderProfile();
-  refreshActiveScreenForLang();
-}
-function isScreenActive(id){ var el=$(id); return !!(el&&el.classList.contains("active")); }
-function refreshMapForLang(){
-  if(!isScreenActive("screenMap")) return;
-  if(mapReady) drawMap();
-  renderMapExpedition();
-  renderMapMission();
-  renderMapResilience();
-  renderMapAbout();
-  renderMapLegend();
-  renderMapProcessBar();
-  renderCountryList();
-  renderMapExplorerHint();
-  updateMapContext();
-  if(mapHitActive) openMapDetailCountry(mapHitActive);
-  else if(chainStageActive) openMapDetailChain(chainStageActive);
-}
-function renderResultScreen(){
-  var r=cur.lastResult; if(!r) return;
-  var c=r.country, total=r.total, acc=r.acc, win=r.win;
-  var titlePt=win?"Operação protegida!":"Operação comprometida", titleEn=win?"Operation protected!":"Operation compromised";
-  var hero=$("resultHero");
-  if(hero) hero.innerHTML='<div class="big">'+(win?"🏆":"⚠️")+'</div><h2>'+(L()==="pt"?titlePt:titleEn)+'</h2><p style="color:var(--steel)">'+c.flag+" "+tt(c.name)+'</p>';
-  var lab=L()==="pt"?{a:"Acertos",b:"Precisão",c:"Integridade",d:"XP total"}:{a:"Correct",b:"Accuracy",c:"Integrity",d:"Total XP"};
-  var grid=$("statsGrid");
-  if(grid) grid.innerHTML='<div class="stat"><div class="v">'+r.correct+"/"+total+'</div><div class="l">'+lab.a+'</div></div><div class="stat"><div class="v">'+acc+'%</div><div class="l">'+lab.b+'</div></div><div class="stat"><div class="v">'+r.integrity+'%</div><div class="l">'+lab.c+'</div></div><div class="stat"><div class="v">'+S.xp+'</div><div class="l">'+lab.d+'</div></div>';
-  renderCampaignDebrief();
-  renderThemeErrors($("themeErrors"));
-  renderMedals($("medalsBox"));
-  renderRank($("rankList"));
-  renderSessionFeedback(win,acc);
-  renderPostSessionActions("resultPostActions");
-}
-function renderBossResultScreen(){
-  var r=bossCur&&bossCur.lastResult; if(!r) return;
-  var b=r.boss, m=r.metrics, tier=r.tier, rank=r.rank, prevBest=r.prevBest, improved=r.improved;
-  var debrief=bossDebriefFromLog(bossCur.log||[]);
-  var outcomes=tier.outcomes.map(function(o){ return "<li>"+tt(o)+"</li>"; }).join("");
-  var idxHtml=bossBarHtml("availability",m.availability)+bossBarHtml("resilience",m.resilience)+bossBarHtml("exposure",m.exposure,true)+bossBarHtml("preparation",m.preparation)+bossBarHtml("maturity",m.maturity);
-  var goodLi=debrief.good.map(function(x){ return "<li>"+x+"</li>"; }).join("");
-  var impLi=debrief.improve.map(function(x){ return "<li>"+x+"</li>"; }).join("");
-  var host=$("bossResult"); if(!host) return;
-  host.innerHTML=
-    '<div class="boss-result-wrap">'+
-      '<div class="boss-tier-hero tier-'+m.tier+'"><div class="boss-tier-ico">'+tier.ico+'</div><h2>'+tt(tier.title)+'</h2>'+
-      '<p class="boss-tier-sub">'+b.emoji+' '+tt(b.name)+' · '+t("boss.maturityTitle")+': <strong>'+m.index+'%</strong>'+(improved&&prevBest?(' <span class="boss-new-best">↑ '+(L()==="pt"?"novo recorde":"new best")+'</span>'):'')+'</p></div>'+
-      '<div class="boss-rank-badge"><span class="boss-rank-ico">'+rank.ico+'</span><div><div class="boss-rank-k">'+t("boss.guardianRank")+'</div><div class="boss-rank-v">'+rank[L()]+'</div></div></div>'+
-      '<div class="boss-idx-panel"><div class="boss-idx-title">'+t("boss.maturityTitle")+'</div>'+idxHtml+'</div>'+
-      '<div class="boss-outcomes"><ul>'+outcomes+'</ul><p class="boss-result-epilogue">'+tt(tier.msg)+'</p></div>'+
-      '<div class="boss-debrief"><div class="boss-debrief-col"><div class="boss-debrief-k">'+t("boss.debriefGood")+'</div><ul>'+goodLi+'</ul></div>'+
-      '<div class="boss-debrief-col"><div class="boss-debrief-k warn">'+t("boss.debriefImprove")+'</div><ul>'+impLi+'</ul></div></div>'+
-    '</div>';
-  renderPostSessionActions("bossPostActions",true);
-}
-function refreshActiveScreenForLang(){
-  refreshHud();
-  updateNavBadges();
-  if(isScreenActive("screenQuiz")&&cur.questions&&cur.questions.length) renderQuestion();
-  if(isScreenActive("screenBoss")&&bossCur&&bossCur.boss) renderBossPhase();
-  if(isScreenActive("screenBossList")) renderBossList();
-  if(isScreenActive("screenBossResult")&&bossCur&&bossCur.lastResult) renderBossResultScreen();
-  if(isScreenActive("screenResult")&&cur.lastResult) renderResultScreen();
-  if(isScreenActive("screenDaily")) renderDaily();
-  if(isScreenActive("screenHome")){ renderNextStep(); renderHomeHowStrip(); renderMissionsFocus(); renderHomeProfileBadges(); renderHomeNextAchievement(); renderHomeStickyCta(); }
-  if(isScreenActive("screenShop")) renderShop();
-  if(isScreenActive("screenProfile")) renderProfile();
-  if(isScreenActive("screenManager")) renderManager();
-  if(isScreenActive("screenSetup")) renderSetupUi();
-  if(isScreenActive("screenReview")&&typeof window.refreshReviewBankLang==="function") window.refreshReviewBankLang();
-  refreshMapForLang();
-  renderChainStageList();
-  var ov=$("onboardOverlay"); if(ov&&!ov.hidden) renderOnboarding();
-  var sp=$("streakPopover"); if(sp&&!sp.hidden) renderHudStreak();
-  var gm=$("glossaryMenu");
-  if(gm&&!gm.hidden){
-    renderGlossaryCatChips();
-    renderGlossaryWordList();
-    renderGlossaryFavs();
-    renderGlossaryReviewList();
-    if(glossaryActiveId) showGlossaryTerm(glossaryActiveId);
-    else renderGlossaryEmptyState();
-  }
-  if(glossaryQuizState&&glossaryQuizState.termId) refreshGlossaryQuizIfOpen();
-}
-function refreshGlossaryQuizIfOpen(){
-  var panel=$("glossaryQuizPanel"), st=glossaryQuizState;
-  if(!panel||panel.hidden||!st||!st.q) return;
-  var q=st.q, qEl=$("glossaryQuizQ"), opts=$("glossaryQuizOpts"), why=$("glossaryQuizWhy");
-  if(qEl) qEl.textContent=getQuestionField(q,"q");
-  if(!opts) return;
-  opts.innerHTML="";
-  (q.opts||[]).forEach(function(o,i){
-    var b=document.createElement("button");
-    b.type="button"; b.className="glossary-quiz-opt";
-    b.textContent=tt(o);
-    if(!st.answered) b.addEventListener("click",function(){ answerGlossaryQuiz(i); });
-    else b.disabled=true;
-    opts.appendChild(b);
-  });
-  if(st.answered&&why){ why.hidden=false; why.textContent=tt(q.why)||""; }
+  if($("screenMap").classList.contains("active")){ drawMap(); renderMapExpedition(); }
 }
 
 /* -------------------- EQUIPES / PAPÉIS — ver js/profile-data.js (escalável) -------------------- */
@@ -1825,7 +1710,7 @@ function renderGlossaryReviewList(){
     var g=GLOSSARY.filter(function(x){return x.id===id;})[0]; if(!g) return;
     var b=document.createElement("button");
     b.type="button"; b.className="glossary-fav-chip glossary-review-chip";
-    b.textContent=glossaryTerm(g);
+    b.textContent=g.term;
     b.addEventListener("click",function(){ openGlossaryForTerm(id); });
     host.appendChild(b);
   });
@@ -1901,7 +1786,7 @@ function bindGlossaryCardActions(g){
       else if(act==="learn"){ toggleGlossaryLearned(g.id); showGlossaryTerm(g.id); renderGlossaryMeta($("glossarySearch")?$("glossarySearch").value:""); renderGlossaryWordList(); renderGlossaryReviewList(); }
       else if(act==="review"){ toggleGlossaryReview(g.id); showGlossaryTerm(g.id); }
       else if(act==="quiz") startGlossaryQuiz(g.id);
-      else if(act==="speak") speak(glossaryTerm(g)+". "+glossarySummary(g));
+      else if(act==="speak") speak(g.term+". "+glossarySummary(g));
     });
   });
   document.querySelectorAll(".glossary-related-chip").forEach(function(b){
@@ -1932,7 +1817,7 @@ function updateGlossaryMobileBar(g){
       else if(act==="learn"){ toggleGlossaryLearned(g.id); showGlossaryTerm(g.id); renderGlossaryMeta($("glossarySearch")?$("glossarySearch").value:""); renderGlossaryWordList(); }
       else if(act==="review"){ toggleGlossaryReview(g.id); showGlossaryTerm(g.id); }
       else if(act==="quiz") startGlossaryQuiz(g.id);
-      else if(act==="speak") speak(glossaryTerm(g)+". "+glossarySummary(g));
+      else if(act==="speak") speak(g.term+". "+glossarySummary(g));
     });
   });
 }
@@ -1976,8 +1861,8 @@ function glossaryMatchFromSearch(q){
   q=(q||"").trim(); if(!q) return null;
   var low=q.toLowerCase();
   var hit=GLOSSARY.filter(function(g){
-    return glossaryTermSearchText(g).toLowerCase()===low || g.id===low
-      || (q.indexOf("—")>=0 && q.toLowerCase().indexOf(glossaryTerm(g).toLowerCase())===0);
+    return g.term.toLowerCase()===low || g.id===low
+      || (q.indexOf("—")>=0 && q.toLowerCase().indexOf(g.term.toLowerCase())===0);
   })[0];
   if(hit) return hit.id;
   var list=glossaryFilter(q);
@@ -1989,7 +1874,7 @@ function glossaryFilter(q){
   if(glossaryActiveCat) list=list.filter(function(g){ return g.cat===glossaryActiveCat; });
   if(!q) return list;
   return list.filter(function(g){
-    return glossaryTermSearchText(g).toLowerCase().indexOf(q)>=0 || g.id.indexOf(q)>=0
+    return g.term.toLowerCase().indexOf(q)>=0 || g.id.indexOf(q)>=0
       || (tt(g.name)||"").toLowerCase().indexOf(q)>=0
       || (tt(g.def)||"").toLowerCase().indexOf(q)>=0
       || (g.acr&&(tt(g.acr)||"").toLowerCase().indexOf(q)>=0)
@@ -2087,7 +1972,7 @@ function selectGlossaryTerm(id, updateSearch){
   if(updateSearch!==false){
     var g=GLOSSARY.filter(function(x){ return x.id===id; })[0];
     var search=$("glossarySearch");
-    if(g&&search) search.value=glossaryTerm(g);
+    if(g&&search) search.value=g.term;
   }
   renderGlossaryWordList();
   if(id) showGlossaryTerm(id);
@@ -2116,7 +2001,7 @@ function renderGlossaryWordList(){
     var learned=S.glossaryLearned&&S.glossaryLearned[g.id]?'<span class="glossary-word-learned" aria-hidden="true">✓</span>':"";
     var novo=glossaryIsNew(g.id)?'<span class="glossary-new-badge">'+t("settings.glossaryNew")+'</span>':"";
     var reviewMark=S.glossaryReview&&S.glossaryReview.indexOf(g.id)>=0?'<span class="glossary-word-review" aria-hidden="true">🔖</span>':"";
-    b.innerHTML=cat+'<span class="glossary-word-term">'+glossaryTerm(g)+'</span>'+novo+'<span class="glossary-word-sep">—</span><span class="glossary-word-name">'+tt(g.name)+'</span>'+learned+reviewMark;
+    b.innerHTML=cat+'<span class="glossary-word-term">'+g.term+'</span>'+novo+'<span class="glossary-word-sep">—</span><span class="glossary-word-name">'+tt(g.name)+'</span>'+learned+reviewMark;
     b.addEventListener("click",function(e){ e.stopPropagation(); selectGlossaryTerm(g.id, false); });
     host.appendChild(b);
   });
@@ -2144,7 +2029,7 @@ function showGlossaryTerm(id){
   var related=glossaryRelatedIds(g);
   var relHtml=related.length?'<div class="glossary-related-k">'+t("settings.glossaryRelated")+'</div><div class="glossary-related">'+related.map(function(rid){
     var rg=GLOSSARY.filter(function(x){return x.id===rid;})[0]; if(!rg) return "";
-    return '<button type="button" class="glossary-related-chip" data-gid="'+rid+'">'+glossaryTerm(rg)+'</button>';
+    return '<button type="button" class="glossary-related-chip" data-gid="'+rid+'">'+rg.term+'</button>';
   }).join("")+'</div>':"";
   var sum=glossarySummary(g), fullDef=tt(g.def)||"";
   var nameBlock='<div class="glossary-name-block"><div class="glossary-def-k">'+t("settings.glossaryDef")+'</div><div class="glossary-name">'+tt(g.name)+'</div></div>';
@@ -2156,7 +2041,7 @@ function showGlossaryTerm(id){
   }
   host.innerHTML=
     cat+
-    '<div class="glossary-term-row2"><div class="glossary-term">'+glossaryTerm(g)+'</div>'+novo+'</div>'+
+    '<div class="glossary-term-row2"><div class="glossary-term">'+g.term+'</div>'+novo+'</div>'+
     nameBlock+
     acrBlock+
     '<div class="glossary-card-actions">'+
@@ -2183,11 +2068,11 @@ function renderGlossaryEmptyState(){
   if(bar) bar.hidden=true;
   var popular=GLOSSARY_SUGGESTIONS.map(function(id){
     var g=GLOSSARY.filter(function(x){return x.id===id;})[0]; if(!g) return "";
-    return '<button type="button" class="glossary-suggest-chip" data-gid="'+id+'">'+glossaryTerm(g)+'</button>';
+    return '<button type="button" class="glossary-suggest-chip" data-gid="'+id+'">'+g.term+'</button>';
   }).join("");
   var role=getRoleGlossaryPicks().map(function(id){
     var g=GLOSSARY.filter(function(x){return x.id===id;})[0]; if(!g) return "";
-    return '<button type="button" class="glossary-suggest-chip glossary-role-chip" data-gid="'+id+'">'+glossaryTerm(g)+'</button>';
+    return '<button type="button" class="glossary-suggest-chip glossary-role-chip" data-gid="'+id+'">'+g.term+'</button>';
   }).join("");
   host.innerHTML='<p class="glossary-empty muted">'+t("settings.glossaryEmpty")+'</p>'
     +'<div class="glossary-suggest-k">'+t("settings.glossarySuggest")+'</div><div class="glossary-suggest">'+popular+'</div>'
@@ -3610,22 +3495,6 @@ function startDaily(){
   cur.questions=buildDaily(); cur.i=0; cur.correct=0; cur.integrity=100; S.lives=3; initQuizSession(); renderLives();
   show("screenQuiz"); renderQuestion();
 }
-function buildQuizFeedbackHtml(q,idx,ok){
-  var review=cur.mode==="review", drill=cur.mode==="themeDrill";
-  if(ok) return "✅ <b>"+(L()==="pt"?"Correto!":"Correct!")+"</b> "+tt(q.why);
-  if(review||drill) return "❌ <b>"+(L()==="pt"?"Revise:":"Review:")+"</b> "+tt(q.why);
-  return "❌ <b>"+(L()==="pt"?"Cuidado!":"Careful!")+"</b> "+tt(q.why)+(THREAT_RESILIENCE[q.theme]?" <span class='res-hit'>−"+THREAT_RESILIENCE[q.theme]+"% "+(L()==="pt"?"resiliência":"resilience")+"</span>":"");
-}
-function buildQuizFeedbackClass(ok){
-  var review=cur.mode==="review", drill=cur.mode==="themeDrill";
-  if(ok) return "feedback show good";
-  return "feedback show err";
-}
-function buildBossFeedbackHtml(ph,ok){
-  var impact=bossImpactText(ph,ok);
-  if(ok) return "✅ <strong>"+t("boss.impactOk")+":</strong> "+impact;
-  return "⚠️ <strong>"+t("boss.impactBad")+":</strong> "+impact;
-}
 function renderPersonalBridge(q){
   var el=$("personalBridge"); if(!el) return;
   var p=getPersonal(q);
@@ -3659,18 +3528,12 @@ function renderQuestion(){
     else b.addEventListener("click",function(){ answer(item.idx,b,q); });
     opts.appendChild(b);
   });
-  var rs=$("reportStep");
+  var rs=$("reportStep"); if(rs) rs.hidden=true;
   if(st){
-    $("feedback").className=buildQuizFeedbackClass(st.ok);
-    $("feedback").innerHTML=buildQuizFeedbackHtml(q,st.selectedIdx,st.ok);
-    if(cur.reportPending) showReportPrompt(q);
-    else if(st.reportDone&&rs){ rs.hidden=false; rs.innerHTML='<p class="report-done">'+t("report.done")+'</p>'; }
-    else if(rs) rs.hidden=true;
-  } else {
-    $("feedback").className="feedback";
-    $("feedback").innerHTML="";
-    if(rs) rs.hidden=true;
-  }
+    $("feedback").className=st.feedbackClass||"feedback";
+    $("feedback").innerHTML=st.feedbackHtml||"";
+    if(st.reportDone&&rs){ rs.hidden=false; rs.innerHTML='<p class="report-done">'+t("report.done")+'</p>'; }
+  } else { $("feedback").className="feedback"; $("feedback").innerHTML=""; }
   updateQuizNav();
   speak(getQuestionField(q,"q"));
 }
@@ -3686,11 +3549,11 @@ function answer(idx,btn,q){
   if(drill){ recordTheme(q.theme,ok); recordMiss(q,ok); if(ok) addReward(5,2,0); }
   else if(review){ recordTheme(q.theme,ok); recordMiss(q,ok); if(ok) addReward(5,2,0); else save(); }
   else { recordTheme(q.theme,ok); recordMiss(q,ok); }
-  if(ok){ btn.classList.add("correct"); if(!review&&!drill) addReward(10,5,q.diff*10); fb.className=buildQuizFeedbackClass(true); fb.innerHTML=buildQuizFeedbackHtml(q,idx,true); }
-  else if(review||drill){ btn.classList.add("wrong"); $("options").querySelectorAll(".opt").forEach(function(b){ if(b.getAttribute("data-correct")==="1") b.classList.add("correct"); }); fb.className=buildQuizFeedbackClass(false); fb.innerHTML=buildQuizFeedbackHtml(q,idx,false); }
-  else{ btn.classList.add("wrong"); $("options").querySelectorAll(".opt").forEach(function(b){ if(b.getAttribute("data-correct")==="1") b.classList.add("correct"); }); cur.integrity=Math.max(0,cur.integrity-20); S.lives=Math.max(0,(S.lives||3)-1); renderLives(); applyResilienceHit(q.theme); fb.className=buildQuizFeedbackClass(false); fb.innerHTML=buildQuizFeedbackHtml(q,idx,false); save(); }
+  if(ok){ btn.classList.add("correct"); if(!review&&!drill) addReward(10,5,q.diff*10); fb.className="feedback show good"; fb.innerHTML="✅ <b>"+(L()==="pt"?"Correto!":"Correct!")+"</b> "+tt(q.why); }
+  else if(review||drill){ btn.classList.add("wrong"); $("options").querySelectorAll(".opt").forEach(function(b){ if(b.getAttribute("data-correct")==="1") b.classList.add("correct"); }); fb.className="feedback show err"; fb.innerHTML="❌ <b>"+(L()==="pt"?"Revise:":"Review:")+"</b> "+tt(q.why); }
+  else{ btn.classList.add("wrong"); $("options").querySelectorAll(".opt").forEach(function(b){ if(b.getAttribute("data-correct")==="1") b.classList.add("correct"); }); cur.integrity=Math.max(0,cur.integrity-20); S.lives=Math.max(0,(S.lives||3)-1); renderLives(); applyResilienceHit(q.theme); fb.className="feedback show err"; fb.innerHTML="❌ <b>"+(L()==="pt"?"Cuidado!":"Careful!")+"</b> "+tt(q.why)+(THREAT_RESILIENCE[q.theme]?" <span class='res-hit'>−"+THREAT_RESILIENCE[q.theme]+"% "+(L()==="pt"?"resiliência":"resilience")+"</span>":""); save(); }
   if(!cur.qStates) cur.qStates={};
-  cur.qStates[cur.i]={selectedIdx:idx,ok:ok,reportDone:false};
+  cur.qStates[cur.i]={selectedIdx:idx,ok:ok,feedbackClass:fb.className,feedbackHtml:fb.innerHTML,reportDone:false};
   cur.correct=countQuizCorrect();
   speak((ok?(L()==="pt"?"Correto. ":"Correct. "):(L()==="pt"?"Cuidado. ":"Careful. "))+tt(q.why));
   setIntegrity(); renderQuizResilience(); updateQuizResilienceVisibility();
@@ -3716,7 +3579,6 @@ function finishCampaign(){
   if(cur.mode==="daily"){ markDailyDone(win); recordStreak(); }
   else if(win) recordStreak();
   checkMedals(); save();
-  cur.lastResult={win:win,acc:acc,total:total,correct:cur.correct,integrity:cur.integrity,country:c,mode:cur.mode};
   var hero=$("resultHero"); var titlePt=win?"Operação protegida!":"Operação comprometida",titleEn=win?"Operation protected!":"Operation compromised";
   hero.innerHTML='<div class="big">'+(win?"🏆":"⚠️")+'</div><h2>'+(L()==="pt"?titlePt:titleEn)+'</h2><p style="color:var(--steel)">'+c.flag+" "+tt(c.name)+'</p>';
   var lab=L()==="pt"?{a:"Acertos",b:"Precisão",c:"Integridade",d:"XP total"}:{a:"Correct",b:"Accuracy",c:"Integrity",d:"Total XP"};
@@ -4306,7 +4168,7 @@ function renderBossPhase(){
     opts.appendChild(btn);
   });
   var fb=$("bossFb");
-  if(st){ fb.className=st.ok?"feedback show good":"feedback show err"; fb.innerHTML=buildBossFeedbackHtml(ph,st.ok); }
+  if(st){ fb.className=st.feedbackClass||"feedback"; fb.innerHTML=st.feedbackHtml||""; }
   else { fb.className="feedback"; fb.innerHTML=""; }
   var nxt=$("bossNext");
   if(nxt) nxt.textContent=bossCur.phase>=b.phases.length-1?t("boss.finish"):(L()==="pt"?"Próxima cena →":"Next scene →");
@@ -4339,7 +4201,7 @@ function bossAnswer(idx,btn,ph,order){
     fb.innerHTML="⚠️ <strong>"+t("boss.impactBad")+":</strong> "+impact;
   }
   if(!bossCur.phaseStates) bossCur.phaseStates={};
-  bossCur.phaseStates[bossCur.phase]={selectedIdx:idx,ok:ok,hp:bossCur.hp,ops:bossCur.ops,order:order||bossCur._optOrder};
+  bossCur.phaseStates[bossCur.phase]={selectedIdx:idx,ok:ok,feedbackClass:fb.className,feedbackHtml:fb.innerHTML,hp:bossCur.hp,ops:bossCur.ops,order:order||bossCur._optOrder};
   bossCur.log.push({good:ph.impactOk||ph.why,bad:ph.impactBad||ph.why,ok:ok});
   if(b.chainId&&ph.stageId){
     var key=chainKey(b.chainId||"carajas",ph.stageId);
@@ -4367,7 +4229,6 @@ function finishBoss(){
   bumpWeekly("boss",1); recordStreak(); checkMedals(); save();
   var debrief=bossDebriefFromLog(bossCur.log);
   var improved=m.index>prevBest;
-  bossCur.lastResult={boss:b,metrics:m,tier:tier,rank:rank,prevBest:prevBest,improved:improved,debrief:debrief};
   var outcomes=tier.outcomes.map(function(o){ return "<li>"+tt(o)+"</li>"; }).join("");
   var idxHtml=bossBarHtml("availability",m.availability)+bossBarHtml("resilience",m.resilience)+bossBarHtml("exposure",m.exposure,true)+bossBarHtml("preparation",m.preparation)+bossBarHtml("maturity",m.maturity);
   var goodLi=debrief.good.map(function(x){ return "<li>"+x+"</li>"; }).join("");
@@ -5564,7 +5425,7 @@ function openGlossaryForTerm(id, fromQuiz, theme){
   }
   toggleGlossaryMenu(true);
   var search=$("glossarySearch");
-  if(search&&g) search.value=glossaryTerm(g);
+  if(search&&g) search.value=g.term;
   renderGlossaryCatChips();
   selectGlossaryTerm(id, false);
 }
@@ -5583,7 +5444,7 @@ function renderGlossaryFavs(){
     var g=GLOSSARY.filter(function(x){return x.id===id;})[0]; if(!g) return;
     var b=document.createElement("button");
     b.type="button"; b.className="glossary-fav-chip";
-    b.textContent=glossaryTerm(g);
+    b.textContent=g.term;
     b.addEventListener("click",function(){ openGlossaryForTerm(id); });
     host.appendChild(b);
   });
@@ -5610,7 +5471,7 @@ function renderQuizGlossaryHint(theme){
   var g=GLOSSARY.filter(function(x){return x.id===gid;})[0];
   if(!g){ el.hidden=true; return; }
   el.hidden=false;
-  el.innerHTML='<button type="button" class="quiz-gloss-btn" id="quizGlossBtn">'+t("quiz.glossaryTip")+': <b>'+glossaryTerm(g)+'</b></button>';
+  el.innerHTML='<button type="button" class="quiz-gloss-btn" id="quizGlossBtn">'+t("quiz.glossaryTip")+': <b>'+g.term+'</b></button>';
   var btn=$("quizGlossBtn");
   if(btn) btn.onclick=function(e){ e.stopPropagation(); var th=cur.questions&&cur.questions[cur.i]?cur.questions[cur.i].theme:null; openGlossaryForTerm(gid, true, th); };
 }
