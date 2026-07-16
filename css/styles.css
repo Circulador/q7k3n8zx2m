@@ -19,7 +19,7 @@ body.contrast{--green:#00ffe1;--gold:#ffd400;--fog:#fff;--steel:#dfe;background:
 body.contrast .card{background:#0b0b0b;border-color:#fff}
 body.large{--fs:19px}
 body.reduce-motion *{animation:none!important;transition:none!important}
-body.reduce-motion .hero-train,body.reduce-motion .hero-belt,body.reduce-motion .hero-ship,body.reduce-motion .hero-shield,body.reduce-motion .hero-net,body.reduce-motion .hero-exc,body.reduce-motion .hero-smoke,body.reduce-motion .hero-truck,body.reduce-motion .hero-globe,body.reduce-motion .hero-flow,body.reduce-motion .hero-lock,body.reduce-motion .hero-crane,body.reduce-motion .hero-node,body.reduce-motion .route-line.iron{animation:none!important}
+body.reduce-motion .hero-scene .hero-svg{filter:none}
 .app{max-width:1080px;margin:0 auto;padding:0 14px calc(var(--bottom-shell-h) + env(safe-area-inset-bottom,0px))}
 .muted{color:var(--steel);font-size:.85rem;margin-bottom:12px}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
@@ -369,39 +369,12 @@ body.onboard-open{overflow:hidden}
 
 .row-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:16px}
 
-/* Home hero — cadeia global + cyber (ilustração decorativa) */
-.hero-scene{position:relative;height:168px;border-radius:10px;overflow:hidden;margin-bottom:12px;border:1px solid var(--line);background:#063540;cursor:default}
+/* Home hero — cadeia global animada (SVG vetorial 21:9) */
+.hero-scene{position:relative;aspect-ratio:21/9;width:100%;height:auto;min-height:140px;max-height:260px;border-radius:10px;overflow:hidden;margin-bottom:12px;border:1px solid var(--line);background:#08232F;cursor:default}
 .hero-scene-btn{display:block;width:100%;padding:0;font:inherit;text-align:left;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
-.hero-scene-btn:hover,.hero-scene-btn:focus-visible{border-color:var(--gold);box-shadow:0 0 0 2px rgba(237,177,17,.25);transform:translateY(-1px)}
+.hero-scene-btn:hover,.hero-scene-btn:focus-visible{border-color:var(--gold);box-shadow:0 0 0 2px rgba(255,194,71,.25);transform:translateY(-1px)}
 .hero-scene-btn:focus{outline:none}
-.hero-svg{display:block;width:100%;height:100%}
-.hero-train{animation:heroTrain 16s linear infinite}
-.hero-belt{animation:heroBelt 1.2s linear infinite}
-.hero-ship{animation:heroShip 10s ease-in-out infinite}
-.hero-shield{animation:heroShield 2.4s ease-in-out infinite}
-.hero-shield:nth-child(2){animation-delay:.6s}
-.hero-net{animation:heroNet 3s linear infinite}
-.hero-exc{animation:heroExc 2.8s ease-in-out infinite;transform-origin:64px 96px}
-.hero-smoke{animation:heroSmoke 2.5s ease-in-out infinite}
-.hero-truck{animation:heroTruck 5s ease-in-out infinite}
-.hero-globe{animation:heroGlobe 5s ease-in-out infinite}
-.hero-flow{animation:heroFlow 3.2s ease-in-out infinite}
-.hero-lock{animation:heroLock 2.8s ease-in-out infinite}
-.hero-crane{animation:heroCrane 4s ease-in-out infinite;transform-origin:632px 104px}
-.hero-node{animation:heroNode 2s ease-in-out infinite}
-@keyframes heroTrain{0%{transform:translate(368px,0)}100%{transform:translate(598px,0)}}
-@keyframes heroBelt{to{stroke-dashoffset:-20}}
-@keyframes heroShip{0%,100%{transform:translate(0,0)}50%{transform:translate(8px,-2px)}}
-@keyframes heroShield{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
-@keyframes heroNet{to{stroke-dashoffset:-18}}
-@keyframes heroExc{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(8deg)}}
-@keyframes heroSmoke{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:.15;transform:translateY(-5px)}}
-@keyframes heroTruck{0%,100%{transform:translateX(0)}50%{transform:translateX(12px)}}
-@keyframes heroGlobe{0%,100%{opacity:.88}50%{opacity:1}}
-@keyframes heroFlow{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
-@keyframes heroLock{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
-@keyframes heroCrane{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-6deg)}}
-@keyframes heroNode{0%,100%{opacity:.5}50%{opacity:1}}
+.hero-svg{display:block;width:100%;height:100%;pointer-events:none;border:0}
 .hero-actions{margin-top:14px;margin-bottom:0}
 .hero-lead{margin:10px 0 0;font-size:1rem;line-height:1.55;color:#eaf2f6}
 .hero-body{margin:10px 0 0;font-size:.9rem;line-height:1.55;color:var(--steel)}
@@ -1564,7 +1537,7 @@ body.theme-dark .card{background:rgba(255,255,255,.04);border-color:rgba(255,255
 .missions-weekly-card{margin-top:14px}
 .week-card-actions{margin-top:4px}
 .setup-banner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;max-width:1080px;margin:0 auto 10px;padding:10px 14px;border-radius:10px;background:rgba(237,177,17,.12);border:1px solid rgba(237,177,17,.35);font-size:.86rem}
-.hero-compact .hero-scene{height:96px;margin-bottom:8px}
+.hero-compact .hero-scene{min-height:96px;max-height:120px;margin-bottom:8px}
 .hero-compact h1{font-size:1.45rem}
 .hero-compact .hero-lead{font-size:.9rem;margin-top:6px}
 .hero-expand-btn{margin-top:8px}
@@ -1711,7 +1684,7 @@ body.ux-v2 .hero-lead-short{display:none}
 .settings-nav-links .dp-link-btn{width:100%;text-align:left}
 .demo-settings-btn{width:100%;margin-top:6px;font-weight:700}
 @media(prefers-reduced-motion:reduce){
-  .hero-svg .hero-train,.hero-svg .hero-flow,.hero-svg .hero-crane,.hero-svg .hero-smoke,.hero-svg .hero-belt,.hero-svg .hero-net{animation:none!important}
+  .hero-scene{min-height:120px;max-height:200px}
 }
 @media(min-width:768px){
   .next-step-ux-v2{display:grid;grid-template-columns:1fr auto;grid-template-areas:"streak streak" "label label" "main main" "badges badges" "hint hint" "cta cta" "week week" "wgoal wgoal" "chips chips" "ach ach" "social social" "preview preview";align-items:center;gap:4px 12px}
