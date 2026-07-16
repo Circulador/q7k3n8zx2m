@@ -2090,18 +2090,41 @@ function syncOverlayBackdrop(){
   bd.hidden=!open;
   bd.setAttribute("aria-hidden",open?"false":"true");
 }
-function positionGlossaryMenu(){
-  var menu=$("glossaryMenu"), btn=$("glossaryBtn");
-  if(!menu||!btn||menu.hidden) return;
-  if(window.matchMedia("(max-width:640px)").matches){
-    menu.style.top=""; menu.style.right=""; menu.style.left=""; menu.style.bottom=""; menu.style.width="";
-    return;
+function getBottomShellPx(){
+  try{
+    var bsh=getComputedStyle(document.documentElement).getPropertyValue("--bottom-shell-h").trim();
+    if(bsh) return parseFloat(bsh)||128;
+  }catch(e){}
+  return 128;
+}
+function positionOverlayPanel(menu,maxW){
+  if(!menu||menu.hidden) return;
+  var tb=document.querySelector(".topbar");
+  var top=tb?Math.round(tb.getBoundingClientRect().bottom+6):56;
+  var bottom=getBottomShellPx();
+  var mobile=window.matchMedia("(max-width:640px)").matches;
+  menu.style.top=top+"px";
+  menu.style.bottom="calc("+bottom+"px + env(safe-area-inset-bottom, 0px))";
+  menu.style.maxHeight="none";
+  menu.style.height="auto";
+  if(mobile){
+    menu.style.left="0";
+    menu.style.right="0";
+    menu.style.width="100%";
+  } else {
+    var w=Math.min(maxW||720, window.innerWidth-20);
+    menu.style.width=w+"px";
+    menu.style.left=Math.max(10, Math.round((window.innerWidth-w)/2))+"px";
+    menu.style.right="auto";
   }
-  var r=btn.getBoundingClientRect(), w=Math.min(720, window.innerWidth-28);
-  menu.style.top=(r.bottom+8)+"px";
-  menu.style.right=Math.max(8, window.innerWidth-r.right)+"px";
-  menu.style.left="auto";
-  menu.style.width=w+"px";
+}
+function positionGlossaryMenu(){ positionOverlayPanel($("glossaryMenu"),720); }
+function positionSettingsMenu(){ positionOverlayPanel($("settingsMenu"),720); }
+function positionA11yMenu(){ positionOverlayPanel($("a11yMenu"),640); }
+function positionOpenOverlayMenus(){
+  var gm=$("glossaryMenu"); if(gm&&!gm.hidden) positionGlossaryMenu();
+  var sm=$("settingsMenu"); if(sm&&!sm.hidden) positionSettingsMenu();
+  var am=$("a11yMenu"); if(am&&!am.hidden) positionA11yMenu();
 }
 function toggleGlossaryMenu(force){
   var menu=$("glossaryMenu"),btn=$("glossaryBtn");
@@ -2138,7 +2161,7 @@ function toggleSettingsMenu(force){
   if(btn) btn.setAttribute("aria-expanded",open?"true":"false");
   syncOverlayBackdrop();
   document.body.classList.toggle("settings-menu-open",open);
-  if(open){ renderA11yCatalog(); var ts=$("themeSelect"); if(ts) ts.value=S.theme||"default"; trapFocus(menu, btn); }
+  if(open){ renderA11yCatalog(); var ts=$("themeSelect"); if(ts) ts.value=S.theme||"default"; positionSettingsMenu(); trapFocus(menu, btn); }
   else releaseFocusTrap();
 }
 function toggleA11yMenu(force){
@@ -2150,7 +2173,7 @@ function toggleA11yMenu(force){
   if(btn) btn.setAttribute("aria-expanded", open?"true":"false");
   syncOverlayBackdrop();
   document.body.classList.toggle("a11y-menu-open", open);
-  if(open){ renderA11yCatalog(); trapFocus(menu, btn); }
+  if(open){ renderA11yCatalog(); positionA11yMenu(); trapFocus(menu, btn); }
   else releaseFocusTrap();
 }
 
@@ -2238,20 +2261,34 @@ var SRS_INTERVALS=[1,3,7];
 var REPORT_THEMES={phishing:1,bec:1,data:1};
 var WEEK_THEME_ROTATION=["phishing","ot","bec","password","data","port","device","remote"];
 var PERSONAL_BY_THEME={
-  phishing:{pt:"Na vida pessoal: desconfie de links urgentes em SMS, e-mail ou redes — confirme pela fonte oficial.",en:"In personal life: be wary of urgent links in SMS, email or social media — confirm via the official source."},
-  password:{pt:"Na vida pessoal: senha única + autenticação em duas etapas no banco e e-mail protegem você como no trabalho.",en:"In personal life: unique passwords + two-factor on bank and email protect you like at work."},
-  ot:{pt:"Na vida pessoal: dispositivos da smart home na rede de visitas podem abrir brechas — separe redes.",en:"In personal life: smart-home devices on guest networks can open gaps — separate networks."},
-  data:{pt:"Na vida pessoal: fotos de documentos no grupo da família podem vazar — compartilhe só o necessário.",en:"In personal life: document photos in family groups can leak — share only what's needed."},
-  device:{pt:"Na vida pessoal: bloquear o celular ao sair da mesa evita acesso indevido em segundos.",en:"In personal life: locking your phone when you step away prevents access in seconds."},
-  remote:{pt:"Na vida pessoal: VPN ou dados móveis em redes públicas — Wi-Fi aberto é porta aberta.",en:"In personal life: VPN or mobile data on public networks — open Wi-Fi is an open door."},
-  bec:{pt:"Na vida pessoal: PIX urgente por WhatsApp de 'parente'? Ligue antes — contas clonadas imitam quem você confia.",en:"In personal life: urgent PIX on WhatsApp from a 'relative'? Call first — cloned accounts mimic people you trust."},
-  port:{pt:"Na vida pessoal: estranhos fotografando sua casa ou prédio podem mapear rotinas — avise a segurança.",en:"In personal life: strangers photographing your home or building may map routines — alert security."}
+  phishing:{pt:"Desconfie de links urgentes em SMS, e-mail ou redes — confirme pela fonte oficial.",en:"Be wary of urgent links in SMS, email or social media — confirm via the official source."},
+  password:{pt:"Senha única e autenticação em duas etapas no banco e e-mail protegem você como no trabalho.",en:"Unique passwords and two-factor on bank and email protect you like at work."},
+  ot:{pt:"Dispositivos da smart home na rede de visitas podem abrir brechas — separe redes.",en:"Smart-home devices on guest networks can open gaps — separate networks."},
+  data:{pt:"Fotos de documentos no grupo da família podem vazar — compartilhe só o necessário.",en:"Document photos in family groups can leak — share only what's needed."},
+  device:{pt:"Bloquear o celular ao sair da mesa evita acesso indevido em segundos.",en:"Locking your phone when you step away prevents access in seconds."},
+  remote:{pt:"VPN ou dados móveis em redes públicas — Wi-Fi aberto é porta aberta.",en:"VPN or mobile data on public networks — open Wi-Fi is an open door."},
+  bec:{pt:"PIX urgente por WhatsApp de 'parente'? Ligue antes — contas clonadas imitam quem você confia.",en:"Urgent PIX on WhatsApp from a 'relative'? Call first — cloned accounts mimic people you trust."},
+  port:{pt:"Estranhos fotografando sua casa ou prédio podem mapear rotinas — avise a segurança.",en:"Strangers photographing your home or building may map routines — alert security."}
 };
 var BOSS_THEME_DEFAULT={ransom:"ot",ceo:"bec",otintr:"ot",omphish:"phishing",leakchain:"data",portintr:"port"};
 var ORBITA_POLICY_URL="https://www.orbita.com/pt/sustentabilidade/governanca";
 
 function fullBank(){ return BANK.concat(typeof COUNTRY_BANK!=="undefined"?COUNTRY_BANK:[]); }
-function getPersonal(q){ return q&&(q.personal||(q.theme&&PERSONAL_BY_THEME[q.theme]))||null; }
+function normalizePersonalText(txt){
+  if(!txt) return "";
+  var s=String(txt).trim();
+  var pfx=L()==="pt"?["Na vida pessoal:","Na vida pessoal","No dia a dia:"]:["In personal life:","In personal life","In daily life:"];
+  var i;
+  for(i=0;i<pfx.length;i++){ if(s.indexOf(pfx[i])===0){ s=s.slice(pfx[i].length).trim(); break; } }
+  if(s.charAt(0)===":") s=s.slice(1).trim();
+  return s;
+}
+function formatPersonalHtml(p){
+  var body=normalizePersonalText(tt(p));
+  if(!body) return "";
+  return '<span class="personal-k">'+t("quiz.personal")+'</span><span class="personal-txt">'+body+'</span>';
+}
+function getPersonal(q){ return q&&q.personal||null; }
 function todayNum(){ var d=new Date(); return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate(); }
 function ensureMissed(){ if(!S.missed) S.missed={}; }
 function recordMiss(q,ok,ctx){
@@ -3461,7 +3498,7 @@ function startDaily(){
 function renderPersonalBridge(q){
   var el=$("personalBridge"); if(!el) return;
   var p=getPersonal(q);
-  if(p){ el.hidden=false; el.innerHTML='<span class="personal-k">'+t("quiz.personal")+':</span> '+tt(p); }
+  if(p){ el.hidden=false; el.innerHTML=formatPersonalHtml(p); }
   else el.hidden=true;
 }
 function renderQuestion(){
@@ -3549,11 +3586,6 @@ function finishCampaign(){
   renderCampaignDebrief(); renderThemeErrors($("themeErrors")); renderMedals($("medalsBox")); renderRank($("rankList"));
   renderSessionFeedback(win,acc);
   renderPostSessionActions("resultPostActions");
-  var rmb=$("resultMapBtn");
-  if(rmb){
-    if(cur.mode==="chain"){ rmb.textContent=L()==="pt"?"⛓️ Voltar a Desafios / Crises":"⛓️ Back to Challenges / Crises"; rmb.onclick=function(){ renderBossList(); show("screenBossList"); }; }
-    else { rmb.textContent=t("result.map"); rmb.onclick=returnToMap; }
-  }
   show("screenResult"); speak((L()==="pt"?titlePt:titleEn)+". "+(L()==="pt"?"Precisão ":"Accuracy ")+acc+"%.");
   if(win) toast(L()==="pt"?"🏆 "+tt(c.name)+" protegido!":"🏆 "+tt(c.name)+" protected!");
 }
@@ -4120,7 +4152,7 @@ function renderBossPhase(){
   $("bossPhaseNum").textContent=(L()==="pt"?"Cena ":"Scene ")+(bossCur.phase+1)+"/"+b.phases.length;
   $("bossPrompt").textContent=tt(ph.q);
   var bp=$("bossPersonalBridge");
-  if(bp){ var th=bossPhaseTheme(b,ph), p=getPersonal({theme:th,personal:ph.personal}); if(p){ bp.hidden=false; bp.innerHTML='<span class="personal-k">'+t("quiz.personal")+':</span> '+tt(p); } else bp.hidden=true; }
+  if(bp){ var p=getPersonal({theme:bossPhaseTheme(b,ph),personal:ph.personal}); if(p){ bp.hidden=false; bp.innerHTML=formatPersonalHtml(p); } else bp.hidden=true; }
   var opts=$("bossOptions"); opts.innerHTML="";
   bossCur.answered=!!st;
   var order=st&&st.order?st.order:shuffle(ph.opts.map(function(o,i){ return {o:o,idx:i}; }));
@@ -4605,11 +4637,6 @@ function renderPostSessionActions(hostId,withWeekly){
     wk.onclick=function(){ openWeeklyScreen(); };
     host.appendChild(wk);
   }
-  var home=document.createElement("button");
-  home.className="btn btn-ghost";
-  home.textContent=t("result.home");
-  home.onclick=function(){ show("screenHome"); };
-  host.appendChild(home);
 }
 function renderWeekLine(){
   var host=$("nextStepWeek"), goalEl=$("weekNextGoal"), chips=$("weekChips");
@@ -5653,8 +5680,8 @@ function bind(){
   if(a11yMenuEl) a11yMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
   if(settingsMenuEl) settingsMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
   if(glossaryMenuEl) glossaryMenuEl.addEventListener("click",function(e){ e.stopPropagation(); });
-  window.addEventListener("resize",function(){ var gm=$("glossaryMenu"); if(gm&&!gm.hidden) positionGlossaryMenu(); });
-  window.addEventListener("scroll",function(){ var gm=$("glossaryMenu"); if(gm&&!gm.hidden) positionGlossaryMenu(); },true);
+  window.addEventListener("resize",positionOpenOverlayMenus);
+  window.addEventListener("scroll",positionOpenOverlayMenus,true);
   if(streakPopEl) streakPopEl.addEventListener("click",function(e){ e.stopPropagation(); });
   wireToolbarTouch("glossaryBtn",function(e){ e.stopPropagation(); toggleGlossaryMenu(); });
   wireToolbarTouch("settingsBtn",function(e){ e.stopPropagation(); toggleSettingsMenu(); });
@@ -5729,7 +5756,6 @@ function bind(){
   on("prevBtn","click",prevQuestion);
   on("quitBtn","click",quizQuit);
   wireQuizNavButtons();
-  on("resultMapBtn","click",returnToMap);
 
   on("bossQuitBtn","click",bossQuit);
   on("bossPrevBtn","click",bossPrev);

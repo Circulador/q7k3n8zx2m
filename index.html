@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=159">
+<link rel="stylesheet" href="css/styles.css?v=160">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -269,6 +269,7 @@
               <h2 class="am-title" data-i18n="a11y.menuTitle">Acessibilidade</h2>
               <button type="button" class="am-close" id="a11yMenuClose" data-i18n-attr="aria-label:a11y.close" aria-label="Fechar menu">×</button>
             </div>
+            <div class="a11y-menu-body panel-menu-body">
             <div class="am-section">
               <span class="am-section-label" data-i18n="a11y.sec.read">Leitura e narração</span>
               <div class="am-toggles">
@@ -344,6 +345,7 @@
                 <span aria-hidden="true">📋</span>
               </button>
             </div>
+            </div>
             <div class="am-footer">
               <button type="button" class="am-reset" id="resetA11yMenuBtn" data-i18n="a11y.reset">↩️ Restaurar padrão</button>
               <a class="am-orbita-link" href="https://www.orbita.com/pt/acessibilidade" target="_blank" rel="noopener noreferrer" data-i18n="a11y.orbitaLink">Acessibilidade Orbita</a>
@@ -358,6 +360,7 @@
               <h2 class="dp-title" id="settingsMenuTitle" data-i18n="settings.title">Configurações</h2>
               <button type="button" class="dp-close" id="settingsMenuClose" data-i18n-attr="aria-label:a11y.close" aria-label="Fechar">×</button>
             </div>
+            <div class="settings-menu-body panel-menu-body">
             <div class="dp-section">
               <label class="dp-label" for="themeSelect" data-i18n="settings.theme">Tema visual</label>
               <select class="dp-select" id="themeSelect">
@@ -405,6 +408,7 @@
             </div>
             <div class="dp-section dp-section-compact">
               <button type="button" class="dp-link-btn" id="settingsOpenA11yBtn" data-i18n="settings.openA11y">♿ Acessibilidade</button>
+            </div>
             </div>
           </div>
         </div>
@@ -736,9 +740,6 @@
     <div class="card"><div class="section-title" data-i18n="result.medals">🏅 Medalhas</div><div class="medals" id="medalsBox"></div></div>
     <div class="card"><div class="section-title" data-i18n="result.rank">📈 Ranking por equipe</div><div class="rank-list" id="rankList"></div></div>
     <div class="row-actions result-actions" id="resultPostActions"></div>
-    <div class="row-actions">
-      <button class="btn btn-blue" id="resultMapBtn" data-i18n="result.map">🗺️ Mapa</button>
-    </div>
   </section>
 
   <!-- ============ CHEFÕES ============ -->
@@ -969,19 +970,19 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="159";</script>
-<script src="js/sign-lang.js?v=159"></script>
-<script src="js/orbita-world-map.js?v=159"></script>
-<script src="js/questions-data.js?v=159"></script>
-<script src="js/country-questions-data.js?v=159"></script>
-<script src="js/bosses-data.js?v=159"></script>
-<script src="js/boss-personal-tips.js?v=159"></script>
-<script src="js/chain-data.js?v=159"></script>
-<script src="js/boss-maps.js?v=159"></script>
-<script src="js/glossary-data.js?v=159"></script>
-<script src="js/profile-data.js?v=159"></script>
-<script src="js/game.js?v=159"></script>
-<script src="js/demo-menu.js?v=159"></script>
+<script>window.APP_VERSION="160";</script>
+<script src="js/sign-lang.js?v=160"></script>
+<script src="js/orbita-world-map.js?v=160"></script>
+<script src="js/questions-data.js?v=160"></script>
+<script src="js/country-questions-data.js?v=160"></script>
+<script src="js/bosses-data.js?v=160"></script>
+<script src="js/boss-personal-tips.js?v=160"></script>
+<script src="js/chain-data.js?v=160"></script>
+<script src="js/boss-maps.js?v=160"></script>
+<script src="js/glossary-data.js?v=160"></script>
+<script src="js/profile-data.js?v=160"></script>
+<script src="js/game.js?v=160"></script>
+<script src="js/demo-menu.js?v=160"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
