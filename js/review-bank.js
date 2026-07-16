@@ -234,6 +234,13 @@ window.initReviewBank = function () {
       el.addEventListener("change", render);
     }
   });
+  window.refreshReviewBankLang = function () {
+    var lang = (typeof S !== "undefined" && S.lang) ? S.lang : "pt";
+    var radio = document.querySelector('input[name="reviewLang"][value="' + lang + '"]');
+    if (radio) radio.checked = true;
+    render();
+  };
+
   render();
 };
 
