@@ -1619,7 +1619,15 @@ function renderA11yMenu(){
   });
 }
 function updateHeroCaption(){
-  /* Hero vetorial animado — sem legendas sobrepostas (design premium sem texto) */
+  var svg=document.querySelector(".hero-svg"); if(!svg) return;
+  var old=svg.querySelectorAll(".hero-caption"); old.forEach(function(n){ n.remove(); });
+  var t1=document.createElementNS("http://www.w3.org/2000/svg","text");
+  t1.setAttribute("class","hero-caption"); t1.setAttribute("x","450"); t1.setAttribute("y","24"); t1.setAttribute("text-anchor","middle"); t1.setAttribute("fill","#EDB111"); t1.setAttribute("font-size","11"); t1.setAttribute("font-weight","700"); t1.setAttribute("font-family","Segoe UI,sans-serif");
+  t1.textContent=L()==="pt"?"Extração → Processamento → Logística → Mercados globais":"Extraction → Processing → Logistics → Global markets";
+  var t2=document.createElementNS("http://www.w3.org/2000/svg","text");
+  t2.setAttribute("class","hero-caption"); t2.setAttribute("x","450"); t2.setAttribute("y","40"); t2.setAttribute("text-anchor","middle"); t2.setAttribute("fill","#8ec8d0"); t2.setAttribute("font-size","9"); t2.setAttribute("font-family","Segoe UI,sans-serif");
+  t2.textContent=L()==="pt"?"Recursos essenciais protegidos por decisões cibernéticas":"Essential resources protected by cyber decisions";
+  svg.appendChild(t1); svg.appendChild(t2);
 }
 
 /* -------------------- GLOSSÁRIO / TEMA / CONFIG -------------------- */
