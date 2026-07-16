@@ -1,7 +1,7 @@
 /* Service Worker — Guardião Cibernético (Orbita)
    Estratégia: cache-first com fallback de rede; navegações caem para index.html offline.
    Ao publicar nova versão, altere CACHE_VERSION (idealmente = APP_VERSION do index.html). */
-var CACHE_VERSION = "v165";
+var CACHE_VERSION = "v166";
 var CACHE_NAME = "gdv-cache-" + CACHE_VERSION;
 
 /* App shell — caminhos relativos para funcionar em subpasta do GitHub Pages */
@@ -17,7 +17,6 @@ var PRECACHE = [
   "./js/questions-data.js?v=139",
   "./js/country-questions-data.js?v=139",
   "./js/bosses-data.js?v=139",
-  "./js/boss-personal-tips.js?v=139",
   "./js/chain-data.js?v=139",
   "./js/boss-maps.js?v=139",
   "./js/glossary-data.js?v=139",

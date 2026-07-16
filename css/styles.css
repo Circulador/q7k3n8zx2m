@@ -371,9 +371,6 @@ body.onboard-open{overflow:hidden}
 
 /* Home hero — cadeia global + cyber (ilustração decorativa) */
 .hero-scene{position:relative;height:168px;border-radius:10px;overflow:hidden;margin-bottom:12px;border:1px solid var(--line);background:#063540;cursor:default}
-.hero-scene-btn{display:block;width:100%;padding:0;font:inherit;text-align:left;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
-.hero-scene-btn:hover,.hero-scene-btn:focus-visible{border-color:var(--gold);box-shadow:0 0 0 2px rgba(237,177,17,.25);transform:translateY(-1px)}
-.hero-scene-btn:focus{outline:none}
 .hero-svg{display:block;width:100%;height:100%}
 .hero-train{animation:heroTrain 14s linear infinite}
 .hero-belt{animation:heroBelt 1.2s linear infinite}
@@ -1689,8 +1686,6 @@ body.home-sticky-visible .app{padding-bottom:calc(var(--bottom-shell-h) + 64px +
 body.home-sticky-visible #aslAccess{bottom:calc(var(--bottom-shell-h) + 72px + env(safe-area-inset-bottom,0px))}
 .hero-lead-short{font-size:.95rem;line-height:1.45}
 .hero-ux-v2 .hero-scene{opacity:.92}
-.hero-scene-btn.hero-locked{cursor:not-allowed;opacity:.55}
-.hero-scene-btn.hero-locked .hero-svg{filter:grayscale(.35)}
 .next-step-ux-v2{display:flex;flex-direction:column;gap:0}
 .next-step-ux-v2 .week-streak-row{order:0;width:100%;margin-bottom:8px}
 .next-step-ux-v2 .next-step-k{order:1;width:100%}

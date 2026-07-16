@@ -2760,7 +2760,6 @@ function renderBossChainVisual(){
     host.hidden=true; host.innerHTML="";
   }
 }
-function renderBossChainSection(){ /* cadeia integrada ao chefão Northern Chain */ }
 function openBossChain(scroll){
   hydrateNorthernBoss();
   renderBossList();
