@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 96" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B2C3B"/><stop offset="1" stop-color="#08232F"/></linearGradient>
+    <linearGradient id="cyber" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#00E6D2"/><stop offset="1" stop-color="#00A8CC"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC247"/><stop offset="1" stop-color="#00E6D2"/></linearGradient>
+    <radialGradient id="globe" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#00A8CC" stop-opacity=".5"/><stop offset="1" stop-color="#08232F"/></radialGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <style>
+      @keyframes train{0%{transform:translateX(318px)}100%{transform:translateX(548px)}}
+      @keyframes ore{0%{transform:translateX(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateX(720px);opacity:0}}
+      @keyframes shield{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+      @keyframes flow{to{stroke-dashoffset:-24}}
+      @keyframes pulse{0%,100%{opacity:.25;transform:scale(.75)}50%{opacity:1;transform:scale(1.15)}}
+      @keyframes ship{0%,100%{transform:translate(0,0)}50%{transform:translate(4px,-2px)}}
+      @keyframes crane{0%,100%{transform:rotate(0)}50%{transform:rotate(-7deg)}}
+      @keyframes scan{0%{transform:translateX(-12px);opacity:0}40%{opacity:.9}100%{transform:translateX(28px);opacity:0}}
+      @keyframes lock{0%,100%{opacity:.45}50%{opacity:1}}
+      .a-train{animation:train 14s linear infinite}
+      .a-ore{animation:ore 5s linear infinite}
+      .a-ore2{animation:ore 5s linear infinite 1.6s}
+      .a-ore3{animation:ore 5s linear infinite 3.2s}
+      .a-sh1{animation:shield 2.4s ease-in-out infinite}
+      .a-sh2{animation:shield 2.4s ease-in-out infinite .6s}
+      .a-sh3{animation:shield 2.4s ease-in-out infinite 1.2s}
+      .a-sh4{animation:shield 2.4s ease-in-out infinite 1.8s}
+      .a-sh5{animation:shield 2.4s ease-in-out infinite 2.4s}
+      .a-net{stroke-dasharray:5 4;animation:flow 2s linear infinite}
+      .a-p1{animation:pulse 2.8s ease-in-out infinite}
+      .a-p2{animation:pulse 2.8s ease-in-out infinite .7s}
+      .a-p3{animation:pulse 2.8s ease-in-out infinite 1.4s}
+      .a-ship{animation:ship 8s ease-in-out infinite}
+      .a-crane{animation:crane 4.5s ease-in-out infinite;transform-origin:598px 52px}
+      .a-scan{animation:scan 2.8s ease-in-out infinite}
+      .a-lock{animation:lock 2.6s ease-in-out infinite}
+      @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+    </style>
+  </defs>
+  <rect width="900" height="96" fill="url(#sky)"/>
+  <text x="450" y="13" text-anchor="middle" fill="#FFC247" font-size="9" font-weight="700" font-family="Segoe UI,system-ui,sans-serif">Extraction ’ Processing ’ Logistics ’ Global markets</text>
+  <text x="450" y="24" text-anchor="middle" fill="#9ed8e8" font-size="7.5" font-family="Segoe UI,system-ui,sans-serif">Essential resources protected by cyber decisions</text>
+
+  <path class="a-net" d="M36 68 Q180 42 300 58 Q420 46 520 56 Q640 48 740 58 Q820 50 864 62" fill="none" stroke="#00E6D2" stroke-width="1.4" opacity=".55" filter="url(#glow)"/>
+  <path class="a-net" d="M50 78 Q200 72 360 76 Q520 70 680 74 Q780 68 850 72" fill="none" stroke="#00A8CC" stroke-width="1" opacity=".35" style="animation-duration:2.8s"/>
+
+  <path d="M8 58 L8 40 L28 32 L48 36 L68 30 L88 38 L88 58 Z" fill="#8A5A44"/>
+  <path d="M20 58 L20 46 L36 40 L52 46 L52 58 Z" fill="#B35C1E" opacity=".7"/>
+  <rect x="42" y="44" width="4" height="10" fill="#FFC247" class="a-crane" style="transform-origin:44px 54px"/>
+  <path d="M46 44 L56 38 L56 41 L48 47 Z" fill="#ccc"/>
+  <g class="a-sh1" transform="translate(48,34)"><path d="M0 0 L8 2 L8 9 Q4 13 0 10 Q-4 13 -8 9 L-8 2 Z" fill="url(#cyber)" opacity=".9"/><rect x="-2.5" y="4" width="5" height="3" rx=".5" fill="#fff" opacity=".85"/></g>
+
+  <rect x="108" y="48" width="34" height="18" rx="1" fill="#5a6a72"/>
+  <rect x="118" y="40" width="14" height="10" fill="#6a7a82"/>
+  <rect x="124" y="34" width="4" height="8" fill="#888"/>
+  <line x1="142" y1="54" x2="178" y2="54" stroke="#555" stroke-width="3"/>
+  <line x1="142" y1="54" x2="178" y2="54" stroke="#FFC247" stroke-width="1.5" stroke-dasharray="4 3" class="a-net"/>
+  <g class="a-sh2" transform="translate(130,36)"><path d="M0 0 L8 2 L8 9 Q4 13 0 10 Q-4 13 -8 9 L-8 2 Z" fill="url(#gold)" opacity=".85"/></g>
+
+  <line x1="188" y1="60" x2="560" y2="60" stroke="#5B5B5B" stroke-width="2.5"/>
+  <g class="a-train">
+    <rect x="0" y="46" width="22" height="12" rx="2" fill="#00A8CC"/>
+    <rect x="22" y="48" width="16" height="10" rx="1" fill="#B35C1E" opacity=".85"/>
+    <rect x="38" y="48" width="16" height="10" rx="1" fill="#B35C1E" opacity=".85"/>
+    <circle cx="8" cy="60" r="2.5" fill="#222"/><circle cx="30" cy="60" r="2" fill="#222"/><circle cx="46" cy="60" r="2" fill="#222"/>
+  </g>
+  <g class="a-sh3" transform="translate(280,38)"><path d="M0 0 L8 2 L8 9 Q4 13 0 10 Q-4 13 -8 9 L-8 2 Z" fill="url(#cyber)" opacity=".85"/></g>
+
+  <circle class="a-ore" cx="100" cy="66" r="2" fill="#FFC247" filter="url(#glow)"/>
+  <circle class="a-ore2" cx="100" cy="66" r="2" fill="#00E6D2" filter="url(#glow)"/>
+  <circle class="a-ore3" cx="100" cy="66" r="1.5" fill="#00A8CC"/>
+
+  <rect x="568" y="54" width="48" height="6" fill="#5a6a72"/>
+  <g class="a-crane"><rect x="592" y="40" width="3" height="18" fill="#888"/><path d="M595 40 L612 34 L612 37 L598 42 Z" fill="#FFC247"/></g>
+  <g class="a-ship"><path d="M618 54 L678 58 L678 72 L618 68 Z" fill="#8b2942"/><rect x="636" y="58" width="28" height="6" fill="#a03050"/></g>
+  <rect x="572" y="48" width="6" height="5" fill="#00A8CC" opacity=".8"/><rect x="580" y="48" width="6" height="5" fill="#00E6D2" opacity=".8"/>
+  <g class="a-sh4" transform="translate(640,36)"><path d="M0 0 L8 2 L8 9 Q4 13 0 10 Q-4 13 -8 9 L-8 2 Z" fill="url(#cyber)" opacity=".85"/></g>
+
+  <rect x="686" y="56" width="214" height="40" fill="#0A5E8A" opacity=".35"/>
+
+  <g transform="translate(820,50)">
+    <circle r="28" fill="url(#globe)" stroke="#00E6D2" stroke-width="1.2" opacity=".9"/>
+    <ellipse rx="28" ry="8" fill="none" stroke="#00A8CC" stroke-width=".7" opacity=".45"/>
+    <path d="M-18 -6 Q-4 8 14 4 Q22 -2 18 -14 Q6 -20 -12 -14 Z" fill="#4E7A4A" opacity=".65"/>
+    <circle class="a-p1" cx="-12" cy="-8" r="2.5" fill="#FFC247"/>
+    <circle class="a-p2" cx="10" cy="6" r="2.5" fill="#00E6D2"/>
+    <circle class="a-p3" cx="16" cy="-10" r="2" fill="#FFC247"/>
+  </g>
+  <g class="a-sh5" transform="translate(820,28)"><path d="M0 0 L8 2 L8 9 Q4 13 0 10 Q-4 13 -8 9 L-8 2 Z" fill="url(#gold)" opacity=".9"/></g>
+
+  <g transform="translate(400,72)">
+    <rect x="0" y="0" width="36" height="14" rx="2" fill="#0B2C3B" stroke="#00A8CC" stroke-width=".8"/>
+    <rect x="3" y="3" width="12" height="8" rx="1" fill="#08232F" stroke="#00E6D2" stroke-width=".6"/>
+    <rect x="19" y="3" width="12" height="8" rx="1" fill="#08232F" stroke="#00E6D2" stroke-width=".6"/>
+    <rect class="a-scan" x="4" y="6" width="10" height="1" fill="#00E6D2" opacity=".8"/>
+  </g>
+  <g class="a-lock" transform="translate(448,76)">
+    <circle r="7" fill="none" stroke="#FFC247" stroke-width="1" opacity=".5"/>
+    <rect x="-3.5" y="-1" width="7" height="5" rx="1" fill="#00A8CC"/>
+    <path d="M-3 -1 V-4 Q0 -7 3 -4 V-1" fill="none" stroke="#FFC247" stroke-width="1.2"/>
+  </g>
+
+  <circle cx="200" cy="70" r="2" class="a-p1" fill="#00E6D2"/>
+  <circle cx="360" cy="68" r="2" class="a-p2" fill="#00E6D2"/>
+  <circle cx="520" cy="70" r="2" class="a-p3" fill="#00E6D2"/>
+</svg>
