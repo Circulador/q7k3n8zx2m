@@ -36,8 +36,8 @@ function tt(o){ return o? (o[L()]!==undefined?o[L()]:o.pt) : ""; }
 var UI = {
   "brand.main":{pt:"Guardião Cibernético",en:"Cyber Guardian"},
   "brand.sub":{pt:"Segurança digital",en:"Digital security"},
-  "home.badge":{pt:"Treinamento de Segurança Digital · ~5 min/dia",en:"Digital Security Training · ~5 min/day"},
-  "home.shortDesc":{pt:"Treinamento de cyber security em ~5 min/dia — um botão na Início guia seu próximo passo.",en:"Cyber security training in ~5 min/day — one Home button guides your next step."},
+  "home.badge":{pt:"Human Defense · ~5 min/dia",en:"Human Defense · ~5 min/day"},
+  "home.shortDesc":{pt:"Recomendações de proteção em ~5 min/dia — um botão na Início guia seu próximo passo.",en:"Protection recommendations in ~5 min/day — one Home button guides your next step."},
   "home.howTitle":{pt:"Como funciona",en:"How it works"},
   "home.howDaily":{pt:"Atividade de hoje",en:"Today's activity"},
   "home.howMap":{pt:"Jornada no mapa",en:"Map journey"},
@@ -141,7 +141,7 @@ var UI = {
   "daily.doneTitle":{pt:"🎉 Atividade de hoje concluída!",en:"🎉 Today's activity complete!"},
   "daily.doneSub":{pt:"Volte amanhã para manter sua sequência e revisar novos cenários.",en:"Come back tomorrow to keep your streak and review new scenarios."},
   "home.previewLoop":{pt:"Seu treino: 📅 Atividade de hoje → 🗺️ Jornada no mapa → 🎯 Desafios / Crises",en:"Your training: 📅 Today's activity → 🗺️ Map journey → 🎯 Challenges / Crises"},
-  "home.nextStepK":{pt:"Próximo passo recomendado",en:"Recommended next step"},
+  "home.nextStepK":{pt:"Próxima proteção recomendada",en:"Next recommended protection"},
   "home.weekBarHint":{pt:"Toque para ver o resumo das metas — não inicia o jogo.",en:"Tap to view goal summary — does not start a session."},
   "home.weekBarAria":{pt:"Metas da semana — ver resumo",en:"Weekly goals — view summary"},
   "home.heroDecorAria":{pt:"Ilustração da cadeia operacional: mina, processamento, logística e mercados globais",en:"Operational chain illustration: mine, processing, logistics and global markets"},
@@ -250,7 +250,25 @@ var UI = {
   "a11y.sec.signs":{pt:"Libras / ASL",en:"Sign language"},
   "home.expand":{pt:"📖 Saber mais sobre o jogo",en:"📖 Learn more about the game"},
   "home.collapse":{pt:"Recolher texto",en:"Collapse text"},
-  "home.playNow":{pt:"▶️ Jogar agora",en:"▶️ Play now"},
+  "home.playNow":{pt:"▶️ Proteger agora",en:"▶️ Protect now"},
+  "home.workspaceK":{pt:"Seu workspace de defesa",en:"Your defense workspace"},
+  "home.postureK":{pt:"Postura de segurança",en:"Security posture"},
+  "home.postureStrong":{pt:"Forte — continue reforçando",en:"Strong — keep reinforcing"},
+  "home.postureMid":{pt:"Atento — há pontos a reforçar",en:"Alert — areas to reinforce"},
+  "home.postureLow":{pt:"Vulnerável — priorize a ação de hoje",en:"Vulnerable — prioritize today's action"},
+  "home.postureNew":{pt:"Iniciando — sua primeira ação reduz risco",en:"Starting — your first action reduces risk"},
+  "home.resumeK":{pt:"Onde parei",en:"Where I left off"},
+  "home.themesK":{pt:"Temas monitorados",en:"Monitored themes"},
+  "home.weekPanelK":{pt:"Metas da semana",en:"Weekly goals"},
+  "session.whyK":{pt:"Por que agora",en:"Why now"},
+  "session.whyDaily":{pt:"Priorizamos {srs} revisão(ões) de erros e reforço em {themes} — ligados ao seu perfil e aos riscos da operação.",en:"We prioritized {srs} mistake review(s) and reinforcement in {themes} — tied to your profile and operational risks."},
+  "session.whyDailySimple":{pt:"Situações selecionadas para reduzir risco humano no seu dia a dia operacional.",en:"Scenarios selected to reduce human risk in your operational day."},
+  "session.whyReview":{pt:"Revisão espaçada de {n} erro(s) — reforço no momento certo aumenta retenção.",en:"Spaced review of {n} mistake(s) — timely reinforcement improves retention."},
+  "session.whyCampaign":{pt:"Jornada em {country} — temas alinhados à operação local e ao seu perfil ({team}).",en:"Journey in {country} — themes aligned with local operations and your profile ({team})."},
+  "session.whyCampaignSimple":{pt:"Campanha contextualizada para decisões seguras nesta operação.",en:"Contextualized campaign for secure decisions in this operation."},
+  "session.whyDrill":{pt:"Reforço focado em {theme} — tema identificado como lacuna no seu radar.",en:"Focused drill on {theme} — theme flagged as a gap on your radar."},
+  "mgr.nowK":{pt:"Ação recomendada agora",en:"Recommended action now"},
+  "mgr.nowEmpty":{pt:"Sem lacunas críticas — mantenha a cadência de proteção da equipe.",en:"No critical gaps — maintain the team's protection cadence."},
   "home.weekLine":{pt:"Semana: {theme} · Acertos {correct}/20 · Campanhas {campaign}/3 · Missão {daily}",en:"Week: {theme} · Correct {correct}/20 · Campaigns {campaign}/3 · Mission {daily}"},
   "home.map":{pt:"🗺️ Mapa da Operação",en:"🗺️ Operations Map"},
   "home.install":{pt:"⬇️ Instalar app",en:"⬇️ Install app"},
@@ -674,8 +692,8 @@ var UI = {
   "profile.certCardRes":{pt:"Resiliência",en:"Resilience"},
   "profile.certCardStreak":{pt:"Sequência",en:"Streak"},
   "profile.certCardFooter":{pt:"Ferramenta educativa interna",en:"Internal educational tool"},
-  "manager.title":{pt:"🧭 Painel do Gestor",en:"🧭 Manager Panel"},
-  "manager.sub":{pt:"Visão agregada por equipe (anônima). Nenhum indivíduo é identificado.",en:"Aggregated team view (anonymous). No individual is identified."},
+  "manager.title":{pt:"🧭 Human Defense — Gestor",en:"🧭 Human Defense — Manager"},
+  "manager.sub":{pt:"Visão de risco humano por equipe (anônima). Nenhum indivíduo é identificado.",en:"Human risk view by team (anonymous). No individual is identified."},
   "manager.export":{pt:"⬇️ Exportar CSV (equipes)",en:"⬇️ Export CSV (teams)"},
   "manager.exportThemes":{pt:"⬇️ Exportar temas (CSV)",en:"⬇️ Export themes (CSV)"},
   "manager.byTeam":{pt:"Taxa de acerto por equipe",en:"Accuracy by team"},
@@ -713,7 +731,7 @@ var UI_V122 = {
   "home.previewLoop":{pt:"Seu loop de treino: 📅 Missão diária → 🗺️ Mapa global → 🎯 Desafios / Crises",en:"Your training loop: 📅 Daily mission → 🗺️ World map → 🎯 Challenges / Crises"},
   "home.firstDay":{pt:"Dia 1 da sua ofensiva — 5 minutos de treino bastam para começar.",en:"Day 1 of your streak — 5 minutes of training is enough to start."},
   "home.nextDaily":{pt:"Sua missão diária está esperando",en:"Your daily mission is waiting"},
-  "home.nextDailySub":{pt:"5 situações rápidas mantêm sua ofensiva e priorizam o que você errou.",en:"5 quick scenarios keep your streak and prioritize what you missed."},
+  "home.nextDailySub":{pt:"5 situações · ~5 min · prioriza erros e temas fracos",en:"5 scenarios · ~5 min · prioritizes mistakes and weak themes"},
   "home.nextReviewSub":{pt:"Você tem {n} itens em revisão espaçada prontos para hoje.",en:"You have {n} items in spaced review ready for today."},
   "home.nextCampaignSub":{pt:"Sua expedição continua — proteja o próximo país no mapa e avance na meta semanal.",en:"Your expedition continues — protect the next country on the map and advance your weekly goal."},
   "home.nextGoDaily":{pt:"▶️ Jogar diária",en:"▶️ Play daily"},
@@ -1092,7 +1110,10 @@ function renderResultScreen(){
   renderSessionFeedback(win,acc); renderPostSessionActions("resultPostActions");
 }
 function refreshActiveScreenForLang(){
-  if(isScreenActive("screenQuiz")&&cur.questions&&cur.questions.length) renderQuestion();
+  if(isScreenActive("screenQuiz")&&cur.questions&&cur.questions.length){
+    if(cur.mode) cur.sessionWhy=computeSessionWhy(cur.mode, cur.questions);
+    renderQuestion();
+  }
   if(isScreenActive("screenBoss")&&bossCur&&bossCur.boss) renderBossPhase();
   if(isScreenActive("screenBossList")) renderBossList();
   if(isScreenActive("screenResult")&&cur.lastResult) renderResultScreen();
@@ -1101,6 +1122,7 @@ function refreshActiveScreenForLang(){
     else if(chainStageActive) openMapDetailChain(chainStageActive);
     else { if(mapReady) drawMap(); renderMapExpedition(); }
   }
+  if(isScreenActive("screenHome")) renderHomeDefensePanel();
   var gm=$("glossaryMenu");
   if(gm&&!gm.hidden){
     renderGlossaryWordList();
@@ -2653,7 +2675,7 @@ function startReviewErrors(){
   var qs=srsDueItems().length?srsDueItems():allMissedQuestions();
   if(!qs.length){ toast(t("pedagogy.reviewEmpty")); return; }
   cur.mode="review"; cur.country={id:"review",name:{pt:"Revisão dos erros",en:"Mistake review"},flag:"📚"};
-  cur.questions=shuffleQuestions(qs.slice()); cur.i=0; cur.correct=0; cur.integrity=100; S.lives=99; initQuizSession();
+  cur.questions=shuffleQuestions(qs.slice()); cur.i=0; cur.correct=0; cur.integrity=100; S.lives=99; initQuizSession(); setSessionWhy("review", cur.questions);
   show("screenQuiz"); renderQuestion();
 }
 function startThemeDrill(theme){
@@ -2663,7 +2685,7 @@ function startThemeDrill(theme){
   if(!pool.length){ toast(L()==="pt"?"Sem perguntas deste tema — abrindo mapa.":"No questions for this theme — opening map."); openMap(null,true); return; }
   cur.mode="themeDrill";
   cur.country={id:"theme_"+theme,name:{pt:"Reforço: "+tt(THEMES[theme]),en:"Drill: "+tt(THEMES[theme])},flag:THEMES[theme].ico};
-  cur.questions=pickProfileQuestions(pool,Math.min(6,pool.length)); cur.i=0; cur.correct=0; cur.integrity=100; S.lives=99; initQuizSession();
+  cur.questions=pickProfileQuestions(pool,Math.min(6,pool.length)); cur.i=0; cur.correct=0; cur.integrity=100; S.lives=99; initQuizSession(); setSessionWhy("themeDrill", cur.questions);
   show("screenQuiz"); renderQuestion();
 }
 
@@ -3673,12 +3695,12 @@ function buildDaily(){
   return shuffleQuestions(picked.slice(0,5));
 }
 function startCampaign(){
-  cur.mode="campaign"; cur.questions=buildCampaign(cur.country); cur.i=0; cur.correct=0; cur.integrity=100; S.lives=3; initQuizSession(); renderLives();
+  cur.mode="campaign"; cur.questions=buildCampaign(cur.country); cur.i=0; cur.correct=0; cur.integrity=100; S.lives=3; initQuizSession(); setSessionWhy("campaign", cur.questions); renderLives();
   show("screenQuiz"); renderQuestion();
 }
 function startDaily(){
   cur.mode="daily"; cur.country={id:"daily",name:{pt:"Missão do Dia",en:"Daily Mission"},flag:"📅"};
-  cur.questions=buildDaily(); cur.i=0; cur.correct=0; cur.integrity=100; S.lives=3; initQuizSession(); renderLives();
+  cur.questions=buildDaily(); cur.i=0; cur.correct=0; cur.integrity=100; S.lives=3; initQuizSession(); setSessionWhy("daily", cur.questions); renderLives();
   show("screenQuiz"); renderQuestion();
 }
 function renderPersonalBridge(q){
@@ -3688,6 +3710,7 @@ function renderPersonalBridge(q){
   else el.hidden=true;
 }
 function renderQuestion(){
+  renderSessionWhy();
   var q=cur.questions[cur.i],c=cur.country;
   if(!cur.qStates) cur.qStates={};
   if(!cur.optOrder) cur.optOrder={};
@@ -4734,6 +4757,123 @@ function applyFocusLearn(){
   var on=!!S.focusLearn;
   document.body.classList.toggle("focus-learn",on);
 }
+function securityPosturePct(){
+  ensureDaily(); ensureStreak();
+  var acc=overallAcc(), accPart=acc===null?45:acc;
+  var journey=journeyCompletionPct();
+  var streakPart=Math.min(100,Math.round(((S.streak&&S.streak.count)||0)/7*100));
+  var dailyPart=S.daily.done.mission?100:0;
+  return Math.min(100,Math.round(accPart*0.4+journey*0.3+streakPart*0.15+dailyPart*0.15));
+}
+function postureLabel(pct){
+  if(!Object.keys(S.themeStats||{}).length&&!S.dailyTotal) return t("home.postureNew");
+  if(pct>=75) return t("home.postureStrong");
+  if(pct>=50) return t("home.postureMid");
+  return t("home.postureLow");
+}
+function questionInSrsDue(q){
+  var due=srsDueItems(), i;
+  for(i=0;i<due.length;i++){ if(due[i]===q||(q.id&&due[i].id===q.id)) return true; }
+  return false;
+}
+function computeSessionWhy(mode, questions){
+  var tm=TEAMS.filter(function(x){ return x.id===S.team; })[0], teamName=tm?tt(tm):"";
+  if(mode==="review"){
+    var n=questions?questions.length:0;
+    return t("session.whyReview").replace("{n}",String(n));
+  }
+  if(mode==="themeDrill"&&questions&&questions[0]){
+    return t("session.whyDrill").replace("{theme}",THEMES[questions[0].theme].ico+" "+tt(THEMES[questions[0].theme]));
+  }
+  if(mode==="campaign"&&cur.country){
+    if(teamName) return t("session.whyCampaign").replace("{country}",cur.country.flag+" "+tt(cur.country.name)).replace("{team}",teamName);
+    return t("session.whyCampaignSimple");
+  }
+  if(mode==="daily"&&questions&&questions.length){
+    var srsN=0, weakMap={}, weak=weakThemes(2), wi, ti, themeNames=[];
+    for(wi=0;wi<questions.length;wi++){
+      if(questionInSrsDue(questions[wi])) srsN++;
+      if(weak.indexOf(questions[wi].theme)>=0) weakMap[questions[wi].theme]=1;
+    }
+    for(ti in weakMap){ if(weakMap.hasOwnProperty(ti)&&THEMES[ti]) themeNames.push(THEMES[ti].ico+" "+tt(THEMES[ti])); }
+    if(srsN||themeNames.length){
+      return t("session.whyDaily").replace("{srs}",String(srsN)).replace("{themes}",themeNames.length?themeNames.join(", "):(L()==="pt"?"temas do perfil":"profile themes"));
+    }
+    return t("session.whyDailySimple");
+  }
+  return "";
+}
+function renderSessionWhy(){
+  var el=$("sessionWhyBanner"); if(!el) return;
+  var txt=cur.sessionWhy||"";
+  if(!txt||uxLegacy()){ el.hidden=true; el.innerHTML=""; return; }
+  el.hidden=false;
+  el.innerHTML='<span class="session-why-k">'+t("session.whyK")+'</span>'+txt;
+}
+function setSessionWhy(mode, questions){
+  cur.sessionWhy=computeSessionWhy(mode, questions||cur.questions||[]);
+  renderSessionWhy();
+}
+function renderHomeWeekPanel(){
+  var body=$("homeWeekPanelBody"); if(!body) return;
+  ensureWeekly();
+  var wp=S.weekly.prog||{}, wt=getWeekTheme(), html="";
+  WEEKLY.forEach(function(w){
+    var p=Math.min(w.goal,wp[w.id]||0), pct=Math.round(p/w.goal*100), done=p>=w.goal;
+    var label=tt(w.name);
+    if(w.themed) label=(L()==="pt"?"Acerte 8 em ":"Get 8 on ")+THEMES[wt].ico+" "+tt(THEMES[wt]);
+    html+='<div class="home-week-row'+(done?" done":"")+'"><span aria-hidden="true">'+(done?"✅":w.ico)+'</span><span class="home-week-row-lab">'+label+' <span class="muted">'+p+"/"+w.goal+'</span></span><span class="home-week-row-bar" aria-hidden="true"><span class="home-week-row-fill" style="width:'+pct+'%"></span></span></div>';
+  });
+  body.innerHTML=html;
+}
+function renderHomeDefensePanel(){
+  var panel=$("homeDefensePanel"); if(!panel) return;
+  if(!S.onboardingDone||uxLegacy()){ panel.hidden=true; return; }
+  panel.hidden=false;
+  var pct=securityPosturePct();
+  var posture=$("hdpPosture");
+  if(posture){
+    posture.innerHTML='<div class="hdp-block-k">'+t("home.postureK")+'</div><div class="hdp-posture-val">'+pct+'%</div><p class="hdp-posture-lab">'+postureLabel(pct)+'</p><div class="hdp-posture-bar" aria-hidden="true"><div class="hdp-posture-fill" style="width:'+pct+'%"></div></div>';
+  }
+  var ns=computeNextStep();
+  var resume=$("hdpResume");
+  if(resume){
+    resume.innerHTML='<div class="hdp-block-k">'+t("home.resumeK")+'</div><p class="hdp-resume-t">'+ns.ico+" "+ns.title+'</p><p class="hdp-resume-d">'+ns.sub+'</p>';
+  }
+  var themes=$("hdpThemes");
+  if(themes){
+    var rows=Object.keys(THEMES).map(function(k){ return {k:k,a:themeAcc(k)}; }).filter(function(x){ return x.a!==null; }).sort(function(a,b){ return a.a-b.a; }).slice(0,4);
+    var thHtml='<div class="hdp-block-k">'+t("home.themesK")+'</div>';
+    if(!rows.length) thHtml+='<p class="muted" style="margin:0;font-size:.78rem">'+(L()==="pt"?"Jogue a primeira atividade para monitorar temas.":"Play your first activity to monitor themes.")+'</p>';
+    else rows.forEach(function(x){
+      thHtml+='<div class="hdp-theme-row"><span class="hdp-theme-name">'+THEMES[x.k].ico+' '+tt(THEMES[x.k])+'</span><span class="hdp-theme-bar"><span class="hdp-theme-fill" style="width:'+x.a+'%"></span></span><span class="hdp-theme-pct">'+x.a+'%</span></div>';
+    });
+    themes.innerHTML=thHtml;
+  }
+  renderHomeWeekPanel();
+}
+function renderManagerNow(){
+  var host=$("mgrNow"); if(!host) return;
+  var recs=pedagogicalRecommendations();
+  if(!recs.length){
+    host.innerHTML='<div class="mgr-now-k">'+t("mgr.nowK")+'</div><p class="mgr-now-t">'+t("mgr.nowEmpty")+'</p>';
+    return;
+  }
+  var top=recs[0];
+  host.innerHTML='<div class="mgr-now-k">'+t("mgr.nowK")+'</div><p class="mgr-now-t">'+top.ico+" "+top.txt+'</p>';
+  var btn=document.createElement("button");
+  btn.className="btn btn-primary btn-sm";
+  btn.textContent=t("pedagogy.recPlay");
+  btn.addEventListener("click",function(){
+    if(top.action==="review") startReviewErrors();
+    else if(top.action==="boss"){ renderBossList(); show("screenBossList"); }
+    else if(top.action==="theme") startThemeDrill(top.theme);
+    else if(top.action==="weekly") openWeeklyScreen();
+    else openMap(null,true);
+  });
+  host.appendChild(btn);
+}
+function isDesktopHome(){ return window.matchMedia&&window.matchMedia("(min-width:960px)").matches; }
 function computeNextStep(){
   ensureDaily(); ensureWeekly();
   var due=srsDueCount();
@@ -4788,6 +4928,7 @@ function renderNextStep(){
   renderHomeTeamSocial();
   renderFirstDayHint();
   card.hidden=false;
+  renderHomeDefensePanel();
   renderHomeStickyCta();
 }
 function applyHeroCompact(){
@@ -4871,7 +5012,7 @@ function renderWeekLine(){
         b.className="week-chip"+(done?" done":"");
         b.setAttribute("role","listitem");
         b.textContent=c.ico+" "+c.cur+"/"+c.goal;
-        b.onclick=openWeeklyScreen;
+        b.onclick=function(){ if(isDesktopHome()&&isScreenActive("screenHome")){ var p=$("homeWeekPanel"); if(p) p.scrollIntoView({behavior:S.a11y.motion?"auto":"smooth",block:"nearest"}); } else openWeeklyScreen(); };
         chips.appendChild(b);
       });
       chips.hidden=false;
@@ -5411,6 +5552,7 @@ function drawRadar(){
 function renderManager(){
   var demo=$("mgrDemo");
   renderManagerKpisSimple();
+  renderManagerNow();
   var host=$("mgrTeams"); host.innerHTML="";
   var acc=overallAcc()||0;
   var tmOnly=TEAMS.filter(function(t){ return t.id===S.team; })[0];
@@ -5605,7 +5747,12 @@ function renderWeekProgressBar(){
   host.setAttribute("aria-label",t("home.weekBarAria"));
   host.setAttribute("aria-valuenow",String(score));
 }
-function openWeeklyScreen(){ show("screenWeekly"); }
+function openWeeklyScreen(){
+  if(isDesktopHome()&&isScreenActive("screenHome")){
+    var p=$("homeWeekPanel"); if(p){ p.scrollIntoView({behavior:S.a11y.motion?"auto":"smooth",block:"nearest"}); return; }
+  }
+  show("screenWeekly");
+}
 function renderWeeklyGoalsChecklist(){
   ensureWeekly(); ensureStreak();
   var host=$("weeklyGoalsChecklist"); if(!host) return;

@@ -19,7 +19,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guardião Orbita">
 <script src="js/access-gate.js?v=118"></script>
-<link rel="stylesheet" href="css/styles.css?v=168">
+<link rel="stylesheet" href="css/styles.css?v=169">
 </head>
 <body>
 <a href="#main" class="skip-link" id="skipLink">Pular para o conteúdo</a>
@@ -63,7 +63,7 @@
   <div class="easter-egg-shell">
     <div class="easter-egg-scroll" id="easterEggScroll">
       <div class="easter-egg-art-wrap" id="easterEggArtWrap">
-        <img id="easterEggImg" class="easter-egg-art" src="images/easter-egg-reveal.png?v=168" alt="" decoding="async">
+        <img id="easterEggImg" class="easter-egg-art" src="images/easter-egg-reveal.png?v=169" alt="" decoding="async">
       </div>
       <div class="easter-egg-head">
         <h2 class="easter-egg-title" id="easterEggTitle"></h2>
@@ -445,6 +445,8 @@
 
   <!-- ============ HOME: LANGUAGE + ACCESSIBILITY ============ -->
   <section id="screenHome" class="screen active" aria-label="Início">
+    <div class="home-workspace" id="homeWorkspace">
+    <div class="home-workspace-main">
     <div class="card hero" id="heroCard">
       <div class="hero-scene" id="heroScene" role="img" data-i18n-attr="aria-label:home.heroDecorAria" aria-label="Ilustração da cadeia operacional">
         <svg class="hero-svg" viewBox="0 0 900 168" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -614,6 +616,19 @@
       <p class="next-step-preview" id="nextStepPreview" hidden aria-live="polite"></p>
       <button type="button" class="btn btn-ghost btn-sm" id="nextStepWeeklyBtn" data-i18n="home.weekBarGo" hidden>Ver detalhes →</button>
     </div>
+    </div><!-- /.home-workspace-main -->
+
+    <aside class="home-defense-panel" id="homeDefensePanel" hidden aria-label="Painel de defesa pessoal">
+      <div class="hdp-k" data-i18n="home.workspaceK">Seu workspace de defesa</div>
+      <section class="hdp-block hdp-posture" id="hdpPosture" aria-live="polite"></section>
+      <section class="hdp-block hdp-resume" id="hdpResume" aria-live="polite"></section>
+      <section class="hdp-block hdp-themes" id="hdpThemes" aria-live="polite"></section>
+      <section class="hdp-block home-week-panel" id="homeWeekPanel" aria-labelledby="homeWeekPanelK">
+        <h3 class="hdp-block-k" id="homeWeekPanelK" data-i18n="home.weekPanelK">Metas da semana</h3>
+        <div class="home-week-panel-body" id="homeWeekPanelBody"></div>
+      </section>
+    </aside>
+    </div><!-- /.home-workspace -->
 
     <div class="home-sticky-cta" id="homeStickyCta" hidden>
       <button type="button" class="btn btn-primary btn-lg" id="homeStickyBtn"></button>
@@ -755,6 +770,7 @@
   <!-- ============ QUIZ ============ -->
   <section id="screenQuiz" class="screen" aria-label="Situação de segurança">
     <div class="card">
+      <div class="session-why-banner" id="sessionWhyBanner" hidden role="status" aria-live="polite"></div>
       <div class="quiz-context-chip" id="quizContextChip" aria-live="polite"></div>
       <div class="quiz-progress" id="quizProgress" aria-live="polite">
         <div class="quiz-progress-label" id="quizProgressLabel"></div>
@@ -963,19 +979,26 @@
 
   <!-- ============ MANAGER ============ -->
   <section id="screenManager" class="screen" aria-label="Painel do gestor">
-    <div class="card">
-      <div class="section-title" data-i18n="manager.title">🧭 Painel do Gestor</div>
-      <div class="section-sub" data-i18n="manager.sub">Visão agregada por equipe (anônima). Nenhum indivíduo é identificado.</div>
-      <p class="mgr-demo muted" id="mgrDemo"></p>
-      <div class="stats-grid" id="mgrKpis"></div>
-      <div class="row-actions" style="margin-top:6px">
-        <button class="btn btn-blue btn-sm" id="mgrExportTeams" data-i18n="manager.export">⬇️ Exportar CSV (equipes)</button>
-        <button class="btn btn-ghost btn-sm" id="mgrExportThemes" data-i18n="manager.exportThemes">⬇️ Exportar temas (CSV)</button>
+    <div class="mgr-workspace">
+      <div class="mgr-workspace-main">
+        <div class="card">
+          <div class="section-title" data-i18n="manager.title">🧭 Human Defense — Gestor</div>
+          <div class="section-sub" data-i18n="manager.sub">Visão de risco humano por equipe (anônima). Nenhum indivíduo é identificado.</div>
+          <p class="mgr-demo muted" id="mgrDemo"></p>
+          <div class="stats-grid" id="mgrKpis"></div>
+          <div class="mgr-now card-inset" id="mgrNow" aria-live="polite"></div>
+          <div class="row-actions" style="margin-top:6px">
+            <button class="btn btn-blue btn-sm" id="mgrExportTeams" data-i18n="manager.export">⬇️ Exportar CSV (equipes)</button>
+            <button class="btn btn-ghost btn-sm" id="mgrExportThemes" data-i18n="manager.exportThemes">⬇️ Exportar temas (CSV)</button>
+          </div>
+        </div>
+      </div>
+      <div class="mgr-workspace-aside">
+        <div class="card"><div class="section-title" data-i18n="manager.byTeam">Taxa de acerto por equipe</div><p class="muted mgr-pending" id="mgrPending"></p><div id="mgrTeams"></div></div>
+        <div class="card"><div class="section-title" data-i18n="manager.weakest">Temas mais fracos (geral)</div><div id="mgrThemes"></div></div>
+        <div class="card"><div class="section-title" data-i18n="manager.recTitle">💡 Recomendações pedagógicas</div><div id="mgrPedagogyRec"></div></div>
       </div>
     </div>
-    <div class="card"><div class="section-title" data-i18n="manager.byTeam">Taxa de acerto por equipe</div><p class="muted mgr-pending" id="mgrPending"></p><div id="mgrTeams"></div></div>
-    <div class="card"><div class="section-title" data-i18n="manager.weakest">Temas mais fracos (geral)</div><div id="mgrThemes"></div></div>
-    <div class="card"><div class="section-title" data-i18n="manager.recTitle">💡 Recomendações pedagógicas</div><div id="mgrPedagogyRec"></div></div>
   </section>
 
   </main>
@@ -1019,18 +1042,18 @@
   </div>
 </div>
 
-<script>window.APP_VERSION="168";</script>
-<script src="js/sign-lang.js?v=168"></script>
-<script src="js/orbita-world-map.js?v=168"></script>
-<script src="js/questions-data.js?v=168"></script>
-<script src="js/country-questions-data.js?v=168"></script>
-<script src="js/bosses-data.js?v=168"></script>
-<script src="js/chain-data.js?v=168"></script>
-<script src="js/boss-maps.js?v=168"></script>
-<script src="js/glossary-data.js?v=168"></script>
-<script src="js/profile-data.js?v=168"></script>
-<script src="js/game.js?v=168"></script>
-<script src="js/demo-menu.js?v=168"></script>
+<script>window.APP_VERSION="169";</script>
+<script src="js/sign-lang.js?v=169"></script>
+<script src="js/orbita-world-map.js?v=169"></script>
+<script src="js/questions-data.js?v=169"></script>
+<script src="js/country-questions-data.js?v=169"></script>
+<script src="js/bosses-data.js?v=169"></script>
+<script src="js/chain-data.js?v=169"></script>
+<script src="js/boss-maps.js?v=169"></script>
+<script src="js/glossary-data.js?v=169"></script>
+<script src="js/profile-data.js?v=169"></script>
+<script src="js/game.js?v=169"></script>
+<script src="js/demo-menu.js?v=169"></script>
 <script src="js/review-bank.js?v=118"></script>
 <script>
 /* Registro do Service Worker (PWA / offline) */
